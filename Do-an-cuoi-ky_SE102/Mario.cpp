@@ -15,7 +15,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	DebugOut(L"[INFO] KeyUp: %f\n", vx);
+	//DebugOut(L"[INFO] Speed: %f\n", vx);
 
 	//Calcute vx like this so it wont get change abruptly
 	if (abs(vx) > abs(maxVx)) {

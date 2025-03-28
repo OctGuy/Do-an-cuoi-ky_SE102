@@ -126,7 +126,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case OBJECT_TYPE_PLATFORM:
 	{
-
 		float cell_width = (float)atof(tokens[3].c_str());
 		float cell_height = (float)atof(tokens[4].c_str());
 		int length = atoi(tokens[5].c_str());
@@ -138,6 +137,32 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			x, y,
 			cell_width, cell_height, length,
 			sprite_begin, sprite_middle, sprite_end
+		);
+
+		break;
+	}
+
+	case OBJECT_TYPE_BOX_PLATFORM:
+	{
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		int width = atoi(tokens[6].c_str());
+		int sprite_id_TL = atoi(tokens[7].c_str());
+		int sprite_iid_MT = atoi(tokens[8].c_str());
+		int sprite_id_TR = atoi(tokens[9].c_str());
+		int sprite_id_ML = atoi(tokens[10].c_str());
+		int sprite_id_fill = atoi(tokens[11].c_str());
+		int sprite_id_MR = atoi(tokens[12].c_str());
+		int sprite_id_BL = atoi(tokens[13].c_str());
+		int sprite_id_MB = atoi(tokens[14].c_str());
+		int sprite_id_BR = atoi(tokens[15].c_str());
+
+		obj = new CBoxPlatform(
+			x, y, 
+			length, width, cell_width, cell_height,
+			sprite_id_TL, sprite_id_TR, sprite_id_BL, sprite_id_BR, sprite_id_fill,
+			sprite_iid_MT, sprite_id_MB, sprite_id_ML, sprite_id_MR
 		);
 
 		break;
