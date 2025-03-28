@@ -1,7 +1,58 @@
 # id	left	top	right	bottom	texture_id
 [SPRITES]
-20001	372	153	387	168	20
+#Need atleast 1 pixels padding on right and bottom to look good (no idea why)
+
+# FLOOR BLOCK
+#Bottom left floor
+20000	86	55	103	72	30
+
+#Bottom middle floor
+20001	104	55	121	72	30
+
+#Bottom right floor
+20002	122	55	139	72	30
+
+#Top left floor
+20003	86	37	103	54	30
+
+#Top middle floor
+20004	104	37	121	54	30
+
+#Top right floor
+20005	122	37	139	54	30
+
+# PROP BLOCK
+#Convex
+20010	104	235	121	252	30
+
+#Normal Brick
+20011	122	289	139	306	30
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
-10000	20001	1000
+
+# FLOOR BLOCK
+#Normal Brick
+10006	19999	1000
+
+#Bottom left floor
+10000	20000	1000
+
+#Bottom middle floor
+10001	20001	1000
+
+#Bottom right floor
+10002	20002	1000
+
+#Top left floor
+10003	20003	1000
+
+#Top middle floor
+10004	20004	1000
+
+#Top right floor
+10005	20005	1000
+
+
+# PROP BLOCK
+10010	20010	1000
