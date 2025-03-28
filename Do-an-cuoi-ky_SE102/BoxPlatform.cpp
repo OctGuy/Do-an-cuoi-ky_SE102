@@ -3,7 +3,7 @@
 void CBoxPlatform::Render()
 {
 	if (this->length <= 0 || this->width <= 0) return;
-	DebugOut(L"Rendering Box");
+	//DebugOut(L"Rendering Box");
 	float yy = y;
 	RenderLayer(this->spriteIdTL, this->spriteIdMT, this->spriteIdTR, yy);
 	yy += this->cellHeight;
@@ -39,16 +39,11 @@ void CBoxPlatform::RenderLayer(int leftLayerId, int midLayerId, int rightLayerId
 
 void CBoxPlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x;
-	t = y;
-	r = x + length * cellWidth;
-	b = y + width * cellHeight;
-
 	float cellWidth_div_2 = this->cellWidth / 2;
 	l = x - cellWidth_div_2;
-	t = y - this->cellHeight / 2;
+	t = y - cellWidth_div_2;
 	r = l + this->cellWidth * this->length;
-	b = t + width * cellHeight;
+	b = t + this->width * this->cellHeight;
 }
 
 void CBoxPlatform::RenderBoundingBox()
