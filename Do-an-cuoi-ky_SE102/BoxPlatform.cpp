@@ -5,22 +5,22 @@ void CBoxPlatform::Render()
 	if (this->length <= 0 || this->width <= 0) return;
 	//DebugOut(L"Rendering Box");
 	float yy = y;
-	RenderLayer(this->spriteIdTL, this->spriteIdMT, this->spriteIdTR, yy);
+	RenderLayer(this->spriteIdTL, this->spriteIdMT, this->spriteIdTR, this->spriteIdSOTCorner, yy);
 	yy += this->cellHeight;
 	if (this->width > 2)
 		for (int i = 1; i < this->width - 1; i++)
 		{
-			RenderLayer(this->spriteIdML, this->spriteIdFill, this->spriteIdMR, yy);
+			RenderLayer(this->spriteIdML, this->spriteIdFill, this->spriteIdMR, this->spriteIdSOTBody,yy);
 			yy += this->cellHeight;
 		}
 	if (this->width > 1)
-		RenderLayer(this->spriteIdBL, this->spriteIdMB, this->spriteIdBR, yy);
+		RenderLayer(this->spriteIdBL, this->spriteIdMB, this->spriteIdBR, this->spriteIdSOTBottom, yy);
 
-	RenderBoundingBox();  // Add this line to display the bounding box
+	//RaenderBoundingBox();  // Add this line to display the bounding box
 }
 
 
-void CBoxPlatform::RenderLayer(int leftLayerId, int midLayerId, int rightLayerId, float yy)
+void CBoxPlatform::RenderLayer(int leftLayerId, int midLayerId, int rightLayerId, int spriteIdSOT,float yy)
 {
 	float xx = x;
 	CSprites* s = CSprites::GetInstance();
@@ -35,6 +35,8 @@ void CBoxPlatform::RenderLayer(int leftLayerId, int midLayerId, int rightLayerId
 	}
 	if (length > 1)
 		s->Get(rightLayerId)->Draw(xx, yy);
+	xx += this->cellWidth;
+	s->Get(spriteIdSOT)->Draw(xx, yy);
 }
 
 void CBoxPlatform::GetBoundingBox(float& l, float& t, float& r, float& b)

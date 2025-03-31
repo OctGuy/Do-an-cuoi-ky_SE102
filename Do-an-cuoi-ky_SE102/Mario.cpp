@@ -12,6 +12,7 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	//DebugOut(L"[INFO] Mario Update: %f %f\n", x, y);
 	vy += ay * dt;
 	vx += ax * dt;
 
