@@ -14,13 +14,13 @@
 
 using namespace std;
 
-CPlayScene::CPlayScene(int id, LPCWSTR filePath):
+CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
 	player = NULL;
 	key_handler = new CSampleKeyHandler(this);
+	backgroundColor = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f); // Default to black
 }
-
 
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_ASSETS	1
@@ -110,6 +110,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		if (player != NULL)
 		{
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
+			//Set new position for mario in the new scene
 			return;
 		}
 		obj = new CMario(x, y);
@@ -157,12 +158,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int sprite_id_BL = atoi(tokens[13].c_str());
 		int sprite_id_MB = atoi(tokens[14].c_str());
 		int sprite_id_BR = atoi(tokens[15].c_str());
+		int sprite_id_SOTCorner = atoi(tokens[16].c_str());
+		int sprite_id_SOTBody = atoi(tokens[17].c_str());
+		int sprite_id_SOTBottom = atoi(tokens[18].c_str());
 
 		obj = new CBoxPlatform(
 			x, y, 
 			length, width, cell_width, cell_height,
 			sprite_id_TL, sprite_id_TR, sprite_id_BL, sprite_id_BR, sprite_id_fill,
-			sprite_iid_MT, sprite_id_MB, sprite_id_ML, sprite_id_MR
+			sprite_iid_MT, sprite_id_MB, sprite_id_ML, sprite_id_MR, 
+			sprite_id_SOTCorner, sprite_id_SOTBody, sprite_id_SOTBottom
 		);
 
 		break;
@@ -229,6 +234,8 @@ void CPlayScene::Load()
 {
 	DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath);
 
+	SetBackgroundColor(181.0f / 255.0f, 235.0f / 255.0f, 242.0f / 255.0f, 255.0f / 255.0f);
+
 	ifstream f;
 	f.open(sceneFilePath);
 
@@ -290,13 +297,22 @@ void CPlayScene::Update(DWORD dt)
 
 	if (cx < 0) cx = 0;
 
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	CGame::GetInstance()->SetCamPos(cx, 220.0f);
 
 	PurgeDeletedObjects();
 }
 
 void CPlayScene::Render()
 {
+	// Clear the back buffer with the background color
+	CGame* game = CGame::GetInstance();
+	ID3D10Device* pD3DDevice = game->GetDirect3DDevice();
+	ID3D10RenderTargetView* pRTV = game->GetRenderTargetView();
+
+	// Clear the back buffer with the background color
+	pD3DDevice->ClearRenderTargetView(pRTV, backgroundColor);
+
+	// Render all game objects
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 }
