@@ -18,6 +18,8 @@ protected:
 
 	vector<LPGAMEOBJECT> objects;
 
+	D3DXCOLOR backgroundColor;
+
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
 
@@ -38,6 +40,9 @@ public:
 
 	void Clear();
 	void PurgeDeletedObjects();
+
+	// Set background color
+	void SetBackgroundColor(float r, float g, float b, float a = 1.0f) { backgroundColor = D3DXCOLOR(r, g, b, a); }
 
 	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);
 };
