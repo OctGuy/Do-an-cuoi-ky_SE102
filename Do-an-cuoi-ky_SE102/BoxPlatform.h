@@ -35,7 +35,6 @@ public:
 		this->spriteIdBL = spriteIdBL;
 		this->spriteIdBR = spriteIdBR;
 		this->spriteIdFill = spriteIdFill;
-		//help
 
 		this->spriteIdMT = spriteIdMT;
 		this->spriteIdMB = spriteIdMB;

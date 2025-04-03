@@ -110,7 +110,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		if (player != NULL)
 		{
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
-			//Set new position for mario in the new scene
 			return;
 		}
 		obj = new CMario(x, y);
@@ -122,6 +121,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BRICK:
 		type = atoi(tokens[3].c_str());
 		obj = new CBrick(x, y, type);
+		break;
+	case OBJECT_TYPE_QUESTION_BRICK:
+		type = atoi(tokens[3].c_str());
+		obj = new CQuestionBrick(x, y, type);
+		//WARNING: load item you want the quesiton brick to contain first then load the brick
+		if (!objects.empty())
+		{
+			((CQuestionBrick*)obj)->SetItem(objects.back());
+		}
 		break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 
