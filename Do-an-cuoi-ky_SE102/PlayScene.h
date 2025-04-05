@@ -8,6 +8,10 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "BoxPlatform.h"
+#include "Coin.h"
+#include "Platform.h"
+#include "Mushroom.h"
+#include "Portal.h"
 //#include "Koopas.h"
 
 

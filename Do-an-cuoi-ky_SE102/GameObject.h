@@ -30,7 +30,7 @@ protected:
 
 	bool isDeleted; 
 
-	//bool isActive; // For loading item in question brick
+	bool isActive; // For loading item in question brick
 
 public: 
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
@@ -38,8 +38,8 @@ public:
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
 
-	//void SetActive(bool isActive) { this->isActive = isActive;} 
-	//bool IsActive() { return isActive; }
+	void SetActive(bool isActive) { this->isActive = isActive;} 
+	bool IsActive() { return isActive; }
 
 	int GetState() { return this->state; }
 	virtual void Delete() { isDeleted = true;  }

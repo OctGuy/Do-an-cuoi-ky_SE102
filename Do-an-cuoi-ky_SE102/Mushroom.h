@@ -1,27 +1,25 @@
 #pragma once
 #include "GameObject.h"
 
-#define ID_TEX_STAR 100
-#define ID_ANI_STAR 12000
-#define STAR_BBOX_WIDTH 16
-#define STAR_BBOX_HEIGHT 16
-#define INVINCIBILITY_DURATION 5000 // 5 seconds
+#define ID_TEX_MUSHROOM 100
+#define ID_ANI_MUSHROOM 12000
+#define MUSHROOM_BBOX_WIDTH 16
+#define MUSHROOM_BBOX_HEIGHT 16
 
-#define STAR_STATE_WALKING 100
-
-class CStar : public CGameObject
+#define MUSHROOM_STATE_WALKING 100
+#define ID_SPRITE_MUSHROOM 50000
+class CMushroom : public CGameObject
 {
 protected:
     float ax;
     float ay;
     bool isOnPlatform;
-    ULONGLONG nextJumpTime;
 
     virtual void OnNoCollision(DWORD dt);
     virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public:
-    CStar(float x, float y);
+    CMushroom(float x, float y);
     void Render() override;
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
     void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;

@@ -20,9 +20,9 @@ void CQuestionBrick::OnCollisionWith(LPCOLLISIONEVENT e)
             if (item != NULL && !isHit)
             {
                 item->SetPosition(x, y - BRICK_BBOX_HEIGHT);
-				//item->SetActive(true);
+				item->SetActive(true);
 				SetState(BRICK_STATE_BOUNCE);
-                item->SetState(100); //100 is STATE_BOUNCE for coin (lazy implementation)
+                item->SetState(100); //100 is STATE_ACTIVE for all item (lazy implementation)
                 //item->SetState(ITEM_STATE_BOUNCE);
                 //item->SetSpeed(0, -0.1f);
             }
