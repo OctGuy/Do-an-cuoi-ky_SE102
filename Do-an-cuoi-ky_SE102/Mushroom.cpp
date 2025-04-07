@@ -1,14 +1,11 @@
 #include "Mushroom.h"
 #include "Textures.h"
 
-#define MUSHROOM_GRAVITY 0.002f
-#define MUSHROOM_WALKING_SPEED 0.1f
-#define MUSHROOM_JUMP_DEFLECT_SPEED 0.4f
 
 CMushroom::CMushroom(float x, float y) : CGameObject(x, y)
 {
     this->ax = 0;
-    this->ay = MUSHROOM_GRAVITY;
+    this->ay = 0;
 	isActive = false;
 }
 
@@ -20,7 +17,8 @@ void CMushroom::Render()
     //RenderBoundingBox();
 
 	CSprites* sprites = CSprites::GetInstance();
-	sprites->Get(ID_SPRITE_MUSHROOM)->Draw(x, y);
+	sprites->Get(ID_SPRITE_MUSHROOM)->Draw(x, y + 2); //added 2 because the mushroo was floating for some reason
+	RenderBoundingBox();
 }
 
 void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -29,7 +27,14 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     vy += ay * dt;
     vx += ax * dt;
 
-    //CGameObject::Update(dt, coObjects);
+    if (y <= originalY - MUSHROOM_BBOX_HEIGHT)
+    {
+        //DebugOut(L"Maximum height reached");
+        y = originalY - MUSHROOM_BBOX_HEIGHT;
+        SetState(MUSHROOM_STATE_WALKING);
+    }
+    CGameObject::Update(dt, coObjects);
+
     CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -45,7 +50,7 @@ void CMushroom::OnNoCollision(DWORD dt)
 {
     x += vx * dt;
     y += vy * dt;
-    isOnPlatform = false;
+    //isOnPlatform = false;
 }
 
 void CMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
@@ -56,10 +61,6 @@ void CMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
     if (e->ny != 0)
     {
         vy = 0;
-        if (e->ny < 0)
-        {
-            isOnPlatform = true;
-        }
     }
     else if (e->nx != 0)
     {
@@ -75,6 +76,11 @@ void CMushroom::SetState(int state)
     {
     case MUSHROOM_STATE_WALKING:
         vx = -MUSHROOM_WALKING_SPEED;  // Start moving left like Goomba
+		ay = MUSHROOM_GRAVITY;  // Apply gravity
+        break;
+    case MUSHROOM_STATE_RISE:
+        originalY = y;
+        vy = -MUSHROOM_RISE_SPEED;  // Start moving up
         break;
     }
 }

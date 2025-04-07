@@ -175,7 +175,7 @@ int CMario::GetAniIdSmall()
 			}
 			else if (vx > 0)
 			{
-				if (ax = -MARIO_ACCEL_RUN_X || ax == -MARIO_ACCEL_WALK_X)
+				if (ax == -MARIO_ACCEL_RUN_X || ax == -MARIO_ACCEL_WALK_X)
 					aniId = ID_ANI_MARIO_SMALL_BRACE_LEFT;
 				else if (ax == MARIO_ACCEL_RUN_X)
 					aniId = ID_ANI_MARIO_SMALL_RUNNING_RIGHT;

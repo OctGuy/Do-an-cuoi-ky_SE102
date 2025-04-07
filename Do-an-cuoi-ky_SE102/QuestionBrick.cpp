@@ -17,16 +17,12 @@ void CQuestionBrick::OnCollisionWith(LPCOLLISIONEVENT e)
     {
         if (e->obj->GetState() != MARIO_STATE_DIE)
         {
-            if (item != NULL && !isHit)
+            if (!isHit)
             {
-                item->SetPosition(x, y - BRICK_BBOX_HEIGHT);
-				item->SetActive(true);
 				SetState(BRICK_STATE_BOUNCE);
-                item->SetState(100); //100 is STATE_ACTIVE for all item (lazy implementation)
-                //item->SetState(ITEM_STATE_BOUNCE);
-                //item->SetSpeed(0, -0.1f);
+				if (dynamic_cast<CCoin*>(item)) //Only activate coin immidiately
+				    ActivateItem();
             }
-            //SetState(BRICK_STATE_BOUNCE);
         }
     }
 }
@@ -52,6 +48,14 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         }
         else
         {
+            if (!isBouncingFinished) // After brick stop bouncing, activate non-coin item
+            {
+                isBouncingFinished = true;
+                if (!dynamic_cast<CCoin*>(item)) 
+                {
+                    ActivateItem();
+                }
+            }
             y = originalY;
             vy = 0;
         }
@@ -59,6 +63,7 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
     CCollision::GetInstance()->Process(this, dt, coObjects);
 }
+
 
 void CQuestionBrick::SetState(int state)
 {
@@ -74,6 +79,15 @@ void CQuestionBrick::SetState(int state)
         }
         break;
     }
+}
+
+void CQuestionBrick::ActivateItem()
+{
+    if (item == NULL) return;
+    item->SetPosition(x, y - 1);
+    item->SetActive(true);
+    item->SetState(100); //100 is STATE_ACTIVE for all item (lazy implementation)
+	item = NULL; // Set item to NULL to prevent access error (PAINFUL LESSON)
 }
 
 
