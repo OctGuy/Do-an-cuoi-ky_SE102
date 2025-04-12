@@ -38,7 +38,7 @@ void CPipe::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				abs(this->y - marioY) < PIPE_DETECTION_RANGE)
 			{
 				//THE ORDER OF THESE FUNCTIONS MATTER
-				this->entity->SetPosition(this->x + 8, this->y - 1); // Set the entity position to the pipe position
+				this->entity->SetPosition(this->x + 8, this->y); // Set the entity position to the pipe position
 				this->entity->SetActive(true); // Set the entity active
 				this->entity->SetState(100); //100 is the actice state of the entity (lazy implementation)
 				this->entity = NULL; // Set the entity to NULL to prevent access error 

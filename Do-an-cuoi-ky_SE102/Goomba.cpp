@@ -3,7 +3,7 @@
 CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 {
 	this->ax = 0;
-	this->ay = GOOMBA_GRAVITY;
+	this->ay = 0;
 	die_start = -1;
 	SetState(GOOMBA_STATE_WALKING);
 }
@@ -26,6 +26,29 @@ void CGoomba::GetBoundingBox(float &left, float &top, float &right, float &botto
 	}
 }
 
+void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	vy += ay * dt;
+	vx += ax * dt;
+
+	// Handle rising logic
+	if (state == GOOMBA_STATE_RISE && y <= originalY - GOOMBA_BBOX_HEIGHT)
+	{
+		y = originalY - GOOMBA_BBOX_HEIGHT;
+		SetState(GOOMBA_STATE_WALKING); // Transition to walking state
+	}
+
+	if ((state == GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT))
+	{
+		isDeleted = true;
+		return;
+	}
+
+	CGameObject::Update(dt, coObjects);
+	CCollision::GetInstance()->Process(this, dt, coObjects);
+}
+
+
 void CGoomba::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
@@ -34,32 +57,18 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return; 
-	if (dynamic_cast<CGoomba*>(e->obj)) return; 
+	if (!e->obj->IsBlocking()) return;
+	if (dynamic_cast<CGoomba*>(e->obj)) return;
 
-	if (e->ny != 0 )
+	if (e->ny != 0)
 	{
-		vy = 0;
+		if (state != GOOMBA_STATE_RISE) // Allow rising
+			vy = 0;
 	}
 	else if (e->nx != 0)
 	{
 		vx = -vx;
 	}
-}
-
-void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
-{
-	vy += ay * dt;
-	vx += ax * dt;
-
-	if ( (state==GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT) )
-	{
-		isDeleted = true;
-		return;
-	}
-
-	CGameObject::Update(dt, coObjects);
-	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 
@@ -89,6 +98,13 @@ void CGoomba::SetState(int state)
 			break;
 		case GOOMBA_STATE_WALKING: 
 			vx = -GOOMBA_WALKING_SPEED;
+			ay = GOOMBA_GRAVITY;
+			break;
+		case GOOMBA_STATE_RISE:
+			originalY = y;
+			ay = 0;
+			vx = 0;
+			vy = -GOOMBA_RISE_SPEED; 
 			break;
 	}
 }

@@ -85,7 +85,7 @@ void CQuestionBrick::ActivateItem()
 {
     if (item == NULL) return;
 	//THE ORDER OF THESE FUNCTIONS MATTER
-    item->SetPosition(x, y - 1);
+    item->SetPosition(x, y);
     item->SetActive(true);
     item->SetState(100); //100 is STATE_ACTIVE for all item (lazy implementation)
 	item = NULL; // Set item to NULL to prevent access error (PAINFUL LESSON)
