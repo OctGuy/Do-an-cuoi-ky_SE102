@@ -129,7 +129,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		if (!objects.empty())
 		{
 			((CQuestionBrick*)obj)->SetItem(objects.back());
-			//objects.back()->SetActive(false);
+			objects.back()->SetActive(false);
 		}
 		break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
@@ -197,6 +197,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			cell_width, cell_height, height,
 			sprite_tl, sprite_tr, sprite_bl, sprite_br
 		);
+
+		if (!objects.empty())
+		{
+			((CPipe*)obj)->SetItem(objects.back());
+			objects.back()->SetActive(false);
+		}
 		break;
 	}
 	case OBJECT_TYPE_PORTAL:
