@@ -12,6 +12,7 @@
 #include "Platform.h"
 #include "Mushroom.h"
 #include "Portal.h"
+#include "Pipe.h"
 //#include "Koopas.h"
 
 

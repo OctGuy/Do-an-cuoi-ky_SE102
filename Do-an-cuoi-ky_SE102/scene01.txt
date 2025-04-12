@@ -6,11 +6,12 @@ goomba.txt
 cloud.txt
 box.txt
 Mushroom.txt
+pipe.txt
 
 # RENDERING ORDER IS IMPORTANT
 [OBJECTS]
 # type	x	y	
-# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Coins, 5 = Platform, 6 = Box Platform
+# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Coins, 5 = Platform, 6 = Box Platform, 7 = Pipe
 
 
 
@@ -35,6 +36,16 @@ Mushroom.txt
 
 # GOOMBA
 2	300	230
+
+#PIPE
+7	352	368	16	16	3	70000	70001	70002	70003
+7	1792	384	16	16	2	70000	70001	70002	70003
+7	1856	368	16	16	3	70000	70001	70002	70003
+7	2256	368	16	16	3	20010	20010	70002	70003
+7	2256	112	16	16	12	20010	20010	70002	70003
+7	2320	384	16	16	2	70000	70001	70002	70003
+
+
 
 # FLOOR 1
 #type	x	y	type of brick
@@ -259,6 +270,8 @@ Mushroom.txt
 1	1680	400	10
 1	1680	384	10
 1	1696	400	10
+1	2256	304	10
+1	2272	304	10
 
 #QUESTION BLOCK WITH ITEMS (Item is loaded at 500 because am too lazy to implement a smart solution)
 4	176	500	
