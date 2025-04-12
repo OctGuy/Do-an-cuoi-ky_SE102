@@ -24,6 +24,8 @@ int CBrick::GetAnimationid()
 		return ID_ANI_BRICK_FLOOR_TOP_RIGHT;
 	else if (type == BRICK_TYPE_CONVEX)
 		return ID_ANI_BRICK_CONVEX;
+	else if (type == BRICK_TYPE_QUESTION)
+		return ID_ANI_QUESTION_BRICK;
 	else
 		return ID_ANI_BRICK_NORMAL;
 

@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "Brick.h"
+#include "QuestionBrick.h"
 #include "Mario.h"
 #include "Goomba.h"
 #include "BoxPlatform.h"
