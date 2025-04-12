@@ -62,19 +62,32 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 
 	if (dynamic_cast<CQuestionBrick*>(e->obj))
-	{
-		CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
-		DebugOut(L"[INFO] Mario collided with a question brick\n");
-		questionBrick->OnCollisionWith(e);
-	}
+		OnCollisionWithBrick(e);
 	else if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
+	else if (dynamic_cast<CMushroom*>(e->obj))
+		OnCollisionWithMushroom(e);
 }
 
+void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
+{
+	CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
+	questionBrick->OnCollisionWith(e);
+}
+
+void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
+{
+	CMushroom* mushroom = dynamic_cast<CMushroom*>(e->obj);
+	if (level != MARIO_LEVEL_BIG)
+	{
+		SetLevel(MARIO_LEVEL_BIG);
+		e->obj->Delete();
+	}
+}
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
@@ -112,8 +125,9 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
+	DebugOut(L">>> Mario touched coin >>> \n");
 	e->obj->Delete();
-	coin++;
+	AddCoin();
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
@@ -161,7 +175,7 @@ int CMario::GetAniIdSmall()
 			}
 			else if (vx > 0)
 			{
-				if (ax = -MARIO_ACCEL_RUN_X || ax == -MARIO_ACCEL_WALK_X)
+				if (ax == -MARIO_ACCEL_RUN_X || ax == -MARIO_ACCEL_WALK_X)
 					aniId = ID_ANI_MARIO_SMALL_BRACE_LEFT;
 				else if (ax == MARIO_ACCEL_RUN_X)
 					aniId = ID_ANI_MARIO_SMALL_RUNNING_RIGHT;

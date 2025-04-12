@@ -354,7 +354,5 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 
 		objSrc->OnCollisionWith(e);			
 	}
-
-
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }

@@ -129,9 +129,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		if (!objects.empty())
 		{
 			((CQuestionBrick*)obj)->SetItem(objects.back());
+			//objects.back()->SetActive(false);
 		}
 		break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y); break;
 
 	case OBJECT_TYPE_PLATFORM:
 	{
@@ -289,6 +291,7 @@ void CPlayScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
+		if (!objects[i]->IsActive()) continue;
 		objects[i]->Update(dt, &coObjects);
 	}
 
@@ -321,8 +324,10 @@ void CPlayScene::Render()
 	pD3DDevice->ClearRenderTargetView(pRTV, backgroundColor);
 
 	// Render all game objects
-	for (int i = 0; i < objects.size(); i++)
+	for (int i = 0; i < objects.size(); i++) {
+		if (!objects[i]->IsActive()) continue;
 		objects[i]->Render();
+	}
 }
 
 /*
