@@ -129,7 +129,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		if (!objects.empty())
 		{
 			((CQuestionBrick*)obj)->SetItem(objects.back());
-			//objects.back()->SetActive(false);
+			objects.back()->SetActive(false);
 		}
 		break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
@@ -182,7 +182,29 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		break;
 	}
+	case OBJECT_TYPE_PIPE:
+	{
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int height = atoi(tokens[5].c_str());
+		int sprite_tl = atoi(tokens[6].c_str());
+		int sprite_tr = atoi(tokens[7].c_str());
+		int sprite_bl = atoi(tokens[8].c_str());
+		int sprite_br = atoi(tokens[9].c_str());
 
+		obj = new CPipe(
+			x, y,
+			cell_width, cell_height, height,
+			sprite_tl, sprite_tr, sprite_bl, sprite_br
+		);
+
+		if (!objects.empty())
+		{
+			((CPipe*)obj)->SetItem(objects.back());
+			objects.back()->SetActive(false);
+		}
+		break;
+	}
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());

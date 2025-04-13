@@ -5,6 +5,7 @@ coin.txt
 cloud.txt
 brick.txt
 box.txt
+pipe.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type

@@ -156,7 +156,11 @@ public:
 
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
 
-	void AddCoin() {coin++;}
+	void AddCoin() 
+	{
+		coin++;
+		DebugOut(L"[INFO] Mario Coin: %d\n", coin);
+	}
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);

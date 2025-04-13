@@ -1,0 +1,12 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#Need atleast 1 pixels padding on right and bottom to look good (no idea why)
+
+70000	224	253	241	270	30
+70001	242	253	259	270	30
+70002	224	271	241	288	30
+70003	242	271	259	288	30
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+
