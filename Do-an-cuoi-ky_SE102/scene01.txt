@@ -7,11 +7,12 @@ cloud.txt
 box.txt
 Mushroom.txt
 pipe.txt
+tussock.txt
 
 # RENDERING ORDER IS IMPORTANT
 [OBJECTS]
 # type	x	y	
-# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Coins, 5 = Platform, 6 = Box Platform, 7 = Pipe
+# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Coins, 5 = Platform, 6 = Box Platform, 7 = Pipe, 8 - Tussock
 
 
 
@@ -31,6 +32,11 @@ pipe.txt
 6	2176	272	16	16	3	9	61001	62001	63001	64001	65001	66001	67001	68001	69001	60051	60052	60052
 6	2144	368	16	16	3	3	61000	62000	63000	64000	65000	66000	67000	68000	69000	60011	60012	60013
 
+
+#TUSSOCK 
+#(sprite id will be in order from L to R, T to B), -1 (sprite_id will not be rendered)
+8	16	352	16 	16	8	4	-1	80000	80001	-1 	-1	-1	-1	-1	80000	80006	80004	80000	80001	80000	80001	-1	80003	80005	80006	80002	80004 	80003	80005	80001	80003	80002	80002	80002	80005	80006	80002	80004	
+
 # MARIO
 0	20	350
 
@@ -49,8 +55,7 @@ pipe.txt
 4	192	500
 7	2256	112	16	16	12	20010	20010	70002	70003
 4	192	500
-7	2320	384	16	16	2	70000	70001	70002	70003
-
+7	2320	384	16	16	2	70000	70001	70002	70003	
 
 
 # FLOOR 1
