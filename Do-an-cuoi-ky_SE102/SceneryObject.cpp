@@ -9,7 +9,7 @@ void CSceneryObject::Render() {
 			int spriteID = spriteIDs[i][j];
 
 			if (spriteID != -1) { // Check if the sprite ID is valid
-				s->Get(spriteID)->Draw(x + cellWidth / 2 + j * cellWidth, y + i * cellHeight);
+				s->Get(spriteID)->Draw(x + j * cellWidth, y + i * cellHeight);
 			}
 		}
 	}
@@ -18,7 +18,7 @@ void CSceneryObject::Render() {
 }
 
 void CSceneryObject::GetBoundingBox(float& l, float& t, float& r, float& b) {
-	l = x;
+	l = x - cellWidth / 2;
 	t = y - cellHeight / 2;
 	r = l + length * cellWidth;
 	b = t + width * cellHeight;
