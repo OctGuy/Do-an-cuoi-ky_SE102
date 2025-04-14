@@ -110,7 +110,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{
-					level = MARIO_LEVEL_SMALL;
+					SetLevel(MARIO_LEVEL_SMALL);
 					StartUntouchable();
 				}
 				else
@@ -266,7 +266,14 @@ void CMario::Render()
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
 
-	if (state == MARIO_STATE_DIE)
+	if(CGame::GetInstance()->IsTimeFrozen()) //show freeze animation
+	{
+		if (nx > 0)
+			aniId = ID_ANI_MARIO_CHANGE_LEVEL_RIGHT; 
+		else
+			aniId = ID_ANI_MARIO_CHANGE_LEVEL_LEFT; 
+	}
+	else if (state == MARIO_STATE_DIE)
 		aniId = ID_ANI_MARIO_DIE;
 	else if (level == MARIO_LEVEL_BIG)
 		aniId = GetAniIdBig();
@@ -274,8 +281,8 @@ void CMario::Render()
 		aniId = GetAniIdSmall();
 
 	animations->Get(aniId)->Render(x, y);
-
-	//RenderBoundingBox();
+	
+	RenderBoundingBox();
 
 	DebugOutTitle(L"Coins: %d", coin);
 }
@@ -433,7 +440,9 @@ void CMario::SetLevel(int l)
 {
 	// Adjust position to avoid falling off platform
 
-	CGame::GetInstance()->FreezeGame();
+	CGame::GetInstance()->FreezeGame(); // time is only frozen when mario is changing level
+
+	SetState(MARIO_STATE_IDLE); 
 
 	if (this->level == MARIO_LEVEL_SMALL)
 	{
