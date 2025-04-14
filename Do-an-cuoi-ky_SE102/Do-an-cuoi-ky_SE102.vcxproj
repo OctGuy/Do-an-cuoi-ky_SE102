@@ -154,7 +154,7 @@
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="Textures.cpp" />
-    <ClCompile Include="Tussock.cpp" />
+    <ClCompile Include="SceneryObject.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -184,7 +184,7 @@
     <ClInclude Include="Mushroom.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Textures.h" />
-    <ClInclude Include="Tussock.h" />
+    <ClInclude Include="SceneryObject.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

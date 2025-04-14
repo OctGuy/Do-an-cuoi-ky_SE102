@@ -13,6 +13,8 @@
 #define MUSHROOM_GRAVITY 0.002f
 #define MUSHROOM_WALKING_SPEED 0.05f
 #define MUSHROOM_RISE_SPEED 0.02f
+
+
 class CMushroom : public CGameObject
 {
 protected:

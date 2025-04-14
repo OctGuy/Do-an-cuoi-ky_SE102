@@ -9,7 +9,7 @@
 #include "Portal.h"
 #include "Coin.h"
 #include "Platform.h"
-#include "Tussock.h"
+#include "SceneryObject.h"
 #include "SampleKeyEventHandler.h"
 
 using namespace std;
@@ -106,154 +106,165 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	switch (object_type)
 	{
-	case OBJECT_TYPE_MARIO:
-		if (player != NULL)
+		case OBJECT_TYPE_MARIO:
 		{
-			DebugOut(L"[ERROR] MARIO object was created before!\n");
-			return;
-		}
-		obj = new CMario(x, y);
-		player = (CMario*)obj;
-
-		DebugOut(L"[INFO] Player object has been created!\n");
-		break;
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
-	case OBJECT_TYPE_BRICK:
-		type = atoi(tokens[3].c_str());
-		obj = new CBrick(x, y, type);
-		break;
-	case OBJECT_TYPE_QUESTION_BRICK:
-		type = atoi(tokens[3].c_str());
-		obj = new CQuestionBrick(x, y, type);
-		//WARNING: load item you want the quesiton brick to contain first then load the brick
-		if (!objects.empty())
-		{
-			((CQuestionBrick*)obj)->SetItem(objects.back());
-			objects.back()->SetActive(false);
-		}
-		break;
-	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
-	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y); break;
-
-	case OBJECT_TYPE_PLATFORM:
-	{
-		float cell_width = (float)atof(tokens[3].c_str());
-		float cell_height = (float)atof(tokens[4].c_str());
-		int length = atoi(tokens[5].c_str());
-		int sprite_begin = atoi(tokens[6].c_str());
-		int sprite_middle = atoi(tokens[7].c_str());
-		int sprite_end = atoi(tokens[8].c_str());
-
-		obj = new CPlatform(
-			x, y,
-			cell_width, cell_height, length,
-			sprite_begin, sprite_middle, sprite_end
-		);
-
-		break;
-	}
-
-	case OBJECT_TYPE_BOX_PLATFORM:
-	{
-		float cell_width = (float)atof(tokens[3].c_str());
-		float cell_height = (float)atof(tokens[4].c_str());
-		int length = atoi(tokens[5].c_str());
-		int width = atoi(tokens[6].c_str());
-		int sprite_id_TL = atoi(tokens[7].c_str());
-		int sprite_iid_MT = atoi(tokens[8].c_str());
-		int sprite_id_TR = atoi(tokens[9].c_str());
-		int sprite_id_ML = atoi(tokens[10].c_str());
-		int sprite_id_fill = atoi(tokens[11].c_str());
-		int sprite_id_MR = atoi(tokens[12].c_str());
-		int sprite_id_BL = atoi(tokens[13].c_str());
-		int sprite_id_MB = atoi(tokens[14].c_str());
-		int sprite_id_BR = atoi(tokens[15].c_str());
-		int sprite_id_SOTCorner = atoi(tokens[16].c_str());
-		int sprite_id_SOTBody = atoi(tokens[17].c_str());
-		int sprite_id_SOTBottom = atoi(tokens[18].c_str());
-
-		obj = new CBoxPlatform(
-			x, y, 
-			length, width, cell_width, cell_height,
-			sprite_id_TL, sprite_id_TR, sprite_id_BL, sprite_id_BR, sprite_id_fill,
-			sprite_iid_MT, sprite_id_MB, sprite_id_ML, sprite_id_MR, 
-			sprite_id_SOTCorner, sprite_id_SOTBody, sprite_id_SOTBottom
-		);
-
-		break;
-	}
-	case OBJECT_TYPE_PIPE:
-	{
-		float cell_width = (float)atof(tokens[3].c_str());
-		float cell_height = (float)atof(tokens[4].c_str());
-		int height = atoi(tokens[5].c_str());
-		int sprite_tl = atoi(tokens[6].c_str());
-		int sprite_tr = atoi(tokens[7].c_str());
-		int sprite_bl = atoi(tokens[8].c_str());
-		int sprite_br = atoi(tokens[9].c_str());
-
-		obj = new CPipe(
-			x, y,
-			cell_width, cell_height, height,
-			sprite_tl, sprite_tr, sprite_bl, sprite_br
-		);
-
-		if (!objects.empty())
-		{
-			((CPipe*)obj)->SetItem(objects.back());
-			objects.back()->SetActive(false);
-		}
-		break;
-	}
-
-	case OBJECT_TYPE_TUSSOCK: 
-	{
-		float cellWidth = (float)atof(tokens[3].c_str());
-		float cellHeight = (float)atof(tokens[4].c_str());
-		int length = atoi(tokens[5].c_str());
-		int width = atoi(tokens[6].c_str());
-
-		vector<vector<int>> spriteIDs;
-		for (int i = 0; i < width; i++)
-		{
-			vector<int> row;
-			for (int j = 0; j < length; j++)
+			if (player != NULL)
 			{
-				int spriteID = atoi(tokens[7 + i * length + j].c_str());
-				row.push_back(spriteID);
+				DebugOut(L"[ERROR] MARIO object was created before!\n");
+				return;
 			}
-			spriteIDs.push_back(row);
+
+			obj = new CMario(x, y);
+			player = (CMario*)obj;
+
+			DebugOut(L"[INFO] Player object has been created!\n");
+			break;
 		}
 
-		obj = new CTussock(x, y, length, width, cellWidth, cellHeight, spriteIDs);
-        DebugOut(L"Loaded Tussock with spriteIDs:\n");
-        for (size_t i = 0; i < spriteIDs.size(); i++) {
-            for (size_t j = 0; j < spriteIDs[i].size(); j++) {
-                DebugOut(L"%d ", spriteIDs[i][j]);
-            }
-            DebugOut(L"\n"); // New line after each row
-        }
+		case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
+
+		case OBJECT_TYPE_BRICK:
+			type = atoi(tokens[3].c_str());
+			obj = new CBrick(x, y, type);
+			break;
+
+		case OBJECT_TYPE_QUESTION_BRICK:
+			type = atoi(tokens[3].c_str());
+			obj = new CQuestionBrick(x, y, type);
+			//WARNING: load item you want the quesiton brick to contain first then load the brick
+
+			if (!objects.empty())
+			{
+				((CQuestionBrick*)obj)->SetItem(objects.back());
+				objects.back()->SetActive(false);
+			}
+
+			break;
+
+		case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+
+		case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y); break;
+
+		case OBJECT_TYPE_PLATFORM:
+		{
+			float cell_width = (float)atof(tokens[3].c_str());
+			float cell_height = (float)atof(tokens[4].c_str());
+			int length = atoi(tokens[5].c_str());
+			int sprite_begin = atoi(tokens[6].c_str());
+			int sprite_middle = atoi(tokens[7].c_str());
+			int sprite_end = atoi(tokens[8].c_str());
+
+			obj = new CPlatform(
+				x, y,
+				cell_width, cell_height, length,
+				sprite_begin, sprite_middle, sprite_end
+			);
+
+			break;
+		}
+
+		case OBJECT_TYPE_BOX_PLATFORM:
+		{
+			float cell_width = (float)atof(tokens[3].c_str());
+			float cell_height = (float)atof(tokens[4].c_str());
+			int length = atoi(tokens[5].c_str());
+			int width = atoi(tokens[6].c_str());
+			int sprite_id_TL = atoi(tokens[7].c_str());
+			int sprite_id_MT = atoi(tokens[8].c_str());
+			int sprite_id_TR = atoi(tokens[9].c_str());
+			int sprite_id_ML = atoi(tokens[10].c_str());
+			int sprite_id_fill = atoi(tokens[11].c_str());
+			int sprite_id_MR = atoi(tokens[12].c_str());
+			int sprite_id_BL = atoi(tokens[13].c_str());
+			int sprite_id_MB = atoi(tokens[14].c_str());
+			int sprite_id_BR = atoi(tokens[15].c_str());
+			int sprite_id_SOTCorner = atoi(tokens[16].c_str());
+			int sprite_id_SOTBody = atoi(tokens[17].c_str());
+			int sprite_id_SOTBottom = atoi(tokens[18].c_str());
+
+			obj = new CBoxPlatform(
+				x, y, 
+				length, width, cell_width, cell_height,
+				sprite_id_TL, sprite_id_TR, sprite_id_BL, sprite_id_BR, sprite_id_fill,
+				sprite_id_MT, sprite_id_MB, sprite_id_ML, sprite_id_MR, 
+				sprite_id_SOTCorner, sprite_id_SOTBody, sprite_id_SOTBottom
+			);
+
+			break;
+		}
+
+		case OBJECT_TYPE_PIPE:
+		{
+			float cell_width = (float)atof(tokens[3].c_str());
+			float cell_height = (float)atof(tokens[4].c_str());
+			int height = atoi(tokens[5].c_str());
+			int sprite_tl = atoi(tokens[6].c_str());
+			int sprite_tr = atoi(tokens[7].c_str());
+			int sprite_bl = atoi(tokens[8].c_str());
+			int sprite_br = atoi(tokens[9].c_str());
+
+			obj = new CPipe(
+				x, y,
+				cell_width, cell_height, height,
+				sprite_tl, sprite_tr, sprite_bl, sprite_br
+			);
+
+			if (!objects.empty())
+			{
+				((CPipe*)obj)->SetItem(objects.back());
+				objects.back()->SetActive(false);
+			}
+			break;
+		}
+
+		case OBJECT_TYPE_SCENERY_OBJ: 
+		{
+			float cellWidth = (float)atof(tokens[3].c_str());
+			float cellHeight = (float)atof(tokens[4].c_str());
+			int length = atoi(tokens[5].c_str());
+			int width = atoi(tokens[6].c_str());
+
+			vector<vector<int>> spriteIDs;
+			for (int i = 0; i < width; i++)
+			{
+				vector<int> row;
+				for (int j = 0; j < length; j++)
+				{
+					int spriteID = atoi(tokens[7 + i * length + j].c_str());
+					row.push_back(spriteID);
+				}
+				spriteIDs.push_back(row);
+			}
+
+			obj = new CSceneryObject(x, y, length, width, cellWidth, cellHeight, spriteIDs);
+
+			//DebugOut(L"Loaded Tussock with spriteIDs:\n");
+			//for (size_t i = 0; i < spriteIDs.size(); i++) {
+			//	for (size_t j = 0; j < spriteIDs[i].size(); j++) {
+			//		DebugOut(L"%d ", spriteIDs[i][j]);
+			//	}
+			//	DebugOut(L"\n"); // New line after each row
+			//}
+
+			break;
+		}
+
+		case OBJECT_TYPE_PORTAL:
+		{
+			float r = (float)atof(tokens[3].c_str());
+			float b = (float)atof(tokens[4].c_str());
+			int scene_id = atoi(tokens[5].c_str());
+			obj = new CPortal(x, y, r, b, scene_id);
+		}
 		break;
-	}
 
-	case OBJECT_TYPE_PORTAL:
-	{
-		float r = (float)atof(tokens[3].c_str());
-		float b = (float)atof(tokens[4].c_str());
-		int scene_id = atoi(tokens[5].c_str());
-		obj = new CPortal(x, y, r, b, scene_id);
-	}
-	break;
-
-
-	default:
-		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
-		return;
+		default:
+			DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
+			return;
 	}
 
 	// General object setup
 	obj->SetPosition(x, y);
-
 
 	objects.push_back(obj);
 }

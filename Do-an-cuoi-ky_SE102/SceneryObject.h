@@ -8,16 +8,20 @@
 #include "Game.h"
 #include <vector>
 
-class CTussock : public CGameObject
+/*
+	Scenery object: tussock, grass, tree, cloud,... and others non-interactive objs
+*/
+
+class CSceneryObject : public CGameObject
 {
 protected:
-	int length;
+	int length;						// Unit: cell
 	int width;
 	float cellWidth;
 	float cellHeight;
-	vector<vector<int>> spriteIDs; // 2D array of sprite IDs
+	vector<vector<int>> spriteIDs;	// 2D array of sprite IDs
 public:
-	CTussock(float x, float y, int length, int width,
+	CSceneryObject(float x, float y, int length, int width,
 		float cellWidth, float cellHeight, vector<vector<int>> spriteIDs) : CGameObject(x, y)
 	{
 		this->length = length;

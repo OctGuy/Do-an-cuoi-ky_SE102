@@ -287,111 +287,115 @@ void CMario::SetState(int state)
 
 	switch (state)
 	{
-	case MARIO_STATE_RUNNING_LEFT:
-		// Only stop sitting if on platform
-		if (isSitting && isOnPlatform) {
-			isSitting = false;
-			y -= MARIO_SIT_HEIGHT_ADJUST;
-		}
-		isRunning = true;
-		maxVx = -MARIO_RUNNING_SPEED;
-		ax = -MARIO_ACCEL_RUN_X;
-		nx = -1;
-		break;
-	case MARIO_STATE_RUNNING_RIGHT:
-		// Only stop sitting if on platform
-		if (isSitting && isOnPlatform) {
-			isSitting = false;
-			y -= MARIO_SIT_HEIGHT_ADJUST;
-		}
-		isRunning = true;
-		maxVx = MARIO_RUNNING_SPEED;
-		ax = MARIO_ACCEL_RUN_X;
-		nx = 1;
-		break;
-	case MARIO_STATE_WALKING_LEFT:
-		// Only stop sitting if on platform
-		if (isSitting && isOnPlatform) {
-			isSitting = false;
-			y -= MARIO_SIT_HEIGHT_ADJUST;
-		}
-		isRunning = true;
-		maxVx = -MARIO_WALKING_SPEED;
-		ax = -MARIO_ACCEL_WALK_X;
-		nx = -1;
-		break;
-	case MARIO_STATE_WALKING_RIGHT:
-		// Only stop sitting if on platform
-		if (isSitting && isOnPlatform) {
-			isSitting = false;
-			y -= MARIO_SIT_HEIGHT_ADJUST;
-		}
-		isRunning = true;
-		maxVx = MARIO_WALKING_SPEED;
-		ax = MARIO_ACCEL_WALK_X;
-		nx = 1;
-		break;
-	case MARIO_STATE_JUMP:
-		// Allow jumping in sitting state
-		if (isOnPlatform)
-		{
-			if (abs(this->vx) == MARIO_RUNNING_SPEED)
-				vy = -MARIO_JUMP_RUN_SPEED_Y;
-			else
-				vy = -MARIO_JUMP_SPEED_Y;
-		}
-		break;
-
-	case MARIO_STATE_RELEASE_JUMP:
-		if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
-		break;
-
-	case MARIO_STATE_SIT:
-		if (isRunning && isOnPlatform) break;
-		if (isOnPlatform && level != MARIO_LEVEL_SMALL)
-		{
-			state = MARIO_STATE_IDLE;
-			isSitting = true;
-			//vx = 0; vy = 0.0f;
-			if (!isSitting)
-				y += MARIO_SIT_HEIGHT_ADJUST;
-		}
-		break;
-
-	case MARIO_STATE_SIT_RELEASE:
-		if (isSitting && isOnPlatform)
-		{
-			isSitting = false;
-			state = MARIO_STATE_IDLE;
-			if (!isSitting)
+		case MARIO_STATE_RUNNING_LEFT:
+			// Only stop sitting if on platform
+			if (isSitting && isOnPlatform) {
+				isSitting = false;
 				y -= MARIO_SIT_HEIGHT_ADJUST;
-		}
-		break;
+			}
+			isRunning = true;
+			maxVx = -MARIO_RUNNING_SPEED;
+			ax = -MARIO_ACCEL_RUN_X;
+			nx = -1;
+			break;
 
-	case MARIO_STATE_DECELERATE_RIGHT:
-		isRunning = false;
-		ax = -MARIO_ACCEL_WALK_X * 1.3f;  // Gentler deceleration
-		nx = 1; //maintain right-facing animation
-		break;
+		case MARIO_STATE_RUNNING_RIGHT:
+			// Only stop sitting if on platform
+			if (isSitting && isOnPlatform) {
+				isSitting = false;
+				y -= MARIO_SIT_HEIGHT_ADJUST;
+			}
+			isRunning = true;
+			maxVx = MARIO_RUNNING_SPEED;
+			ax = MARIO_ACCEL_RUN_X;
+			nx = 1;
+			break;
 
-	case MARIO_STATE_DECELERATE_LEFT:
-		isRunning = false;
-		ax = MARIO_ACCEL_WALK_X * 1.3f;  // Gentler deceleration
-		nx = -1; //maintain left-facing animation
-		break;
+		case MARIO_STATE_WALKING_LEFT:
+			// Only stop sitting if on platform
+			if (isSitting && isOnPlatform) {
+				isSitting = false;
+				y -= MARIO_SIT_HEIGHT_ADJUST;
+			}
+			isRunning = true;
+			maxVx = -MARIO_WALKING_SPEED;
+			ax = -MARIO_ACCEL_WALK_X;
+			nx = -1;
+			break;
 
-	case MARIO_STATE_IDLE:
-		ax = 0.0f;
-		vx = 0.0f;
-		isRunning = false;
-		break;
+		case MARIO_STATE_WALKING_RIGHT:
+			// Only stop sitting if on platform
+			if (isSitting && isOnPlatform) {
+				isSitting = false;
+				y -= MARIO_SIT_HEIGHT_ADJUST;
+			}
+			isRunning = true;
+			maxVx = MARIO_WALKING_SPEED;
+			ax = MARIO_ACCEL_WALK_X;
+			nx = 1;
+			break;
 
-	case MARIO_STATE_DIE:
-		vy = -MARIO_JUMP_DEFLECT_SPEED;
-		vx = 0;
-		ax = 0;
-		isRunning = false;
-		break;
+		case MARIO_STATE_JUMP:
+			// Allow jumping in sitting state
+			if (isOnPlatform)
+			{
+				if (abs(this->vx) == MARIO_RUNNING_SPEED)
+					vy = -MARIO_JUMP_RUN_SPEED_Y;
+				else
+					vy = -MARIO_JUMP_SPEED_Y;
+			}
+			break;
+
+		case MARIO_STATE_RELEASE_JUMP:
+			if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
+			break;
+
+		case MARIO_STATE_SIT:
+			if (isRunning && isOnPlatform) break;
+			if (isOnPlatform && level != MARIO_LEVEL_SMALL)
+			{
+				state = MARIO_STATE_IDLE;
+				isSitting = true;
+				//vx = 0; vy = 0.0f;
+				if (!isSitting)
+					y += MARIO_SIT_HEIGHT_ADJUST;
+			}
+			break;
+
+		case MARIO_STATE_SIT_RELEASE:
+			if (isSitting && isOnPlatform)
+			{
+				isSitting = false;
+				state = MARIO_STATE_IDLE;
+				if (!isSitting)
+					y -= MARIO_SIT_HEIGHT_ADJUST;
+			}
+			break;
+
+		case MARIO_STATE_DECELERATE_RIGHT:
+			isRunning = false;
+			ax = -MARIO_ACCEL_WALK_X * 1.3f;  // Gentler deceleration
+			nx = 1; //maintain right-facing animation
+			break;
+
+		case MARIO_STATE_DECELERATE_LEFT:
+			isRunning = false;
+			ax = MARIO_ACCEL_WALK_X * 1.3f;  // Gentler deceleration
+			nx = -1; //maintain left-facing animation
+			break;
+
+		case MARIO_STATE_IDLE:
+			ax = 0.0f;
+			vx = 0.0f;
+			isRunning = false;
+			break;
+
+		case MARIO_STATE_DIE:
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			vx = 0;
+			ax = 0;
+			isRunning = false;
+			break;
 	}
 
 	CGameObject::SetState(state);

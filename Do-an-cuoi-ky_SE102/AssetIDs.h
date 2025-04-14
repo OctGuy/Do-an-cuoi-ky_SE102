@@ -4,11 +4,13 @@
 // This file contains all IDs of game assets 
 //
 
+#pragma region Textures_ID
 #define ID_TEX_MARIO 0
 #define ID_TEX_ENEMY 10
 #define ID_TEX_MISC 20
+#pragma endregion
 
-
+#pragma region Objects_ID
 #define OBJECT_TYPE_MARIO	0
 #define OBJECT_TYPE_BRICK	1
 #define OBJECT_TYPE_GOOMBA	2
@@ -17,16 +19,13 @@
 #define OBJECT_TYPE_PLATFORM 5
 #define OBJECT_TYPE_BOX_PLATFORM 6
 #define OBJECT_TYPE_PIPE 7
-#define OBJECT_TYPE_TUSSOCK 8
+#define OBJECT_TYPE_SCENERY_OBJ 8
 #define OBJECT_TYPE_QUESTION_BRICK 21
 #define OBJECT_TYPE_MUSHROOM 22
-
-
-
 #define OBJECT_TYPE_PORTAL	50
+#pragma endregion
 
-
-#pragma region MARIO 
+#pragma region Mario_Sprites_ID 
 
 #define ID_SPRITE_MARIO 10000
 #define ID_SPRITE_MARIO_BIG (ID_SPRITE_MARIO + 1000)
@@ -85,6 +84,8 @@
 
 #pragma endregion 
 
+
+#pragma region Non-player_Sprites_ID
 #define ID_SPRITE_BRICK 20000
 
 #define ID_SPRITE_GOOMBA 30000
@@ -94,6 +95,7 @@
 #define ID_SPRITE_COIN 40000
 
 #define ID_SPRITE_CLOUD 50000
-#define ID_SPRITE_CLOUD_BEGIN (ID_SPRITE_CLOUD+1000)
-#define ID_SPRITE_CLOUD_MIDDLE (ID_SPRITE_CLOUD+2000)
-#define ID_SPRITE_CLOUD_END (ID_SPRITE_CLOUD+3000)
+#define ID_SPRITE_CLOUD_BEGIN (ID_SPRITE_CLOUD + 1000)
+#define ID_SPRITE_CLOUD_MIDDLE (ID_SPRITE_CLOUD + 2000)
+#define ID_SPRITE_CLOUD_END (ID_SPRITE_CLOUD + 3000)
+#pragma endregion

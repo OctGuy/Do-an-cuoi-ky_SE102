@@ -4,15 +4,19 @@ void CBoxPlatform::Render()
 {
 	if (this->length <= 0 || this->width <= 0) return;
 	//DebugOut(L"Rendering Box");
+
 	float yy = y;
 	RenderLayer(this->spriteIdTL, this->spriteIdMT, this->spriteIdTR, this->spriteIdSOTCorner, yy);
 	yy += this->cellHeight;
-	if (this->width > 2)
+
+	if (this->width > 2) {
 		for (int i = 1; i < this->width - 1; i++)
 		{
-			RenderLayer(this->spriteIdML, this->spriteIdFill, this->spriteIdMR, this->spriteIdSOTBody,yy);
+			RenderLayer(this->spriteIdML, this->spriteIdFill, this->spriteIdMR, this->spriteIdSOTBody, yy);
 			yy += this->cellHeight;
 		}
+	}
+		
 	if (this->width > 1)
 		RenderLayer(this->spriteIdBL, this->spriteIdMB, this->spriteIdBR, this->spriteIdSOTBottom, yy);
 
@@ -27,14 +31,17 @@ void CBoxPlatform::RenderLayer(int leftLayerId, int midLayerId, int rightLayerId
 
 	s->Get(leftLayerId)->Draw(xx, yy);
 	xx += this->cellWidth;
+
 	//Render middle of layer
 	for (int i = 1; i < this->length - 1; i++)
 	{
 		s->Get(midLayerId)->Draw(xx, yy);
 		xx += this->cellWidth;
 	}
+
 	if (length > 1)
 		s->Get(rightLayerId)->Draw(xx, yy);
+
 	xx += this->cellWidth;
 	s->Get(spriteIdSOT)->Draw(xx, yy);
 }

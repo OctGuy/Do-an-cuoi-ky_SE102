@@ -46,12 +46,12 @@ void CCoin::SetState(int state)
 {
 	switch (state)
 	{
-	case COIN_STATE_BOUNCE:
-		//DebugOut(L"Coin bounce");
-		originalY = y - COIN_BBOX_HEIGHT; //This happen after question brick update new y position for coin
-		bounceStart = GetTickCount64();
-		vy = -COIN_BOUNCE_SPEED;
-		break;
+		case COIN_STATE_BOUNCE:
+			//DebugOut(L"Coin bounce");
+			originalY = y - COIN_BBOX_HEIGHT; //This happen after question brick update new y position for coin
+			bounceStart = GetTickCount64();
+			vy = -COIN_BOUNCE_SPEED;
+			break;
 	}
 
 	CGameObject::SetState(state);
@@ -63,6 +63,7 @@ void CCoin::CollectCoin()
 	//I wanted mario to call oncollisionwithcoin function instead but this will do(Hopefully)
 	CGame* game = CGame::GetInstance();
 	CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
+
 	if (playScene)
 	{
 		CMario* mario = dynamic_cast<CMario*>(playScene->GetPlayer());
@@ -71,5 +72,6 @@ void CCoin::CollectCoin()
 			mario->AddCoin();
 		}
 	}
+
 	this->Delete();
 }
