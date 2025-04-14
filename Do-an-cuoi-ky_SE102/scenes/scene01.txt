@@ -1,13 +1,13 @@
 [ASSETS]
-mario.txt
-brick.txt
-coin.txt
-goomba.txt
-cloud.txt
-box.txt
-Mushroom.txt
-pipe.txt
-tussock.txt
+assets\mario.txt
+assets\brick.txt
+assets\coin.txt
+assets\goomba.txt
+assets\cloud.txt
+assets\box.txt
+assets\mushroom.txt
+assets\pipe.txt
+assets\tussock.txt
 
 # RENDERING ORDER IS IMPORTANT
 [OBJECTS]
