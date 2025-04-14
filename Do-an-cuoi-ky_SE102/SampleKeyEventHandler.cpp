@@ -28,6 +28,10 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
     case DIK_R: // reset
         //Reload();
         break;
+	case DIK_P:
+		// Pause game
+		CGame::GetInstance()->TogglePause();
+		break;
     }
 }
 
