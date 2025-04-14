@@ -7,7 +7,7 @@ assets\cloud.txt
 assets\box.txt
 assets\mushroom.txt
 assets\pipe.txt
-assets\tussock.txt
+assets\scenery_object.txt
 
 # RENDERING ORDER IS IMPORTANT
 [OBJECTS]
@@ -33,8 +33,9 @@ assets\tussock.txt
 6	2144	368	16	16	3	3	61000	62000	63000	64000	65000	66000	67000	68000	69000	60011	60012	60013
 
 
-#TUSSOCK 
+#SCENERY OBJECT 
 #(sprite id will be in order from L to R, T to B), -1 (sprite_id will not be rendered)
+# First Tussock
 8	16	352	16 	16	8	4	-1	80000	80001	-1 	-1	-1	-1	-1	80000	80006	80004	80000	80001	80000	80001	-1	80003	80005	80006	80002	80004 	80003	80005	80001	80003	80002	80002	80002	80005	80006	80002	80004	
 
 # MARIO

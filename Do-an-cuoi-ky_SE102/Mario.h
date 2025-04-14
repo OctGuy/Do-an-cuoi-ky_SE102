@@ -19,6 +19,7 @@
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
 
+#pragma region MARIO_STATE
 #define MARIO_STATE_DIE				-10
 #define MARIO_STATE_IDLE			0
 #define MARIO_STATE_WALKING_RIGHT	100
@@ -35,6 +36,7 @@
 
 #define MARIO_STATE_DECELERATE_RIGHT 700
 #define MARIO_STATE_DECELERATE_LEFT  701
+#pragma endregion
 
 
 #pragma region ANIMATION_ID
@@ -84,8 +86,6 @@
 #pragma endregion
 
 #define GROUND_Y 160.0f
-
-
 
 
 #define	MARIO_LEVEL_SMALL	1

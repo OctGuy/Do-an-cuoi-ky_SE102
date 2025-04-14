@@ -16,7 +16,7 @@ protected:
 	float cellHeight;
 	int spriteIdTL, spriteIdTR, spriteIdBL, spriteIdBR, spriteIdFill; // Sprite ID of 4 corners and fill
 	int spriteIdMT, spriteIdMB, spriteIdML, spriteIdMR; // Sprite ID of 4 middle edges
-	int spriteIdSOTCorner; 
+	int spriteIdSOTCorner;								// Sprite ID of Shadow on top of corner
 	int spriteIdSOTBody; 
 	int spriteIdSOTBottom;
 public:
@@ -24,7 +24,7 @@ public:
 		float cellWidth, float cellHeight, int spriteIdTL, int spriteIdTR, 
 		int spriteIdBL, int spriteIdBR, int spriteIdFill, 
 		int spriteIdMT, int spriteIdMB, int spriteIdML, int spriteIdMR, 
-		int spriteIdSOTCorner, int spriteIdSOTBody, int spriteSOTBottom) :CGameObject(x, y)
+		int spriteIdSOTCorner, int spriteIdSOTBody, int spriteSOTBottom) : CGameObject(x, y)
 	{
 		this->length = length;
 		this->width = width;
@@ -48,7 +48,7 @@ public:
 
 	void Render();
 	//Render a layer of the box platform
-	void RenderLayer(int leftLayerId, int midLayerId, int rightLayerId, int spriteIdSOT,float yy); //yy is the y position of the layer
+	void RenderLayer(int leftLayerId, int midLayerId, int rightLayerId, int spriteIdSOT, float yy); //yy is the y position of the layer
 
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);

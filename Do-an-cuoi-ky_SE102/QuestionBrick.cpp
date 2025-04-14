@@ -70,14 +70,14 @@ void CQuestionBrick::SetState(int state)
     CGameObject::SetState(state);
     switch (state)
     {
-    case BRICK_STATE_BOUNCE:
-        if (!isHit)
-        {
-            isHit = true;
-            bounceStart = GetTickCount64();
-            vy = -BRICK_BOUNCE_SPEED;
-        }
-        break;
+        case BRICK_STATE_BOUNCE:
+            if (!isHit)
+            {
+                isHit = true;
+                bounceStart = GetTickCount64();
+                vy = -BRICK_BOUNCE_SPEED;
+            }
+            break;
     }
 }
 

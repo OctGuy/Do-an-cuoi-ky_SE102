@@ -74,13 +74,14 @@ void CMushroom::SetState(int state)
 
     switch (state)
     {
-    case MUSHROOM_STATE_WALKING:
-        vx = -MUSHROOM_WALKING_SPEED;  // Start moving left like Goomba
-		ay = MUSHROOM_GRAVITY;  // Apply gravity
-        break;
-    case MUSHROOM_STATE_RISE:
-        originalY = y;
-        vy = -MUSHROOM_RISE_SPEED;  // Start moving up
-        break;
+        case MUSHROOM_STATE_WALKING:
+            vx = -MUSHROOM_WALKING_SPEED;  // Start moving left like Goomba
+		    ay = MUSHROOM_GRAVITY;  // Apply gravity
+            break;
+
+        case MUSHROOM_STATE_RISE:
+            originalY = y;
+            vy = -MUSHROOM_RISE_SPEED;  // Start moving up
+            break;
     }
 }
