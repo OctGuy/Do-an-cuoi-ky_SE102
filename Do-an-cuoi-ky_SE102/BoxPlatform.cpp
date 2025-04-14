@@ -16,7 +16,7 @@ void CBoxPlatform::Render()
 	if (this->width > 1)
 		RenderLayer(this->spriteIdBL, this->spriteIdMB, this->spriteIdBR, this->spriteIdSOTBottom, yy);
 
-	//RaenderBoundingBox();  // Add this line to display the bounding box
+	//RenderBoundingBox();  // Add this line to display the bounding box
 }
 
 

@@ -9,7 +9,7 @@
 #include "Portal.h"
 #include "Coin.h"
 #include "Platform.h"
-
+#include "Tussock.h"
 #include "SampleKeyEventHandler.h"
 
 using namespace std;
@@ -205,6 +205,37 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		break;
 	}
+
+	case OBJECT_TYPE_TUSSOCK: 
+	{
+		float cellWidth = (float)atof(tokens[3].c_str());
+		float cellHeight = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		int width = atoi(tokens[6].c_str());
+
+		vector<vector<int>> spriteIDs;
+		for (int i = 0; i < width; i++)
+		{
+			vector<int> row;
+			for (int j = 0; j < length; j++)
+			{
+				int spriteID = atoi(tokens[7 + i * length + j].c_str());
+				row.push_back(spriteID);
+			}
+			spriteIDs.push_back(row);
+		}
+
+		obj = new CTussock(x, y, length, width, cellWidth, cellHeight, spriteIDs);
+        DebugOut(L"Loaded Tussock with spriteIDs:\n");
+        for (size_t i = 0; i < spriteIDs.size(); i++) {
+            for (size_t j = 0; j < spriteIDs[i].size(); j++) {
+                DebugOut(L"%d ", spriteIDs[i][j]);
+            }
+            DebugOut(L"\n"); // New line after each row
+        }
+		break;
+	}
+
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());
