@@ -151,6 +151,7 @@ public:
 
 	float GetVx() { return vx; }
 	float GetAx() { return ax; }
+	int GetCoin() { return coin; }
 
 	int IsCollidable()
 	{

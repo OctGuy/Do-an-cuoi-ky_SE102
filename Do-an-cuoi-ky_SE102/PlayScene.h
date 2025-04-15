@@ -13,6 +13,8 @@
 #include "Mushroom.h"
 #include "Portal.h"
 #include "Pipe.h"
+#include "SceneryObject.h"
+#include "HUD.h"
 //#include "Koopas.h"
 
 
@@ -20,7 +22,8 @@ class CPlayScene: public CScene
 {
 protected: 
 	// A play scene has to have player, right? 
-	LPGAMEOBJECT player;					
+	LPGAMEOBJECT player;
+	LPHUD HUD;
 
 	vector<LPGAMEOBJECT> objects;
 

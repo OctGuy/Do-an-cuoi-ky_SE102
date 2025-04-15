@@ -8,6 +8,7 @@ assets\box.txt
 assets\mushroom.txt
 assets\pipe.txt
 assets\scenery_object.txt
+assets\HUD.txt
 
 # RENDERING ORDER IS IMPORTANT
 [OBJECTS]
