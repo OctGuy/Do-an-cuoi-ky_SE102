@@ -20,3 +20,6 @@
 - Mostly finished map 1-1 (11:00)
 - Finished implementing time game Pause and Freeze (Phong)
 
+16/4/2025
+- Recreating the HUD from the mario games (Phong)
+
