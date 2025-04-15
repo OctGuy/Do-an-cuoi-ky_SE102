@@ -8,6 +8,7 @@ assets\box.txt
 assets\mushroom.txt
 assets\pipe.txt
 assets\scenery_object.txt
+assets\piranha_plant.txt
 
 # RENDERING ORDER IS IMPORTANT
 [OBJECTS]
@@ -99,7 +100,10 @@ assets\scenery_object.txt
 0	20	350
 
 # GOOMBA
-#2	300	230
+2	300	230
+
+#PIRANHA_PLANT
+9	359	368
 
 #PIPE
 2	300	500

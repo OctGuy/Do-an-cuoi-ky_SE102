@@ -1,13 +1,140 @@
 #include "PiranhaPlant.h"
+#include "PlayScene.h"
 
-CPiranhaPlant::CPiranhaPlant(float x, float y)
-{ 
-	this->ax = 0;
-	this->ay = 0;
+CPiranhaPlant::CPiranhaPlant(float x, float y) : CEnemy(x, y)
+{
+	this->x = x;
+	this->y = y;
+	originalY = y;
+	SetState(PIRANHA_STATE_HIDE);
 }
 
-void CPiranhaPlant::OnNoCollision(DWORD dt)
+void CPiranhaPlant::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	x += vx * dt;
-	y += vy * dt;
+	left = x - PIRANHA_BBOX_WIDTH / 2;
+	top = y - PIRANHA_BBOX_HEIGHT / 2;
+	right = left + PIRANHA_BBOX_WIDTH;
+	bottom = top + PIRANHA_BBOX_HEIGHT;
+}
+
+void CPiranhaPlant::SetState(int state)
+{
+	stateStartTime = GetTickCount64();
+	this->state = state;
+
+	switch (state) {
+	case PIRANHA_STATE_HIDE:
+		vy = 0;
+		break;
+	case PIRANHA_STATE_RISE:
+		originalY = y;
+		vy = -PIRANHA_MOVE_SPEED;
+		break;
+	case PIRANHA_STATE_SNIP:
+		vy = 0;
+		break;
+	case PIRANHA_STATE_DIVE:
+		originalY = y;
+		vy = PIRANHA_MOVE_SPEED;
+		break;
+	default:
+		break;
+	}
+}
+
+int CPiranhaPlant::GetSnippingDirection()
+{
+	// Get the current scene and player
+	CGame* game = CGame::GetInstance();
+	CPlayScene* currentScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
+	CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+
+	float marioX, marioY;
+	mario->GetPosition(marioX, marioY);
+
+	// Check the position of the Piranha Plant relative to Mario
+	if (marioX < x) {
+		if (marioY < y)
+			return 0;		// UP_LEFT
+		else
+			return 1;		// DOWN_LEFT
+	}
+	else {
+		if (marioY < y)
+			return 2;		// UP_RIGHT
+		else
+			return 3;		// DOWN_RIGHT
+	}
+}
+
+void CPiranhaPlant::Render()
+{
+	if (state == PIRANHA_STATE_HIDE)
+		return;
+
+	int aniId = -1;
+
+	if (state == PIRANHA_STATE_RISE || state == PIRANHA_STATE_DIVE) {
+		int direction = GetSnippingDirection();
+		if (direction == 0 || direction == 1)
+			aniId = PIRANHA_ANI_LEFT_RISE_DIVE;
+		else
+			aniId = PIRANHA_ANI_RIGHT_RISE_DIVE;
+	}
+	else if (state == PIRANHA_STATE_SNIP) {
+		int direction = GetSnippingDirection();
+		if (direction == 0)
+			aniId = PIRANHA_ANI_UP_LEFT;
+		else if (direction == 1)
+			aniId = PIRANHA_ANI_DOWN_LEFT;
+		else if (direction == 2)
+			aniId = PIRANHA_ANI_UP_RIGHT;
+		else
+			aniId = PIRANHA_ANI_DOWN_RIGHT;
+	}
+
+	CAnimations* animations = CAnimations::GetInstance();
+	animations->Get(aniId)->Render(x, y);
+
+	RenderBoundingBox();
+}
+
+void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	ULONGLONG now = GetTickCount64();
+
+	switch (state) {
+	case PIRANHA_STATE_HIDE:
+		if (now - stateStartTime > PIRANHA_HIDE_TIMEOUT) {
+			SetState(PIRANHA_STATE_RISE);
+		}
+		break;
+
+	case PIRANHA_STATE_RISE:
+		y += vy * dt;
+		if (fabs(y - originalY) >= PIRANHA_BBOX_HEIGHT_RISE) {
+			y = originalY - PIRANHA_BBOX_HEIGHT_RISE;
+			SetState(PIRANHA_STATE_SNIP);
+		}
+		break;
+
+	case PIRANHA_STATE_SNIP:
+		if (now - stateStartTime > PIRANHA_HIDE_TIMEOUT) {
+			SetState(PIRANHA_STATE_DIVE);
+		}
+		break;
+
+	case PIRANHA_STATE_DIVE:
+		y += vy * dt;
+		if (fabs(y - originalY) >= PIRANHA_BBOX_HEIGHT_RISE) {
+			y = originalY + PIRANHA_BBOX_HEIGHT_RISE;
+			SetState(PIRANHA_STATE_HIDE);
+		}
+		break;
+
+	default:
+		break;
+	}
+
+	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

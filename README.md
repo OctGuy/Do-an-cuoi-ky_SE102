@@ -18,3 +18,5 @@
 
 15/4/2025
 - Mostly finished map 1-1 (11:00)
+- Relatively completed the movement (up, down) of Piranha Plant (last 8hrs)
+- Remained the shooting (will implement later on)
