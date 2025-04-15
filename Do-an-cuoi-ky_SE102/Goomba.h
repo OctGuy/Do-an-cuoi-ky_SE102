@@ -1,5 +1,7 @@
 #pragma once
 #include "GameObject.h"
+#include "Game.h"
+#include "Sprites.h"
 
 #define GOOMBA_GRAVITY 0.002f
 #define GOOMBA_WALKING_SPEED 0.05f
@@ -15,6 +17,8 @@
 #define GOOMBA_STATE_WALKING 110
 #define GOOMBA_STATE_DIE 200
 
+#define GOOMBA_TEXTURE_IDLE 31001
+
 #define ID_ANI_GOOMBA_WALKING 5000
 #define ID_ANI_GOOMBA_DIE 5001
 
@@ -25,6 +29,9 @@ protected:
 	float ay; 
 
 	int originalY;
+
+	//Need to create an enemy class and implement this instead of just goomba
+	int currentAniId = GOOMBA_TEXTURE_IDLE; 
 
 	ULONGLONG die_start;
 
