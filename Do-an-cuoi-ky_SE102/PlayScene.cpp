@@ -245,6 +245,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			//	}
 			//	DebugOut(L"\n"); // New line after each row
 			//}
+			/*CGame* game = CGame::GetInstance();
+			DebugOut(L"BackBufferWidth: %d\n", game->GetBackBufferWidth());
+			DebugOut(L"BackBufferHeight: %d\n", game->GetBackBufferHeight());*/
 
 			break;
 		}
@@ -347,6 +350,8 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
 	//I just added mario to collision list so mario would collide correctly with other objects
+	//CGame* game = CGame::GetInstance();
+
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
 	{
@@ -360,19 +365,62 @@ void CPlayScene::Update(DWORD dt)
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
-	if (player == NULL) return; 
+	//if (player == NULL) return; 
+
+	//// Update camera to follow mario
+	//float cx, cy;
+	//player->GetPosition(cx, cy);
+
+	//// Get camera position
+	//float camX, camY;
+	//game->GetCamPos(camX, camY);
+
+	//// Map size
+	//float mapWidth = 2816.0f;
+	//float mapHeight = 432.0f;
+
+	//// Define margin boundaries    
+	//float marginX = 80.0f; // Horizontal margin    
+	//float marginY = 40.0f;  // Vertical margin  
+
+	//// Only move camera if Mario pushes outside the margin
+	//if (cx > camX + game->GetBackBufferWidth() - marginX)
+	//	camX = cx - (game->GetBackBufferWidth() - marginX);
+	//else if (cx < camX + marginX)
+	//	camX = cx - marginX;
+
+	//if (cy > camY + game->GetBackBufferHeight() - marginY)
+	//	camY = cy - (game->GetBackBufferHeight() - marginY);
+	//else if (cy < camY + marginY)
+	//	camY = cy - marginY;
+
+	//if (camX < -8)
+	//	camX = -8;
+	//if (camX > mapWidth - game->GetBackBufferWidth() - 8)
+	//	camX = mapWidth - game->GetBackBufferWidth();
+	//if (camY < 0)
+	//	camY = 0;
+	//if (camY > mapHeight - game->GetBackBufferHeight() - 9)
+	//	camY = mapHeight - game->GetBackBufferHeight() - 9;
+
+	//game->SetCamPos(camX, camY);
+
+	//// Purged deleted objects
+	//PurgeDeletedObjects();
+	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
+	if (player == NULL) return;
 
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
 
-	CGame *game = CGame::GetInstance();
+	CGame* game = CGame::GetInstance();
 	cx -= game->GetBackBufferWidth() / 2;
 	cy -= game->GetBackBufferHeight() / 2;
 
 	if (cx < 0) cx = 0;
 
-	CGame::GetInstance()->SetCamPos(cx, 220.0f);
+	CGame::GetInstance()->SetCamPos(cx, 220.f);
 
 	PurgeDeletedObjects();
 }
