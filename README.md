@@ -13,5 +13,8 @@
 13/4/2025
 - Merging codes and discussion between teamate
 
-14/3/2025
+14/4/2025
 - Implementing Time Freeze and Pause Method
+
+15/4/2025
+- Mostly finished map 1-1 (11:00)
