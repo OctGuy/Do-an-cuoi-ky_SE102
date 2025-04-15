@@ -553,6 +553,16 @@ CGame::~CGame()
 	pD3DDevice->Release();
 }
 
+void CGame::CountDownFreezeTime()
+{
+	DWORD now = GetTickCount64();
+	if (now - freeze_start > GAME_FREEZE_TIME)
+	{
+		isTimeFrozen = false;
+		freeze_start = 0;
+	}
+}
+
 CGame* CGame::GetInstance()
 {
 	if (__instance == NULL) __instance = new CGame();
