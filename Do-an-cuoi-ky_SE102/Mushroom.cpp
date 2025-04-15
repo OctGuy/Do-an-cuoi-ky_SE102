@@ -18,7 +18,8 @@ void CMushroom::Render()
 
 	CSprites* sprites = CSprites::GetInstance();
 	sprites->Get(ID_SPRITE_MUSHROOM)->Draw(x, y + 2); //added 2 because the mushroo was floating for some reason
-	RenderBoundingBox();
+	
+    //RenderBoundingBox();
 }
 
 void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
