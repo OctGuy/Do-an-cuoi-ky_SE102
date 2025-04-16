@@ -26,15 +26,15 @@ void CPiranhaPlant::SetState(int state)
 	case PIRANHA_STATE_HIDE:
 		vy = 0;
 		break;
-	case PIRANHA_STATE_RISE:
-		originalY = y;
+	case PIRANHA_STATE_RISE:	
+		//originalY = y;			// now y0 is the y when the plant is hidding
 		vy = -PIRANHA_MOVE_SPEED;
 		break;
 	case PIRANHA_STATE_SNIP:
 		vy = 0;
 		break;
 	case PIRANHA_STATE_DIVE:
-		originalY = y;
+		//originalY = y;			// now y0 is the y when the plant is snipping
 		vy = PIRANHA_MOVE_SPEED;
 		break;
 	default:
@@ -119,7 +119,7 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		break;
 
 	case PIRANHA_STATE_SNIP:
-		if (now - stateStartTime > PIRANHA_HIDE_TIMEOUT) {
+		if (now - stateStartTime > PIRANHA_SNIP_TIMEOUT) {		
 			SetState(PIRANHA_STATE_DIVE);
 		}
 		break;

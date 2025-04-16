@@ -212,7 +212,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 			if (!objects.empty())
 			{
-				((CPipe*)obj)->SetItem(objects.back());
+				dynamic_cast<CPipe*>(obj)->SetItem(objects.back());
 				objects.back()->SetActive(false);
 			}
 			break;
