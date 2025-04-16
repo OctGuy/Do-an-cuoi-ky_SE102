@@ -3,6 +3,7 @@
 #include "Animation.h"
 #include "Animations.h"
 #include "debug.h"
+#include "FireBullet.h"
 
 #pragma region SNIP_RANGE
 #define FAR_POINT_LEFT_RIGHT 119
@@ -43,9 +44,9 @@ class CPiranhaPlant : public CEnemy
 protected:
 	ULONGLONG stateStartTime;	// time when the current state was started
 	float originalY;			// original y pos when starting descending, ascending
-
+	CFireBullet* fireBullet;	// fire bullet shooted by piranha plant
 public:
-	CPiranhaPlant(float x, float y);
+	CPiranhaPlant(float x, float y, CFireBullet* fireBullet);
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

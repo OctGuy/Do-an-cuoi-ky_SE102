@@ -9,11 +9,12 @@ assets\mushroom.txt
 assets\pipe.txt
 assets\scenery_object.txt
 assets\piranha_plant.txt
+assets\fire_bullet.txt
 
 # RENDERING ORDER IS IMPORTANT
 [OBJECTS]
 # type	x	y	
-# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Coins, 5 = Platform, 6 = Box Platform, 7 = Pipe, 8 - Tussock
+# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Coins, 5 = Platform, 6 = Box Platform, 7 = Pipe, 8 - Tussock, 9 - Piranha Plant, 10 - Fire Bullet
 
 
 

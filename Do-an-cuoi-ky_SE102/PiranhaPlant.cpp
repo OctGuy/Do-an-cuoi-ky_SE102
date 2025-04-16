@@ -1,12 +1,14 @@
 #include "PiranhaPlant.h"
 #include "PlayScene.h"
 
-CPiranhaPlant::CPiranhaPlant(float x, float y) : CEnemy(x, y)
+CPiranhaPlant::CPiranhaPlant(float x, float y, CFireBullet* fireBullet) : CEnemy(x, y)
 {
 	this->x = x;
 	this->y = y;
 	originalY = y;
 	SetState(PIRANHA_STATE_HIDE);
+	this->fireBullet = fireBullet;
+	fireBullet->SetState(FIRE_BULLET_STATE_INACTIVE); // Set the fire bullet to inactive state
 }
 
 void CPiranhaPlant::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -111,7 +113,7 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float marioX, marioY;
 	mario->GetPosition(marioX, marioY);
 
-	// Check if Mario is too far or too close
+	// Check if Mario is too far or too close (improve later: implement a function to know when Mario is in range)
     float relativeX = fabs(marioX - x);
 	if (GetSnippingDirection() == 0 || GetSnippingDirection() == 1) {
 		if (relativeX > FAR_POINT_LEFT_RIGHT || (relativeX < NEAR_POINT_MAX_LEFT && relativeX > NEAR_POINT_MIN_LEFT))
