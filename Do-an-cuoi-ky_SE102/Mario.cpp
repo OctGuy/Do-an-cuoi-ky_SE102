@@ -86,6 +86,7 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 	{
 		SetLevel(MARIO_LEVEL_BIG);
 		e->obj->Delete();
+		AddPoint(1000);
 	}
 }
 
@@ -100,6 +101,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		{
 			goomba->SetState(GOOMBA_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			AddPoint(100);
 		}
 	}
 	else // hit by Goomba

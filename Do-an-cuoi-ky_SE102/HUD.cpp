@@ -21,6 +21,7 @@ void CHUD::Update(DWORD dt)
     // Update coin count from player
     if (player) {
         this->coin = player->GetCoin();
+		this->score = player->GetPoint();
     }
 
     // Update time
@@ -49,9 +50,9 @@ void CHUD::Render()
 	//For this the HUD to render correctly, these values need to be adjusted manually
 	//TODO: create a way to calculate the position of the text
     
-    // Render Mario icon (for lives)
+    // Render Mario icon and live number
 	marioIconSprite->Draw(hud_x - 105, hud_y + 5);
-    RenderNumber(lives, hud_x - 85, hud_y + 6, 1);
+    RenderNumber(lives, hud_x - 77, hud_y + 6, 1);
 
     // Render score
     RenderNumber(score, hud_x - 61, hud_y + 6, 7);
@@ -62,7 +63,7 @@ void CHUD::Render()
     // Render time
     RenderNumber(remainingTime, hud_x + 11, hud_y + 6, 3);
 
-    //Render world
+    //Render world number
 	RenderNumber(1, hud_x - 77, hud_y - 2, 1);
 }
 
