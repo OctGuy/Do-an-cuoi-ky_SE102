@@ -82,7 +82,7 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
 	CMushroom* mushroom = dynamic_cast<CMushroom*>(e->obj);
-	if (level != MARIO_LEVEL_BIG)
+	if (level == MARIO_LEVEL_SMALL)
 	{
 		SetLevel(MARIO_LEVEL_BIG);
 		e->obj->Delete();
@@ -112,7 +112,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{
-					SetLevel(MARIO_LEVEL_SMALL);
+					SetLevel(level - 1);
 					StartUntouchable();
 				}
 				else
