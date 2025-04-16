@@ -5,9 +5,11 @@
 #include "debug.h"
 
 #pragma region SNIP_RANGE
-#define FAR_POINT 119
-#define NEAR_POINT_MIN 22
-#define NEAR_POINT_MAX 24.1
+#define FAR_POINT_LEFT_RIGHT 119
+#define NEAR_POINT_MIN_LEFT 22
+#define NEAR_POINT_MAX_LEFT 23
+#define NEAR_POINT_MIN_RIGHT 23
+#define NEAR_POINT_MAX_RIGHT 24
 #pragma endregion
 
 #define PIRANHA_BBOX_WIDTH 16

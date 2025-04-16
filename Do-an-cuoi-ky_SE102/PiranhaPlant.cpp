@@ -113,17 +113,30 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	// Check if Mario is too far or too close
     float relativeX = fabs(marioX - x);
-    if (relativeX > FAR_POINT || (relativeX < NEAR_POINT_MAX && relativeX > NEAR_POINT_MIN))
-    {
-        if (this->state == PIRANHA_STATE_SNIP) {
-            SetState(PIRANHA_STATE_DIVE); // Transition to dive first
-        }
-		else if (this->state == PIRANHA_STATE_HIDE) {
-			SetState(PIRANHA_STATE_HIDE); // Stay hidden
+	if (GetSnippingDirection() == 0 || GetSnippingDirection() == 1) {
+		if (relativeX > FAR_POINT_LEFT_RIGHT || (relativeX < NEAR_POINT_MAX_LEFT && relativeX > NEAR_POINT_MIN_LEFT))
+		{
+			if (this->state == PIRANHA_STATE_SNIP) {
+				SetState(PIRANHA_STATE_DIVE); // Transition to dive first
+			}
+			else if (this->state == PIRANHA_STATE_HIDE) {
+				SetState(PIRANHA_STATE_HIDE); // Stay hidden
+			}
 		}
-    }
-
-	//DebugOut(L"[INFO] RelativeX = %f\n", relativeX);
+	}
+	else {
+		if (relativeX > FAR_POINT_LEFT_RIGHT || (relativeX < NEAR_POINT_MAX_RIGHT && relativeX > NEAR_POINT_MIN_RIGHT))
+		{
+			if (this->state == PIRANHA_STATE_SNIP) {
+				SetState(PIRANHA_STATE_DIVE); // Transition to dive first
+			}
+			else if (this->state == PIRANHA_STATE_HIDE) {
+				SetState(PIRANHA_STATE_HIDE); // Stay hidden
+			}
+		}
+	}
+	
+	DebugOut(L"[INFO] RelativeX = %f\n", relativeX);
 	// Mario is in the range of snipping
 	switch (state) {
 	case PIRANHA_STATE_HIDE:
