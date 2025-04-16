@@ -38,6 +38,10 @@
 #define PIRANHA_ANI_DOWN_RIGHT 6005
 #pragma endregion
 
+#pragma region PIRANHA_RANGE
+#define IN_RANGE_OF_LEFT 100
+#define IN_RANGE_OF_RIGHT 200
+#pragma endregion
 
 class CPiranhaPlant : public CEnemy
 {
@@ -55,5 +59,6 @@ public:
 	virtual int IsBlocking() { return 0; }
 	int GetSnippingDirection(); // get the direction of the snipping action to mario
 	void SetState(int state);
+	int GetDirectionRange();
 };
 

@@ -101,10 +101,7 @@ void CPiranhaPlant::Render()
 	RenderBoundingBox();
 }
 
-void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	ULONGLONG now = GetTickCount64();
-
+int CPiranhaPlant::GetDirectionRange() {
 	// Get Mario's position
 	CGame* game = CGame::GetInstance();
 	CPlayScene* currentScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
@@ -113,32 +110,38 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float marioX, marioY;
 	mario->GetPosition(marioX, marioY);
 
-	// Check if Mario is too far or too close (improve later: implement a function to know when Mario is in range)
-    float relativeX = fabs(marioX - x);
+	float relativeX = fabs(marioX - x);
+
 	if (GetSnippingDirection() == 0 || GetSnippingDirection() == 1) {
 		if (relativeX > FAR_POINT_LEFT_RIGHT || (relativeX < NEAR_POINT_MAX_LEFT && relativeX > NEAR_POINT_MIN_LEFT))
 		{
-			if (this->state == PIRANHA_STATE_SNIP) {
-				SetState(PIRANHA_STATE_DIVE); // Transition to dive first
-			}
-			else if (this->state == PIRANHA_STATE_HIDE) {
-				SetState(PIRANHA_STATE_HIDE); // Stay hidden
-			}
+			return IN_RANGE_OF_LEFT;
 		}
 	}
 	else {
 		if (relativeX > FAR_POINT_LEFT_RIGHT || (relativeX < NEAR_POINT_MAX_RIGHT && relativeX > NEAR_POINT_MIN_RIGHT))
 		{
-			if (this->state == PIRANHA_STATE_SNIP) {
-				SetState(PIRANHA_STATE_DIVE); // Transition to dive first
-			}
-			else if (this->state == PIRANHA_STATE_HIDE) {
-				SetState(PIRANHA_STATE_HIDE); // Stay hidden
-			}
+			return IN_RANGE_OF_RIGHT;
 		}
 	}
-	
-	DebugOut(L"[INFO] RelativeX = %f\n", relativeX);
+}
+
+
+void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	ULONGLONG now = GetTickCount64();
+
+	int directionRange = GetDirectionRange();
+	if (directionRange == IN_RANGE_OF_LEFT || directionRange == IN_RANGE_OF_RIGHT)
+	{
+		if (state == PIRANHA_STATE_HIDE) {
+			SetState(PIRANHA_STATE_RISE); // Transition to rise first
+		}
+		else if (this->state == PIRANHA_STATE_RISE) {
+			SetState(PIRANHA_STATE_RISE); // Stay rising
+		}
+	}
+
 	// Mario is in the range of snipping
 	switch (state) {
 	case PIRANHA_STATE_HIDE:
