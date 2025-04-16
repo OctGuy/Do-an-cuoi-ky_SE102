@@ -14,7 +14,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
     if (KeyCode == DIK_P)
     {
         game->TogglePause();
-        return; // Exit after toggling pause
+        return;
     }
 
     // If game is paused, ignore all other input
@@ -38,6 +38,9 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
     case DIK_2:
         mario->SetLevel(MARIO_LEVEL_BIG);
         break;
+	case DIK_3:
+		mario->SetLevel(MARIO_LEVEL_RACCOON);
+		break;
     case DIK_R: // reset
         //Reload();
         break;
