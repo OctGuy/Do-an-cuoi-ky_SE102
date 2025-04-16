@@ -16,7 +16,7 @@ protected:
 	float cellHeight;
 	int spriteIdTL, spriteIdTR, spriteIdBL, spriteIdBR;
 
-	LPGAMEOBJECT entity; //pointer to the entity that is "inside" the pipe 
+	//LPGAMEOBJECT entity; //pointer to the entity that is "inside" the pipe 
 
 public:
 	CPipe(float x, float y,
@@ -31,16 +31,16 @@ public:
 		this->spriteIdBL = sprite_id_bl;
 		this->spriteIdBR = sprite_id_br;
 
-		this->entity = NULL;
+		//this->entity = NULL;
 	}
 
 	void Render() override;
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	//void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b) override;
 	//void RenderBoundingBox() ;
 	int IsDirectionColliable(float nx, float ny) override;
 
-	void SetItem(LPGAMEOBJECT item) {
+	/*void SetItem(LPGAMEOBJECT item) {
 		this->entity = item;
-	}
+	}*/
 };

@@ -4,6 +4,12 @@
 #include "Animations.h"
 #include "debug.h"
 
+#pragma region SNIP_RANGE
+#define FAR_POINT 119
+#define NEAR_POINT_MIN 22
+#define NEAR_POINT_MAX 24.1
+#pragma endregion
+
 #define PIRANHA_BBOX_WIDTH 16
 #define PIRANHA_BBOX_HEIGHT 32
 #define PIRANHA_BBOX_HEIGHT_RISE 24

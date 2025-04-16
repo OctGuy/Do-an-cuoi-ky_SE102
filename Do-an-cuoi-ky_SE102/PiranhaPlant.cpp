@@ -103,6 +103,28 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	ULONGLONG now = GetTickCount64();
 
+	// Get Mario's position
+	CGame* game = CGame::GetInstance();
+	CPlayScene* currentScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
+	CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+
+	float marioX, marioY;
+	mario->GetPosition(marioX, marioY);
+
+	// Check if Mario is too far or too close
+    float relativeX = fabs(marioX - x);
+    if (relativeX > FAR_POINT || (relativeX < NEAR_POINT_MAX && relativeX > NEAR_POINT_MIN))
+    {
+        if (this->state == PIRANHA_STATE_SNIP) {
+            SetState(PIRANHA_STATE_DIVE); // Transition to dive first
+        }
+		else if (this->state == PIRANHA_STATE_HIDE) {
+			SetState(PIRANHA_STATE_HIDE); // Stay hidden
+		}
+    }
+
+	//DebugOut(L"[INFO] RelativeX = %f\n", relativeX);
+	// Mario is in the range of snipping
 	switch (state) {
 	case PIRANHA_STATE_HIDE:
 		if (now - stateStartTime > PIRANHA_HIDE_TIMEOUT) {

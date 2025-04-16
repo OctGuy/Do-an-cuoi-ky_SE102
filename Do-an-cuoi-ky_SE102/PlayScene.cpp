@@ -210,11 +210,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				sprite_tl, sprite_tr, sprite_bl, sprite_br
 			);
 
-			if (!objects.empty())
+			/*if (!objects.empty())
 			{
 				dynamic_cast<CPipe*>(obj)->SetItem(objects.back());
 				objects.back()->SetActive(false);
-			}
+			}*/
 			break;
 		}
 
