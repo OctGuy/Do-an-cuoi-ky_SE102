@@ -119,7 +119,10 @@ class CMario : public CGameObject
 	int untouchable;
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
+
+	//Tracking point and coin
 	int coin;
+	int point;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -144,6 +147,7 @@ public:
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
+		point = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -151,6 +155,8 @@ public:
 
 	float GetVx() { return vx; }
 	float GetAx() { return ax; }
+	int GetCoin() { return coin; }
+	int GetPoint() { return point; }
 
 	int IsCollidable()
 	{
@@ -159,11 +165,10 @@ public:
 
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
 
-	void AddCoin() 
-	{
-		coin++;
-		DebugOut(L"[INFO] Mario Coin: %d\n", coin);
-	}
+	//Update coin and point
+	void AddCoin() {coin++; AddPoint(100);}
+	void AddPoint(int p) { point += p; }
+
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
