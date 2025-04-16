@@ -23,3 +23,4 @@
 16/4/2025
 - Recreating the HUD from the mario games (Phong)
 - Discussion between teamate.
+- Changing the sprite (Phong)
