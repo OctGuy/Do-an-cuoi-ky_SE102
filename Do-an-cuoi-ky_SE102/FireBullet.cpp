@@ -10,27 +10,23 @@ void CFireBullet::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CFireBullet::Render()
 {
-	if (state == FIRE_BULLET_STATE_INACTIVE) return;
+	int aniId = FIRE_BULLET_ANI_INACTIVE;
+	if (state != FIRE_BULLET_STATE_INACTIVE)
+		aniId = FIRE_BULLET_ANI;
+
+	CAnimations* animations = CAnimations::GetInstance();
+	animations->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
-	CAnimations::GetInstance()->Get(FIRE_BULLET_ANI)->Render(x, y);
 }
 
 void CFireBullet::SetState(int state) {
-	//this->state = state;
+	this->state = state;
 
 	switch (state)
 	{
 	case FIRE_BULLET_STATE_INACTIVE:
 		vx = 0;
 		vy = 0;
-		break;
-	case FIRE_BULLET_STATE_RISE:			// Move up
-		vx = 0;
-		vy = -FIRE_BULLET_SPEED_Y;
-		break;
-	case FIRE_BULLET_STATE_DIVE:			// Move down
-		vx = 0;
-		vy = FIRE_BULLET_SPEED_Y;
 		break;
 	case FIRE_BULLET_STATE_LEFT_SHOOT_HIGH:
 		vx = -FIRE_BULLET_SPEED_X_HIGH;
@@ -58,12 +54,15 @@ void CFireBullet::SetState(int state) {
 		break;
 	}
 
-	CGameObject::SetState(state);
+	//CGameObject::SetState(state);
 }
 
 void CFireBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	// Same as piranha plant update
+
+	if (state == FIRE_BULLET_STATE_INACTIVE) return;
+
 	x += vx * dt;
 	y += vy * dt;
 
@@ -72,16 +71,5 @@ void CFireBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	}
 
-	if (state == FIRE_BULLET_STATE_RISE) {
-		if (fabs(y - originalY) >= FIRE_BULLET_HEIGHT_RISE) {
-			y = originalY - FIRE_BULLET_HEIGHT_RISE;
-			SetState(FIRE_BULLET_STATE_INACTIVE);
-		}
-	}
-	else if (state == FIRE_BULLET_STATE_DIVE) {
-		if (fabs(y - originalY) >= FIRE_BULLET_HEIGHT_RISE) {
-			y = originalY + FIRE_BULLET_HEIGHT_RISE;
-			SetState(FIRE_BULLET_STATE_INACTIVE);
-		}
-	}
+	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

@@ -1,14 +1,14 @@
 #include "PiranhaPlant.h"
 #include "PlayScene.h"
 
-CPiranhaPlant::CPiranhaPlant(float x, float y, CFireBullet* fireBullet) : CEnemy(x, y)
+CPiranhaPlant::CPiranhaPlant(float x, float y, CFireBullet* fB) : CEnemy(x, y)
 {
 	this->x = x;
 	this->y = y;
 	originalY = y;
+	this->fireBullet = fB;
 	SetState(PIRANHA_STATE_HIDE);
-	this->fireBullet = fireBullet;
-	fireBullet->SetState(FIRE_BULLET_STATE_INACTIVE); // Set the fire bullet to inactive state
+	isShooting = false;									// Initialize shooting state
 }
 
 void CPiranhaPlant::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -26,17 +26,24 @@ void CPiranhaPlant::SetState(int state)
 
 	switch (state) {
 	case PIRANHA_STATE_HIDE:
+		fireBullet->SetState(FIRE_BULLET_STATE_INACTIVE); // Reset the bullet state
+		fireBullet->SetPosition(x, y);
+		isShooting = false; // Reset shooting state
 		vy = 0;
 		break;
-	case PIRANHA_STATE_RISE:	
-		//originalY = y;			// now y0 is the y when the plant is hidding
+	case PIRANHA_STATE_RISE:
+		fireBullet->SetState(FIRE_BULLET_STATE_INACTIVE); // Reset the bullet state
+		fireBullet->SetPosition(x, y);
+		isShooting = false; // Reset shooting state
 		vy = -PIRANHA_MOVE_SPEED;
 		break;
 	case PIRANHA_STATE_SNIP:
 		vy = 0;
 		break;
 	case PIRANHA_STATE_DIVE:
-		//originalY = y;			// now y0 is the y when the plant is snipping
+		fireBullet->SetState(FIRE_BULLET_STATE_INACTIVE); // Reset the bullet state
+		fireBullet->SetPosition(x, y);
+		isShooting = false; // Reset shooting state
 		vy = PIRANHA_MOVE_SPEED;
 		break;
 	default:
@@ -126,6 +133,40 @@ int CPiranhaPlant::GetDirectionRange() {
 	}
 }
 
+void CPiranhaPlant::Shoot(int direction)
+{
+	if (fireBullet == NULL) return;
+
+	CGame* game = CGame::GetInstance();
+	CPlayScene* currentScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
+	CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+
+	float marioX, marioY;
+	mario->GetPosition(marioX, marioY);
+
+	float relativeX = fabs(marioX - x);
+	int snipDirection = GetSnippingDirection();
+
+	if (snipDirection == 0)
+		fireBullet->SetState(FIRE_BULLET_STATE_LEFT_SHOOT_HIGH);
+	else if (snipDirection == 2)
+		fireBullet->SetState(FIRE_BULLET_STATE_RIGHT_SHOOT_HIGH);
+	else if (snipDirection == 1) {
+		if (relativeX < FAR_POINT_LEFT_RIGHT || relativeX > 75)
+			fireBullet->SetState(FIRE_BULLET_STATE_LEFT_SHOOT_FAR);
+		else
+			fireBullet->SetState(FIRE_BULLET_STATE_LEFT_SHOOT_LOW);
+	}
+	else {
+		if (relativeX > FAR_POINT_LEFT_RIGHT || relativeX > 75)
+			fireBullet->SetState(FIRE_BULLET_STATE_RIGHT_SHOOT_FAR);
+		else
+			fireBullet->SetState(FIRE_BULLET_STATE_RIGHT_SHOOT_LOW);
+	}
+
+	isShooting = true;
+	//DebugOut(L"[INFO] Piranha plant shoot bullet at direction: %d\n", fireBullet->GetState());
+}
 
 void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -140,6 +181,10 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (this->state == PIRANHA_STATE_RISE) {
 			SetState(PIRANHA_STATE_RISE); // Stay rising
 		}
+	}
+
+	if (!isShooting && fireBullet != NULL) {
+		fireBullet->SetPosition(x, y); // Update the position of the fire bullet
 	}
 
 	// Mario is in the range of snipping
@@ -159,6 +204,10 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		break;
 
 	case PIRANHA_STATE_SNIP:
+		if (isShooting == false) {
+			Shoot(GetSnippingDirection());
+			DebugOut(L"[INFO] Piranha plant shoot bullet at direction: %d\n", fireBullet->GetState());
+		}
 		if (now - stateStartTime > PIRANHA_SNIP_TIMEOUT) {		
 			SetState(PIRANHA_STATE_DIVE);
 		}

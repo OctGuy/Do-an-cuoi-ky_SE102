@@ -20,7 +20,7 @@
 #define PIRANHA_MOVE_SPEED 0.03f
 
 #define PIRANHA_HIDE_TIMEOUT 2500
-#define PIRANHA_SNIP_TIMEOUT 2500
+#define PIRANHA_SNIP_TIMEOUT 3000
 
 #pragma region PIRANHA_STATE_ID
 #define PIRANHA_STATE_HIDE 300
@@ -49,6 +49,7 @@ protected:
 	ULONGLONG stateStartTime;	// time when the current state was started
 	float originalY;			// original y pos when starting descending, ascending
 	CFireBullet* fireBullet;	// fire bullet shooted by piranha plant
+	bool isShooting;			// check if the piranha plant is shooting
 public:
 	CPiranhaPlant(float x, float y, CFireBullet* fireBullet);
 
@@ -59,6 +60,8 @@ public:
 	virtual int IsBlocking() { return 0; }
 	int GetSnippingDirection(); // get the direction of the snipping action to mario
 	void SetState(int state);
+	int GetTarget();
+	void Shoot(int direction);
 	int GetDirectionRange();
 };
 

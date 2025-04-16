@@ -19,14 +19,14 @@
 												//  => LOW (shoot at 60 degrees relative to the horizontal axis)
 #define FIRE_BULLET_BBOX_WIDTH 8
 #define FIRE_BULLET_BBOX_HEIGHT 8
-#define FIRE_BULLET_HEIGHT_RISE 24	
+//#define FIRE_BULLET_HEIGHT_RISE 24	
 
 #define FIRE_BULLET_ANI 7000
 #define FIRE_BULLET_ANI_INACTIVE 7001
 
 #define FIRE_BULLET_STATE_INACTIVE 0
-#define FIRE_BULLET_STATE_RISE 1		// Follow piranha plant
-#define FIRE_BULLET_STATE_DIVE 2 		// Follow piranha plant
+//#define FIRE_BULLET_STATE_RISE 1		// Follow piranha plant
+//#define FIRE_BULLET_STATE_DIVE 2 		// Follow piranha plant
 
 
 #define FIRE_BULLET_STATE_LEFT_SHOOT_HIGH 3
