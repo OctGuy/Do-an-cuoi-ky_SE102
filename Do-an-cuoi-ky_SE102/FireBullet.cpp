@@ -10,18 +10,19 @@ void CFireBullet::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CFireBullet::Render()
 {
-	int aniId = FIRE_BULLET_ANI_INACTIVE;
+	int aniId = -1;
 	if (state != FIRE_BULLET_STATE_INACTIVE)
 		aniId = FIRE_BULLET_ANI;
 
-	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(aniId)->Render(x, y);
+	if (aniId != -1) {
+		CAnimations* animations = CAnimations::GetInstance();
+		animations->Get(aniId)->Render(x, y);
+	}
+
 	RenderBoundingBox();
 }
 
 void CFireBullet::SetState(int state) {
-	this->state = state;
-
 	switch (state)
 	{
 	case FIRE_BULLET_STATE_INACTIVE:
@@ -53,8 +54,8 @@ void CFireBullet::SetState(int state) {
 		vy = FIRE_BULLET_SPEED_Y;
 		break;
 	}
-
-	//CGameObject::SetState(state);
+	
+	CGameObject::SetState(state);
 }
 
 void CFireBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -65,11 +66,6 @@ void CFireBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	x += vx * dt;
 	y += vy * dt;
-
-	if (y > 222.0f) { // bullet fall of the ground
-		SetState(FIRE_BULLET_STATE_INACTIVE);
-		return;
-	}
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

@@ -256,9 +256,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		case OBJECT_TYPE_PIRANHA_PLANT:
 		{
-			CFireBullet* fireBullet = new CFireBullet(x, y);
-			obj = new CPiranhaPlant(x, y, fireBullet);
-			objects.push_back(fireBullet); // Add fire bullet to the scene
+			obj = new CPiranhaPlant(x, y);
 			break;
 		}
 

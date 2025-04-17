@@ -48,10 +48,9 @@ class CPiranhaPlant : public CEnemy
 protected:
 	ULONGLONG stateStartTime;	// time when the current state was started
 	float originalY;			// original y pos when starting descending, ascending
-	CFireBullet* fireBullet;	// fire bullet shooted by piranha plant
 	bool isShooting;			// check if the piranha plant is shooting
 public:
-	CPiranhaPlant(float x, float y, CFireBullet* fireBullet);
+	CPiranhaPlant(float x, float y);
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -60,8 +59,7 @@ public:
 	virtual int IsBlocking() { return 0; }
 	int GetSnippingDirection(); // get the direction of the snipping action to mario
 	void SetState(int state);
-	int GetTarget();
-	void Shoot(int direction);
-	int GetDirectionRange();
+	//void Shoot(int direction);
+	bool IsTargetInRange();	
 };
 
