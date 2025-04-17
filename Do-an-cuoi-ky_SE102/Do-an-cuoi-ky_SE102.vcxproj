@@ -153,7 +153,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
-    <ClCompile Include="Mushroom.cpp" />
+    <ClCompile Include="PowerUp.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="SceneryObject.cpp" />
     <ClCompile Include="Utils.cpp" />
@@ -183,7 +183,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprites.h" />
-    <ClInclude Include="Mushroom.h" />
+    <ClInclude Include="PowerUp.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="SceneryObject.h" />

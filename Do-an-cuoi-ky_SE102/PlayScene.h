@@ -10,7 +10,7 @@
 #include "BoxPlatform.h"
 #include "Coin.h"
 #include "Platform.h"
-#include "Mushroom.h"
+#include "PowerUp.h"
 #include "Portal.h"
 #include "Pipe.h"
 #include "SceneryObject.h"

@@ -181,6 +181,7 @@ public:
 	float GetAx() { return ax; }
 	int GetCoin() { return coin; }
 	int GetPoint() { return point; }
+	int GetLevel() { return level; }
 
 	int IsCollidable()
 	{

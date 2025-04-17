@@ -15,13 +15,20 @@ void CQuestionBrick::OnCollisionWith(LPCOLLISIONEVENT e)
 {
     if (e->ny > 0)
     {
-        if (e->obj->GetState() != MARIO_STATE_DIE)
+        CGame* game = CGame::GetInstance();
+        CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
+        CMario* mario = dynamic_cast<CMario*>(playScene->GetPlayer());
+        if (!isHit)
         {
-            if (!isHit)
+			SetState(BRICK_STATE_BOUNCE);
+			if (dynamic_cast<CCoin*>(item)) //Only activate coin immidiately
+				ActivateItem();
+            else
             {
-				SetState(BRICK_STATE_BOUNCE);
-				if (dynamic_cast<CCoin*>(item)) //Only activate coin immidiately
-				    ActivateItem();
+				if (mario->GetLevel() == MARIO_LEVEL_SMALL)
+                    dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_MUSHROOM);
+				else
+                    dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_LEAF);
             }
         }
     }
