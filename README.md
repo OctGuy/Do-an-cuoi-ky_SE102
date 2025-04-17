@@ -20,3 +20,12 @@
 - Mostly finished map 1-1 (11:00)
 - Relatively completed the movement (up, down) of Piranha Plant (last 8hrs)
 - Remained the shooting (will implement later on)
+
+16/4/2025
+- Fix position of rising an diving offset of Piranha
+- Invoke Piranha when Mario is in range (need to improve)
+- Still remain bugs in bullet direction,...
+
+17/4/2025
+- Fix the method to determine when Mario is in range of snipping
+- Fix bugs in bullet animation (need to improve more direction)
