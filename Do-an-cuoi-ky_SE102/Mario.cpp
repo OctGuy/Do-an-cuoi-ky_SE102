@@ -69,8 +69,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
-	else if (dynamic_cast<CMushroom*>(e->obj))
-		OnCollisionWithMushroom(e);
+	else if (dynamic_cast<CPowerUp*>(e->obj))
+		OnCollisionWithPowerUp(e);
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -79,15 +79,18 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 	questionBrick->OnCollisionWith(e);
 }
 
-void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
+void CMario::OnCollisionWithPowerUp(LPCOLLISIONEVENT e)
 {
-	CMushroom* mushroom = dynamic_cast<CMushroom*>(e->obj);
-	if (level == MARIO_LEVEL_SMALL)
+	if (dynamic_cast<CPowerUp*>(e->obj)->GetType() == POWER_UP_TYPE_LEAF && level != MARIO_LEVEL_RACCOON)
+	{
+		SetLevel(MARIO_LEVEL_RACCOON);
+	}
+	else if (dynamic_cast<CPowerUp*>(e->obj)->GetType() == POWER_UP_TYPE_MUSHROOM && level == MARIO_LEVEL_SMALL)
 	{
 		SetLevel(MARIO_LEVEL_BIG);
-		e->obj->Delete();
-		AddPoint(1000);
 	}
+	e->obj->Delete();
+	AddPoint(1000);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
