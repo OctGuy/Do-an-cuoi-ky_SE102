@@ -27,3 +27,4 @@
 
 17/4/2025
 - Debug Piranha plant together
+- Finished implementing Leaf power up and question brick + power up handling. (Phong)
