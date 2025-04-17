@@ -145,7 +145,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 
-		case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y); break;
+		case OBJECT_TYPE_POWER_UP: obj = new CPowerUp(x, y); break;
 
 		case OBJECT_TYPE_PLATFORM:
 		{
@@ -347,6 +347,9 @@ void CPlayScene::Load()
 		}
 	}
 
+	//Loading HUD
+	if(player) HUD = new CHUD(dynamic_cast<CMario*>(player));
+
 	f.close();
 
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
@@ -371,6 +374,8 @@ void CPlayScene::Update(DWORD dt)
 		if (!objects[i]->IsActive()) continue;
 		objects[i]->Update(dt, &coObjects);
 	}
+
+	if(player) HUD->Update(dt);
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	//if (player == NULL) return; 
@@ -448,6 +453,9 @@ void CPlayScene::Render()
 		if (!objects[i]->IsActive()) continue;
 		objects[i]->Render();
 	}
+
+	// Render HUD
+	if (player) HUD->Render();
 }
 
 /*
@@ -476,6 +484,11 @@ void CPlayScene::Unload()
 
 	objects.clear();
 	player = NULL;
+
+	if (HUD) {
+		delete HUD;
+		HUD = nullptr;
+	}
 
 	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
 }

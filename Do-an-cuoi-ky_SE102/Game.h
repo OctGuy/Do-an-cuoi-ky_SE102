@@ -18,6 +18,7 @@ using namespace std;
 #define KEYBOARD_BUFFER_SIZE 1024
 #define KEYBOARD_STATE_SIZE 256
 
+#define GAME_FREEZE_TIME 1000
 
 
 /*
@@ -56,6 +57,11 @@ class CGame
 	unordered_map<int, LPSCENE> scenes;
 	int current_scene;
 	int next_scene = -1;
+
+	// Time freeze/pause variables
+	bool isTimeFrozen = false;
+	bool isPaused = false;   
+	ULONGLONG freeze_start = 0; // Time when freeze started
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
@@ -96,6 +102,21 @@ public:
 	ID3DX10Sprite* GetSpriteHandler() { return this->spriteObject; }
 
 	ID3D10BlendState* GetAlphaBlending() { return pBlendStateAlpha; };
+
+	// Time freeze/pause methods
+	//void FreezeTime(bool freeze) { isTimeFrozen = freeze; }
+	bool IsTimeFrozen() const { return isTimeFrozen; }
+	void FreezeGame() { isTimeFrozen = true; freeze_start = GetTickCount64(); }
+	void CountDownFreezeTime();
+
+	void SetPauseState(bool pause) { isPaused = pause; }
+	bool IsPaused() const { return isPaused; }
+
+	// Method to toggle pause
+	void TogglePause() { isPaused = !isPaused; }
+
+	// Method to toggle time freeze
+	//void ToggleTimeFreeze() { isTimeFrozen = !isTimeFrozen; }
 
 	int GetBackBufferWidth() { return backBufferWidth; }
 	int GetBackBufferHeight() { return backBufferHeight; }

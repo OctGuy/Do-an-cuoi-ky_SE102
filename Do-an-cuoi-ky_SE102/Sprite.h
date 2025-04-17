@@ -17,6 +17,7 @@ class CSprite
 public:
 	CSprite(int id, int left, int top, int right, int bottom, LPTEXTURE tex);
 
+	int GetID() { return id; }
 	void Draw(float x, float y);
 };
 

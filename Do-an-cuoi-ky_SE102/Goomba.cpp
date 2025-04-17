@@ -74,14 +74,23 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CGoomba::Render()
 {
+	//Keep the goomba in suspend aniamtion when game is pause or freeze
+	CGame* game = CGame::GetInstance();
+	if (game->IsPaused() || game->IsTimeFrozen()) {
+		CSprites* s = CSprites::GetInstance();
+		s->Get(currentAniId)->Draw(x, y);
+		return;
+	}
+
+	//Render Normally
 	int aniId = ID_ANI_GOOMBA_WALKING;
 	if (state == GOOMBA_STATE_DIE) 
 	{
 		aniId = ID_ANI_GOOMBA_DIE;
 	}
 
-	CAnimations::GetInstance()->Get(aniId)->Render(x,y);
-	//RenderBoundingBox();
+	CAnimations::GetInstance()->Get(aniId)->Render(x,y, &currentAniId); //&currentAniId to get current sprite id 
+	RenderBoundingBox();
 }
 
 void CGoomba::SetState(int state)

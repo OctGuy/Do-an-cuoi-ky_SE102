@@ -41,6 +41,9 @@
 
 #pragma region ANIMATION_ID
 
+#define ID_ANI_MARIO_CHANGE_LEVEL_RIGHT 300
+#define ID_ANI_MARIO_CHANGE_LEVEL_LEFT 301
+
 #define ID_ANI_MARIO_IDLE_RIGHT 400
 #define ID_ANI_MARIO_IDLE_LEFT 401
 
@@ -83,6 +86,28 @@
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT 1600
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT 1601
 
+//RACCOON MARIO
+#define ID_ANI_MARIO_RACCOON_IDLE_RIGHT 2000
+#define ID_ANI_MARIO_RACCOON_IDLE_LEFT 2001
+
+#define ID_ANI_MARIO_RACCOON_WALKING_RIGHT 2100
+#define ID_ANI_MARIO_RACCOON_WALKING_LEFT 2101
+
+#define ID_ANI_MARIO_RACCOON_RUNNING_RIGHT 2200
+#define ID_ANI_MARIO_RACCOON_RUNNING_LEFT 2201
+
+#define ID_ANI_MARIO_RACCOON_JUMP_WALK_RIGHT 2300
+#define ID_ANI_MARIO_RACCOON_JUMP_WALK_LEFT 2301
+
+#define ID_ANI_MARIO_RACCOON_JUMP_RUN_RIGHT 2400
+#define ID_ANI_MARIO_RACCOON_JUMP_RUN_LEFT 2401
+
+#define ID_ANI_MARIO_RACCOON_SIT_RIGHT 2500
+#define ID_ANI_MARIO_RACCOON_SIT_LEFT 2501
+
+#define ID_ANI_MARIO_RACCOON_BRACE_RIGHT 2600
+#define ID_ANI_MARIO_RACCOON_BRACE_LEFT 2601
+
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -90,6 +115,7 @@
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
+#define	MARIO_LEVEL_RACCOON 3
 
 #define MARIO_BIG_BBOX_WIDTH  14
 #define MARIO_BIG_BBOX_HEIGHT 24
@@ -116,7 +142,10 @@ class CMario : public CGameObject
 	int untouchable;
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
+
+	//Tracking point and coin
 	int coin;
+	int point;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -124,9 +153,11 @@ class CMario : public CGameObject
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
 	void OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e);
+	void OnCollisionWithPowerUp(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
+	int GetAniIdRaccoon();
 
 public:
 	CMario(float x, float y) : CGameObject(x, y)
@@ -142,6 +173,7 @@ public:
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
+		point = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -149,6 +181,9 @@ public:
 
 	float GetVx() { return vx; }
 	float GetAx() { return ax; }
+	int GetCoin() { return coin; }
+	int GetPoint() { return point; }
+	int GetLevel() { return level; }
 
 	int IsCollidable()
 	{
@@ -157,11 +192,10 @@ public:
 
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
 
-	void AddCoin() 
-	{
-		coin++;
-		DebugOut(L"[INFO] Mario Coin: %d\n", coin);
-	}
+	//Update coin and point
+	void AddCoin() {coin++; AddPoint(100);}
+	void AddPoint(int p) { point += p; }
+
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);

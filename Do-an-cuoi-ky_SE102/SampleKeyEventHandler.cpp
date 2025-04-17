@@ -6,8 +6,21 @@
 #include "Mario.h"
 #include "PlayScene.h"
 
+CGame* game = CGame::GetInstance();
+
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
+    // Always process pause key regardless of game state
+    if (KeyCode == DIK_P)
+    {
+        game->TogglePause();
+        return;
+    }
+
+    // If game is paused, ignore all other input
+    if (game->IsPaused() || game->IsTimeFrozen())
+        return;
+
     CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
     //DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
@@ -25,6 +38,9 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
     case DIK_2:
         mario->SetLevel(MARIO_LEVEL_BIG);
         break;
+	case DIK_3:
+		mario->SetLevel(MARIO_LEVEL_RACCOON);
+		break;
     case DIK_R: // reset
         //Reload();
         break;
@@ -33,6 +49,10 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 
 void CSampleKeyHandler::OnKeyUp(int KeyCode)
 {
+    // If game is paused, ignore all other input
+    if (game->IsPaused() || game->IsTimeFrozen())
+        return;
+
     CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
     CGame* game = CGame::GetInstance();
 
@@ -76,6 +96,10 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 
 void CSampleKeyHandler::KeyState(BYTE* states)
 {
+    // If game is paused, ignore all other input
+    if (game->IsPaused() || game->IsTimeFrozen())
+        return;
+
     CGame* game = CGame::GetInstance();
     CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 

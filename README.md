@@ -1,31 +1,37 @@
 # Do-an-cuoi-ky_SE102
 
 30/3/2025
-- Messy implement of features, mostly just as long as it runs. Still need some optimizations 
+- Messy implement of features, mostly just as long as it runs. Still need some optimizations (Phong)
 
 31/3/2025
-- Finally finished implementing box platform( Hopefully no bug).
+- Finally finished implementing box platform( Hopefully no bug). (Phong)
 
 12/4/2025
-- Implemented a simple version of pipe with no enemy handling method yet
-- Pipe can now contain goomba
+- Implemented a simple version of pipe with no enemy handling method yet (Phong)
+- Pipe can now contain goomba (Phong)
 
 13/4/2025
 - Merging codes and discussion between teamate
 
 14/4/2025
-- Implementing Time Freeze and Pause Method
+- Implementing Time Freeze and Pause Method (Phong)
 
 15/4/2025
-- Mostly finished map 1-1 (11:00)
-- Relatively completed the movement (up, down) of Piranha Plant (last 8hrs)
-- Remained the shooting (will implement later on)
+- Mostly finished map 1-1 (11:00) (Thinh)
+- Relatively completed the movement (up, down) of Piranha Plant (last 8hrs) (Thinh)
+- Remained the shooting (will implement later on) (Thinh)
 
 16/4/2025
-- Fix position of rising an diving offset of Piranha
-- Invoke Piranha when Mario is in range (need to improve)
-- Still remain bugs in bullet direction,...
+- Recreating the HUD from the mario games (Phong)
+- Discussion between teamate.
+- Changing the sprite and adding raccoon form to Mario (Phong)
+- Fix position of rising an diving offset of Piranha (Thinh)
+- Invoke Piranha when Mario is in range (need to improve) (Thinh)
+- Still remain bugs in bullet direction,... (Thinh)
 
 17/4/2025
-- Fix the method to determine when Mario is in range of snipping
-- Fix bugs in bullet animation (need to improve more direction)
+- Fix the method to determine when Mario is in range of snipping (Thinh)
+- Fix bugs in bullet animation (need to improve more direction) (Thinh)
+- Finished implementing time game Pause and Freeze (Phong)
+- Debug Piranha plant together
+- Finished implementing Leaf power up and question brick + power up handling. (Phong)
