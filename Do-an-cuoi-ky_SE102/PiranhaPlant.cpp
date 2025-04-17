@@ -101,39 +101,32 @@ void CPiranhaPlant::Render()
 	RenderBoundingBox();
 }
 
-//void CPiranhaPlant::Shoot(int direction)
-//{
+void CPiranhaPlant::Shoot(int direction)
+{
+	CFireBullet* fireBullet = new CFireBullet(x, y);
+	CGame* game = CGame::GetInstance();	
+	CPlayScene* currentScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
+	currentScene->Add(fireBullet);
 
-	//CGame* game = CGame::GetInstance();
-	//CPlayScene* currentScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
-	//CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+	switch (direction) {
+	case 0:	// UP_LEFT
+		fireBullet->SetState(FIRE_BULLET_STATE_LEFT_SHOOT_HIGH);
+		break;
+	case 1:	// DOWN_LEFT
+		fireBullet->SetState(FIRE_BULLET_STATE_LEFT_SHOOT_LOW);
+		break;
+	case 2:	// UP_RIGHT
+		fireBullet->SetState(FIRE_BULLET_STATE_RIGHT_SHOOT_HIGH);
+		break;
+	case 3:	// DOWN_RIGHT
+		fireBullet->SetState(FIRE_BULLET_STATE_RIGHT_SHOOT_LOW);
+		break;
+	default:
+		break;
+	}
 
-	//float marioX, marioY;
-	//mario->GetPosition(marioX, marioY);
-
-	//float relativeX = fabs(marioX - x);
-	//int snipDirection = GetSnippingDirection();
-
-	//if (snipDirection == 0)
-	//	fireBullet->SetState(FIRE_BULLET_STATE_LEFT_SHOOT_HIGH);
-	//else if (snipDirection == 2)
-	//	fireBullet->SetState(FIRE_BULLET_STATE_RIGHT_SHOOT_HIGH);
-	//else if (snipDirection == 1) {
-	//	if (relativeX < FAR_POINT_LEFT_RIGHT || relativeX > 75)
-	//		fireBullet->SetState(FIRE_BULLET_STATE_LEFT_SHOOT_FAR);
-	//	else
-	//		fireBullet->SetState(FIRE_BULLET_STATE_LEFT_SHOOT_LOW);
-	//}
-	//else {
-	//	if (relativeX > FAR_POINT_LEFT_RIGHT || relativeX > 75)
-	//		fireBullet->SetState(FIRE_BULLET_STATE_RIGHT_SHOOT_FAR);
-	//	else
-	//		fireBullet->SetState(FIRE_BULLET_STATE_RIGHT_SHOOT_LOW);
-	//}
-
-	//isShooting = true;
-	////DebugOut(L"[INFO] Piranha plant shoot bullet at direction: %d\n", fireBullet->GetState());
-//}
+	isShooting = true; // Set shooting state to true
+}
 
 bool CPiranhaPlant::IsTargetInRange() {
 	CGame* game = CGame::GetInstance();
@@ -184,6 +177,11 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		break;
 
 	case PIRANHA_STATE_SNIP:
+		if (!isShooting) {
+			int direction = GetSnippingDirection();
+			Shoot(direction);
+		}
+
 		if (now - stateStartTime > PIRANHA_SNIP_TIMEOUT) {		
 			SetState(PIRANHA_STATE_DIVE);
 		}

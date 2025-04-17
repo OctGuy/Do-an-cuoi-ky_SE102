@@ -59,7 +59,7 @@ public:
 	virtual int IsBlocking() { return 0; }
 	int GetSnippingDirection(); // get the direction of the snipping action to mario
 	void SetState(int state);
-	//void Shoot(int direction);
+	void Shoot(int direction);
 	bool IsTargetInRange();	
 };
 
