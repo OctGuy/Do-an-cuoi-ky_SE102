@@ -22,30 +22,30 @@ void CPipe::Render()
 	}
 }
 
-void CPipe::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	if (this->entity == NULL) return;
-	CGame* game = CGame::GetInstance();
-	CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
-	if (playScene)
-	{
-		CMario* mario = dynamic_cast<CMario*>(playScene->GetPlayer());
-		if (mario)
-		{
-			float marioX, marioY;
-			mario->GetPosition(marioX, marioY);
-			if (abs(this->x - marioX) < PIPE_DETECTION_RANGE &&
-				abs(this->y - marioY) < PIPE_DETECTION_RANGE)
-			{
-				//THE ORDER OF THESE FUNCTIONS MATTER
-				this->entity->SetPosition(this->x + 8, this->y); // Set the entity position to the pipe position
-				this->entity->SetActive(true); // Set the entity active
-				this->entity->SetState(100); //100 is the actice state of the entity (lazy implementation)
-				this->entity = NULL; // Set the entity to NULL to prevent access error 
-			}
-		}
-	}
-}
+//void CPipe::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+//{
+//	if (this->entity == NULL) return;
+//	CGame* game = CGame::GetInstance();
+//	CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
+//	if (playScene)
+//	{
+//		CMario* mario = dynamic_cast<CMario*>(playScene->GetPlayer());
+//		if (mario)
+//		{
+//			float marioX, marioY;
+//			mario->GetPosition(marioX, marioY);
+//			if (fabs(this->x - marioX) < PIPE_DETECTION_RANGE &&
+//				fabs(this->y - marioY) < PIPE_DETECTION_RANGE)
+//			{
+//				//THE ORDER OF THESE FUNCTIONS MATTER
+//				this->entity->SetPosition(this->x + 8, this->y);	// Set the entity position to the pipe position
+//				this->entity->SetActive(true);						// Set the entity active
+//				this->entity->SetState(100);						//100 is the actice state of the entity (lazy implementation)
+//				this->entity = NULL;								// Set the entity to NULL to prevent access error 
+//			}
+//		}
+//	}
+//}
 
 void CPipe::GetBoundingBox(float& l, float& t, float& r, float& b)
 {

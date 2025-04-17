@@ -47,6 +47,8 @@ public:
 
 	LPGAMEOBJECT GetPlayer() { return player; }
 
+	void Add(LPGAMEOBJECT obj) { objects.push_back(obj); }
+
 	void Clear();
 	void PurgeDeletedObjects();
 

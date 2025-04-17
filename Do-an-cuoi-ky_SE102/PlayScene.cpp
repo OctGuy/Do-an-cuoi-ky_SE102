@@ -11,6 +11,8 @@
 #include "Platform.h"
 #include "SceneryObject.h"
 #include "SampleKeyEventHandler.h"
+#include "PiranhaPlant.h"
+#include "FireBullet.h"
 
 using namespace std;
 
@@ -209,11 +211,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				sprite_tl, sprite_tr, sprite_bl, sprite_br
 			);
 
-			if (!objects.empty())
+			/*if (!objects.empty())
 			{
-				((CPipe*)obj)->SetItem(objects.back());
+				dynamic_cast<CPipe*>(obj)->SetItem(objects.back());
 				objects.back()->SetActive(false);
-			}
+			}*/
 			break;
 		}
 
@@ -249,6 +251,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"BackBufferWidth: %d\n", game->GetBackBufferWidth());
 			DebugOut(L"BackBufferHeight: %d\n", game->GetBackBufferHeight());*/
 
+			break;
+		}
+
+		case OBJECT_TYPE_PIRANHA_PLANT:
+		{
+			obj = new CPiranhaPlant(x, y);
 			break;
 		}
 

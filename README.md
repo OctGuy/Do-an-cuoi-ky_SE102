@@ -17,14 +17,21 @@
 - Implementing Time Freeze and Pause Method (Phong)
 
 15/4/2025
-- Mostly finished map 1-1 (11:00)
-- Finished implementing time game Pause and Freeze (Phong)
+- Mostly finished map 1-1 (11:00) (Thinh)
+- Relatively completed the movement (up, down) of Piranha Plant (last 8hrs) (Thinh)
+- Remained the shooting (will implement later on) (Thinh)
 
 16/4/2025
 - Recreating the HUD from the mario games (Phong)
 - Discussion between teamate.
 - Changing the sprite and adding raccoon form to Mario (Phong)
+- Fix position of rising an diving offset of Piranha (Thinh)
+- Invoke Piranha when Mario is in range (need to improve) (Thinh)
+- Still remain bugs in bullet direction,... (Thinh)
 
 17/4/2025
+- Fix the method to determine when Mario is in range of snipping (Thinh)
+- Fix bugs in bullet animation (need to improve more direction) (Thinh)
+- Finished implementing time game Pause and Freeze (Phong)
 - Debug Piranha plant together
 - Finished implementing Leaf power up and question brick + power up handling. (Phong)

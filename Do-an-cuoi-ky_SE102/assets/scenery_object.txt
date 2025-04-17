@@ -23,7 +23,8 @@
 #stars
 80014	26	73	43	90	30
 80015	44	73	61	90	30
-80016	62	73	79	90	30
+80016	62	73	79	90	30	
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 

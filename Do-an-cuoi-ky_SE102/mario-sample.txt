@@ -16,6 +16,8 @@ height	240
 0	textures\mario.png
 1	textures\MarioSprite.png
 10	textures\enemies.png
+11	textures\enemies_full.png
+12	textures\enemies_full_flip.png
 20	textures\misc.png
 21	textures\misc_2.png
 30 	textures\tiles.png
