@@ -143,7 +143,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 
-		case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y); break;
+		case OBJECT_TYPE_POWER_UP: obj = new CPowerUp(x, y); break;
 
 		case OBJECT_TYPE_PLATFORM:
 		{

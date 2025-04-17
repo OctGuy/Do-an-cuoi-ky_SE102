@@ -4,7 +4,7 @@
 #include "Mario.h"
 #include "debug.h"
 #include "Coin.h"
-#include "Mushroom.h"
+#include "PowerUp.h"
 
 #define BRICK_BOUNCE_SPEED 0.1f
 #define BRICK_BOUNCE_HEIGHT 10.0f

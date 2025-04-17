@@ -5,7 +5,7 @@ assets\coin.txt
 assets\goomba.txt
 assets\cloud.txt
 assets\box.txt
-assets\mushroom.txt
+assets\powerup.txt
 assets\pipe.txt
 assets\scenery_object.txt
 assets\HUD.txt

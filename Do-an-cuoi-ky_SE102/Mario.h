@@ -151,7 +151,7 @@ class CMario : public CGameObject
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
-	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
+	void OnCollisionWithPowerUp(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -181,6 +181,7 @@ public:
 	float GetAx() { return ax; }
 	int GetCoin() { return coin; }
 	int GetPoint() { return point; }
+	int GetLevel() { return level; }
 
 	int IsCollidable()
 	{
