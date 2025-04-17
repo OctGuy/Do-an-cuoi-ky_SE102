@@ -24,3 +24,6 @@
 - Recreating the HUD from the mario games (Phong)
 - Discussion between teamate.
 - Changing the sprite and adding raccoon form to Mario (Phong)
+
+17/4/2025
+- Debug Piranha plant together
