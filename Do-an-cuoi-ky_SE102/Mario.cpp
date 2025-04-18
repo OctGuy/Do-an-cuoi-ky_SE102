@@ -18,6 +18,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
+	DebugOut(L"[INFO] Mario Update: %f %f\n", vx, vy);
+
 	//DebugOut(L"[INFO] Speed: %f\n", vx);
 
 	//Calcute vx like this so it wont get change abruptly
@@ -379,6 +381,8 @@ void CMario::SetState(int state)
 				ax = -MARIO_FRICTION * 2.f;
 			else
 				ax = -MARIO_ACCEL_RUN_X;
+			if(vx == 0)
+				vx = -MARIO_INITIAL_SPEED;
 			nx = -1;
 			break;
 
@@ -394,6 +398,8 @@ void CMario::SetState(int state)
 				ax = MARIO_FRICTION * 2.f;
 			else
 				ax = MARIO_ACCEL_RUN_X;
+			if (vx == 0)
+				vx = MARIO_INITIAL_SPEED;
 			nx = 1;
 			break;
 
@@ -409,6 +415,8 @@ void CMario::SetState(int state)
 				ax = -MARIO_FRICTION * 2.f; 
 			else
 				ax = -MARIO_ACCEL_WALK_X;
+			if (vx == 0)
+				vx = -MARIO_INITIAL_SPEED;
 			nx = -1;
 			break;
 
@@ -424,6 +432,8 @@ void CMario::SetState(int state)
 				ax = MARIO_FRICTION * 2.f;
 			else
 				ax = MARIO_ACCEL_WALK_X;
+			if (vx == 0)
+				vx = MARIO_INITIAL_SPEED;
 			nx = 1;
 			break;
 

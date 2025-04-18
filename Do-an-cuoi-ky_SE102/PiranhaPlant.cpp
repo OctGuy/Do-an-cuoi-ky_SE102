@@ -157,7 +157,7 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			state = PIRANHA_STATE_DIVE;
 		else if (state == PIRANHA_STATE_HIDE)
 			stateStartTime = now;		// stay hide, if not implement this, it will rise when the timeout is over
-		DebugOut(L"[INFO] Piranha plant is not in range\n");
+		//DebugOut(L"[INFO] Piranha plant is not in range\n");
 	}
 
 	// Mario is in the range of snipping
