@@ -212,7 +212,7 @@ int CMario::GetAniIdSmall()
 			}
 			else if (vx > 0)
 			{
-				if (ax == -MARIO_ACCEL_RUN_X)
+				if (ax == -MARIO_FRICTION * 2.f)
 					aniId = ID_ANI_MARIO_SMALL_BRACE_LEFT;
 				else if (vx == MARIO_RUNNING_SPEED)
 					aniId = ID_ANI_MARIO_SMALL_RUNNING_RIGHT;
@@ -221,7 +221,7 @@ int CMario::GetAniIdSmall()
 			}
 			else // vx < 0
 			{
-				if (ax == MARIO_ACCEL_RUN_X)
+				if (ax == MARIO_FRICTION * 2.f)
 					aniId = ID_ANI_MARIO_SMALL_BRACE_RIGHT;
 				else if (vx == -MARIO_RUNNING_SPEED)
 					aniId = ID_ANI_MARIO_SMALL_RUNNING_LEFT;
@@ -275,7 +275,7 @@ int CMario::GetAniIdBig()
 			}
 			else if (vx > 0)
 			{
-				if (ax == -MARIO_ACCEL_RUN_X)
+				if (ax == -MARIO_FRICTION * 2.f)
 					aniId = ID_ANI_MARIO_BRACE_LEFT;
 				else if (vx == MARIO_RUNNING_SPEED)
 					aniId = ID_ANI_MARIO_RUNNING_RIGHT;
@@ -284,7 +284,7 @@ int CMario::GetAniIdBig()
 			}
 			else // vx < 0
 			{
-				if (ax == MARIO_ACCEL_RUN_X)
+				if (ax == MARIO_FRICTION * 2.f)
 					aniId = ID_ANI_MARIO_BRACE_RIGHT;
 				else if (vx == -MARIO_RUNNING_SPEED)
 					aniId = ID_ANI_MARIO_RUNNING_LEFT;
@@ -334,7 +334,7 @@ int CMario::GetAniIdRaccoon()
 			}
 			else if (vx > 0)
 			{
-				if (ax == -MARIO_ACCEL_RUN_X)
+				if (ax == -MARIO_FRICTION * 2.f)
 					aniId = ID_ANI_MARIO_RACCOON_BRACE_LEFT;
 				else if (vx == MARIO_RUNNING_SPEED)
 					aniId = ID_ANI_MARIO_RACCOON_RUNNING_RIGHT;
@@ -343,7 +343,7 @@ int CMario::GetAniIdRaccoon()
 			}
 			else // vx < 0
 			{
-				if (ax == MARIO_ACCEL_RUN_X )
+				if (ax == MARIO_FRICTION * 2.f)
 					aniId = ID_ANI_MARIO_RACCOON_BRACE_RIGHT;
 				else if (vx == -MARIO_RUNNING_SPEED)
 					aniId = ID_ANI_MARIO_RACCOON_RUNNING_LEFT;
@@ -401,7 +401,12 @@ void CMario::SetState(int state)
 			}
 			isRunning = true;
 			maxVx = -MARIO_RUNNING_SPEED;
-			ax = -MARIO_ACCEL_RUN_X;
+			if (vx > 0)
+				// When mario try to run left while decelerating right
+				// ax to the left can be double friction right? (left momentum + friction)
+				ax = -MARIO_FRICTION * 2.f;
+			else
+				ax = -MARIO_ACCEL_RUN_X;
 			nx = -1;
 			break;
 
@@ -413,7 +418,10 @@ void CMario::SetState(int state)
 			}
 			isRunning = true;
 			maxVx = MARIO_RUNNING_SPEED;
-			ax = MARIO_ACCEL_RUN_X;
+			if (vx < 0)
+				ax = MARIO_FRICTION * 2.f;
+			else
+				ax = MARIO_ACCEL_RUN_X;
 			nx = 1;
 			break;
 
@@ -425,7 +433,10 @@ void CMario::SetState(int state)
 			}
 			isRunning = true;
 			maxVx = -MARIO_WALKING_SPEED;
-			ax = -MARIO_ACCEL_WALK_X;
+			if(vx > 0)
+				ax = -MARIO_FRICTION * 2.f; 
+			else
+				ax = -MARIO_ACCEL_WALK_X;
 			nx = -1;
 			break;
 
@@ -437,7 +448,10 @@ void CMario::SetState(int state)
 			}
 			isRunning = true;
 			maxVx = MARIO_WALKING_SPEED;
-			ax = MARIO_ACCEL_WALK_X;
+			if (vx < 0)
+				ax = MARIO_FRICTION * 2.f;
+			else
+				ax = MARIO_ACCEL_WALK_X;
 			nx = 1;
 			break;
 
@@ -482,13 +496,13 @@ void CMario::SetState(int state)
 
 		case MARIO_STATE_DECELERATE_RIGHT:
 			isRunning = false;
-			ax = -MARIO_ACCEL_WALK_X * 5.f;  // set acceleration in opposite direction
+			ax = -MARIO_FRICTION;  // set acceleration in opposite direction
 			nx = 1; //maintain right-facing animation
 			break;
 
 		case MARIO_STATE_DECELERATE_LEFT:
 			isRunning = false;
-			ax = MARIO_ACCEL_WALK_X * 5.f;  // set acceleration in opposite direction
+			ax = MARIO_FRICTION;  // set acceleration in opposite direction
 			nx = -1; //maintain left-facing animation
 			break;
 

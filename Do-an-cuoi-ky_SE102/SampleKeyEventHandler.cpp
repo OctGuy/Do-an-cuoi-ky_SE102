@@ -61,19 +61,18 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
     {
     case DIK_RIGHT:
         //The order of these codditions is important
-        if (mario->GetVx() > 0.05f)  // Only decelerate if moving at a meaningful speed
+        if (mario->GetVx() > 0.01f)  // Only decelerate if moving at a meaningful speed
             mario->SetState(MARIO_STATE_DECELERATE_RIGHT);
         else
             mario->SetState(MARIO_STATE_IDLE);  // Stop immediately if moving very slowly
         // Check if down key is pressed when right key is released
         if (game->IsKeyDown(DIK_DOWN)) {
             mario->SetState(MARIO_STATE_SIT);
-            DebugOut(L"Sitting\n");
         }
         break;
 
     case DIK_LEFT:
-        if (mario->GetVx() < -0.05f)  // Only decelerate if moving at a meaningful speed
+        if (mario->GetVx() < -0.01f)  // Only decelerate if moving at a meaningful speed
             mario->SetState(MARIO_STATE_DECELERATE_LEFT);
         else
             mario->SetState(MARIO_STATE_IDLE);  // Stop immediately if moving very slowly
@@ -103,20 +102,19 @@ void CSampleKeyHandler::KeyState(BYTE* states)
     CGame* game = CGame::GetInstance();
     CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
-    // Handle movement even when sitting
-    if (game->IsKeyDown(DIK_RIGHT))
-    {
-        if (game->IsKeyDown(DIK_A))
-            mario->SetState(MARIO_STATE_RUNNING_RIGHT);
-        else
-            mario->SetState(MARIO_STATE_WALKING_RIGHT);
-    }
-    else if (game->IsKeyDown(DIK_LEFT))
+    if (game->IsKeyDown(DIK_LEFT))
     {
         if (game->IsKeyDown(DIK_A))
             mario->SetState(MARIO_STATE_RUNNING_LEFT);
         else
             mario->SetState(MARIO_STATE_WALKING_LEFT);
+    }
+    else if (game->IsKeyDown(DIK_RIGHT))
+    {
+        if (game->IsKeyDown(DIK_A))
+            mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+        else
+            mario->SetState(MARIO_STATE_WALKING_RIGHT);
     }
     else
     {
