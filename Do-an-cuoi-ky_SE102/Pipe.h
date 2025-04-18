@@ -38,6 +38,7 @@ public:
 	//void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b) override;
 	//void RenderBoundingBox() ;
+	int IsCollidable() { return 1; }
 	int IsDirectionColliable(float nx, float ny) override;
 
 	/*void SetItem(LPGAMEOBJECT item) {

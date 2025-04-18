@@ -20,6 +20,8 @@ void CPipe::Render()
 		xx += this->cellWidth;
 		s->Get(this->spriteIdBR)->Draw(xx, yy);
 	}
+
+	//RenderBoundingBox();
 }
 
 //void CPipe::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -49,9 +51,10 @@ void CPipe::Render()
 
 void CPipe::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - this->cellWidth / 2;
+	//- 1 and + 2 are expanding bounding box to the left and right 1px
+	l = x - this->cellWidth / 2 - 1;
 	t = y - this->cellHeight / 2;
-	r = l + 2 * this->cellWidth; // pipe is always 2 cells wide
+	r = l + 2 * this->cellWidth + 2; // pipe is always 2 cells wide
 	b = t + this->height * this->cellHeight;
 }
 
