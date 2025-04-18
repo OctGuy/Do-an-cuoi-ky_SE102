@@ -35,3 +35,6 @@
 - Finished implementing time game Pause and Freeze (Phong)
 - Debug Piranha plant together
 - Finished implementing Leaf power up and question brick + power up handling. (Phong)
+
+18/4/2025
+- Fine-tuning parameter and fixing some bugs (Phong)
