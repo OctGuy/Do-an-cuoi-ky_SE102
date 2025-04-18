@@ -6,11 +6,11 @@
 
 #include "debug.h"
 
-#define MARIO_WALKING_SPEED		0.11f
-#define MARIO_RUNNING_SPEED		0.22f
+#define MARIO_WALKING_SPEED		0.09f
+#define MARIO_RUNNING_SPEED		0.20f
 
-#define MARIO_ACCEL_WALK_X	0.0002f
-#define MARIO_ACCEL_RUN_X	0.0003f
+#define MARIO_ACCEL_WALK_X	0.0001f
+#define MARIO_ACCEL_RUN_X	0.0001f
 
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f
