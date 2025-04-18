@@ -122,24 +122,9 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 			AddPoint(100);
 		}
 	}
-	else // hit by Goomba
+	else if(goomba->GetState() != GOOMBA_STATE_DIE)
 	{
-		if (untouchable == 0)
-		{
-			if (goomba->GetState() != GOOMBA_STATE_DIE)
-			{
-				if (level > MARIO_LEVEL_SMALL)
-				{
-					SetLevel(level - 1);
-					StartUntouchable();
-				}
-				else
-				{
-					DebugOut(L">>> Mario DIE >>> \n");
-					SetState(MARIO_STATE_DIE);
-				}
-			}
-		}
+		GetHurt();
 	}
 }
 
@@ -158,19 +143,8 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e) 
 {
-	CPiranhaPlant* piranhaPlant = dynamic_cast<CPiranhaPlant*>(e->obj);
-	if (untouchable == 0) {
-		if (level > MARIO_LEVEL_SMALL)
-		{
-			level = MARIO_LEVEL_SMALL;
-			StartUntouchable();
-		}
-		else
-		{
-			DebugOut(L">>> Mario DIE >>> \n");
-			SetState(MARIO_STATE_DIE);
-		}
-	}
+	//CPiranhaPlant* piranhaPlant = dynamic_cast<CPiranhaPlant*>(e->obj);
+	GetHurt();
 }
 
 //
@@ -564,5 +538,22 @@ void CMario::SetLevel(int l)
 		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
 	}
 	level = l;
+}
+
+void CMario::GetHurt()
+{
+	if (untouchable == 0)
+	{
+		if (level > MARIO_LEVEL_SMALL)
+		{
+			SetLevel(level - 1);
+			StartUntouchable();
+		}
+		else
+		{
+			DebugOut(L">>> Mario DIE >>> \n");
+			SetState(MARIO_STATE_DIE);
+		}
+	}
 }
 
