@@ -27,6 +27,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else
 			vx = maxVx;
 	}
+
+	// Compare mario y position with max jump y (calulate from the current floor - max jump height)
+	// If mario y is smaller or equal to the  max jump y, set gravity to default
+	if (y <= currentFloorY - MARIO_MAX_JUMP_HEIGHT)
+	{
+		ay = MARIO_GRAVITY;
+	}
+
 	//reset is On platform for correct jumpinga animation
 	isOnPlatform = false;
 
@@ -51,10 +59,14 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
 		vy = 0;
-		// Only mark as on platform if collision is primarily from above
+		ay = MARIO_GRAVITY; // Reset gravity to default
+		// If collosion is from below mario, mark on platform to true
+		// Also update currentFloorY
 		if (e->ny < 0 && abs(e->ny) > abs(e->nx))
 		{
 			isOnPlatform = true;
+			float fill1, fill2, fill3; //I dont know how to get the bounding box of the object without these variable
+			e->obj->GetBoundingBox(fill1, currentFloorY, fill2, fill3);
 		}
 	}
 	else if (e->nx != 0 && e->obj->IsBlocking())
@@ -433,6 +445,7 @@ void CMario::SetState(int state)
 			// Allow jumping in sitting state
 			if (isOnPlatform)
 			{
+				ay = 0;
 				if (abs(this->vx) == MARIO_RUNNING_SPEED)
 					vy = -MARIO_JUMP_RUN_SPEED_Y;
 				else
@@ -441,6 +454,7 @@ void CMario::SetState(int state)
 			break;
 
 		case MARIO_STATE_RELEASE_JUMP:
+			ay = MARIO_GRAVITY;
 			if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
 			break;
 

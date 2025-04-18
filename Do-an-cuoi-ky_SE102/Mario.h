@@ -12,12 +12,13 @@
 #define MARIO_ACCEL_WALK_X	0.0001f
 #define MARIO_ACCEL_RUN_X	0.0001f
 
-#define MARIO_JUMP_SPEED_Y		0.5f
-#define MARIO_JUMP_RUN_SPEED_Y	0.6f
+#define MARIO_JUMP_SPEED_Y		0.2f
+#define MARIO_JUMP_RUN_SPEED_Y	0.3f
+#define MARIO_MAX_JUMP_HEIGHT	70.f
 
-#define MARIO_GRAVITY			0.002f
+#define MARIO_GRAVITY			0.0015f
 
-#define MARIO_JUMP_DEFLECT_SPEED  0.4f
+#define MARIO_JUMP_DEFLECT_SPEED  0.2f
 
 #pragma region MARIO_STATE
 #define MARIO_STATE_DIE				-10
@@ -110,7 +111,7 @@
 
 #pragma endregion
 
-#define GROUND_Y 160.0f
+#define GROUND_Y 350.0f
 
 
 #define	MARIO_LEVEL_SMALL	1
@@ -141,7 +142,9 @@ class CMario : public CGameObject
 	int level;
 	int untouchable;
 	ULONGLONG untouchable_start;
+
 	BOOLEAN isOnPlatform;
+	float currentFloorY; // Y position of the current floor
 
 	//Tracking point and coin
 	int coin;
@@ -151,7 +154,6 @@ class CMario : public CGameObject
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
-	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
 	void OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e);
 	void OnCollisionWithPowerUp(LPCOLLISIONEVENT e);
 
@@ -171,7 +173,10 @@ public:
 		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
+
 		isOnPlatform = false;
+		currentFloorY = GROUND_Y; // Initialize to ground level
+
 		coin = 0;
 		point = 0;
 	}
