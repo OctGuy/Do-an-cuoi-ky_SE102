@@ -8,33 +8,28 @@
 // 30 degrees: far
 // 60 degrees: low
 
-#define FIRE_BULLET_SPEED_Y 0.03f				// fix (same as the rise speed of piranha plant)
+#define FIRE_BULLET_SPEED_Y 0.04f				
 
 // Basic arctan function to calc the angle based on the Position of bullet and the target
-#define FIRE_BULLET_SPEED_X_HIGH 0.03f			// high : arctan(0.03 / 0.03) = 45
-												//	=> HIGH (shoot at 45 degrees relative to the horizontal axis)
-#define FIRE_BULLET_SPEED_X_FAR 0.05196f		// far  :  arctan(3 * sqrt(3) / 100) = 30 
-												//	=> FAR (shoot at 30 degrees relative to the horizontal axis)] 
-#define FIRE_BULLET_SPEED_X_LOW 0.017320f		// low  : arctan(sqrt(3) / 100) = 60
-												//  => LOW (shoot at 60 degrees relative to the horizontal axis)
+
+#define FIRE_BULLET_SPEED_X_FAR 0.1042f														
+#define FIRE_BULLET_SPEED_X_NEAR 0.042745f		
+												
 #define FIRE_BULLET_BBOX_WIDTH 8
 #define FIRE_BULLET_BBOX_HEIGHT 8
-//#define FIRE_BULLET_HEIGHT_RISE 24	
 
 #define FIRE_BULLET_ANI 7000
 #define FIRE_BULLET_ANI_INACTIVE 7001
 
 #define FIRE_BULLET_STATE_INACTIVE 0
-//#define FIRE_BULLET_STATE_RISE 1		// Follow piranha plant
-//#define FIRE_BULLET_STATE_DIVE 2 		// Follow piranha plant
-
-
-#define FIRE_BULLET_STATE_LEFT_SHOOT_HIGH 3
-#define FIRE_BULLET_STATE_LEFT_SHOOT_FAR 4
-#define FIRE_BULLET_STATE_LEFT_SHOOT_LOW 5
-#define FIRE_BULLET_STATE_RIGHT_SHOOT_HIGH 6
-#define FIRE_BULLET_STATE_RIGHT_SHOOT_FAR 7
-#define FIRE_BULLET_STATE_RIGHT_SHOOT_LOW 8
+#define FIRE_BULLET_STATE_LEFT_SHOOT_UP_NEAR 3
+#define FIRE_BULLET_STATE_LEFT_SHOOT_UP_FAR 4
+#define FIRE_BULLET_STATE_LEFT_SHOOT_DOWN_FAR 5
+#define FIRE_BULLET_STATE_LEFT_SHOOT_DOWN_NEAR 6
+#define FIRE_BULLET_STATE_RIGHT_SHOOT_UP_NEAR 7
+#define FIRE_BULLET_STATE_RIGHT_SHOOT_UP_FAR 8
+#define FIRE_BULLET_STATE_RIGHT_SHOOT_DOWN_FAR 9
+#define FIRE_BULLET_STATE_RIGHT_SHOOT_DOWN_NEAR 10
 
 class CFireBullet : public CGameObject
 {

@@ -18,7 +18,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	DebugOut(L"[INFO] Mario Update: %f %f\n", vx, vy);
+	//DebugOut(L"[INFO] Mario Update: %f %f\n", vx, vy);
 
 	//DebugOut(L"[INFO] Speed: %f\n", vx);
 
@@ -88,6 +88,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPiranhaPlant(e);
 	else if (dynamic_cast<CPowerUp*>(e->obj))
 		OnCollisionWithPowerUp(e);
+	else if (dynamic_cast<CFireBullet*>(e->obj))
+		OnCollisionWithBullet(e);
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -146,6 +148,10 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e) 
 {
 	//CPiranhaPlant* piranhaPlant = dynamic_cast<CPiranhaPlant*>(e->obj);
+	GetHurt();
+}
+
+void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e) {
 	GetHurt();
 }
 
