@@ -106,20 +106,38 @@ void CPiranhaPlant::Shoot(int direction)
 	CFireBullet* fireBullet = new CFireBullet(x, y);
 	CGame* game = CGame::GetInstance();	
 	CPlayScene* currentScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
+	CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
 	currentScene->Add(fireBullet);
 
+	float marioX, marioY;
+	mario->GetPosition(marioX, marioY);
+
+	float relativeX = fabs(marioX - x);
+	
 	switch (direction) {
-	case 0:	// UP_LEFT
-		fireBullet->SetState(FIRE_BULLET_STATE_LEFT_SHOOT_HIGH);
+	case 0:
+		if (relativeX > 79)
+			fireBullet->SetState(FIRE_BULLET_STATE_LEFT_SHOOT_UP_FAR);
+		else
+			fireBullet->SetState(FIRE_BULLET_STATE_LEFT_SHOOT_UP_NEAR);
 		break;
-	case 1:	// DOWN_LEFT
-		fireBullet->SetState(FIRE_BULLET_STATE_LEFT_SHOOT_LOW);
+	case 1:
+		if (relativeX > 79)
+			fireBullet->SetState(FIRE_BULLET_STATE_LEFT_SHOOT_DOWN_FAR);
+		else
+			fireBullet->SetState(FIRE_BULLET_STATE_LEFT_SHOOT_DOWN_NEAR);
 		break;
-	case 2:	// UP_RIGHT
-		fireBullet->SetState(FIRE_BULLET_STATE_RIGHT_SHOOT_HIGH);
+	case 2:
+		if (relativeX > 79)
+			fireBullet->SetState(FIRE_BULLET_STATE_RIGHT_SHOOT_UP_FAR);
+		else
+			fireBullet->SetState(FIRE_BULLET_STATE_RIGHT_SHOOT_UP_NEAR);
 		break;
-	case 3:	// DOWN_RIGHT
-		fireBullet->SetState(FIRE_BULLET_STATE_RIGHT_SHOOT_LOW);
+	case 3:
+		if (relativeX > 79)
+			fireBullet->SetState(FIRE_BULLET_STATE_RIGHT_SHOOT_DOWN_FAR);
+		else
+			fireBullet->SetState(FIRE_BULLET_STATE_RIGHT_SHOOT_DOWN_NEAR);
 		break;
 	default:
 		break;
@@ -152,13 +170,13 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	bool isInRange = IsTargetInRange();
 
-	if (!isInRange) {		// when mario is not in range (not in the camera)
-		if (state == PIRANHA_STATE_SNIP)
-			state = PIRANHA_STATE_DIVE;
-		else if (state == PIRANHA_STATE_HIDE)
-			stateStartTime = now;		// stay hide, if not implement this, it will rise when the timeout is over
-		//DebugOut(L"[INFO] Piranha plant is not in range\n");
-	}
+	//if (!isInRange) {		// when mario is not in range (not in the camera)
+	//	if (state == PIRANHA_STATE_SNIP)
+	//		state = PIRANHA_STATE_DIVE;
+	//	else if (state == PIRANHA_STATE_HIDE)
+	//		stateStartTime = now;		// stay hide, if not implement this, it will rise when the timeout is over
+	//	//DebugOut(L"[INFO] Piranha plant is not in range\n");
+	//}
 
 	// Mario is in the range of snipping
 	switch (state) {
@@ -177,7 +195,7 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		break;
 
 	case PIRANHA_STATE_SNIP:
-		if (!isShooting) {
+		if (!isShooting && now - stateStartTime > PIRANHA_WAIT_FOR_SHOOT_TIMEOUT) {
 			int direction = GetSnippingDirection();
 			Shoot(direction);
 		}
