@@ -39,3 +39,6 @@
 18/4/2025
 - Fine-tuning parameter and fixing some bugs (Phong)
 - Revamping some machanic (jumping, running, decelarating) (Phong)
+
+`9/4/1015
+- Working on the flying and slow-falling mehanic of Raccoon Mario
