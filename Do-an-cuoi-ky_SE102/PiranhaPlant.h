@@ -16,7 +16,7 @@
 #pragma endregion
 
 #define LIMIT_RANGE_TO_SHOOT 79
-const pair<float, float> PIRANHA_MIN_RANGE_TO_INVOKE = make_pair(23.0f, 24.5f);
+#define DISTANCE_PIRANHA_NOT_INVOKE 24.5
 
 #define PIRANHA_BBOX_WIDTH 16
 #define PIRANHA_BBOX_HEIGHT 32
