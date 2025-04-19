@@ -30,10 +30,24 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
         mario->SetState(MARIO_STATE_SIT);
         break;
     case DIK_S:
-        if (mario->GetVy() > 0 && mario->GetLevel() == MARIO_LEVEL_RACCOON)
-			mario->SetState(MARIO_STATE_SLOW_FALL);
-        else
+        if (mario->GetLevel() == MARIO_LEVEL_RACCOON)
+        {
+            if (mario->IsOnPlatform()) // If on ground, do a normal jump
+            {
+                mario->SetState(MARIO_STATE_JUMP);
+            }
+            else // If already in air
+            {
+                if (fabs(mario->GetVx()) >= MARIO_RUNNING_SPEED)
+                    mario->SetState(MARIO_STATE_FLYING);
+                else
+                    mario->SetState(MARIO_STATE_SLOW_FALL);
+            }
+        }
+        else // For Small and Big Mario, just jump normally
+        {
             mario->SetState(MARIO_STATE_JUMP);
+        }
         break;
     case DIK_1:
         mario->SetLevel(MARIO_LEVEL_SMALL);

@@ -25,6 +25,8 @@
 #define MARIO_SLOW_FALL_SPEED	0.05f
 #define MARIO_SLOW_FALL_DURATION 500 
 
+#define MARIO_FLYING_SPEED	-0.1f
+
 #define MARIO_JUMP_DEFLECT_SPEED  0.2f
 
 #pragma region MARIO_STATE
@@ -36,6 +38,7 @@
 #define MARIO_STATE_JUMP			300
 #define MARIO_STATE_RELEASE_JUMP    301
 #define MARIO_STATE_SLOW_FALL		302
+#define MARIO_STATE_FLYING			303	
 
 #define MARIO_STATE_RUNNING_RIGHT	400
 #define MARIO_STATE_RUNNING_LEFT	500
@@ -156,6 +159,7 @@ class CMario : public CGameObject
 	ULONGLONG slowfall_start; 
 
 	BOOLEAN isOnPlatform;
+	BOOLEAN isInAir;	//If Raccoon mario is flying or floating this should be true
 	float currentFloorY; // Y position of the current floor
 
 	//Tracking point and coin
@@ -178,7 +182,7 @@ public:
 	{
 		isSitting = false;
 		isRunning = false;
-		maxVx = 0.0f;
+		maxVx = MARIO_WALKING_SPEED;
 		maxVy = MARIO_MAX_FALL_SPEED;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY;
@@ -188,6 +192,7 @@ public:
 		untouchable_start = -1;
 
 		isOnPlatform = false;
+		isInAir = false;
 		currentFloorY = GROUND_Y; // Initialize to ground level
 
 		coin = 0;
@@ -210,6 +215,7 @@ public:
 	}
 
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
+	BOOLEAN IsOnPlatform() { return isOnPlatform; }
 
 	//Update coin and point
 	void AddCoin() {coin++; AddPoint(100);}
