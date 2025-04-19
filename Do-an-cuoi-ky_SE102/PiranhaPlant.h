@@ -4,6 +4,8 @@
 #include "Animations.h"
 #include "debug.h"
 #include "FireBullet.h"
+#include "Mario.h"
+#include <utility>
 
 #pragma region SNIP_RANGE
 #define FAR_POINT_LEFT_RIGHT 119
@@ -12,6 +14,9 @@
 #define NEAR_POINT_MIN_RIGHT 23
 #define NEAR_POINT_MAX_RIGHT 24
 #pragma endregion
+
+#define LIMIT_RANGE_TO_SHOOT 79
+const pair<float, float> PIRANHA_MIN_RANGE_TO_INVOKE = make_pair(23.0f, 24.5f);
 
 #define PIRANHA_BBOX_WIDTH 16
 #define PIRANHA_BBOX_HEIGHT 32
@@ -62,5 +67,6 @@ public:
 	void SetState(int state);
 	void Shoot(int direction);
 	bool IsTargetInRange();	
+	CMario* GetPlayer();
 };
 

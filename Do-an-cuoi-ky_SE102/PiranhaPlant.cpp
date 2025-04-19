@@ -10,6 +10,14 @@ CPiranhaPlant::CPiranhaPlant(float x, float y) : CEnemy(x, y)
 	isShooting = false;				// Initialize shooting state
 }
 
+CMario* CPiranhaPlant::GetPlayer()
+{
+	CGame* game = CGame::GetInstance();
+	CPlayScene* currentScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
+	CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+	return mario;
+}
+
 void CPiranhaPlant::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x - PIRANHA_BBOX_WIDTH / 2;
@@ -47,9 +55,7 @@ void CPiranhaPlant::SetState(int state)
 int CPiranhaPlant::GetSnippingDirection()
 {
 	// Get the current scene and player
-	CGame* game = CGame::GetInstance();
-	CPlayScene* currentScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
-	CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+	CMario* mario = GetPlayer();
 
 	float marioX, marioY;
 	mario->GetPosition(marioX, marioY);
@@ -104,37 +110,39 @@ void CPiranhaPlant::Render()
 void CPiranhaPlant::Shoot(int direction)
 {
 	CFireBullet* fireBullet = new CFireBullet(x, y);
-	CGame* game = CGame::GetInstance();	
-	CPlayScene* currentScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
-	CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+	CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
 	currentScene->Add(fireBullet);
+
+	CMario* mario = GetPlayer();
 
 	float marioX, marioY;
 	mario->GetPosition(marioX, marioY);
+	DebugOut(L"marioX: %f\n", marioX);
+	DebugOut(L"Piranha x: %f\n", x);
 
 	float relativeX = fabs(marioX - x);
 	
 	switch (direction) {
 	case 0:
-		if (relativeX > 79)
+		if (relativeX > LIMIT_RANGE_TO_SHOOT)
 			fireBullet->SetState(FIRE_BULLET_STATE_LEFT_SHOOT_UP_FAR);
 		else
 			fireBullet->SetState(FIRE_BULLET_STATE_LEFT_SHOOT_UP_NEAR);
 		break;
 	case 1:
-		if (relativeX > 79)
+		if (relativeX > LIMIT_RANGE_TO_SHOOT)
 			fireBullet->SetState(FIRE_BULLET_STATE_LEFT_SHOOT_DOWN_FAR);
 		else
 			fireBullet->SetState(FIRE_BULLET_STATE_LEFT_SHOOT_DOWN_NEAR);
 		break;
 	case 2:
-		if (relativeX > 79)
+		if (relativeX > LIMIT_RANGE_TO_SHOOT)
 			fireBullet->SetState(FIRE_BULLET_STATE_RIGHT_SHOOT_UP_FAR);
 		else
 			fireBullet->SetState(FIRE_BULLET_STATE_RIGHT_SHOOT_UP_NEAR);
 		break;
 	case 3:
-		if (relativeX > 79)
+		if (relativeX > LIMIT_RANGE_TO_SHOOT)
 			fireBullet->SetState(FIRE_BULLET_STATE_RIGHT_SHOOT_DOWN_FAR);
 		else
 			fireBullet->SetState(FIRE_BULLET_STATE_RIGHT_SHOOT_DOWN_NEAR);
@@ -147,12 +155,10 @@ void CPiranhaPlant::Shoot(int direction)
 }
 
 bool CPiranhaPlant::IsTargetInRange() {
-	CGame* game = CGame::GetInstance();
-	CPlayScene* currentScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
-	CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+	CMario* mario = GetPlayer();
 
-	float backBufferWidth = game->GetBackBufferWidth();
-	float backBufferHeight = game->GetBackBufferHeight();
+	float backBufferWidth = CGame::GetInstance()->GetBackBufferWidth();
+	float backBufferHeight = CGame::GetInstance()->GetBackBufferHeight();
 	
 	float marioX, marioY;
 	mario->GetPosition(marioX, marioY);
@@ -160,8 +166,8 @@ bool CPiranhaPlant::IsTargetInRange() {
 	float relativeX = fabs(marioX - x);
 	float relativeY = fabs(marioY - y);
 
-	return (relativeX < backBufferWidth / 2.0f
-		&& relativeY < backBufferHeight / 2.0f);
+	return (relativeX < (backBufferWidth + 20.0f) / 2.0f
+		&& relativeY < (backBufferHeight + 20.0f) / 2.0f);
 }
 
 void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -170,13 +176,18 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	bool isInRange = IsTargetInRange();
 
-	//if (!isInRange) {		// when mario is not in range (not in the camera)
-	//	if (state == PIRANHA_STATE_SNIP)
-	//		state = PIRANHA_STATE_DIVE;
-	//	else if (state == PIRANHA_STATE_HIDE)
-	//		stateStartTime = now;		// stay hide, if not implement this, it will rise when the timeout is over
-	//	//DebugOut(L"[INFO] Piranha plant is not in range\n");
-	//}
+	CMario* mario = GetPlayer();
+
+	float marioX, marioY;
+	mario->GetPosition(marioX, marioY);
+
+	float relativeX = fabs(marioX - x);
+	if (relativeX > PIRANHA_MIN_RANGE_TO_INVOKE.first && relativeX < PIRANHA_MIN_RANGE_TO_INVOKE.second) {
+		if (state == PIRANHA_STATE_SNIP)
+			SetState(PIRANHA_STATE_DIVE);
+		else if (state == PIRANHA_STATE_HIDE)
+			SetState(PIRANHA_STATE_HIDE);
+	}
 
 	// Mario is in the range of snipping
 	switch (state) {
@@ -195,7 +206,7 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		break;
 
 	case PIRANHA_STATE_SNIP:
-		if (!isShooting && now - stateStartTime > PIRANHA_WAIT_FOR_SHOOT_TIMEOUT) {
+		if (!isShooting && now - stateStartTime > PIRANHA_WAIT_FOR_SHOOT_TIMEOUT && IsTargetInRange()) {
 			int direction = GetSnippingDirection();
 			Shoot(direction);
 		}
@@ -216,6 +227,9 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	default:
 		break;
 	}
+
+	//DebugOut(L"Piranha state: %d\n", state);
+	
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
