@@ -20,7 +20,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	//DebugOut(L"[INFO] Mario Update: %f %f\n", vx, vy);
 
-	//DebugOut(L"[INFO] Speed: %f\n", vx);
+	// Cap the falling speed to MAX_FALL_SPEED
+	if (vy > maxVy) vy = maxVy;
 
 	//Calcute vx like this so it wont get change abruptly
 	if (abs(vx) > abs(maxVx)) {
@@ -28,6 +29,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vx += ax * dt;
 		else
 			vx = maxVx;
+			//vx = maxVx;
 	}
 
 	// Compare mario y position with max jump y (calulate from the current floor - max jump height)
@@ -39,6 +41,17 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	//reset is On platform for correct jumpinga animation
 	isOnPlatform = false;
+
+	// reset untouchable timer if untouchable time has passed
+	if (GetTickCount64() - slowfall_start > MARIO_SLOW_FALL_DURATION)
+	{
+		//DebugOut(L"Time Out\n");
+		slowfall_start = 0;
+		maxVy = MARIO_MAX_FALL_SPEED; // Reset max fall speed to default
+		isInAir = false; // Reset isInAir to false
+	}
+	else
+		//DebugOut(L"Floating\n");
 
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
@@ -234,10 +247,16 @@ int CMario::GetAniIdBig()
 		}
 		else
 		{
-			if (nx >= 0)
-				aniId = ID_ANI_MARIO_JUMP_WALK_RIGHT;
-			else
-				aniId = ID_ANI_MARIO_JUMP_WALK_LEFT;
+			if(vy < 0)
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_JUMP_WALK_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_JUMP_WALK_LEFT;
+			else 
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_FALLING_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_FALLING_LEFT;
 		}
 	}
 	else if (isSitting)
@@ -285,17 +304,35 @@ int CMario::GetAniIdRaccoon()
 	{
 		if (abs(vx) == MARIO_RUNNING_SPEED)
 		{
-			if (nx >= 0)
-				aniId = ID_ANI_MARIO_RACCOON_JUMP_RUN_RIGHT;
+			if (isInAir)
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_RACCOON_FLYING_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_RACCOON_FLYING_LEFT;
 			else
-				aniId = ID_ANI_MARIO_RACCOON_JUMP_RUN_LEFT;
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_RACCOON_JUMP_RUN_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_RACCOON_JUMP_RUN_LEFT;
 		}
 		else
 		{
-			if (nx >= 0)
-				aniId = ID_ANI_MARIO_RACCOON_JUMP_WALK_RIGHT;
+			if (vy < 0)
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_RACCOON_JUMP_WALK_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_RACCOON_JUMP_WALK_LEFT;
 			else
-				aniId = ID_ANI_MARIO_RACCOON_JUMP_WALK_LEFT;
+				if (isInAir)
+					if (nx >= 0)
+						aniId = ID_ANI_MARIO_RACCOON_SLOWFALL_RIGHT;
+					else
+						aniId = ID_ANI_MARIO_RACCOON_SLOWFALL_LEFT;
+				else 
+					if (nx >= 0)
+						aniId = ID_ANI_MARIO_RACCOON_FALLING_RIGHT;
+					else
+						aniId = ID_ANI_MARIO_RACCOON_FALLING_LEFT;
 		}
 	}
 	else if (isSitting)
@@ -374,6 +411,8 @@ void CMario::SetState(int state)
 	switch (state)
 	{
 		case MARIO_STATE_RUNNING_LEFT:
+			if(isInAir && vy > 0)
+				vx = -MARIO_WALKING_SPEED;
 			// Only stop sitting if on platform
 			if (isSitting && isOnPlatform) {
 				isSitting = false;
@@ -393,6 +432,8 @@ void CMario::SetState(int state)
 			break;
 
 		case MARIO_STATE_RUNNING_RIGHT:
+			if (isInAir && vy > 0)
+				vx = MARIO_WALKING_SPEED;
 			// Only stop sitting if on platform
 			if (isSitting && isOnPlatform) {
 				isSitting = false;
@@ -455,9 +496,33 @@ void CMario::SetState(int state)
 			}
 			break;
 
+		case MARIO_STATE_SLOW_FALL:
+			// Only apply slow fall if already in the air
+			if (!isOnPlatform)
+			{
+				DebugOut(L"[INFO] Mario floating\n");
+				slowfall_start = GetTickCount64();
+				maxVy = MARIO_SLOW_FALL_SPEED;
+				isInAir = true;
+				//ay = 0; // Temporarily remove gravity
+			}
+			break;
+
 		case MARIO_STATE_RELEASE_JUMP:
 			ay = MARIO_GRAVITY;
-			if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
+			break;
+
+		case MARIO_STATE_FLYING:
+			// Only apply flying if already in the air
+			if (!isOnPlatform)
+			{
+				DebugOut(L"[INFO] Mario flying\n");
+				vy = MARIO_FLYING_SPEED; // Apply upward boost
+				slowfall_start = GetTickCount64();
+				maxVy = MARIO_FLYING_SPEED; // Use flying speed as max speed
+				isInAir = true;
+				ay = 0; // Temporarily remove gravity
+			}
 			break;
 
 		case MARIO_STATE_SIT:
