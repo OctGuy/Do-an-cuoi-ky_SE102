@@ -18,7 +18,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	DebugOut(L"[INFO] Mario Update: %f %f\n", vx, vy);
+	//DebugOut(L"[INFO] Mario Update: %f %f\n", vx, vy);
 
 	// Cap the falling speed to MAX_FALL_SPEED
 	if (vy > maxVy) vy = maxVy;
@@ -241,10 +241,16 @@ int CMario::GetAniIdBig()
 		}
 		else
 		{
-			if (nx >= 0)
-				aniId = ID_ANI_MARIO_JUMP_WALK_RIGHT;
-			else
-				aniId = ID_ANI_MARIO_JUMP_WALK_LEFT;
+			if(vy < 0)
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_JUMP_WALK_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_JUMP_WALK_LEFT;
+			else 
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_FALLING_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_FALLING_LEFT;
 		}
 	}
 	else if (isSitting)
@@ -292,17 +298,35 @@ int CMario::GetAniIdRaccoon()
 	{
 		if (abs(vx) == MARIO_RUNNING_SPEED)
 		{
-			if (nx >= 0)
-				aniId = ID_ANI_MARIO_RACCOON_JUMP_RUN_RIGHT;
+			if (isInAir)
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_RACCOON_FLYING_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_RACCOON_FLYING_LEFT;
 			else
-				aniId = ID_ANI_MARIO_RACCOON_JUMP_RUN_LEFT;
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_RACCOON_JUMP_RUN_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_RACCOON_JUMP_RUN_LEFT;
 		}
 		else
 		{
-			if (nx >= 0)
-				aniId = ID_ANI_MARIO_RACCOON_JUMP_WALK_RIGHT;
+			if (vy < 0)
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_RACCOON_JUMP_WALK_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_RACCOON_JUMP_WALK_LEFT;
 			else
-				aniId = ID_ANI_MARIO_RACCOON_JUMP_WALK_LEFT;
+				if (isInAir)
+					if (nx >= 0)
+						aniId = ID_ANI_MARIO_RACCOON_SLOWFALL_RIGHT;
+					else
+						aniId = ID_ANI_MARIO_RACCOON_SLOWFALL_LEFT;
+				else 
+					if (nx >= 0)
+						aniId = ID_ANI_MARIO_RACCOON_FALLING_RIGHT;
+					else
+						aniId = ID_ANI_MARIO_RACCOON_FALLING_LEFT;
 		}
 	}
 	else if (isSitting)
