@@ -21,6 +21,9 @@
 #define MARIO_MAX_JUMP_HEIGHT	70.f
 
 #define MARIO_GRAVITY			0.0015f
+#define MARIO_MAX_FALL_SPEED	0.3f
+#define MARIO_SLOW_FALL_SPEED	0.05f
+#define MARIO_SLOW_FALL_DURATION 500 
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.2f
 
@@ -32,6 +35,7 @@
 
 #define MARIO_STATE_JUMP			300
 #define MARIO_STATE_RELEASE_JUMP    301
+#define MARIO_STATE_SLOW_FALL		302
 
 #define MARIO_STATE_RUNNING_RIGHT	400
 #define MARIO_STATE_RUNNING_LEFT	500
@@ -139,13 +143,17 @@ class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
 	BOOLEAN isRunning;
+
 	float maxVx;
+	float maxVy; 
+
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
 
 	int level;
 	int untouchable;
 	ULONGLONG untouchable_start;
+	ULONGLONG slowfall_start; 
 
 	BOOLEAN isOnPlatform;
 	float currentFloorY; // Y position of the current floor
@@ -171,6 +179,7 @@ public:
 		isSitting = false;
 		isRunning = false;
 		maxVx = 0.0f;
+		maxVy = MARIO_MAX_FALL_SPEED;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY;
 
@@ -189,6 +198,7 @@ public:
 	void SetState(int state);
 
 	float GetVx() { return vx; }
+	float GetVy() { return vy; }
 	float GetAx() { return ax; }
 	int GetCoin() { return coin; }
 	int GetPoint() { return point; }

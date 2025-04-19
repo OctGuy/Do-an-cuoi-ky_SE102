@@ -20,7 +20,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	DebugOut(L"[INFO] Mario Update: %f %f\n", vx, vy);
 
-	//DebugOut(L"[INFO] Speed: %f\n", vx);
+	// Cap the falling speed to MAX_FALL_SPEED
+	if (vy > maxVy) vy = maxVy;
 
 	//Calcute vx like this so it wont get change abruptly
 	if (abs(vx) > abs(maxVx)) {
@@ -39,6 +40,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	//reset is On platform for correct jumpinga animation
 	isOnPlatform = false;
+
+	// reset untouchable timer if untouchable time has passed
+	if (GetTickCount64() - slowfall_start > MARIO_SLOW_FALL_DURATION)
+	{
+		slowfall_start = 0;
+		maxVy = MARIO_MAX_FALL_SPEED; // Reset max fall speed to default
+	}
 
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
@@ -449,8 +457,16 @@ void CMario::SetState(int state)
 			}
 			break;
 
+		case MARIO_STATE_SLOW_FALL:
+			if (vy > 0)
+			{
+				slowfall_start = GetTickCount64();
+				maxVy = MARIO_SLOW_FALL_SPEED;
+			}
+
 		case MARIO_STATE_RELEASE_JUMP:
 			ay = MARIO_GRAVITY;
+			// This make the faling smoother
 			if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
 			break;
 
