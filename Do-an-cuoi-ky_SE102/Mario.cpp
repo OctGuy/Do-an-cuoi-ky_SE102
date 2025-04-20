@@ -9,6 +9,7 @@
 #include "Portal.h"
 #include "QuestionBrick.h"
 #include "PiranhaPlant.h"
+#include "Koopa.h"
 
 #include "Collision.h"
 
@@ -103,6 +104,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPowerUp(e);
 	else if (dynamic_cast<CFireBullet*>(e->obj))
 		OnCollisionWithBullet(e);
+	else if (dynamic_cast<CKoopa*>(e->obj))
+		OnCollisionWithKoopa(e);
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -160,12 +163,33 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e) 
 {
-	//CPiranhaPlant* piranhaPlant = dynamic_cast<CPiranhaPlant*>(e->obj);
 	GetHurt();
 }
 
 void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e) {
 	GetHurt();
+}
+
+void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
+
+	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+
+	if (e->ny < 0) {
+		if (koopa->GetState() == KOOPA_STATE_WALKING_LEFT || 
+			koopa->GetState() == KOOPA_STATE_WALKING_RIGHT)
+		{
+			koopa->SetState(KOOPA_STATE_SHELL_IDLE);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			AddPoint(100);
+		}
+	}
+	else if (koopa->GetState() != KOOPA_STATE_SHELL_IDLE 
+		&& koopa->GetState() != KOOPA_STATE_SHELL_SHAKING
+		&& koopa->GetState() != KOOPA_STATE_SHELL_REVERSE_IDLE
+		&& koopa->GetState() != KOOPA_STATE_SHELL_REVERSE_SHAKING) 
+	{
+		GetHurt();
+	}
 }
 
 //

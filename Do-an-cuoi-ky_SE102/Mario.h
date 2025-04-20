@@ -183,6 +183,7 @@ class CMario : public CGameObject
 	void OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e);
 	void OnCollisionWithPowerUp(LPCOLLISIONEVENT e);
 	void OnCollisionWithBullet(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -226,6 +227,7 @@ public:
 	}
 
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
+
 	BOOLEAN IsOnPlatform() { return isOnPlatform; }
 	BOOLEAN IsInAir() { return isInAir; }
 
