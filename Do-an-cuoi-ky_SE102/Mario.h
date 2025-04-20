@@ -227,6 +227,7 @@ public:
 
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
 	BOOLEAN IsOnPlatform() { return isOnPlatform; }
+	BOOLEAN IsInAir() { return isInAir; }
 
 	//Update coin and point
 	void AddCoin() {coin++; AddPoint(100);}
