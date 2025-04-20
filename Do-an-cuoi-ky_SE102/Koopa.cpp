@@ -1,4 +1,4 @@
-#include "Koopa.h"
+﻿#include "Koopa.h"
 
 void CKoopa::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
@@ -25,18 +25,11 @@ void CKoopa::OnNoCollision(DWORD dt) {
 
 void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (!e->obj->IsBlocking()) return;
-	//if (e->ny != 0) {
-	//	vy = 0;
-	//	ay = KOOPA_GRAVITY; // Reset gravity to default
-	//}
-	//else if (e->nx != 0) {
-	//	vx = -vx; // Reverse direction on collision with left or right
-	//}
 
 	if (e->ny < 0) { // Stand on platform
 		vy = 0;
 		ay = KOOPA_GRAVITY; 
-		platform = e->obj; 
+		platform = e->obj;  // Set platform to what Koopa is standing on
 	}
 
 	if (e->nx != 0) { 
@@ -54,11 +47,23 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 			SetState(KOOPA_STATE_WALKING_LEFT);
 	}
 
+	if (state == KOOPA_STATE_SHELL_IDLE || state == KOOPA_STATE_SHELL_REVERSE_IDLE) {
+		if (GetTickCount64() - stateShellStart > KOOPA_SHELL_DURATION) {
+			SetState(KOOPA_STATE_SHELL_SHAKING);
+		}
+	}
+	else if (state == KOOPA_STATE_SHELL_SHAKING || state == KOOPA_STATE_SHELL_REVERSE_SHAKING) {
+		if (GetTickCount64() - stateShakingStart > KOOPA_SHELL_SHAKING_DURATION) {
+			SetState(KOOPA_STATE_WALKING_LEFT);
+		}
+	}
+
 	DebugOut(L"Koopa is on platform: %d\n", isOnPlatform);
 }
 
 void CKoopa::Render() {
 	int aniId = -1;
+
 	if (state == KOOPA_STATE_WALKING_LEFT)
 		aniId = KOOPA_ANI_WALKING_LEFT;
 	else if (state == KOOPA_STATE_WALKING_RIGHT)
@@ -87,10 +92,8 @@ void CKoopa::SetState(int state) {
 	{
 	case KOOPA_STATE_WALKING_LEFT:
 		vx = -KOOPA_WALKING_SPEED;
-		ay = KOOPA_GRAVITY; // Reset gravity to default
 		break;
 	case KOOPA_STATE_WALKING_RIGHT:
-		ay = KOOPA_GRAVITY; // Reset gravity to default
 		vx = KOOPA_WALKING_SPEED;
 		break;
 	case KOOPA_STATE_SHELL_IDLE:
@@ -101,6 +104,7 @@ void CKoopa::SetState(int state) {
 		//vx = (nx > 0) ? KOOPA_SHELL_SPEED : -KOOPA_SHELL_SPEED;
 		//break;*/
 	case KOOPA_STATE_SHELL_SHAKING:
+		stateShakingStart = GetTickCount64();
 		vx = 0;
 		break;
 	case KOOPA_STATE_SHELL_REVERSE_IDLE:
@@ -111,11 +115,13 @@ void CKoopa::SetState(int state) {
 		//vx = (nx > 0) ? -KOOPA_SHELL_SPEED : KOOPA_SHELL_SPEED;
 		//break;*/
 	case KOOPA_STATE_SHELL_REVERSE_SHAKING:
+		stateShakingStart = GetTickCount64();
 		vx = 0;
 		break;
 	default:
 		break;
 	}
+
 	CGameObject::SetState(state);
 }
 

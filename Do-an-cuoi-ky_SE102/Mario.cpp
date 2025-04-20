@@ -158,7 +158,25 @@ void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e) {
 }
 
 void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
-	GetHurt();
+
+	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+
+	if (e->ny < 0) {
+		if (koopa->GetState() == KOOPA_STATE_WALKING_LEFT || 
+			koopa->GetState() == KOOPA_STATE_WALKING_RIGHT)
+		{
+			koopa->SetState(KOOPA_STATE_SHELL_IDLE);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			AddPoint(100);
+		}
+	}
+	else if (koopa->GetState() != KOOPA_STATE_SHELL_IDLE 
+		&& koopa->GetState() != KOOPA_STATE_SHELL_SHAKING
+		&& koopa->GetState() != KOOPA_STATE_SHELL_REVERSE_IDLE
+		&& koopa->GetState() != KOOPA_STATE_SHELL_REVERSE_SHAKING) 
+	{
+		GetHurt();
+	}
 }
 
 //

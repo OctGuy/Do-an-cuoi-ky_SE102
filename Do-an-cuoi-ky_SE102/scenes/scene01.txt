@@ -107,7 +107,7 @@ assets\koopa.txt
 2	240	400
 
 #KOOPA
-11	543 	240
+11	549 	341
 
 #PIRANHA_PLANT
 9	359	368

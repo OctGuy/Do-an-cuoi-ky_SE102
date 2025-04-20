@@ -25,8 +25,8 @@
 #define KOOPA_SHELL_BBOX_WIDTH 16
 #define KOOPA_SHELL_BBOX_HEIGHT 16
 
-#define KOOPA_SHELL_DURATION 8000
-#define KOOPA_SHELL_SHAKING 5000
+#define KOOPA_SHELL_DURATION 5000
+#define KOOPA_SHELL_SHAKING_DURATION 2000
 
 #define KOOPA_STATE_WALKING_LEFT 0
 #define KOOPA_STATE_WALKING_RIGHT 1
@@ -45,6 +45,7 @@ protected:
 	float ay;
 
 	ULONGLONG stateShellStart;
+	ULONGLONG stateShakingStart;
 
 	LPGAMEOBJECT platform;
 
@@ -56,6 +57,7 @@ public:
 		this->ay = KOOPA_GRAVITY;
 		SetState(KOOPA_STATE_WALKING_LEFT);
 		stateShellStart = -1;
+		stateShakingStart = -1;
 		isHeld = false;
 		platform = NULL;
 	}
@@ -66,10 +68,19 @@ public:
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void SetState(int state);
 	int IsCollidable() { return 1; }
-	int IsBlocking() { return 0; }
+
+	int IsBlocking()
+	{
+		return state == KOOPA_STATE_SHELL_IDLE 
+			|| state == KOOPA_STATE_SHELL_REVERSE_IDLE
+			|| state == KOOPA_STATE_SHELL_SHAKING
+			|| state == KOOPA_STATE_SHELL_REVERSE_SHAKING;
+	}
+
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	bool IsOnPlatform();
+	//void ShellStart();
 	//void CheckEdgeOfPlatform(vector<LPGAMEOBJECT>* coObjects);
 };
 
