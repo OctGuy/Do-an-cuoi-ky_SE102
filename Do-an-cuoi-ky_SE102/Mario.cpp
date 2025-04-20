@@ -51,11 +51,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		maxVy = MARIO_MAX_FALL_SPEED; // Reset max fall speed to default
 		isInAir = false; // Reset isInAir to false
 	}
-	else
-		//DebugOut(L"Floating\n");
 
 	// reset untouchable timer if untouchable time has passed
-	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
+	// In the Update() method, modify the untouchable timer check:
+	if (untouchable && GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
