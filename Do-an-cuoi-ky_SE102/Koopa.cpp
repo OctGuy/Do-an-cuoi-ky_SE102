@@ -54,7 +54,9 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 	}
 	else if (state == KOOPA_STATE_SHELL_SHAKING || state == KOOPA_STATE_SHELL_REVERSE_SHAKING) {
 		if (GetTickCount64() - stateShakingStart > KOOPA_SHELL_SHAKING_DURATION) {
+			vy = -0.4;
 			SetState(KOOPA_STATE_WALKING_LEFT);
+			
 		}
 	}
 
@@ -94,6 +96,7 @@ void CKoopa::SetState(int state) {
 		vx = -KOOPA_WALKING_SPEED;
 		break;
 	case KOOPA_STATE_WALKING_RIGHT:
+		//vy = -0.4;
 		vx = KOOPA_WALKING_SPEED;
 		break;
 	case KOOPA_STATE_SHELL_IDLE:
