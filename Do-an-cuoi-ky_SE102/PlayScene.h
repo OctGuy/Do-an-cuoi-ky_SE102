@@ -29,6 +29,8 @@ protected:
 
 	D3DXCOLOR backgroundColor;
 
+	BOOLEAN isCameraFollowMarioY = false; //Keep track of whether the camera should follow Mario's Y position
+
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
 

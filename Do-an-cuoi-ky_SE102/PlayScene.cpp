@@ -435,12 +435,40 @@ void CPlayScene::Update(DWORD dt)
 	player->GetPosition(cx, cy);
 
 	CGame* game = CGame::GetInstance();
+
+	// Get Mario's vertical velocity to check if he's flying
+	float vy = ((CMario*)player)->GetVy();
+	CMario* mario = (CMario*)player;
+
+	// Follow on X axis
 	cx -= game->GetBackBufferWidth() / 2;
-	cy -= game->GetBackBufferHeight() / 2;
+
+	float marioX, marioY;
+	mario->GetPosition(marioX, marioY);
+
+	// If mario is flying then switch camera to follow him on y axis else keep it fixed
+	if (mario->IsInAir() && vy < 0 || marioY < 200.f)
+		isCameraFollowMarioY = true;
+	else if (mario->IsOnPlatform() && marioY >= 340.f)
+		isCameraFollowMarioY = false;
+
+	//Make camera follow Mario vertically when flying
+	if (isCameraFollowMarioY) {
+		cy -= game->GetBackBufferHeight() / 2;
+	}
+	else {
+		// Regular fixed camera Y position when not flying
+		cy = 220.0f;
+	}
 
 	if (cx < 0) cx = 0;
+	//This is calculated to be roughly the end of the map (might need to be adjusted to fit diffrent map)
+	else if (cx > 2816.f - game->GetBackBufferWidth() - 8.f) cx = 2816.f - game->GetBackBufferWidth() - 8.f;
 
-	CGame::GetInstance()->SetCamPos(cx, 220.f);
+	if (cy < 0) cy = 0;
+	else if (cy > 220.f) cy = 220.f;
+
+	CGame::GetInstance()->SetCamPos(cx, cy);
 
 	PurgeDeletedObjects();
 }
