@@ -30,8 +30,10 @@ public:
 		this->width = width;
 		this->cellWidth = cellWidth;
 		this->cellHeight = cellHeight;
+
 		this->spriteIdTL = spriteIdTL;
 		this->spriteIdTR = spriteIdTR;
+
 		this->spriteIdBL = spriteIdBL;
 		this->spriteIdBR = spriteIdBR;
 		this->spriteIdFill = spriteIdFill;
