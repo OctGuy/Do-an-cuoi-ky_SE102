@@ -200,8 +200,8 @@ public:
 		return (state != MARIO_STATE_DIE);
 	}
 
-	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
-
+	//int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
+	int IsBlocking() { return 0; } 
 	//Update coin and point
 	void AddCoin() {coin++; AddPoint(100);}
 	void AddPoint(int p) { point += p; }

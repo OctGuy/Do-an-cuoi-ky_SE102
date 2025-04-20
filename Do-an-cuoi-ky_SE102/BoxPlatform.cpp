@@ -20,7 +20,7 @@ void CBoxPlatform::Render()
 	if (this->width > 1)
 		RenderLayer(this->spriteIdBL, this->spriteIdMB, this->spriteIdBR, this->spriteIdSOTBottom, yy);
 
-	//RenderBoundingBox();  // Add this line to display the bounding box
+	RenderBoundingBox();  // Add this line to display the bounding box
 }
 
 
@@ -48,11 +48,10 @@ void CBoxPlatform::RenderLayer(int leftLayerId, int midLayerId, int rightLayerId
 
 void CBoxPlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	float cellWidth_div_2 = this->cellWidth / 2;
-	l = x - cellWidth_div_2;
-	t = y - cellWidth_div_2;
+	l = x - this->cellWidth / 2;
+	t = y - this->cellHeight / 2;
 	r = l + this->cellWidth * this->length;
-	b = t + this->width * this->cellHeight;
+	b = t + this->cellHeight * this->width;
 }
 
 void CBoxPlatform::RenderBoundingBox()

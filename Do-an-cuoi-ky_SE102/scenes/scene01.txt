@@ -11,11 +11,12 @@ assets\scenery_object.txt
 assets\piranha_plant.txt
 assets\fire_bullet.txt
 assets\HUD.txt
+assets\koopa.txt
 
 #RENDERING ORDER IS IMPORTANT
 [OBJECTS]
 # type	x	y	
-# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Coins, 5 = Platform, 6 = Box Platform, 7 = Pipe, 8 - Tussock, 9 - Piranha Plant, 10 - Fire Bullet
+# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Coins, 5 = Platform, 6 = Box Platform, 7 = Pipe, 8 - Tussock, 9 - Piranha Plant, 10 - Fire Bullet, 11 - Koopa
 
 
 
@@ -100,9 +101,13 @@ assets\HUD.txt
 
 # MARIO
 0	20	350
+#0	493	392
 
 # GOOMBA
 2	240	400
+
+#KOOPA
+11	538 	246
 
 #PIRANHA_PLANT
 9	359	368

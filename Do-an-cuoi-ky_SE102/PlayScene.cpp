@@ -13,6 +13,7 @@
 #include "SampleKeyEventHandler.h"
 #include "PiranhaPlant.h"
 #include "FireBullet.h"
+#include "Koopa.h"
 
 using namespace std;
 
@@ -257,6 +258,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		case OBJECT_TYPE_PIRANHA_PLANT:
 		{
 			obj = new CPiranhaPlant(x, y);
+			break;
+		}
+
+		case OBJECT_TYPE_KOOPA:
+		{
+			obj = new CKoopa(x, y);
 			break;
 		}
 
