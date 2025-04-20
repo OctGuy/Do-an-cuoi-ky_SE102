@@ -25,12 +25,27 @@ void CKoopa::OnNoCollision(DWORD dt) {
 
 void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (!e->obj->IsBlocking()) return;
-	if (e->ny != 0) {
+	//if (e->ny != 0) {
+	//	vy = 0;
+	//	ay = KOOPA_GRAVITY; // Reset gravity to default
+	//}
+	//else if (e->nx != 0) {
+	//	vx = -vx; // Reverse direction on collision with left or right
+	//}
+
+	if (e->ny < 0) { // Stand on platform
 		vy = 0;
-		ay = KOOPA_GRAVITY; // Reset gravity to default
+		ay = KOOPA_GRAVITY; 
+		if (platform == NULL && dynamic_cast<CBoxPlatform*>(e->obj)) {
+			platform = dynamic_cast<CBoxPlatform*>(e->obj);
+		}
 	}
-	else if (e->nx != 0) {
-		vx = -vx; // Reverse direction on collision with left or right
+
+	if (e->nx != 0) { 
+		if (state == KOOPA_STATE_WALKING_LEFT)
+			SetState(KOOPA_STATE_WALKING_RIGHT);
+		else if (state == KOOPA_STATE_WALKING_RIGHT)
+			SetState(KOOPA_STATE_WALKING_LEFT);
 	}
 }
 
@@ -71,6 +86,7 @@ void CKoopa::SetState(int state) {
 		vx = KOOPA_WALKING_SPEED;
 		break;
 	case KOOPA_STATE_SHELL_IDLE:
+		stateShellStart = GetTickCount64();
 		vx = 0;
 		break;
 	/*case KOOPA_STATE_SHELL_MOVE:
@@ -80,6 +96,7 @@ void CKoopa::SetState(int state) {
 		vx = 0;
 		break;
 	case KOOPA_STATE_SHELL_REVERSE_IDLE:
+		stateShellStart = GetTickCount64();
 		vx = 0;
 		break;
 	/*case KOOPA_STATE_SHELL_REVERSE_MOVE:

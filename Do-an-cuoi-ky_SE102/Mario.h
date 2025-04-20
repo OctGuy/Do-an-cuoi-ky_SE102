@@ -161,6 +161,7 @@ class CMario : public CGameObject
 	void OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e);
 	void OnCollisionWithPowerUp(LPCOLLISIONEVENT e);
 	void OnCollisionWithBullet(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -200,8 +201,8 @@ public:
 		return (state != MARIO_STATE_DIE);
 	}
 
-	//int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
-	int IsBlocking() { return 0; } 
+	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
+	//int IsBlocking() { return 0; } 
 	//Update coin and point
 	void AddCoin() {coin++; AddPoint(100);}
 	void AddPoint(int p) { point += p; }

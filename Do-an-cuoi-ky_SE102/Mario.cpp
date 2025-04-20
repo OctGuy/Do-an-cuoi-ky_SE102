@@ -9,6 +9,7 @@
 #include "Portal.h"
 #include "QuestionBrick.h"
 #include "PiranhaPlant.h"
+#include "Koopa.h"
 
 #include "Collision.h"
 
@@ -90,6 +91,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPowerUp(e);
 	else if (dynamic_cast<CFireBullet*>(e->obj))
 		OnCollisionWithBullet(e);
+	else if (dynamic_cast<CKoopa*>(e->obj))
+		OnCollisionWithKoopa(e);
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -152,6 +155,10 @@ void CMario::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e)
 }
 
 void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e) {
+	GetHurt();
+}
+
+void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 	GetHurt();
 }
 
