@@ -36,9 +36,7 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (e->ny < 0) { // Stand on platform
 		vy = 0;
 		ay = KOOPA_GRAVITY; 
-		if (platform == NULL && dynamic_cast<CBoxPlatform*>(e->obj)) {
-			platform = dynamic_cast<CBoxPlatform*>(e->obj);
-		}
+		platform = e->obj; 
 	}
 
 	if (e->nx != 0) { 
@@ -47,6 +45,16 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 		else if (state == KOOPA_STATE_WALKING_RIGHT)
 			SetState(KOOPA_STATE_WALKING_LEFT);
 	}
+
+	bool isOnPlatform = IsOnPlatform();
+	if (!isOnPlatform) {
+		if (state == KOOPA_STATE_WALKING_LEFT)
+			SetState(KOOPA_STATE_WALKING_RIGHT);
+		else if (state == KOOPA_STATE_WALKING_RIGHT)
+			SetState(KOOPA_STATE_WALKING_LEFT);
+	}
+
+	DebugOut(L"Koopa is on platform: %d\n", isOnPlatform);
 }
 
 void CKoopa::Render() {
@@ -109,6 +117,23 @@ void CKoopa::SetState(int state) {
 		break;
 	}
 	CGameObject::SetState(state);
+}
+
+bool CKoopa::IsOnPlatform() {
+	if (platform == NULL) {
+		return false;
+	}
+
+	float checkX = x + (vx > 0 ? KOOPA_BBOX_WIDTH / 2 : -KOOPA_BBOX_WIDTH / 2);
+	//float checkY = y + KOOPA_BBOX_HEIGHT / 2 + 1;
+	float l, t, r, b;
+	platform->GetBoundingBox(l, t, r, b);
+
+	if (checkX >= l && checkX <= r) {
+		return true;
+	}
+
+	return false;
 }
 
 void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {

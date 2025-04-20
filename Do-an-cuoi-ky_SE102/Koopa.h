@@ -69,6 +69,7 @@ public:
 	int IsBlocking() { return 0; }
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
+	bool IsOnPlatform();
 	//void CheckEdgeOfPlatform(vector<LPGAMEOBJECT>* coObjects);
 };
 
