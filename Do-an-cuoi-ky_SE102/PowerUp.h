@@ -10,11 +10,11 @@
 #define ID_SPRITE_LEAF_LEFT 50002
 
 #define LEAF_RISE_HEIGHT 25
-#define LEAF_SWAY_DISTANCE 20
+#define LEAF_SWAY_DISTANCE 40
 
-#define LEAF_GRAVITY 0.008f
+#define LEAF_GRAVITY 0.01f
 #define LEAF_SWAYING_SPEED 0.04f
-#define LEAF_RISE_SPEED 0.02f
+#define LEAF_RISE_SPEED 0.08f
 
 
 ///////////////

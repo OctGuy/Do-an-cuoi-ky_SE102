@@ -83,10 +83,15 @@ void CPowerUp::UpdateLeaf()
 		y = originalY - LEAF_RISE_HEIGHT;
 		SetState(LEAF_STATE_FALLING);
 	}
-	else if (abs(originalX - x) >= LEAF_SWAY_DISTANCE)
+	else if (x - originalX >= LEAF_SWAY_DISTANCE && vx > 0) // Moving right and reached sway limit
 	{
-		vx = -vx; //Change direction when reaching the sway distance
+		vx = -LEAF_SWAYING_SPEED; // Reverse direction to left
 	}
+	else if (x <= originalX  && vx < 0) // Moving left and reached sway limit
+	{
+		vx = LEAF_SWAYING_SPEED; // Reverse direction to right
+	}
+
 }
 
 void CPowerUp::OnNoCollision(DWORD dt)
