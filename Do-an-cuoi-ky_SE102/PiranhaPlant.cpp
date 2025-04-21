@@ -183,9 +183,7 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	float relativeX = fabs(marioX - x);
 	if (relativeX < DISTANCE_PIRANHA_NOT_INVOKE) {
-		if (state == PIRANHA_STATE_SNIP)
-			SetState(PIRANHA_STATE_DIVE);
-		else if (state == PIRANHA_STATE_HIDE)
+		if (state == PIRANHA_STATE_HIDE)
 			SetState(PIRANHA_STATE_HIDE);
 	}
 
