@@ -106,7 +106,7 @@ assets\koopa.txt
 11	497 	384
 
 #PIRANHA_PLANT
-#9	359	368
+9	359	368
 
 #PIPE
 #2	334	397
