@@ -524,6 +524,10 @@ void CMario::SetState(int state)
 			if (!isOnPlatform)
 			{
 				DebugOut(L"[INFO] Mario floating\n");
+				//Camera keep confusing mario for flying when he is floating 
+				//So I added to make sure mario is not seen as flying
+				//And it the control feel good this too so win-win
+				if (vy < 0) vy = 0.f;	
 				slowfall_start = GetTickCount64();
 				maxVy = MARIO_SLOW_FALL_SPEED;
 				isInAir = true;
