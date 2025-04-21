@@ -42,9 +42,15 @@
 
 19/4/2015
 - Working on the flying and slow-falling mehanic of Raccoon Mario (Phong)
+- Add more direction for Piranha Plant (Thinh)
+- Hurt Mario by bullet (Thinh)
+- Set proper distance to Mario for invoking Piranha Plant (Thinh)
 
 20/4/2025
 - Work on camera follow mario system. (Phong)
+- Create Koopa class (collision, intelligence, shell state) (Thinh)
 
 21/4/2025
 - Adjust fly mechanic, leaf fall trajectory (Phong)
+- Change Koopa sprite for more distinct (Thinh)
+- Modify Piranha state when Mario comes near (Thinh)
