@@ -39,28 +39,7 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 			SetState(KOOPA_STATE_WALKING_LEFT);
 	}
 
-	bool isOnPlatform = IsOnPlatform();
-	if (!isOnPlatform) {
-		if (state == KOOPA_STATE_WALKING_LEFT)
-			SetState(KOOPA_STATE_WALKING_RIGHT);
-		else if (state == KOOPA_STATE_WALKING_RIGHT)
-			SetState(KOOPA_STATE_WALKING_LEFT);
-	}
-
-	if (state == KOOPA_STATE_SHELL_IDLE || state == KOOPA_STATE_SHELL_REVERSE_IDLE) {
-		if (GetTickCount64() - stateShellStart > KOOPA_SHELL_DURATION) {
-			SetState(KOOPA_STATE_SHELL_SHAKING);
-		}
-	}
-	else if (state == KOOPA_STATE_SHELL_SHAKING || state == KOOPA_STATE_SHELL_REVERSE_SHAKING) {
-		if (GetTickCount64() - stateShakingStart > KOOPA_SHELL_SHAKING_DURATION) {
-			vy = -0.4;
-			SetState(KOOPA_STATE_WALKING_LEFT);
-			
-		}
-	}
-
-	DebugOut(L"Koopa is on platform: %d\n", isOnPlatform);
+	//DebugOut(L"Koopa is on platform: %d\n", isOnPlatform);
 }
 
 void CKoopa::Render() {
@@ -148,6 +127,27 @@ bool CKoopa::IsOnPlatform() {
 void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	vy += ay * dt;
 	vx += ax * dt;
+
+	bool isOnPlatform = IsOnPlatform();
+	if (!isOnPlatform) {
+		if (state == KOOPA_STATE_WALKING_LEFT)
+			SetState(KOOPA_STATE_WALKING_RIGHT);
+		else if (state == KOOPA_STATE_WALKING_RIGHT)
+			SetState(KOOPA_STATE_WALKING_LEFT);
+	}
+
+	if (state == KOOPA_STATE_SHELL_IDLE || state == KOOPA_STATE_SHELL_REVERSE_IDLE) {
+		if (GetTickCount64() - stateShellStart > KOOPA_SHELL_DURATION) {
+			SetState(KOOPA_STATE_SHELL_SHAKING);
+		}
+	}
+	else if (state == KOOPA_STATE_SHELL_SHAKING || state == KOOPA_STATE_SHELL_REVERSE_SHAKING) {
+		if (GetTickCount64() - stateShakingStart > KOOPA_SHELL_SHAKING_DURATION) {
+			vy = -KOOPA_BBOX_HEIGHT / 2;
+			SetState(KOOPA_STATE_WALKING_LEFT);
+
+		}
+	}
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
