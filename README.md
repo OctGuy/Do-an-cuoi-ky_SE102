@@ -47,4 +47,4 @@
 - Work on camera follow mario system. (Phong)
 
 21/4/2025
-- Adjust fly mechanic, leaf fall trajectory
+- Adjust fly mechanic, leaf fall trajectory (Phong)
