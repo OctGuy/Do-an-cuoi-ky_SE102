@@ -1,5 +1,13 @@
 #include "QuestionBrick.h"
 
+CMario* CQuestionBrick::GetPlayer()
+{
+	CGame* game = CGame::GetInstance();
+	CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
+	CMario* mario = dynamic_cast<CMario*>(playScene->GetPlayer());
+	return mario;
+}
+
 void CQuestionBrick::Render()
 {
     if (isHit) {
@@ -13,27 +21,24 @@ void CQuestionBrick::Render()
 
 void CQuestionBrick::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-    if (e->ny > 0)
+	CMario* mario = GetPlayer();
+    if (e->ny > 0 || (e->nx != 0 && dynamic_cast<CKoopa*>(e->obj)))
     {
-        CGame* game = CGame::GetInstance();
-        CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
-        CMario* mario = dynamic_cast<CMario*>(playScene->GetPlayer());
         if (!isHit)
         {
-			SetState(BRICK_STATE_BOUNCE);
-			if (dynamic_cast<CCoin*>(item)) //Only activate coin immidiately
-				ActivateItem();
+            SetState(BRICK_STATE_BOUNCE);
+            if (dynamic_cast<CCoin*>(item)) //Only activate coin immidiately
+                ActivateItem();
             else
             {
-				if (mario->GetLevel() == MARIO_LEVEL_SMALL)
+                if (mario->GetLevel() == MARIO_LEVEL_SMALL)
                     dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_MUSHROOM);
-				else
+                else
                     dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_LEAF);
             }
         }
     }
 }
-
 
 void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
