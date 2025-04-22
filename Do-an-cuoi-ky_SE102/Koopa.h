@@ -76,7 +76,9 @@ public:
 		return state == KOOPA_STATE_SHELL_IDLE 
 			|| state == KOOPA_STATE_SHELL_REVERSE_IDLE
 			|| state == KOOPA_STATE_SHELL_SHAKING
-			|| state == KOOPA_STATE_SHELL_REVERSE_SHAKING;
+			|| state == KOOPA_STATE_SHELL_REVERSE_SHAKING
+			|| state == KOOPA_STATE_SHELL_MOVE 
+			|| state == KOOPA_STATE_SHELL_REVERSE_MOVE;
 	}
 
 	void OnNoCollision(DWORD dt);

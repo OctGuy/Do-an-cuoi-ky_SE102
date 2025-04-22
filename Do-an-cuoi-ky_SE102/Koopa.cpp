@@ -41,24 +41,25 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 			SetState(KOOPA_STATE_WALKING_RIGHT);
 		else if (state == KOOPA_STATE_WALKING_RIGHT)
 			SetState(KOOPA_STATE_WALKING_LEFT);
-		/*else if (state == KOOPA_STATE_SHELL_MOVE || state == KOOPA_STATE_SHELL_REVERSE_MOVE) {
-			vx = -vx;
-		}*/
 	}
 
-	if (state == KOOPA_STATE_SHELL_IDLE) {
+	if (state == KOOPA_STATE_SHELL_IDLE || state == KOOPA_STATE_SHELL_REVERSE_IDLE) {
 		if (dynamic_cast<CMario*>(e->obj)) {
 			if (e->nx < 0) {
-				SetState(KOOPA_STATE_SHELL_MOVE);
+				SetState((state == KOOPA_STATE_SHELL_IDLE)
+					? KOOPA_STATE_SHELL_MOVE 
+					: KOOPA_STATE_SHELL_REVERSE_MOVE);
 				vx = -KOOPA_SHELL_SPEED;
 			}
 			else if (e->nx > 0) {
-				SetState(KOOPA_STATE_SHELL_MOVE);
+				SetState((state == KOOPA_STATE_SHELL_IDLE)
+					? KOOPA_STATE_SHELL_MOVE
+					: KOOPA_STATE_SHELL_REVERSE_MOVE);
 				vx = KOOPA_SHELL_SPEED;
 			}
 		}
 	}
-	else if (state == KOOPA_STATE_SHELL_MOVE) {
+	else if (state == KOOPA_STATE_SHELL_MOVE || state == KOOPA_STATE_SHELL_REVERSE_MOVE) {
 		if (e->nx != 0) {
 			vx = -vx;
 		}
@@ -121,8 +122,8 @@ void CKoopa::SetState(int state) {
 		vx = 0;
 		break;
 	case KOOPA_STATE_SHELL_MOVE:
-		ay = KOOPA_GRAVITY;
-		vx = 0; // Set vx when Collision
+		ay = KOOPA_GRAVITY;				// Natural fall down when Koopa is out of platform or box
+		vx = 0;							// Set vx when Collision
 		break;
 	case KOOPA_STATE_SHELL_SHAKING:
 		stateShakingStart = GetTickCount64();
@@ -133,8 +134,8 @@ void CKoopa::SetState(int state) {
 		vx = 0;
 		break;
 	case KOOPA_STATE_SHELL_REVERSE_MOVE:
-		ay = KOOPA_GRAVITY;
-		vx = 0; // Set vx when Collision
+		ay = KOOPA_GRAVITY;				// Natural fall down when Koopa is out of platform or box
+		vx = 0;							// Set vx when Collision
 		break;
 	case KOOPA_STATE_SHELL_REVERSE_SHAKING:
 		stateShakingStart = GetTickCount64();
@@ -189,9 +190,6 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 				? KOOPA_STATE_SHELL_SHAKING
 				: KOOPA_STATE_SHELL_REVERSE_SHAKING);
 		}
-
-		
-
 		break;
 
 	case KOOPA_STATE_SHELL_SHAKING:
@@ -200,10 +198,6 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			vy = -0.4;
 			SetState(KOOPA_STATE_WALKING_LEFT);
 		}
-		break;
-
-	case KOOPA_STATE_SHELL_MOVE:
-	case KOOPA_STATE_SHELL_REVERSE_MOVE:
 		break;
 	}
 
