@@ -435,7 +435,7 @@ void CMario::Render()
 	}
 	animations->Get(aniId)->Render(x, y);
 	
-	RenderBoundingBox();
+	//RenderBoundingBox();
 
 	DebugOutTitle(L"Coins: %d", coin);
 }
@@ -573,7 +573,7 @@ void CMario::SetState(int state)
 				if(Tail)
 				{
 					Tail->SetActive(true);
-					Tail->SetPosition(x, y);
+					Tail->SetPosition(x, y + 4.f);
 					Tail->SetState(RACCOON_TAIL_STATE_ACTIVE);
 				}
 				tailAttack_start = GetTickCount64();

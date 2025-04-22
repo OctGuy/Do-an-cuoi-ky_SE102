@@ -57,6 +57,14 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	// First check if the object is a tail
+	if (dynamic_cast<CRaccoonTail*>(e->obj))
+	{
+		OnCollisionWithTail(e);
+		return;
+	}
+
+	// Then handle other collision checks
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CGoomba*>(e->obj)) return;
 
@@ -69,6 +77,17 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		vx = -vx;
 	}
+}
+
+
+void CGoomba::OnCollisionWithTail(LPCOLLISIONEVENT e)
+{
+	//DebugOut(L"Goomba hit by tail\n");
+	SetState(GOOMBA_STATE_DIE);
+	vy = -GOOMBA_RISE_SPEED;
+	ax = 0;
+	ay = 0;
+	return;
 }
 
 

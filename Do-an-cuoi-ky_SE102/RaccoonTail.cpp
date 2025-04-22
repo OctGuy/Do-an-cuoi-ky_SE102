@@ -15,6 +15,7 @@ void CRaccoonTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         }
 		else if (x < startX - RACCOON_TAIL_RANGE)
 		{
+            //vx = RACCOON_TAIL_SPEED;
 			SetState(RACCOON_TAIL_STATE_INACTIVE); // Set inactive state if out of range
 		}
     }
@@ -22,12 +23,16 @@ void CRaccoonTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     {
         isActive = false; // Set inactive status
     }
+
+	//DebugOut(L"[INFO] Raccoon Tail state: %d\n", state);
+
+    //CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CRaccoonTail::Render()
 {
     // Render bounding box for debugging purposes
-    RenderBoundingBox();
+    //RenderBoundingBox();
 }
 
 void CRaccoonTail::SetState(int state)
@@ -49,10 +54,10 @@ void CRaccoonTail::SetState(int state)
     }
 }
 
-void CRaccoonTail::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+void CRaccoonTail::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-    left = x ;
-    top = y;
-    right = x + 16; // Example width
-    bottom = y + 16; // Example height
+    l = x;
+    t = y;
+    r = l + 8; // Example width
+    b = t + 8; // Example height
 }

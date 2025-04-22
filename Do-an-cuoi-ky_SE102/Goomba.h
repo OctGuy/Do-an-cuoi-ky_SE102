@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "Game.h"
 #include "Sprites.h"
-
+#include "RaccoonTail.h"
 #define GOOMBA_GRAVITY 0.002f
 #define GOOMBA_WALKING_SPEED 0.05f
 #define GOOMBA_RISE_SPEED 0.02f
@@ -44,7 +44,7 @@ protected:
 	virtual void OnNoCollision(DWORD dt);
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
-
+	void OnCollisionWithTail(LPCOLLISIONEVENT e);
 public: 	
 	CGoomba(float x, float y);
 	virtual void SetState(int state);
