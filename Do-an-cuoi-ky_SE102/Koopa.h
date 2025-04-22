@@ -5,6 +5,8 @@
 #include "Platform.h"
 #include "BoxPlatform.h"
 #include "Brick.h"
+#include "Mario.h"
+#include "PlayScene.h"
 
 #define KOOPA_ANI_WALKING_LEFT 8000
 #define KOOPA_ANI_WALKING_RIGHT 8001
@@ -80,7 +82,6 @@ public:
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	bool IsOnPlatform();
-	//void ShellStart();
-	//void CheckEdgeOfPlatform(vector<LPGAMEOBJECT>* coObjects);
+	CMario* GetPlayer();
 };
 
