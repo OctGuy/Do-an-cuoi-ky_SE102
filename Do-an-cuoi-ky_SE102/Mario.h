@@ -3,6 +3,7 @@
 
 #include "Animation.h"
 #include "Animations.h"
+#include "RaccoonTail.h"
 
 #include "debug.h"
 
@@ -181,6 +182,8 @@ class CMario : public CGameObject
 
 	float currentFloorY; // Y position of the current floor
 
+	LPGAMEOBJECT Tail; // Raccoon tail object
+
 	//Tracking point and coin
 	int coin;
 	int point;
@@ -214,9 +217,12 @@ public:
 		slowfall_start = -1;
 		tailAttack_start = -1;
 
+		isSitting = false;
 		isOnPlatform = false;
 		isInAir = false;
 		isTailAttacking = false;
+
+		Tail = NULL;
 		currentFloorY = GROUND_Y; // Initialize to ground level
 
 		coin = 0;
@@ -253,7 +259,7 @@ public:
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	void SetLevel(int l);
-
+	void SetTail(LPGAMEOBJECT tail) { this->Tail = tail; }
 	void GetHurt();
 
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }

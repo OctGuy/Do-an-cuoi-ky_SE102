@@ -153,6 +153,7 @@
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="QuestionBrick.cpp" />
+    <ClCompile Include="RaccoonTail.cpp" />
     <ClCompile Include="SampleKeyEventHandler.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="QuestionBrick.h" />
+    <ClInclude Include="RaccoonTail.h" />
     <ClInclude Include="SampleKeyEventHandler.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sprite.h" />

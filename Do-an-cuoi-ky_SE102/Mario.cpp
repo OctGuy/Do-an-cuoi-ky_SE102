@@ -570,6 +570,12 @@ void CMario::SetState(int state)
 			if (level == MARIO_LEVEL_RACCOON && !isTailAttacking)
 			{
 				DebugOut(L"[INFO] Mario tail attack\n");
+				if(Tail)
+				{
+					Tail->SetActive(true);
+					Tail->SetPosition(x, y);
+					Tail->SetState(RACCOON_TAIL_STATE_ACTIVE);
+				}
 				tailAttack_start = GetTickCount64();
 				isTailAttacking = true;
 			}

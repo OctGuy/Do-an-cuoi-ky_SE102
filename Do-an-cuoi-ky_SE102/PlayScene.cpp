@@ -14,6 +14,7 @@
 #include "PiranhaPlant.h"
 #include "FireBullet.h"
 #include "Koopa.h"
+#include "RaccoonTail.h"
 
 using namespace std;
 
@@ -117,8 +118,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				return;
 			}
 
+			// Create Mario
 			obj = new CMario(x, y);
 			player = (CMario*)obj;
+
+			// Create the tail for Mario
+			CRaccoonTail* tail = new CRaccoonTail(x, y);
+
+			// Set the tail for Mario
+			dynamic_cast<CMario*>(player)->SetTail(tail);
+
+			// Add the tail to the object list
+			objects.push_back(tail);
 
 			DebugOut(L"[INFO] Player object has been created!\n");
 			break;
