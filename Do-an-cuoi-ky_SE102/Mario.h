@@ -11,7 +11,7 @@
 #define MARIO_WALKING_SPEED		0.09f
 #define MARIO_RUNNING_SPEED		0.20f
 
-#define MARIO_ACCEL_WALK_X	0.0001f
+#define MARIO_ACCEL_WALK_X	0.00008f
 #define MARIO_ACCEL_RUN_X	0.0001f
 
 #define MARIO_FRICTION		0.0002f
@@ -48,6 +48,9 @@
 
 #define MARIO_STATE_DECELERATE_RIGHT 700
 #define MARIO_STATE_DECELERATE_LEFT  701
+
+#define MARIO_STATE_HOLD	800
+#define MARIO_STATE_DROP	801
 #pragma endregion
 
 
@@ -170,6 +173,7 @@ class CMario : public CGameObject
 
 	BOOLEAN isOnPlatform;
 	BOOLEAN isInAir;	//If Raccoon mario is flying or floating this should be true
+	BOOLEAN isAbleToHold; //If player is holding S this should true
 	float currentFloorY; // Y position of the current floor
 
 	//Tracking point and coin

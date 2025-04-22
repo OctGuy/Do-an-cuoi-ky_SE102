@@ -60,6 +60,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 
+	DebugOut(L"[INFO] Mario Update: %d\n", isAbleToHold);
+
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -182,12 +184,19 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 			AddPoint(100);
 		}
 	}
-	else if (koopa->GetState() != KOOPA_STATE_SHELL_IDLE 
-		&& koopa->GetState() != KOOPA_STATE_SHELL_SHAKING
-		&& koopa->GetState() != KOOPA_STATE_SHELL_REVERSE_IDLE
-		&& koopa->GetState() != KOOPA_STATE_SHELL_REVERSE_SHAKING) 
+	else
 	{
-		GetHurt();
+		if (koopa->GetState() == KOOPA_STATE_WALKING_LEFT ||
+			koopa->GetState() == KOOPA_STATE_WALKING_RIGHT)
+			GetHurt();
+		else if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
+				 koopa->GetState() == KOOPA_STATE_SHELL_SHAKING)
+			if (isAbleToHold) 
+			{
+				//DebugOut(L"[INFO] Mario picked Koopa\n");
+				koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * KOOPA_BBOX_WIDTH / 2, y);
+				koopa->SetSpeed(0, 0);
+			}
 	}
 }
 
@@ -597,6 +606,14 @@ void CMario::SetState(int state)
 			vx = 0;
 			ax = 0;
 			isRunning = false;
+			break;
+
+		case MARIO_STATE_HOLD:
+			isAbleToHold = true;
+			break;
+
+		case MARIO_STATE_DROP:
+			isAbleToHold = false;
 			break;
 	}
 

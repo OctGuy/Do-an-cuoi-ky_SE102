@@ -36,7 +36,7 @@
 #define KOOPA_STATE_SHELL_REVERSE_IDLE 5
 #define KOOPA_STATE_SHELL_REVERSE_MOVE 6
 #define KOOPA_STATE_SHELL_REVERSE_SHAKING 7
-
+#define KOOPA_STATE_SHELL_PICKED 8
 
 class CKoopa : public CEnemy
 {
@@ -69,13 +69,15 @@ public:
 	void SetState(int state);
 	int IsCollidable() { return 1; }
 
-	int IsBlocking()
-	{
-		return state == KOOPA_STATE_SHELL_IDLE 
-			|| state == KOOPA_STATE_SHELL_REVERSE_IDLE
-			|| state == KOOPA_STATE_SHELL_SHAKING
-			|| state == KOOPA_STATE_SHELL_REVERSE_SHAKING;
-	}
+	int IsBlocking() { return 0; }
+
+	//int IsBlocking()
+	//{
+	//	return state == KOOPA_STATE_SHELL_IDLE 
+	//		|| state == KOOPA_STATE_SHELL_REVERSE_IDLE
+	//		|| state == KOOPA_STATE_SHELL_SHAKING
+	//		|| state == KOOPA_STATE_SHELL_REVERSE_SHAKING;
+	//}
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
