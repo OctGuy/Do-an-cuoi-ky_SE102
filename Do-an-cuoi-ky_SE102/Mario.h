@@ -235,6 +235,7 @@ public:
 	void AddCoin() {coin++; AddPoint(100);}
 	void AddPoint(int p) { point += p; }
 
+	bool GetIsRunning() { return isRunning; }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
