@@ -65,7 +65,19 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 		}
 	}
 
+	if (dynamic_cast<CQuestionBrick*>(e->obj)) {
+		if (state == KOOPA_STATE_SHELL_MOVE 
+			|| state == KOOPA_STATE_SHELL_REVERSE_MOVE)
+			OnCollisionWithBrick(e);
+	}
+		
+
 	//DebugOut(L"Koopa is on platform: %d\n", isOnPlatform);
+}
+
+void CKoopa::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
+	CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
+	questionBrick->OnCollisionWith(e);
 }
 
 CMario* CKoopa::GetPlayer() {

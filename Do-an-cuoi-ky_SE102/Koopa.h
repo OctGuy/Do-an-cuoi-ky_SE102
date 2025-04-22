@@ -19,7 +19,7 @@
 
 #define KOOPA_GRAVITY 0.01f
 #define KOOPA_WALKING_SPEED 0.03f
-#define KOOPA_SHELL_SPEED 0.1f
+#define KOOPA_SHELL_SPEED 0.2f
 
 #define KOOPA_BBOX_WIDTH 16
 #define KOOPA_BBOX_HEIGHT 26
@@ -85,5 +85,7 @@ public:
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	bool IsOnPlatform();
 	CMario* GetPlayer();
+
+	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
 };
 
