@@ -5,6 +5,7 @@
 #include "debug.h"
 #include "Coin.h"
 #include "PowerUp.h"
+#include "Koopa.h"
 
 #define BRICK_BOUNCE_SPEED 0.1f
 #define BRICK_BOUNCE_HEIGHT 10.0f
@@ -49,6 +50,8 @@ public:
     void SetState(int state);
 
     void ActivateItem();
+
+    CMario* GetPlayer();
 };
 
 

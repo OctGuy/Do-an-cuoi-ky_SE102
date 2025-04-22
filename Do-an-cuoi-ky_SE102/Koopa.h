@@ -5,6 +5,8 @@
 #include "Platform.h"
 #include "BoxPlatform.h"
 #include "Brick.h"
+#include "Mario.h"
+#include "PlayScene.h"
 
 #define KOOPA_ANI_WALKING_LEFT 8000
 #define KOOPA_ANI_WALKING_RIGHT 8001
@@ -17,7 +19,7 @@
 
 #define KOOPA_GRAVITY 0.01f
 #define KOOPA_WALKING_SPEED 0.03f
-#define KOOPA_SHELL_SPEED 0.1f
+#define KOOPA_SHELL_SPEED 0.2f
 
 #define KOOPA_BBOX_WIDTH 16
 #define KOOPA_BBOX_HEIGHT 26
@@ -74,13 +76,16 @@ public:
 		return state == KOOPA_STATE_SHELL_IDLE 
 			|| state == KOOPA_STATE_SHELL_REVERSE_IDLE
 			|| state == KOOPA_STATE_SHELL_SHAKING
-			|| state == KOOPA_STATE_SHELL_REVERSE_SHAKING;
+			|| state == KOOPA_STATE_SHELL_REVERSE_SHAKING
+			|| state == KOOPA_STATE_SHELL_MOVE 
+			|| state == KOOPA_STATE_SHELL_REVERSE_MOVE;
 	}
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	bool IsOnPlatform();
-	//void ShellStart();
-	//void CheckEdgeOfPlatform(vector<LPGAMEOBJECT>* coObjects);
+	CMario* GetPlayer();
+
+	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
 };
 
