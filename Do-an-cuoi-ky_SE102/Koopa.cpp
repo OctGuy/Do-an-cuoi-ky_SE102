@@ -43,23 +43,23 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 			SetState(KOOPA_STATE_WALKING_LEFT);
 	}
 
-	if (state == KOOPA_STATE_SHELL_IDLE || state == KOOPA_STATE_SHELL_REVERSE_IDLE) {
-		if (dynamic_cast<CMario*>(e->obj)) {
-			if (e->nx < 0) {
-				SetState((state == KOOPA_STATE_SHELL_IDLE)
-					? KOOPA_STATE_SHELL_MOVE 
-					: KOOPA_STATE_SHELL_REVERSE_MOVE);
-				vx = -KOOPA_SHELL_SPEED;
-			}
-			else if (e->nx > 0) {
-				SetState((state == KOOPA_STATE_SHELL_IDLE)
-					? KOOPA_STATE_SHELL_MOVE
-					: KOOPA_STATE_SHELL_REVERSE_MOVE);
-				vx = KOOPA_SHELL_SPEED;
-			}
-		}
-	}
-	else if (state == KOOPA_STATE_SHELL_MOVE || state == KOOPA_STATE_SHELL_REVERSE_MOVE) {
+	//if (state == KOOPA_STATE_SHELL_IDLE || state == KOOPA_STATE_SHELL_REVERSE_IDLE) {
+	//	if (dynamic_cast<CMario*>(e->obj)) {
+	//		if (e->nx < 0) {
+	//			SetState((state == KOOPA_STATE_SHELL_IDLE)
+	//				? KOOPA_STATE_SHELL_MOVE 
+	//				: KOOPA_STATE_SHELL_REVERSE_MOVE);
+	//			vx = -KOOPA_SHELL_SPEED;
+	//		}
+	//		else if (e->nx > 0) {
+	//			SetState((state == KOOPA_STATE_SHELL_IDLE)
+	//				? KOOPA_STATE_SHELL_MOVE
+	//				: KOOPA_STATE_SHELL_REVERSE_MOVE);
+	//			vx = KOOPA_SHELL_SPEED;
+	//		}
+	//	}
+	//}
+	if (state == KOOPA_STATE_SHELL_MOVE || state == KOOPA_STATE_SHELL_REVERSE_MOVE) {
 		if (e->nx != 0) {
 			vx = -vx;
 		}
