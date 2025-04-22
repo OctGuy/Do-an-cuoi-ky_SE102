@@ -60,6 +60,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 
+	if (GetTickCount64() - tailAttack_start > MARIO_TAIL_ATTACK_TIME)
+	{
+		tailAttack_start = 0;
+		isTailAttacking = false;
+	}
+
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -419,6 +425,14 @@ void CMario::Render()
 	else if (level == MARIO_LEVEL_RACCOON)
 		aniId = GetAniIdRaccoon();
 
+	if (isTailAttacking)
+	{
+		aniId = ID_ANI_MARIO_RACCOON_TAIL_ATTACK_RIGHT;
+		//if (nx > 0)
+		//	aniId = ID_ANI_MARIO_RACCOON_TAIL_ATTACK_RIGHT;
+		//else
+		//	aniId = ID_ANI_MARIO_RACCOON_TAIL_ATTACK_LEFT;
+	}
 	animations->Get(aniId)->Render(x, y);
 	
 	RenderBoundingBox();
@@ -549,6 +563,15 @@ void CMario::SetState(int state)
 				maxVy = MARIO_FLYING_SPEED; // Use flying speed as max speed
 				isInAir = true;
 				ay = 0; // Temporarily remove gravity
+			}
+			break;
+
+		case MARIO_STATE_TAIL_ATTACK:
+			if (level == MARIO_LEVEL_RACCOON && !isTailAttacking)
+			{
+				DebugOut(L"[INFO] Mario tail attack\n");
+				tailAttack_start = GetTickCount64();
+				isTailAttacking = true;
 			}
 			break;
 

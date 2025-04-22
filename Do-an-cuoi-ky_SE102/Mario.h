@@ -48,6 +48,8 @@
 
 #define MARIO_STATE_DECELERATE_RIGHT 700
 #define MARIO_STATE_DECELERATE_LEFT  701
+
+#define MARIO_STATE_TAIL_ATTACK		800
 #pragma endregion
 
 
@@ -130,6 +132,9 @@
 #define ID_ANI_MARIO_RACCOON_FLYING_RIGHT 2800
 #define ID_ANI_MARIO_RACCOON_FLYING_LEFT 2801
 
+#define ID_ANI_MARIO_RACCOON_TAIL_ATTACK_RIGHT 2900
+#define ID_ANI_MARIO_RACCOON_TAIL_ATTACK_LEFT 2901
+
 #pragma endregion
 
 #define GROUND_Y 350.0f
@@ -151,6 +156,7 @@
 
 
 #define MARIO_UNTOUCHABLE_TIME 1000
+#define MARIO_TAIL_ATTACK_TIME 500
 
 class CMario : public CGameObject
 {
@@ -167,9 +173,12 @@ class CMario : public CGameObject
 	int untouchable;
 	ULONGLONG untouchable_start;
 	ULONGLONG slowfall_start; 
+	ULONGLONG tailAttack_start;
 
 	BOOLEAN isOnPlatform;
 	BOOLEAN isInAir;	//If Raccoon mario is flying or floating this should be true
+	BOOLEAN isTailAttacking; //If Raccoon mario is using tail attack this should be true
+
 	float currentFloorY; // Y position of the current floor
 
 	//Tracking point and coin
@@ -202,9 +211,12 @@ public:
 		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
+		slowfall_start = -1;
+		tailAttack_start = -1;
 
 		isOnPlatform = false;
 		isInAir = false;
+		isTailAttacking = false;
 		currentFloorY = GROUND_Y; // Initialize to ground level
 
 		coin = 0;
@@ -230,6 +242,7 @@ public:
 
 	BOOLEAN IsOnPlatform() { return isOnPlatform; }
 	BOOLEAN IsInAir() { return isInAir; }
+	BOOLEAN IsTailAttacking() { return isTailAttacking; }
 
 	//Update coin and point
 	void AddCoin() {coin++; AddPoint(100);}
@@ -240,9 +253,11 @@ public:
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	void SetLevel(int l);
-	//int GetLevel() { return level; }
+
 	void GetHurt();
+
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
+	void StartTailAttack() { isTailAttacking = true; tailAttack_start = GetTickCount64(); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };
