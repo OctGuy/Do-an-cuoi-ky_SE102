@@ -47,11 +47,7 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 		if (dynamic_cast<CQuestionBrick*>(e->obj)) {
 			DebugOut(L"Koopa collided with QuestionBrick\n");
 			OnCollisionWithBrick(e);
-		}
-		else if (dynamic_cast<CPiranhaPlant*>(e->obj)) {
-			DebugOut(L"Koopa collided with PiranhaPlant\n");
-		}
-			
+		}	
 	}
 	//DebugOut(L"Koopa is on platform: %d\n", isOnPlatform);
 }

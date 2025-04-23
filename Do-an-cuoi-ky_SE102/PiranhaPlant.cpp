@@ -8,6 +8,7 @@ CPiranhaPlant::CPiranhaPlant(float x, float y) : CEnemy(x, y)
 	originalY = y;
 	SetState(PIRANHA_STATE_HIDE);
 	isShooting = false;				// Initialize shooting state
+	die_start = -1;
 }
 
 CMario* CPiranhaPlant::GetPlayer()
@@ -46,6 +47,10 @@ void CPiranhaPlant::SetState(int state)
 	case PIRANHA_STATE_DIVE:
 		isShooting = false; // Reset shooting state
 		vy = PIRANHA_MOVE_SPEED;
+		break;
+	case PIRANHA_STATE_DIE:
+		die_start = GetTickCount64();
+		vy = 0;
 		break;
 	default:
 		break;
@@ -100,6 +105,8 @@ void CPiranhaPlant::Render()
 		else
 			aniId = PIRANHA_ANI_DOWN_RIGHT;
 	}
+	else if (state == PIRANHA_STATE_DIE)
+		aniId = PIRANHA_ANI_DIE;
 
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(aniId)->Render(x, y);
@@ -170,6 +177,15 @@ bool CPiranhaPlant::IsTargetInRange() {
 		&& relativeY < (backBufferHeight + 20.0f) / 2.0f);
 }
 
+void CPiranhaPlant::OnCollisionWith(LPCOLLISIONEVENT e) {
+	if (dynamic_cast<CKoopa*>(e->obj)) {
+		SetState(PIRANHA_STATE_DIE);
+		CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+		koopa->SetState(KOOPA_STATE_DIE);
+		//die_start = GetTickCount64();
+	}
+}
+
 void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	ULONGLONG now = GetTickCount64();
@@ -222,6 +238,11 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		break;
 
+	case PIRANHA_STATE_DIE:
+		if (now - die_start > PIRANHA_DIE_TIMEOUT) {
+			isDeleted = true;
+		}
+		break;
 	default:
 		break;
 	}
