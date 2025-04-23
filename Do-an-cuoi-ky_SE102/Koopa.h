@@ -7,6 +7,7 @@
 #include "Brick.h"
 #include "Mario.h"
 #include "PlayScene.h"
+#include "PiranhaPlant.h"
 
 #define KOOPA_ANI_WALKING_LEFT 8000
 #define KOOPA_ANI_WALKING_RIGHT 8001

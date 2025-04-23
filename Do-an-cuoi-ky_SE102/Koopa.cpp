@@ -48,6 +48,9 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 			DebugOut(L"Koopa collided with QuestionBrick\n");
 			OnCollisionWithBrick(e);
 		}
+		else if (dynamic_cast<CPiranhaPlant*>(e->obj)) {
+			DebugOut(L"Koopa collided with PiranhaPlant\n");
+		}
 			
 	}
 	//DebugOut(L"Koopa is on platform: %d\n", isOnPlatform);
@@ -166,7 +169,7 @@ bool CKoopa::IsOnPlatform() {
 void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CMario* player = GetPlayer();
 
-	DebugOut(L"[INFO] Koopa velocity: %f %f\n", vx, vy);
+	//DebugOut(L"[INFO] Koopa velocity: %f %f\n", vx, vy);
 
 	vy += ay * dt;
 	vx += ax * dt;
