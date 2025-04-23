@@ -16,10 +16,12 @@
 #define KOOPA_ANI_SHELL_REVERSE_IDLE 8005
 #define KOOPA_ANI_SHELL_REVERSE_MOVE 8006
 #define KOOPA_ANI_SHELL_REVERSE_SHAKING 8007
+#define KOOPA_ANI_DIE 8007 // same as shell move
 
 #define KOOPA_GRAVITY 0.01f
 #define KOOPA_WALKING_SPEED 0.03f
 #define KOOPA_SHELL_SPEED 0.15f
+#define KOOPA_DEFLECT_SPEED 0.4f
 
 #define KOOPA_BBOX_WIDTH 16
 #define KOOPA_BBOX_HEIGHT 26
@@ -29,6 +31,7 @@
 
 #define KOOPA_SHELL_DURATION 5000
 #define KOOPA_SHELL_SHAKING_DURATION 2000
+#define KOOPA_DIE_DURATION 3000
 
 #define KOOPA_STATE_WALKING_LEFT 0
 #define KOOPA_STATE_WALKING_RIGHT 1
@@ -38,6 +41,7 @@
 #define KOOPA_STATE_SHELL_REVERSE_IDLE 5
 #define KOOPA_STATE_SHELL_REVERSE_MOVE 6
 #define KOOPA_STATE_SHELL_REVERSE_SHAKING 7
+#define KOOPA_STATE_DIE 8
 
 
 class CKoopa : public CEnemy
@@ -48,6 +52,7 @@ protected:
 
 	ULONGLONG stateShellStart;
 	ULONGLONG stateShakingStart;
+	ULONGLONG die_start;
 
 	LPGAMEOBJECT platform;
 
@@ -60,6 +65,7 @@ public:
 		SetState(KOOPA_STATE_WALKING_LEFT);
 		stateShellStart = -1;
 		stateShakingStart = -1;
+		die_start = -1;
 		isHeld = false;
 		platform = NULL;
 	}
@@ -69,7 +75,9 @@ public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void SetState(int state);
-	int IsCollidable() { return 1; }
+	int IsCollidable() {
+		return state != KOOPA_STATE_DIE;
+	}
 
 	int IsBlocking() { return 0; }
 
