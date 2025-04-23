@@ -60,6 +60,34 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 
+
+	//Handle Koopa Picking and Kicking
+	if (Koopa)
+	{
+		Koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * KOOPA_BBOX_WIDTH / 2, y - 5.f);
+		Koopa->SetSpeed(0, 0);
+		//If koopa is out of shell
+		if (Koopa->GetState() == KOOPA_STATE_WALKING_LEFT ||
+			Koopa->GetState() == KOOPA_STATE_WALKING_RIGHT)
+		{
+			GetHurt();
+			if (nx = 1)
+				Koopa->SetState(KOOPA_STATE_WALKING_RIGHT);
+			else
+				Koopa->SetState(KOOPA_STATE_WALKING_LEFT);
+			Koopa = NULL;
+		}
+		else
+		{
+			if (!isAbleToHold) 
+			{
+				Koopa->SetState(KOOPA_STATE_SHELL_MOVE);
+				Koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
+				Koopa = NULL;
+			}
+		}
+	}
+
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -186,10 +214,34 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 			AddPoint(100);
 		}
 	}
-	else if (koopa->GetState() != KOOPA_STATE_SHELL_IDLE
-		&& koopa->GetState() != KOOPA_STATE_SHELL_SHAKING
-		&& koopa->GetState() != KOOPA_STATE_SHELL_REVERSE_IDLE
-		&& koopa->GetState() != KOOPA_STATE_SHELL_REVERSE_SHAKING) GetHurt();
+	else
+	{
+		if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
+			koopa->GetState() == KOOPA_STATE_SHELL_SHAKING ||
+			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE ||
+			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_SHAKING)
+			if (isAbleToHold) //pick
+			{
+				this->Koopa = e->obj;
+				//DebugOut(L"[INFO] Mario picked Koopa\n");
+				/*koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * KOOPA_BBOX_WIDTH / 2, y);
+				koopa->SetSpeed(0, 0);*/
+			}
+			else //Kick
+			{
+				koopa->SetState(KOOPA_STATE_SHELL_MOVE);
+				koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
+			}
+		else if (koopa->GetState() == KOOPA_STATE_WALKING_LEFT ||
+			koopa->GetState() == KOOPA_STATE_WALKING_RIGHT ||
+			koopa->GetState() == KOOPA_STATE_SHELL_MOVE ||
+			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE)
+		{
+			Koopa = NULL;
+			GetHurt();
+		}
+
+	}
 }
 
 //
@@ -599,6 +651,15 @@ void CMario::SetState(int state)
 			ax = 0;
 			isRunning = false;
 			break;
+
+		case MARIO_STATE_HOLD:
+			isAbleToHold = true;
+			break;
+
+		case MARIO_STATE_DROP:
+			isAbleToHold = false;
+			//Koopa = NULL;
+			break;
 	}
 
 	CGameObject::SetState(state);
@@ -651,6 +712,7 @@ void CMario::GetHurt()
 {
 	if (untouchable == 0)
 	{
+		CGame::GetInstance()->FreezeGame();
 		if (level > MARIO_LEVEL_SMALL)
 		{
 			SetLevel(level - 1);

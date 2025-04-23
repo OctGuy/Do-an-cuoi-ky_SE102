@@ -71,16 +71,7 @@ public:
 	void SetState(int state);
 	int IsCollidable() { return 1; }
 
-	int IsBlocking()
-	{
-		return state == KOOPA_STATE_SHELL_IDLE 
-			|| state == KOOPA_STATE_SHELL_REVERSE_IDLE
-			|| state == KOOPA_STATE_SHELL_SHAKING
-			|| state == KOOPA_STATE_SHELL_REVERSE_SHAKING
-			|| state == KOOPA_STATE_SHELL_MOVE 
-			|| state == KOOPA_STATE_SHELL_REVERSE_MOVE;
-		//return 0;
-	}
+	int IsBlocking() { return 0; }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);

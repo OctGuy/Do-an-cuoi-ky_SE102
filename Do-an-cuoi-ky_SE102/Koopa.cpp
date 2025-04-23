@@ -24,10 +24,6 @@ void CKoopa::OnNoCollision(DWORD dt) {
 }
 
 void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
-	CMario* player = GetPlayer();
-	int mNx;
-	if (player != NULL) player->GetNx(mNx);
-
 	if (!e->obj->IsBlocking()) return;
 
 	if (e->ny < 0) { // Stand on platform
@@ -43,23 +39,7 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 			SetState(KOOPA_STATE_WALKING_LEFT);
 	}
 
-	if (state == KOOPA_STATE_SHELL_IDLE || state == KOOPA_STATE_SHELL_REVERSE_IDLE) {
-		if (dynamic_cast<CMario*>(e->obj)) {
-			if (e->nx < 0) {
-				SetState((state == KOOPA_STATE_SHELL_IDLE)
-					? KOOPA_STATE_SHELL_MOVE 
-					: KOOPA_STATE_SHELL_REVERSE_MOVE);
-				vx = -KOOPA_SHELL_SPEED;
-			}
-			else if (e->nx > 0) {
-				SetState((state == KOOPA_STATE_SHELL_IDLE)
-					? KOOPA_STATE_SHELL_MOVE
-					: KOOPA_STATE_SHELL_REVERSE_MOVE);
-				vx = KOOPA_SHELL_SPEED;
-			}
-		}
-	}
-	else if (state == KOOPA_STATE_SHELL_MOVE || state == KOOPA_STATE_SHELL_REVERSE_MOVE) {
+	if (state == KOOPA_STATE_SHELL_MOVE || state == KOOPA_STATE_SHELL_REVERSE_MOVE) {
 		if (e->nx != 0 && e->obj->IsBlocking()) {
 			vx = -vx;
 		}
@@ -70,6 +50,8 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 		}
 			
 	}
+			
+	}
 	//DebugOut(L"Koopa is on platform: %d\n", isOnPlatform);
 }
 
@@ -77,18 +59,6 @@ void CKoopa::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
 	CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
 	questionBrick->OnCollisionWith(e);
 }
-
-//void CKoopa::OnCollisionWithGoomba(LPCOLLISIONEVENT e) {
-//	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-//	CMario* player = GetPlayer();
-//
-//	if (e->nx != 0) {
-//		if (goomba->GetState() == GOOMBA_STATE_WALKING) {
-//			goomba->SetState(GOOMBA_STATE_DIE_REVERSE);
-//			player->AddPoint(100);
-//		}
-//	}
-//}
 
 CMario* CKoopa::GetPlayer() {
 	CGame* game = CGame::GetInstance();
@@ -190,6 +160,8 @@ bool CKoopa::IsOnPlatform() {
 void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CMario* player = GetPlayer();
 
+	DebugOut(L"[INFO] Koopa velocity: %f %f\n", vx, vy);
+
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -217,6 +189,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	case KOOPA_STATE_SHELL_SHAKING:
 	case KOOPA_STATE_SHELL_REVERSE_SHAKING:
 		if (now - stateShakingStart > KOOPA_SHELL_SHAKING_DURATION) {
+			DebugOut(L"[INFO] Koopa is out of shell\n");
 			vy = -0.4;
 			SetState(KOOPA_STATE_WALKING_LEFT);
 		}
