@@ -3,6 +3,7 @@
 
 #include "Animation.h"
 #include "Animations.h"
+#include "RaccoonTail.h"
 
 #include "debug.h"
 
@@ -51,6 +52,8 @@
 
 #define MARIO_STATE_HOLD	800
 #define MARIO_STATE_DROP	801
+
+#define MARIO_STATE_TAIL_ATTACK		900
 #pragma endregion
 
 
@@ -61,17 +64,25 @@
 
 #define ID_ANI_MARIO_IDLE_RIGHT 400
 #define ID_ANI_MARIO_IDLE_LEFT 401
+#define ID_ANI_MARIO_IDLE_HOLDING_RIGHT 402
+#define ID_ANI_MARIO_IDLE_HOLDING_LEFT 403
 
 #define ID_ANI_MARIO_WALKING_RIGHT 500
 #define ID_ANI_MARIO_WALKING_LEFT 501
+#define ID_ANI_MARIO_WALKING_HOLDING_RIGHT 502
+#define ID_ANI_MARIO_WALKING_HOLDING_LEFT 503
 
 #define ID_ANI_MARIO_RUNNING_RIGHT 600
 #define ID_ANI_MARIO_RUNNING_LEFT 601
+#define ID_ANI_MARIO_RUNNING_HOLDING_RIGHT 602
+#define ID_ANI_MARIO_RUNNING_HOLDING_LEFT 603
 
 #define ID_ANI_MARIO_JUMP_WALK_RIGHT 700
 #define ID_ANI_MARIO_JUMP_WALK_LEFT 701
 #define ID_ANI_MARIO_FALLING_RIGHT 702
 #define ID_ANI_MARIO_FALLING_LEFT 703
+#define ID_ANI_MARIO_JUMP_WALK_HOLDING_RIGHT 704
+#define ID_ANI_MARIO_JUMP_WALK_HOLDING_LEFT 705
 
 #define ID_ANI_MARIO_JUMP_RUN_RIGHT 800
 #define ID_ANI_MARIO_JUMP_RUN_LEFT 801
@@ -87,18 +98,26 @@
 // SMALL MARIO
 #define ID_ANI_MARIO_SMALL_IDLE_RIGHT 1100
 #define ID_ANI_MARIO_SMALL_IDLE_LEFT 1102
+#define ID_ANI_MARIO_SMALL_IDLE_HOLDING_RIGHT 1103
+#define ID_ANI_MARIO_SMALL_IDLE_HOLDING_LEFT 1104
 
 #define ID_ANI_MARIO_SMALL_WALKING_RIGHT 1200
 #define ID_ANI_MARIO_SMALL_WALKING_LEFT 1201
+#define ID_ANI_MARIO_SMALL_WALKING_HOLDING_RIGHT 1202
+#define ID_ANI_MARIO_SMALL_WALKING_HOLDING_LEFT 1203
 
 #define ID_ANI_MARIO_SMALL_RUNNING_RIGHT 1300
 #define ID_ANI_MARIO_SMALL_RUNNING_LEFT 1301
+#define ID_ANI_MARIO_SMALL_RUNNING_HOLDING_RIGHT 1302
+#define ID_ANI_MARIO_SMALL_RUNNING_HOLDING_LEFT 1303
 
 #define ID_ANI_MARIO_SMALL_BRACE_RIGHT 1400
 #define ID_ANI_MARIO_SMALL_BRACE_LEFT 1401
 
 #define ID_ANI_MARIO_SMALL_JUMP_WALK_RIGHT 1500
 #define ID_ANI_MARIO_SMALL_JUMP_WALK_LEFT 1501
+#define ID_ANI_MARIO_SMALL_JUMP_WALK_HOLDING_RIGHT 1502
+#define ID_ANI_MARIO_SMALL_JUMP_WALK_HOLDING_LEFT 1503
 
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT 1600
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT 1601
@@ -106,17 +125,25 @@
 //RACCOON MARIO
 #define ID_ANI_MARIO_RACCOON_IDLE_RIGHT 2000
 #define ID_ANI_MARIO_RACCOON_IDLE_LEFT 2001
+#define ID_ANI_MARIO_RACCOON_IDLE_HOLDING_RIGHT 2002
+#define ID_ANI_MARIO_RACCOON_IDLE_HOLDING_LEFT 2003
 
 #define ID_ANI_MARIO_RACCOON_WALKING_RIGHT 2100
 #define ID_ANI_MARIO_RACCOON_WALKING_LEFT 2101
+#define ID_ANI_MARIO_RACCOON_WALKING_HOLDING_RIGHT 2102
+#define ID_ANI_MARIO_RACCOON_WALKING_HOLDING_LEFT 2103
 
 #define ID_ANI_MARIO_RACCOON_RUNNING_RIGHT 2200
 #define ID_ANI_MARIO_RACCOON_RUNNING_LEFT 2201
+#define ID_ANI_MARIO_RACCOON_RUNNING_HOLDING_RIGHT 2202
+#define ID_ANI_MARIO_RACCOON_RUNNING_HOLDING_LEFT 2203
 
 #define ID_ANI_MARIO_RACCOON_JUMP_WALK_RIGHT 2300
 #define ID_ANI_MARIO_RACCOON_JUMP_WALK_LEFT 2301
 #define ID_ANI_MARIO_RACCOON_FALLING_RIGHT 2302
 #define ID_ANI_MARIO_RACCOON_FALLING_LEFT 2303
+#define ID_ANI_MARIO_RACCOON_JUMP_WALK_HOLDING_RIGHT 2304
+#define ID_ANI_MARIO_RACCOON_JUMP_WALK_HOLDING_LEFT 2305
 
 #define ID_ANI_MARIO_RACCOON_JUMP_RUN_RIGHT 2400
 #define ID_ANI_MARIO_RACCOON_JUMP_RUN_LEFT 2401
@@ -132,6 +159,9 @@
 
 #define ID_ANI_MARIO_RACCOON_FLYING_RIGHT 2800
 #define ID_ANI_MARIO_RACCOON_FLYING_LEFT 2801
+
+#define ID_ANI_MARIO_RACCOON_TAIL_ATTACK_RIGHT 2900
+#define ID_ANI_MARIO_RACCOON_TAIL_ATTACK_LEFT 2901
 
 #pragma endregion
 
@@ -153,7 +183,8 @@
 #define MARIO_SMALL_BBOX_HEIGHT 12
 
 
-#define MARIO_UNTOUCHABLE_TIME 1000
+#define MARIO_UNTOUCHABLE_TIME 2500
+#define MARIO_TAIL_ATTACK_TIME 250
 
 class CMario : public CGameObject
 {
@@ -161,7 +192,7 @@ class CMario : public CGameObject
 	BOOLEAN isRunning;
 
 	float maxVx;
-	float maxVy; 
+	float maxVy;
 
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
@@ -169,14 +200,20 @@ class CMario : public CGameObject
 	int level;
 	int untouchable;
 	ULONGLONG untouchable_start;
-	ULONGLONG slowfall_start; 
+	ULONGLONG slowfall_start;
+	ULONGLONG tailAttack_start;
 
 	BOOLEAN isOnPlatform;
 	BOOLEAN isInAir;	//If Raccoon mario is flying or floating this should be true
-	BOOLEAN isAbleToHold; //If player is holding S this should true
+
+	BOOLEAN isTailAttacking; //If Raccoon mario is using tail attack this should be true
+	LPGAMEOBJECT Tail; // Raccoon tail object
+
 	float currentFloorY; // Y position of the current floor
 
+	BOOLEAN isAbleToHold; //If player is holding S this should true
 	LPGAMEOBJECT Koopa; // Koopa object that Mario is holding
+
 
 	//Tracking point and coin
 	int coin;
@@ -208,9 +245,16 @@ public:
 		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
+		slowfall_start = -1;
+		tailAttack_start = -1;
 
+		isSitting = false;
 		isOnPlatform = false;
 		isInAir = false;
+		isTailAttacking = false;
+		isAbleToHold = false;
+
+		Tail = NULL;
 		currentFloorY = GROUND_Y; // Initialize to ground level
 
 		Koopa = NULL;
@@ -238,9 +282,10 @@ public:
 
 	BOOLEAN IsOnPlatform() { return isOnPlatform; }
 	BOOLEAN IsInAir() { return isInAir; }
+	BOOLEAN IsTailAttacking() { return isTailAttacking; }
 
 	//Update coin and point
-	void AddCoin() {coin++; AddPoint(100);}
+	void AddCoin() { coin++; AddPoint(100); }
 	void AddPoint(int p) { point += p; }
 
 	bool GetIsRunning() { return isRunning; }
@@ -249,9 +294,11 @@ public:
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	void SetLevel(int l);
-	//int GetLevel() { return level; }
+	void SetTail(LPGAMEOBJECT tail) { this->Tail = tail; }
 	void GetHurt();
+
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
+	void StartTailAttack() { isTailAttacking = true; tailAttack_start = GetTickCount64(); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };

@@ -1,0 +1,63 @@
+#include "RaccoonTail.h"
+#include "Collision.h"
+
+void CRaccoonTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+    if (state == RACCOON_TAIL_STATE_ACTIVE)
+    {
+        // Move horizontally around the x-axis
+        x += vx * dt;
+
+        // Reverse direction if it exceeds the range
+        if (x > startX + RACCOON_TAIL_RANGE)
+        {
+            vx = -vx;
+        }
+		else if (x < startX - RACCOON_TAIL_RANGE)
+		{
+            //vx = RACCOON_TAIL_SPEED;
+			SetState(RACCOON_TAIL_STATE_INACTIVE); // Set inactive state if out of range
+		}
+    }
+    else if (state == RACCOON_TAIL_STATE_INACTIVE)
+    {
+        isActive = false; // Set inactive status
+    }
+
+	//DebugOut(L"[INFO] Raccoon Tail state: %d\n", state);
+
+    //CCollision::GetInstance()->Process(this, dt, coObjects);
+}
+
+void CRaccoonTail::Render()
+{
+    // Render bounding box for debugging purposes
+    //RenderBoundingBox();
+}
+
+void CRaccoonTail::SetState(int state)
+{
+    CGameObject::SetState(state);
+
+    switch (state)
+    {
+    case RACCOON_TAIL_STATE_ACTIVE:
+        isActive = true;
+		startX = x; // Store the initial position
+        vx = RACCOON_TAIL_SPEED; // Set horizontal speed
+        break;
+
+    case RACCOON_TAIL_STATE_INACTIVE:
+        isActive = false;
+        vx = 0; // Stop movement
+        break;
+    }
+}
+
+void CRaccoonTail::GetBoundingBox(float& l, float& t, float& r, float& b)
+{
+    l = x;
+    t = y;
+    r = l + 8; // Example width
+    b = t + 8; // Example height
+}

@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Game.h"
 #include "Sprites.h"
+#include "RaccoonTail.h"
 #include "Koopa.h"
 
 #define GOOMBA_GRAVITY 0.002f
@@ -54,7 +55,7 @@ protected:
 	virtual void OnNoCollision(DWORD dt);
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
-
+	void OnCollisionWithTail(LPCOLLISIONEVENT e);
 public: 	
 	CGoomba(float x, float y);
 	virtual void SetState(int state);

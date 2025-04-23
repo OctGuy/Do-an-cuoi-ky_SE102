@@ -8,6 +8,8 @@
 
 using namespace std;
 
+//TODO: Make some animation non-repeatable
+
 class CAnimation
 {
 	ULONGLONG lastFrameTime;
