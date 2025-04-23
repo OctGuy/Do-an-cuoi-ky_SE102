@@ -7,6 +7,7 @@
 #include "Brick.h"
 #include "Mario.h"
 #include "PlayScene.h"
+#include "PiranhaPlant.h"
 
 #define KOOPA_ANI_WALKING_LEFT 8000
 #define KOOPA_ANI_WALKING_RIGHT 8001
@@ -18,7 +19,7 @@
 #define KOOPA_ANI_SHELL_REVERSE_SHAKING 8007
 #define KOOPA_ANI_DIE 8007 // same as shell move
 
-#define KOOPA_GRAVITY 0.01f
+#define KOOPA_GRAVITY 0.002f
 #define KOOPA_WALKING_SPEED 0.03f
 #define KOOPA_SHELL_SPEED 0.15f
 #define KOOPA_DEFLECT_SPEED 0.4f
@@ -76,7 +77,7 @@ public:
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void SetState(int state);
 	int IsCollidable() {
-		return state != KOOPA_STATE_DIE;
+		return	1;
 	}
 
 	int IsBlocking() { return 0; }

@@ -27,12 +27,14 @@
 #define PIRANHA_HIDE_TIMEOUT 2500
 #define PIRANHA_SNIP_TIMEOUT 3500
 #define PIRANHA_WAIT_FOR_SHOOT_TIMEOUT 2000
+#define PIRANHA_DIE_TIMEOUT 1500
 
 #pragma region PIRANHA_STATE_ID
 #define PIRANHA_STATE_HIDE 300
 #define PIRANHA_STATE_RISE 301
 #define PIRANHA_STATE_SNIP 302
 #define PIRANHA_STATE_DIVE 303
+#define PIRANHA_STATE_DIE 304
 #pragma endregion
 
 #pragma region PIRANHA_ANIMATION_ID
@@ -42,6 +44,7 @@
 #define PIRANHA_ANI_DOWN_LEFT 6003
 #define PIRANHA_ANI_UP_RIGHT 6004
 #define PIRANHA_ANI_DOWN_RIGHT 6005
+#define PIRANHA_ANI_DIE 6006
 #pragma endregion
 
 #pragma region PIRANHA_RANGE
@@ -55,18 +58,24 @@ protected:
 	ULONGLONG stateStartTime;	// time when the current state was started
 	float originalY;			// original y pos when starting descending, ascending
 	bool isShooting;			// check if the piranha plant is shooting
+	ULONGLONG die_start;
 public:
 	CPiranhaPlant(float x, float y);
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
-	virtual int IsCollidable() { return 1; };
+	virtual int IsCollidable() {
+		if (state == PIRANHA_STATE_DIE)
+			return 0;
+		return 1;
+	};
 	virtual int IsBlocking() { return 0; }
 	int GetSnippingDirection(); // get the direction of the snipping action to mario
 	void SetState(int state);
 	void Shoot(int direction);
 	bool IsTargetInRange();	
 	CMario* GetPlayer();
+	void OnCollisionWith(LPCOLLISIONEVENT e);
 };
 
