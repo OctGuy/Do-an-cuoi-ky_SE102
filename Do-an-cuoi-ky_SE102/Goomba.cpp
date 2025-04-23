@@ -60,8 +60,8 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	// First check if the object is a tail
 	if (dynamic_cast<CRaccoonTail*>(e->obj))
 	{
+		DebugOut(L"[INFO] Goomba hit by tail\n");
 		OnCollisionWithTail(e);
-		return;
 	}
 
 	// Then handle other collision checks

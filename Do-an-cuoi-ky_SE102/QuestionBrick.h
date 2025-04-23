@@ -6,6 +6,7 @@
 #include "Coin.h"
 #include "PowerUp.h"
 #include "Koopa.h"
+#include "RaccoonTail.h"
 
 #define BRICK_BOUNCE_SPEED 0.1f
 #define BRICK_BOUNCE_HEIGHT 10.0f
@@ -39,6 +40,7 @@ public:
     }
 
     void OnCollisionWith(LPCOLLISIONEVENT e);
+    //void OnCollisionWithTail(LPCOLLISIONEVENT e);
 
     void SetItem(LPGAMEOBJECT item) {
         this->item = item;
@@ -46,8 +48,10 @@ public:
             hasItem = true;
     }
 
-    void SetState(int state);
+    BOOLEAN IsHit() { return isHit; }
 
+    void SetState(int state);
+    void Activate();
     void ActivateItem();
 
     CMario* GetPlayer(); // No changes needed here

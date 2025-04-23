@@ -21,21 +21,13 @@ void CQuestionBrick::Render()
 
 void CQuestionBrick::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+    DebugOut(L"[INFO]FKKKK\n");
 	CMario* mario = GetPlayer();
     if (e->ny > 0 || (e->nx != 0 && dynamic_cast<CKoopa*>(e->src_obj)))
     {
         if (!isHit)
         {
-            SetState(BRICK_STATE_BOUNCE);
-            if (dynamic_cast<CCoin*>(item)) //Only activate coin immidiately
-                ActivateItem();
-            else
-            {
-                if (mario->GetLevel() == MARIO_LEVEL_SMALL)
-                    dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_MUSHROOM);
-                else
-                    dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_LEAF);
-            }
+            Activate();
         }
     }
 }
@@ -76,6 +68,21 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
+
+void CQuestionBrick::Activate()
+{
+    CMario* mario = GetPlayer();
+    SetState(BRICK_STATE_BOUNCE);
+    if (dynamic_cast<CCoin*>(item)) //Only activate coin immidiately
+        ActivateItem();
+    else
+    {
+        if (mario->GetLevel() == MARIO_LEVEL_SMALL)
+            dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_MUSHROOM);
+        else
+            dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_LEAF);
+    }
+}
 
 void CQuestionBrick::SetState(int state)
 {

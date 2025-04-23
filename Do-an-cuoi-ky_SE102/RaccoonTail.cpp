@@ -1,5 +1,9 @@
 #include "RaccoonTail.h"
 #include "Collision.h"
+#include "Goomba.h" 
+#include "Koopa.h"  
+#include "debug.h" 
+#include "QuestionBrick.h"
 
 void CRaccoonTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -26,13 +30,30 @@ void CRaccoonTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	//DebugOut(L"[INFO] Raccoon Tail state: %d\n", state);
 
-    //CCollision::GetInstance()->Process(this, dt, coObjects);
+    CCollision::GetInstance()->Process(this, dt, coObjects);
+}
+
+void CRaccoonTail::OnCollisionWith(LPCOLLISIONEVENT e)
+{
+	if (dynamic_cast<CGoomba*>(e->obj)) 
+	{
+		DebugOut(L"[INFO] RaccoonTail hit Goomba\n");
+		CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+		goomba->SetState(GOOMBA_STATE_DIE_REVERSE); 
+	}
+	else if (dynamic_cast<CQuestionBrick*>(e->obj)) 
+	{
+		DebugOut(L"[INFO] RaccoonTail hit questionbrick\n");
+        CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
+        if (!questionBrick->IsHit())
+            questionBrick->Activate();
+	}
 }
 
 void CRaccoonTail::Render()
 {
     // Render bounding box for debugging purposes
-    //RenderBoundingBox();
+    RenderBoundingBox();
 }
 
 void CRaccoonTail::SetState(int state)

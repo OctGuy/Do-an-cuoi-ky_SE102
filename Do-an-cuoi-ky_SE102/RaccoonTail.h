@@ -1,23 +1,24 @@
 #pragma once
 #include "GameObject.h"
 
-#define RACCOON_TAIL_STATE_INACTIVE 0
-#define RACCOON_TAIL_STATE_ACTIVE 1
+#define RACCOON_TAIL_STATE_INACTIVE 200
+#define RACCOON_TAIL_STATE_ACTIVE 100
 
-#define RACCOON_TAIL_SPEED 0.1f // Speed of horizontal movement
-#define RACCOON_TAIL_RANGE 16.0f // Range of horizontal movement
+#define RACCOON_TAIL_SPEED 0.15f // Example speed
+#define RACCOON_TAIL_RANGE 20.0f // Example range of movement
 
 class CRaccoonTail : public CGameObject
 {
 protected:
     float startX; // Initial x position for horizontal movement
+    bool isActive; // Flag to indicate if the tail is currently active
 
 public:
     CRaccoonTail(float x, float y) : CGameObject(x, y)
     {
         this->startX = x;
-        this->state = RACCOON_TAIL_STATE_INACTIVE;
-        this->isActive = true;
+        this->isActive = false; // Initially inactive
+        this->SetState(RACCOON_TAIL_STATE_INACTIVE);
     }
 
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
@@ -25,6 +26,9 @@ public:
     void SetState(int state) override;
     void GetBoundingBox(float& l, float& t, float& r, float& b);
 
+    void OnCollisionWith(LPCOLLISIONEVENT e) override;
+
     int IsCollidable() { return 1; }
     int IsBlocking() { return 0; }
+    bool IsActive() { return isActive; }
 };
