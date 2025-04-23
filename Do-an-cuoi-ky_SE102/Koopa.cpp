@@ -24,10 +24,6 @@ void CKoopa::OnNoCollision(DWORD dt) {
 }
 
 void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
-	CMario* player = GetPlayer();
-	int mNx;
-	if (player != NULL) player->GetNx(mNx);
-
 	if (!e->obj->IsBlocking()) return;
 
 	if (e->ny < 0) { // Stand on platform
@@ -43,35 +39,19 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 			SetState(KOOPA_STATE_WALKING_LEFT);
 	}
 
-	//if (state == KOOPA_STATE_SHELL_IDLE || state == KOOPA_STATE_SHELL_REVERSE_IDLE) {
-	//	if (dynamic_cast<CMario*>(e->obj)) {
-	//		if (e->nx < 0) {
-	//			SetState((state == KOOPA_STATE_SHELL_IDLE)
-	//				? KOOPA_STATE_SHELL_MOVE 
-	//				: KOOPA_STATE_SHELL_REVERSE_MOVE);
-	//			vx = -KOOPA_SHELL_SPEED;
-	//		}
-	//		else if (e->nx > 0) {
-	//			SetState((state == KOOPA_STATE_SHELL_IDLE)
-	//				? KOOPA_STATE_SHELL_MOVE
-	//				: KOOPA_STATE_SHELL_REVERSE_MOVE);
-	//			vx = KOOPA_SHELL_SPEED;
-	//		}
-	//	}
-	//}
 	if (state == KOOPA_STATE_SHELL_MOVE || state == KOOPA_STATE_SHELL_REVERSE_MOVE) {
-		if (e->nx != 0) {
+		if (e->nx != 0 && e->obj->IsBlocking()) {
 			vx = -vx;
 		}
-	}
 
-	if (dynamic_cast<CQuestionBrick*>(e->obj)) {
-		if (state == KOOPA_STATE_SHELL_MOVE 
-			|| state == KOOPA_STATE_SHELL_REVERSE_MOVE)
+		if (dynamic_cast<CQuestionBrick*>(e->obj)) {
+			DebugOut(L"Koopa collided with QuestionBrick\n");
 			OnCollisionWithBrick(e);
+		}
+			
 	}
-		
-
+			
+	}
 	//DebugOut(L"Koopa is on platform: %d\n", isOnPlatform);
 }
 

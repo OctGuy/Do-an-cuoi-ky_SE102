@@ -54,3 +54,9 @@
 - Adjust fly mechanic, leaf fall trajectory (Phong)
 - Change Koopa sprite for more distinct (Thinh)
 - Modify Piranha state when Mario comes near (Thinh)
+
+22/4/2025
+- Work on mario Tail Attack Mechanic (Phong)
+
+23/4/2025
+- Work on mario holding Koopa (Phong)

@@ -22,7 +22,7 @@ void CQuestionBrick::Render()
 void CQuestionBrick::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	CMario* mario = GetPlayer();
-    if (e->ny > 0 || (e->nx != 0 && dynamic_cast<CKoopa*>(e->obj)))
+    if (e->ny > 0 || (e->nx != 0 && dynamic_cast<CKoopa*>(e->src_obj)))
     {
         if (!isHit)
         {

@@ -38,7 +38,8 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		SetState(GOOMBA_STATE_WALKING); // Transition to walking state
 	}
 
-	if ((state == GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT))
+	if (((state == GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT))
+		|| (state == GOOMBA_STATE_DIE_REVERSE) && (GetTickCount64() - die_start > GOOMBA_DIE_REVERSE_TIMEOUT))
 	{
 		isDeleted = true;
 		return;
@@ -47,7 +48,6 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
-
 
 void CGoomba::OnNoCollision(DWORD dt)
 {
@@ -62,11 +62,19 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (e->ny != 0)
 	{
-		if (state != GOOMBA_STATE_RISE) // Allow rising
-			vy = 0;
+		vy = 0;
+		ay = GOOMBA_GRAVITY; // Reset gravity to default
 	}
 	else if (e->nx != 0)
 	{
+		if (dynamic_cast<CKoopa*>(e->obj)) {
+			CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+
+			if (koopa->GetState() == KOOPA_STATE_SHELL_MOVE
+				|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
+				SetState(GOOMBA_STATE_DIE_REVERSE);
+			}
+		}
 		vx = -vx;
 	}
 }
@@ -87,6 +95,10 @@ void CGoomba::Render()
 	if (state == GOOMBA_STATE_DIE) 
 	{
 		aniId = ID_ANI_GOOMBA_DIE;
+	}
+	else if (state == GOOMBA_STATE_DIE_REVERSE)
+	{
+		aniId = ID_ANI_GOOMBA_DIE_REVERSE;
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x,y, &currentAniId); //&currentAniId to get current sprite id 
@@ -116,6 +128,14 @@ void CGoomba::SetState(int state)
 			ay = 0;
 			vx = 0;
 			vy = -GOOMBA_RISE_SPEED; 
+			break;
+
+		case GOOMBA_STATE_DIE_REVERSE:
+			DebugOut(L"GOOMBA DIE REVERSE\n");
+			die_start = GetTickCount64();
+			vx = 0;
+			vy = -GOOMBA_DEFLECT_SPEED;
+			ay = GOOMBA_GRAVITY;
 			break;
 	}
 }

@@ -19,7 +19,7 @@
 
 #define KOOPA_GRAVITY 0.01f
 #define KOOPA_WALKING_SPEED 0.03f
-#define KOOPA_SHELL_SPEED 0.2f
+#define KOOPA_SHELL_SPEED 0.15f
 
 #define KOOPA_BBOX_WIDTH 16
 #define KOOPA_BBOX_HEIGHT 26
@@ -73,21 +73,12 @@ public:
 
 	int IsBlocking() { return 0; }
 
-	//int IsBlocking()
-	//{
-	//	return state == KOOPA_STATE_SHELL_IDLE 
-	//		|| state == KOOPA_STATE_SHELL_REVERSE_IDLE
-	//		|| state == KOOPA_STATE_SHELL_SHAKING
-	//		|| state == KOOPA_STATE_SHELL_REVERSE_SHAKING
-	//		|| state == KOOPA_STATE_SHELL_MOVE 
-	//		|| state == KOOPA_STATE_SHELL_REVERSE_MOVE;
-	//}
-
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	bool IsOnPlatform();
 	CMario* GetPlayer();
 
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
+	//void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 };
 
