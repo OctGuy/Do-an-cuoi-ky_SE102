@@ -60,15 +60,22 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 
+
+	//Handle Koopa Picking and Kicking
 	if (Koopa)
 	{
 		Koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * KOOPA_BBOX_WIDTH / 2, y - 5.f);
 		Koopa->SetSpeed(0, 0);
+		//If koopa is out of shell
 		if (Koopa->GetState() == KOOPA_STATE_WALKING_LEFT ||
 			Koopa->GetState() == KOOPA_STATE_WALKING_RIGHT)
 		{
-			Koopa = NULL;
 			GetHurt();
+			if (nx = 1)
+				Koopa->SetState(KOOPA_STATE_WALKING_RIGHT);
+			else
+				Koopa->SetState(KOOPA_STATE_WALKING_LEFT);
+			Koopa = NULL;
 		}
 	}
 
@@ -642,7 +649,7 @@ void CMario::SetState(int state)
 
 		case MARIO_STATE_DROP:
 			isAbleToHold = false;
-			Koopa = NULL;
+			//Koopa = NULL;
 			break;
 	}
 
