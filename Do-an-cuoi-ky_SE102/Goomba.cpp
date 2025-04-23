@@ -57,7 +57,6 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-<<<<<<< HEAD
 	// First check if the object is a tail
 	if (dynamic_cast<CRaccoonTail*>(e->obj))
 	{
@@ -66,10 +65,7 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 
 	// Then handle other collision checks
-	if (!e->obj->IsBlocking()) return;
-=======
 	//if (!e->obj->IsBlocking()) return;
->>>>>>> master
 	if (dynamic_cast<CGoomba*>(e->obj)) return;
 
 	if (e->ny != 0)

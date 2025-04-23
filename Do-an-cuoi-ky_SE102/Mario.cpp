@@ -60,12 +60,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 
-<<<<<<< HEAD
 	if (GetTickCount64() - tailAttack_start > MARIO_TAIL_ATTACK_TIME)
 	{
 		tailAttack_start = 0;
 		isTailAttacking = false;
-=======
+	}
 
 	//Handle Koopa Picking and Kicking
 	if (Koopa)
@@ -92,7 +91,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				Koopa = NULL;
 			}
 		}
->>>>>>> master
 	}
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);

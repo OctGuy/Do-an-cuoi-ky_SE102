@@ -2,12 +2,9 @@
 #include "GameObject.h"
 #include "Game.h"
 #include "Sprites.h"
-<<<<<<< HEAD
 #include "RaccoonTail.h"
-=======
 #include "Koopa.h"
 
->>>>>>> master
 #define GOOMBA_GRAVITY 0.002f
 #define GOOMBA_WALKING_SPEED 0.05f
 #define GOOMBA_RISE_SPEED 0.02f

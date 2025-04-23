@@ -1,7 +1,7 @@
 #pragma once
 #include "Brick.h"
 #include "GameObject.h"
-#include "Mario.h"
+#include "Mario.h" // Ensure this is included to define CMario
 #include "debug.h"
 #include "Coin.h"
 #include "PowerUp.h"
@@ -11,7 +11,6 @@
 #define BRICK_BOUNCE_HEIGHT 10.0f
 #define BRICK_BOUNCE_TIME 200
 #define BRICK_STATE_BOUNCE 100
-
 
 class CQuestionBrick : public CBrick
 {
@@ -30,7 +29,7 @@ public:
         isHit = false;
         originalY = y;
         bounceStart = 0;
-		isBouncingFinished = false;
+        isBouncingFinished = false;
     }
     void Render();
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -51,10 +50,5 @@ public:
 
     void ActivateItem();
 
-    CMario* GetPlayer();
+    CMario* GetPlayer(); // No changes needed here
 };
-
-
-//bool IsHit() { return isHit; }
-//void GetBoundingBox(float& l, float& t, float& r, float& b);
-//int IsBlocking();

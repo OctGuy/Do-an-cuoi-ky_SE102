@@ -50,12 +50,10 @@
 #define MARIO_STATE_DECELERATE_RIGHT 700
 #define MARIO_STATE_DECELERATE_LEFT  701
 
-<<<<<<< HEAD
-#define MARIO_STATE_TAIL_ATTACK		800
-=======
 #define MARIO_STATE_HOLD	800
 #define MARIO_STATE_DROP	801
->>>>>>> master
+
+#define MARIO_STATE_TAIL_ATTACK		900
 #pragma endregion
 
 
@@ -183,18 +181,15 @@ class CMario : public CGameObject
 
 	BOOLEAN isOnPlatform;
 	BOOLEAN isInAir;	//If Raccoon mario is flying or floating this should be true
-<<<<<<< HEAD
+
 	BOOLEAN isTailAttacking; //If Raccoon mario is using tail attack this should be true
-
-	float currentFloorY; // Y position of the current floor
-
 	LPGAMEOBJECT Tail; // Raccoon tail object
-=======
-	BOOLEAN isAbleToHold; //If player is holding S this should true
+
 	float currentFloorY; // Y position of the current floor
 
+	BOOLEAN isAbleToHold; //If player is holding S this should true
 	LPGAMEOBJECT Koopa; // Koopa object that Mario is holding
->>>>>>> master
+
 
 	//Tracking point and coin
 	int coin;
@@ -233,6 +228,7 @@ public:
 		isOnPlatform = false;
 		isInAir = false;
 		isTailAttacking = false;
+		isAbleToHold = false;
 
 		Tail = NULL;
 		currentFloorY = GROUND_Y; // Initialize to ground level
