@@ -136,8 +136,8 @@ void CKoopa::SetState(int state) {
 		DebugOut(L"[INFO] Koopa is dead\n");
 		die_start = GetTickCount64();
 		ay = KOOPA_GRAVITY;
-		vx = 0;
-		vy = -KOOPA_DEFLECT_SPEED;
+		vx = -0.1f;
+		//vy = -KOOPA_DEFLECT_SPEED;
 	default:
 		break;
 	}
