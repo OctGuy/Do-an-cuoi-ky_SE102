@@ -45,7 +45,10 @@ protected:
 	virtual void Render();
 
 	virtual int IsCollidable() { 
-		return state != GOOMBA_STATE_DIE_REVERSE;
+		if (state == GOOMBA_STATE_DIE_REVERSE
+			|| state == GOOMBA_STATE_DIE)
+			return 0;
+		return 1;
 	};
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);
