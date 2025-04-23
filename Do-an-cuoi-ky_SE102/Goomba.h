@@ -28,6 +28,9 @@
 #define ID_ANI_GOOMBA_DIE 5001
 #define ID_ANI_GOOMBA_DIE_REVERSE 5002
 
+#define BASE_GOOMBA_TYPE 1
+#define WINGED_GOOMBA_TYPE 2
+
 class CGoomba : public CGameObject
 {
 protected:
