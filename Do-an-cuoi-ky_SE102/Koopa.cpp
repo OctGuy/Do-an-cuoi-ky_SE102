@@ -50,8 +50,6 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 		}
 			
 	}
-			
-	}
 	//DebugOut(L"Koopa is on platform: %d\n", isOnPlatform);
 }
 
