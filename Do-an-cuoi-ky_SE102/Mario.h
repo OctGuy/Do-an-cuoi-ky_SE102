@@ -12,7 +12,7 @@
 #define MARIO_WALKING_SPEED		0.09f
 #define MARIO_RUNNING_SPEED		0.20f
 
-#define MARIO_ACCEL_WALK_X	0.0001f
+#define MARIO_ACCEL_WALK_X	0.00008f
 #define MARIO_ACCEL_RUN_X	0.0001f
 
 #define MARIO_FRICTION		0.0002f
@@ -50,7 +50,12 @@
 #define MARIO_STATE_DECELERATE_RIGHT 700
 #define MARIO_STATE_DECELERATE_LEFT  701
 
+<<<<<<< HEAD
 #define MARIO_STATE_TAIL_ATTACK		800
+=======
+#define MARIO_STATE_HOLD	800
+#define MARIO_STATE_DROP	801
+>>>>>>> master
 #pragma endregion
 
 
@@ -178,11 +183,18 @@ class CMario : public CGameObject
 
 	BOOLEAN isOnPlatform;
 	BOOLEAN isInAir;	//If Raccoon mario is flying or floating this should be true
+<<<<<<< HEAD
 	BOOLEAN isTailAttacking; //If Raccoon mario is using tail attack this should be true
 
 	float currentFloorY; // Y position of the current floor
 
 	LPGAMEOBJECT Tail; // Raccoon tail object
+=======
+	BOOLEAN isAbleToHold; //If player is holding S this should true
+	float currentFloorY; // Y position of the current floor
+
+	LPGAMEOBJECT Koopa; // Koopa object that Mario is holding
+>>>>>>> master
 
 	//Tracking point and coin
 	int coin;
@@ -225,6 +237,8 @@ public:
 		Tail = NULL;
 		currentFloorY = GROUND_Y; // Initialize to ground level
 
+		Koopa = NULL;
+
 		coin = 0;
 		point = 0;
 	}
@@ -254,6 +268,7 @@ public:
 	void AddCoin() {coin++; AddPoint(100);}
 	void AddPoint(int p) { point += p; }
 
+	bool GetIsRunning() { return isRunning; }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
