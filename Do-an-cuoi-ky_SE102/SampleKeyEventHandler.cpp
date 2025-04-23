@@ -99,22 +99,19 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
         if (game->IsKeyDown(DIK_DOWN))
             mario->SetState(MARIO_STATE_SIT);
         break;
-
+    case DIK_A:
+        mario->SetState(MARIO_STATE_DROP);
+        break;
     case DIK_S:
         mario->SetState(MARIO_STATE_RELEASE_JUMP);
         // Check if down key is presed when jump key is released
         if (game->IsKeyDown(DIK_DOWN))
             mario->SetState(MARIO_STATE_SIT);
         break;
-
     case DIK_DOWN:
         mario->SetState(MARIO_STATE_SIT_RELEASE);
         break;
-    case DIK_A:
-        mario->SetState(MARIO_STATE_DROP);
-        break;
     }
-
 }
 
 void CSampleKeyHandler::KeyState(BYTE* states)

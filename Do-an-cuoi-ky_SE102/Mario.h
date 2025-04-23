@@ -176,6 +176,8 @@ class CMario : public CGameObject
 	BOOLEAN isAbleToHold; //If player is holding S this should true
 	float currentFloorY; // Y position of the current floor
 
+	LPGAMEOBJECT Koopa; // Koopa object that Mario is holding
+
 	//Tracking point and coin
 	int coin;
 	int point;
@@ -210,6 +212,8 @@ public:
 		isOnPlatform = false;
 		isInAir = false;
 		currentFloorY = GROUND_Y; // Initialize to ground level
+
+		Koopa = NULL;
 
 		coin = 0;
 		point = 0;
