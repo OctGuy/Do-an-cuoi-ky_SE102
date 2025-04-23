@@ -91,10 +91,9 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 void CGoomba::OnCollisionWithTail(LPCOLLISIONEVENT e)
 {
 	//DebugOut(L"Goomba hit by tail\n");
-	SetState(GOOMBA_STATE_DIE);
-	vy = -GOOMBA_RISE_SPEED;
-	ax = 0;
-	ay = 0;
+	SetState(GOOMBA_STATE_DIE_REVERSE);
+	//ax = 0;
+	//ay = 0;
 	return;
 }
 
