@@ -90,6 +90,8 @@ void CKoopa::Render() {
 		aniId = KOOPA_ANI_SHELL_REVERSE_MOVE;
 	else if (state == KOOPA_STATE_SHELL_REVERSE_SHAKING)
 		aniId = KOOPA_ANI_SHELL_REVERSE_SHAKING;
+	else if (state == KOOPA_STATE_DIE)
+		aniId = KOOPA_ANI_DIE;
 	
 	if (aniId != -1)
 		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
@@ -131,6 +133,12 @@ void CKoopa::SetState(int state) {
 		stateShakingStart = GetTickCount64();
 		vx = 0;
 		break;
+	case KOOPA_STATE_DIE:
+		DebugOut(L"[INFO] Koopa is dead\n");
+		die_start = GetTickCount64();
+		ay = KOOPA_GRAVITY;
+		vx = 0;
+		vy = -KOOPA_DEFLECT_SPEED;
 	default:
 		break;
 	}
@@ -190,6 +198,11 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			//DebugOut(L"[INFO] Koopa is out of shell\n");
 			vy = -0.4;
 			SetState(KOOPA_STATE_WALKING_LEFT);
+		}
+		break;
+	case KOOPA_STATE_DIE:
+		if (now - die_start > KOOPA_DIE_DURATION) {
+			isDeleted = true;
 		}
 		break;
 	}
