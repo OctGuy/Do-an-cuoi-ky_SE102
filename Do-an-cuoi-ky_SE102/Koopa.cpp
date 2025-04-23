@@ -60,18 +60,16 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 		}
 	}
 	else if (state == KOOPA_STATE_SHELL_MOVE || state == KOOPA_STATE_SHELL_REVERSE_MOVE) {
-		if (e->nx != 0) {
+		if (e->nx != 0 && e->obj->IsBlocking()) {
 			vx = -vx;
 		}
-	}
 
-	if (dynamic_cast<CQuestionBrick*>(e->obj)) {
-		if (state == KOOPA_STATE_SHELL_MOVE 
-			|| state == KOOPA_STATE_SHELL_REVERSE_MOVE)
+		if (dynamic_cast<CQuestionBrick*>(e->obj)) {
+			DebugOut(L"Koopa collided with QuestionBrick\n");
 			OnCollisionWithBrick(e);
+		}
+			
 	}
-		
-
 	//DebugOut(L"Koopa is on platform: %d\n", isOnPlatform);
 }
 
@@ -79,6 +77,18 @@ void CKoopa::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
 	CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
 	questionBrick->OnCollisionWith(e);
 }
+
+//void CKoopa::OnCollisionWithGoomba(LPCOLLISIONEVENT e) {
+//	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+//	CMario* player = GetPlayer();
+//
+//	if (e->nx != 0) {
+//		if (goomba->GetState() == GOOMBA_STATE_WALKING) {
+//			goomba->SetState(GOOMBA_STATE_DIE_REVERSE);
+//			player->AddPoint(100);
+//		}
+//	}
+//}
 
 CMario* CKoopa::GetPlayer() {
 	CGame* game = CGame::GetInstance();

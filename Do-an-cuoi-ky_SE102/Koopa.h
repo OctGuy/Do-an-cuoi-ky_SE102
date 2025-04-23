@@ -19,7 +19,7 @@
 
 #define KOOPA_GRAVITY 0.01f
 #define KOOPA_WALKING_SPEED 0.03f
-#define KOOPA_SHELL_SPEED 0.2f
+#define KOOPA_SHELL_SPEED 0.15f
 
 #define KOOPA_BBOX_WIDTH 16
 #define KOOPA_BBOX_HEIGHT 26
@@ -79,6 +79,7 @@ public:
 			|| state == KOOPA_STATE_SHELL_REVERSE_SHAKING
 			|| state == KOOPA_STATE_SHELL_MOVE 
 			|| state == KOOPA_STATE_SHELL_REVERSE_MOVE;
+		//return 0;
 	}
 
 	void OnNoCollision(DWORD dt);
@@ -87,5 +88,6 @@ public:
 	CMario* GetPlayer();
 
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
+	//void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 };
 
