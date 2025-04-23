@@ -56,7 +56,12 @@
 - Modify Piranha state when Mario comes near (Thinh)
 
 22/4/2025
+- Collision for moving Koopa shell (Thinh)
+- Mario kicked Koopa shell (Thinh)
 - Work on mario Tail Attack Mechanic (Phong)
 
 23/4/2025
 - Work on mario holding Koopa (Phong)
+- Moving Koopa Shell killed Goomba (state die_reverse) (Thinh)
+- Add die_state for Koopa, Piranha Plant (Thinh)
+- Koopa shell killed Piranha Plant (Thinh)
