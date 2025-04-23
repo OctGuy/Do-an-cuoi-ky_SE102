@@ -77,6 +77,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				Koopa->SetState(KOOPA_STATE_WALKING_LEFT);
 			Koopa = NULL;
 		}
+		else
+		{
+			if (!isAbleToHold) 
+			{
+				Koopa->SetState(KOOPA_STATE_SHELL_MOVE);
+				Koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
+				Koopa = NULL;
+			}
+		}
 	}
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
