@@ -4,6 +4,7 @@
 #include "Koopa.h"  
 #include "debug.h" 
 #include "QuestionBrick.h"
+#include "PiranhaPlant.h"
 
 void CRaccoonTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -51,6 +52,12 @@ void CRaccoonTail::OnCollisionWith(LPCOLLISIONEVENT e)
 		DebugOut(L"[INFO] RaccoonTail hit Koopa\n");
 		CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
 		koopa->SetState(KOOPA_STATE_SHELL_REVERSE_IDLE);
+	}
+	else if (dynamic_cast<CPiranhaPlant*>(e->obj))
+	{
+		DebugOut(L"[INFO] RaccoonTail hit PiranhaPlant\n");
+		CPiranhaPlant* piranha = dynamic_cast<CPiranhaPlant*>(e->obj);
+		piranha->SetState(PIRANHA_STATE_DIE);
 	}
 }
 
