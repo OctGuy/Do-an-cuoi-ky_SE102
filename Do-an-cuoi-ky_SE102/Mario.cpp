@@ -66,6 +66,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isTailAttacking = false;
 	}
 
+	CCollision::GetInstance()->Process(this, dt, coObjects);
+
 	//Handle Koopa Picking and Kicking
 	if (Koopa)
 	{
@@ -92,8 +94,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
-
-	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CMario::OnNoCollision(DWORD dt)

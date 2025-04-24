@@ -21,7 +21,6 @@ void CQuestionBrick::Render()
 
 void CQuestionBrick::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-    DebugOut(L"[INFO]FKKKK\n");
 	CMario* mario = GetPlayer();
     if (e->ny > 0 || (e->nx != 0 && dynamic_cast<CKoopa*>(e->src_obj)))
     {
