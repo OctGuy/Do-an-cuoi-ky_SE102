@@ -468,6 +468,13 @@ int CMario::GetAniIdRaccoon()
 			}
 		}
 	}
+	else if (isTailAttacking)
+	{
+		if (nx > 0)
+			aniId = ID_ANI_MARIO_RACCOON_TAIL_ATTACK_RIGHT;
+		else
+			aniId = ID_ANI_MARIO_RACCOON_TAIL_ATTACK_LEFT;
+	}
 	else if (!isOnPlatform)
 	{
 		if (abs(vx) == MARIO_RUNNING_SPEED)
@@ -563,14 +570,6 @@ void CMario::Render()
 		aniId = GetAniIdSmall();
 	else if (level == MARIO_LEVEL_RACCOON)
 		aniId = GetAniIdRaccoon();
-
-	if (isTailAttacking)
-	{
-		if (nx > 0)
-			aniId = ID_ANI_MARIO_RACCOON_TAIL_ATTACK_RIGHT;
-		else
-			aniId = ID_ANI_MARIO_RACCOON_TAIL_ATTACK_LEFT;
-	}
 	animations->Get(aniId)->Render(x, y);
 
 	//RenderBoundingBox();

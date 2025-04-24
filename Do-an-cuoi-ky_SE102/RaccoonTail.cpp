@@ -7,6 +7,7 @@
 
 void CRaccoonTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (!IsActive()) return;
     if (state == RACCOON_TAIL_STATE_ACTIVE)
     {
         // Move horizontally around the x-axis
@@ -19,14 +20,10 @@ void CRaccoonTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         }
 		else if (x < startX - RACCOON_TAIL_RANGE)
 		{
-            //vx = RACCOON_TAIL_SPEED;
-			SetState(RACCOON_TAIL_STATE_INACTIVE); // Set inactive state if out of range
+			SetActive(false); // Set inactive state if out of range
 		}
     }
-    else if (state == RACCOON_TAIL_STATE_INACTIVE)
-    {
-        isActive = false; // Set inactive status
-    }
+
 
 	//DebugOut(L"[INFO] Raccoon Tail state: %d\n", state);
 
@@ -35,7 +32,8 @@ void CRaccoonTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CRaccoonTail::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (dynamic_cast<CGoomba*>(e->obj)) 
+	if (!IsActive()) return;
+	else if (dynamic_cast<CGoomba*>(e->obj)) 
 	{
 		DebugOut(L"[INFO] RaccoonTail hit Goomba\n");
 		CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
@@ -47,6 +45,12 @@ void CRaccoonTail::OnCollisionWith(LPCOLLISIONEVENT e)
         CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
         if (!questionBrick->IsHit())
             questionBrick->Activate();
+	}
+	else if (dynamic_cast<CKoopa*>(e->obj))
+	{
+		DebugOut(L"[INFO] RaccoonTail hit Koopa\n");
+		CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+		koopa->SetState(KOOPA_STATE_SHELL_REVERSE_IDLE);
 	}
 }
 
