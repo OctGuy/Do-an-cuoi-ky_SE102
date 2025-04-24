@@ -68,7 +68,12 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	else if (e->nx != 0)
 	{
-		if (e->obj->IsBlocking())vx = -GOOMBA_WALKING_SPEED;
+		if (e->obj->IsBlocking()) {
+			if(e->nx > 0)
+				vx = GOOMBA_WALKING_SPEED;
+			else
+				vx = -GOOMBA_WALKING_SPEED;
+		}
 		else if (dynamic_cast<CKoopa*>(e->obj)) {
 			CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
 
