@@ -61,14 +61,15 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	//if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CGoomba*>(e->obj)) return;
 
-	if (e->ny != 0)
+	if (e->ny != 0 && e->obj->IsBlocking())
 	{
 		vy = 0;
 		ay = GOOMBA_GRAVITY; // Reset gravity to default
 	}
 	else if (e->nx != 0)
 	{
-		if (dynamic_cast<CKoopa*>(e->obj)) {
+		if (e->obj->IsBlocking())vx = -GOOMBA_WALKING_SPEED;
+		else if (dynamic_cast<CKoopa*>(e->obj)) {
 			CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
 
 			if (koopa->GetState() == KOOPA_STATE_SHELL_MOVE
@@ -76,7 +77,6 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 				SetState(GOOMBA_STATE_DIE_REVERSE);
 			}
 		}
-		vx = -vx;
 	}
 }
 
