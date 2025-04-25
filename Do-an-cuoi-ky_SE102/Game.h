@@ -18,7 +18,7 @@ using namespace std;
 #define KEYBOARD_BUFFER_SIZE 1024
 #define KEYBOARD_STATE_SIZE 256
 
-#define GAME_FREEZE_TIME 1000
+#define GAME_FREEZE_TIME 500
 
 
 /*
@@ -60,6 +60,7 @@ class CGame
 
 	// Time freeze/pause variables
 	bool isTimeFrozen = false;
+	ULONGLONG freezeDuration;
 	bool isPaused = false;   
 	ULONGLONG freeze_start = 0; // Time when freeze started
 
@@ -106,7 +107,11 @@ public:
 	// Time freeze/pause methods
 	//void FreezeTime(bool freeze) { isTimeFrozen = freeze; }
 	bool IsTimeFrozen() const { return isTimeFrozen; }
-	void FreezeGame() { isTimeFrozen = true; freeze_start = GetTickCount64(); }
+	void FreezeGame(ULONGLONG freezeDur = GAME_FREEZE_TIME) { 
+		isTimeFrozen = true; 
+		freeze_start = GetTickCount64(); 
+		freezeDuration = freezeDur;
+	}
 	void CountDownFreezeTime();
 
 	void SetPauseState(bool pause) { isPaused = pause; }

@@ -556,7 +556,7 @@ CGame::~CGame()
 void CGame::CountDownFreezeTime()
 {
 	DWORD now = GetTickCount64();
-	if (now - freeze_start > GAME_FREEZE_TIME)
+	if (now - freeze_start > freezeDuration)
 	{
 		isTimeFrozen = false;
 		freeze_start = 0;
