@@ -43,8 +43,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//reset is On platform for correct jumpinga animation
 	isOnPlatform = false;
 
+	ULONGLONG now = GetTickCount64();
+
 	// reset untouchable timer if untouchable time has passed
-	if (GetTickCount64() - slowfall_start > MARIO_SLOW_FALL_DURATION)
+	if (now - slowfall_start > MARIO_SLOW_FALL_DURATION)
 	{
 		//DebugOut(L"Time Out\n");
 		slowfall_start = 0;
@@ -54,16 +56,22 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	// reset untouchable timer if untouchable time has passed
 	// In the Update() method, modify the untouchable timer check:
-	if (untouchable && GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
+	if (untouchable && now - untouchable_start > MARIO_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
 	}
 
-	if (GetTickCount64() - tailAttack_start > MARIO_TAIL_ATTACK_TIME)
+	if (now - tailAttack_start > MARIO_TAIL_ATTACK_TIME)
 	{
 		tailAttack_start = 0;
 		isTailAttacking = false;
+	}
+
+	if (now - kick_start > MARIO_KICK_TIME)
+	{
+		kick_start = 0;
+		isKicking = false;
 	}
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -71,9 +79,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//Handle Koopa Picking and Kicking
 	if (Koopa)
 	{
-		Koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * 5.f, y - 3.f);
+		Koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * 2.f, y - 3.f);
 		Koopa->SetSpeed(0, 0);
-		//If koopa is out of shell
+		//If koopa is out of shell while mario is still holding it, mario is hurt
 		if (Koopa->GetState() == KOOPA_STATE_WALKING_LEFT ||
 			Koopa->GetState() == KOOPA_STATE_WALKING_RIGHT)
 		{
@@ -88,6 +96,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			if (!isAbleToHold)
 			{
+				isKicking = true;
+				kick_start = now;
 				Koopa->SetState(KOOPA_STATE_SHELL_MOVE);
 				Koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
 				Koopa = NULL;
@@ -231,11 +241,10 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_SHAKING) {
 			if (isAbleToHold) { // pick
 				this->Koopa = e->obj;
-				//DebugOut(L"[INFO] Mario picked Koopa\n");
-				/*koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * KOOPA_BBOX_WIDTH / 2, y);
-				koopa->SetSpeed(0, 0);*/
 			}
 			else { // Kick
+				isKicking = true;
+				kick_start = GetTickCount64();
 				koopa->SetState(KOOPA_STATE_SHELL_MOVE);
 				koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
 			}
@@ -256,7 +265,14 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 int CMario::GetAniIdSmall()
 {
 	int aniId = -1;
-	if (Koopa)
+	if (isKicking)
+	{
+		if (nx >= 0)
+			aniId = ID_ANI_MARIO_SMALL_KICK_RIGHT;
+		else
+			aniId = ID_ANI_MARIO_SMALL_KICK_LEFT;
+	}
+	else if (Koopa)
 	{
 		if (!isOnPlatform)
 			if (nx >= 0)
@@ -348,7 +364,14 @@ int CMario::GetAniIdBig()
 {
 	int aniId = -1;
 
-	if (Koopa) {
+	if (isKicking)
+	{
+		if (nx >= 0)
+			aniId = ID_ANI_MARIO_KICK_RIGHT;
+		else
+			aniId = ID_ANI_MARIO_KICK_LEFT;
+	}
+	else if (Koopa) {
 		if (!isOnPlatform)
 			if (nx >= 0)
 				aniId = ID_ANI_MARIO_JUMP_WALK_HOLDING_RIGHT;
@@ -440,7 +463,14 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdRaccoon()
 {
 	int aniId = -1;
-	if (Koopa) {
+	if (isKicking)
+	{
+		if (nx >= 0)
+			aniId = ID_ANI_MARIO_RACCOON_KICK_RIGHT;
+		else
+			aniId = ID_ANI_MARIO_RACCOON_KICK_LEFT;
+	}
+	else if (Koopa) {
 		if (!isOnPlatform)
 			if (nx >= 0)
 				aniId = ID_ANI_MARIO_RACCOON_JUMP_WALK_HOLDING_RIGHT;

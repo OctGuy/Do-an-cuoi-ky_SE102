@@ -59,6 +59,9 @@
 
 #pragma region ANIMATION_ID
 
+#define ID_ANI_MARIO_KICK_RIGHT 200
+#define ID_ANI_MARIO_KICK_LEFT 201
+
 #define ID_ANI_MARIO_CHANGE_LEVEL_RIGHT 300
 #define ID_ANI_MARIO_CHANGE_LEVEL_LEFT 301
 
@@ -122,6 +125,9 @@
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT 1600
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT 1601
 
+#define ID_ANI_MARIO_SMALL_KICK_RIGHT 1700
+#define ID_ANI_MARIO_SMALL_KICK_LEFT 1701
+
 //RACCOON MARIO
 #define ID_ANI_MARIO_RACCOON_IDLE_RIGHT 2000
 #define ID_ANI_MARIO_RACCOON_IDLE_LEFT 2001
@@ -163,6 +169,9 @@
 #define ID_ANI_MARIO_RACCOON_TAIL_ATTACK_RIGHT 2900
 #define ID_ANI_MARIO_RACCOON_TAIL_ATTACK_LEFT 2901
 
+#define ID_ANI_MARIO_RACCOON_KICK_RIGHT 3000
+#define ID_ANI_MARIO_RACCOON_KICK_LEFT 3001
+
 #pragma endregion
 
 #define GROUND_Y 350.0f
@@ -185,6 +194,7 @@
 
 #define MARIO_UNTOUCHABLE_TIME 2500
 #define MARIO_TAIL_ATTACK_TIME 250
+#define MARIO_KICK_TIME 250
 
 class CMario : public CGameObject
 {
@@ -202,9 +212,11 @@ class CMario : public CGameObject
 	ULONGLONG untouchable_start;
 	ULONGLONG slowfall_start;
 	ULONGLONG tailAttack_start;
+	ULONGLONG kick_start;
 
 	BOOLEAN isOnPlatform;
 	BOOLEAN isInAir;	//If Raccoon mario is flying or floating this should be true
+	BOOLEAN isKicking; 
 
 	BOOLEAN isTailAttacking; //If Raccoon mario is using tail attack this should be true
 	LPGAMEOBJECT Tail; // Raccoon tail object
@@ -244,15 +256,18 @@ public:
 
 		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
+
 		untouchable_start = -1;
 		slowfall_start = -1;
 		tailAttack_start = -1;
+		kick_start = 1;
 
 		isSitting = false;
 		isOnPlatform = false;
 		isInAir = false;
 		isTailAttacking = false;
 		isAbleToHold = false;
+		isKicking = false;
 
 		Tail = NULL;
 		currentFloorY = GROUND_Y; // Initialize to ground level
