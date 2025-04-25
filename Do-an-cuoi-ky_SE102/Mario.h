@@ -64,6 +64,7 @@
 
 #define ID_ANI_MARIO_CHANGE_LEVEL_RIGHT 300
 #define ID_ANI_MARIO_CHANGE_LEVEL_LEFT 301
+#define ID_ANI_MARIO_CHANGE_LEVEL_RACCOON 302
 
 #define ID_ANI_MARIO_IDLE_RIGHT 400
 #define ID_ANI_MARIO_IDLE_LEFT 401
@@ -208,6 +209,7 @@ class CMario : public CGameObject
 	float ay;				// acceleration on y 
 
 	int level;
+	int preLevel;
 	int untouchable;
 	ULONGLONG untouchable_start;
 	ULONGLONG slowfall_start;
@@ -255,6 +257,7 @@ public:
 		ay = MARIO_GRAVITY;
 
 		level = MARIO_LEVEL_SMALL;
+		preLevel = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 
 		untouchable_start = -1;

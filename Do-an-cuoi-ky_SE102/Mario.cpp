@@ -43,6 +43,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//reset is On platform for correct jumpinga animation
 	isOnPlatform = false;
 
+	//Update preLevel before current level
+	preLevel = level;
+
 	ULONGLONG now = GetTickCount64();
 
 	// reset untouchable timer if untouchable time has passed
@@ -601,10 +604,15 @@ void CMario::Render()
 	//The only time where this condition is true is when mario change level
 	if (CGame::GetInstance()->IsTimeFrozen()) //show changing animation
 	{
-		if (nx > 0)
-			aniId = ID_ANI_MARIO_CHANGE_LEVEL_RIGHT;
+		if (preLevel == MARIO_LEVEL_RACCOON || level == MARIO_LEVEL_RACCOON)
+			aniId = ID_ANI_MARIO_CHANGE_LEVEL_RACCOON;
 		else
-			aniId = ID_ANI_MARIO_CHANGE_LEVEL_LEFT;
+		{
+			if (nx > 0)
+				aniId = ID_ANI_MARIO_CHANGE_LEVEL_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_CHANGE_LEVEL_LEFT;
+		}	
 	}
 	else if (state == MARIO_STATE_DIE)
 		aniId = ID_ANI_MARIO_DIE;
@@ -855,7 +863,10 @@ void CMario::SetLevel(int l)
 {
 	// Adjust position to avoid falling off platform
 
-	CGame::GetInstance()->FreezeGame(); // time is only frozen when mario is changing level
+	if (preLevel == MARIO_LEVEL_RACCOON || level == MARIO_LEVEL_RACCOON)
+		CGame::GetInstance()->FreezeGame(200); //200 is the time it take to transform to and from raccon
+	else
+		CGame::GetInstance()->FreezeGame(); //The amount time freeze is unmodified
 
 	SetState(MARIO_STATE_IDLE);
 
