@@ -28,6 +28,8 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 
 	if (e->ny < 0) { // Stand on platform
 		vy = 0;
+		if (state == KOOPA_STATE_SHELL_REVERSE_JUMP)
+			SetState(KOOPA_STATE_SHELL_REVERSE_IDLE);
 		ay = KOOPA_GRAVITY; 
 		platform = e->obj;  // Set platform to what Koopa is standing on
 	}
@@ -83,7 +85,8 @@ void CKoopa::Render() {
 		aniId = KOOPA_ANI_SHELL_MOVE;
 	else if (state == KOOPA_STATE_SHELL_SHAKING)
 		aniId = KOOPA_ANI_SHELL_SHAKING;
-	else if (state == KOOPA_STATE_SHELL_REVERSE_IDLE)
+	else if (state == KOOPA_STATE_SHELL_REVERSE_IDLE ||
+			 state == KOOPA_STATE_SHELL_REVERSE_JUMP)
 		aniId = KOOPA_ANI_SHELL_REVERSE_IDLE;
 	else if (state == KOOPA_STATE_SHELL_REVERSE_MOVE)
 		aniId = KOOPA_ANI_SHELL_REVERSE_MOVE;
@@ -131,6 +134,11 @@ void CKoopa::SetState(int state) {
 	case KOOPA_STATE_SHELL_REVERSE_SHAKING:
 		stateShakingStart = GetTickCount64();
 		vx = 0;
+		break;
+	case KOOPA_STATE_SHELL_REVERSE_JUMP:
+		vy = -KOOPA_DEFLECT_SPEED;      // Jump up with reverse deflect speed
+		ay = KOOPA_GRAVITY;             // Apply gravity for natural arc
+		vx = -vx;                       // Reverse current x velocity
 		break;
 	case KOOPA_STATE_DIE:
 		DebugOut(L"[INFO] Koopa is dead\n");

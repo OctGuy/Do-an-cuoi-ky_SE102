@@ -51,7 +51,8 @@ void CRaccoonTail::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		DebugOut(L"[INFO] RaccoonTail hit Koopa\n");
 		CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
-		koopa->SetState(KOOPA_STATE_SHELL_REVERSE_IDLE);
+		koopa->SetSpeed(nx * KOOPA_SHELL_SPEED/2, 0); // Set speed for Koopa
+		koopa->SetState(KOOPA_STATE_SHELL_REVERSE_JUMP);
 	}
 	else if (dynamic_cast<CPiranhaPlant*>(e->obj))
 	{
