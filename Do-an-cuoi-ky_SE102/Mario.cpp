@@ -98,7 +98,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				isKicking = true;
 				kick_start = now;
-				Koopa->SetState(KOOPA_STATE_SHELL_MOVE);
+				if (Koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
+					Koopa->GetState() == KOOPA_STATE_SHELL_SHAKING)
+					Koopa->SetState(KOOPA_STATE_SHELL_MOVE);
+				else
+					Koopa->SetState(KOOPA_STATE_SHELL_REVERSE_MOVE);
 				Koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
 				Koopa = NULL;
 			}
@@ -220,7 +224,8 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 		if (koopa->GetState() == KOOPA_STATE_WALKING_LEFT
 			|| koopa->GetState() == KOOPA_STATE_WALKING_RIGHT
 			|| koopa->GetState() == KOOPA_STATE_SHELL_MOVE
-			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
+			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) 
+		{
 			koopa->SetState((koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE)
 				? KOOPA_STATE_SHELL_REVERSE_IDLE
 				: KOOPA_STATE_SHELL_IDLE);
@@ -228,8 +233,13 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 			AddPoint(100);
 		}
 		else if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
-			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE) {
-			koopa->SetState(KOOPA_STATE_SHELL_MOVE);
+			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE) 
+		{
+			if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
+				koopa->GetState() == KOOPA_STATE_SHELL_SHAKING)
+				koopa->SetState(KOOPA_STATE_SHELL_MOVE);
+			else
+				koopa->SetState(KOOPA_STATE_SHELL_REVERSE_MOVE);
 			koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
@@ -245,7 +255,11 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 			else { // Kick
 				isKicking = true;
 				kick_start = GetTickCount64();
-				koopa->SetState(KOOPA_STATE_SHELL_MOVE);
+				if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
+					koopa->GetState() == KOOPA_STATE_SHELL_SHAKING)
+					koopa->SetState(KOOPA_STATE_SHELL_MOVE);
+				else
+					koopa->SetState(KOOPA_STATE_SHELL_REVERSE_MOVE);
 				koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
 			}
 		}
