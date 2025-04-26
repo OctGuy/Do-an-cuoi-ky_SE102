@@ -19,7 +19,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	//DebugOut(L"[INFO] Mario Update: %f %f\n", vx, vy);
+	DebugOut(L"[INFO] Mario Update: %f %f\n", vx, vy);
 
 	// Cap the falling speed to MAX_FALL_SPEED
 	if (vy > maxVy) vy = maxVy;
@@ -601,8 +601,10 @@ void CMario::Render()
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
 
+	if (state == MARIO_STATE_DIE)
+		aniId = ID_ANI_MARIO_DIE;
 	//The only time where this condition is true is when mario change level
-	if (CGame::GetInstance()->IsTimeFrozen()) //show changing animation
+	else if (CGame::GetInstance()->IsTimeFrozen()) //show changing animation
 	{
 		if (preLevel == MARIO_LEVEL_RACCOON || level == MARIO_LEVEL_RACCOON)
 			aniId = ID_ANI_MARIO_CHANGE_LEVEL_RACCOON;
@@ -614,8 +616,6 @@ void CMario::Render()
 				aniId = ID_ANI_MARIO_CHANGE_LEVEL_LEFT;
 		}	
 	}
-	else if (state == MARIO_STATE_DIE)
-		aniId = ID_ANI_MARIO_DIE;
 	else if (level == MARIO_LEVEL_BIG)
 		aniId = GetAniIdBig();
 	else if (level == MARIO_LEVEL_SMALL)
@@ -861,8 +861,6 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 
 void CMario::SetLevel(int l)
 {
-	// Adjust position to avoid falling off platform
-
 	if (preLevel == MARIO_LEVEL_RACCOON || level == MARIO_LEVEL_RACCOON)
 		CGame::GetInstance()->FreezeGame(200); //200 is the time it take to transform to and from raccon
 	else
@@ -870,6 +868,7 @@ void CMario::SetLevel(int l)
 
 	SetState(MARIO_STATE_IDLE);
 
+	// Adjust position to avoid falling off platform
 	if (this->level == MARIO_LEVEL_SMALL)
 	{
 		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
