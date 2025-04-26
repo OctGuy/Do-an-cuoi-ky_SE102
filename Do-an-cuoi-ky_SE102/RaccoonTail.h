@@ -4,8 +4,8 @@
 #define RACCOON_TAIL_STATE_INACTIVE 200
 #define RACCOON_TAIL_STATE_ACTIVE 100
 
-#define RACCOON_TAIL_SPEED 0.15f // Example speed
-#define RACCOON_TAIL_RANGE 20.0f // Example range of movement
+#define RACCOON_TAIL_SPEED 0.15f 
+#define RACCOON_TAIL_RANGE 20.0f
 
 class CRaccoonTail : public CGameObject
 {
@@ -19,6 +19,7 @@ public:
         this->startX = x;
         this->isActive = false; // Initially inactive
         this->SetState(RACCOON_TAIL_STATE_INACTIVE);
+        nx = -1;
     }
 
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
@@ -30,5 +31,5 @@ public:
 
     int IsCollidable() { return 1; }
     int IsBlocking() { return 0; }
-    bool IsActive() { return isActive; }
+    //ool IsActive() { return isActive; }
 };

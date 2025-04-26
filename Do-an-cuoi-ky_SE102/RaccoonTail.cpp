@@ -13,15 +13,16 @@ void CRaccoonTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     {
         // Move horizontally around the x-axis
         x += vx * dt;
-
         // Reverse direction if it exceeds the range
         if (x > startX + RACCOON_TAIL_RANGE)
         {
             vx = -vx;
+            nx = 1;
         }
 		else if (x < startX - RACCOON_TAIL_RANGE)
 		{
 			SetActive(false); // Set inactive state if out of range
+            nx = -1;
 		}
     }
 
@@ -91,6 +92,6 @@ void CRaccoonTail::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
     l = x;
     t = y;
-    r = l + 8; // Example width
-    b = t + 8; // Example height
+    r = l + 8;
+    b = t + 8; 
 }
