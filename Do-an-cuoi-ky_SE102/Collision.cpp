@@ -54,12 +54,8 @@ void CCollision::SweptAABB(
 	// Why 1.0f? Because we want to use this value to calculate the normal vector for object to still move normally
 	// Why nx and not ny? cause it didnt cause any error :D
 	if (dx == 0 && dy == 0)
-	{
-		t = 1.0f;
-		nx = 1.0f;
-		ny = 0.0f;
+
 		return;
-	}
 
 	if (dx > 0)
 	{

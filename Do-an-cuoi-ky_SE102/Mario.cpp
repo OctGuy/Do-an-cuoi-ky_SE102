@@ -19,7 +19,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	DebugOut(L"[INFO] Mario Update: %f %f\n", vx, vy);
+	//DebugOut(L"[INFO] Mario Update: %f %f\n", vx, vy);
 
 	// Cap the falling speed to MAX_FALL_SPEED
 	if (vy > maxVy) vy = maxVy;
@@ -762,7 +762,6 @@ void CMario::SetState(int state)
 			DebugOut(L"[INFO] Mario tail attack\n");
 			if (Tail)
 			{
-				Tail->SetActive(true);
 				Tail->SetPosition(x, y + 4.f);
 				Tail->SetState(RACCOON_TAIL_STATE_ACTIVE);
 			}
