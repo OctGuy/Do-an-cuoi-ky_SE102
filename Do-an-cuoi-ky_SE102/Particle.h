@@ -24,18 +24,18 @@ public:
         this->creationTime = GetTickCount64();
 		this->type = type;
         if (type == PARTICLE_TYPE_POINT) {
-			this->vx = 0;
+			this->vx = 0.f;
 			this->vy = -0.05f;
             this->lifetime = PARTICLE_POINT_LIFE_TIME;
 		}
 		else if (type == PARTICLE_TYPE_HIT) {
-            this->vx = 0;
-            this->vy = 0;
+            this->vx = 0.f;
+            this->vy = 0.f;
             this->lifetime = PARTICLE_HIT_LIFE_TIME;
 		}
         else {
-            this->vx = 0;
-            this->vy = 0;
+            this->vx = 0.f;
+            this->vy = 0.f;
 			lifetime = 0;
         }
     }

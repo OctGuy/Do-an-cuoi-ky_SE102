@@ -63,7 +63,8 @@ void CCoin::CollectCoin()
 	//I wanted mario to call oncollisionwithcoin function instead but this will do(Hopefully)
 	CGame* game = CGame::GetInstance();
 	CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
-
+	CParticle* particle = new CParticle(x, y, PARTICLE_TYPE_POINT);
+	playScene->Add(particle);
 	if (playScene)
 	{
 		CMario* mario = dynamic_cast<CMario*>(playScene->GetPlayer());

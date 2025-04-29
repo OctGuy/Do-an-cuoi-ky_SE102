@@ -4,7 +4,7 @@
 #include "Animation.h"
 #include "Animations.h"
 #include "RaccoonTail.h"
-
+#include "Particle.h"
 #include "debug.h"
 
 #define MARIO_INITIAL_SPEED		0.04f
@@ -303,8 +303,8 @@ public:
 	BOOLEAN IsTailAttacking() { return isTailAttacking; }
 
 	//Update coin and point
-	void AddCoin() { coin++; AddPoint(100); }
-	void AddPoint(int p) { point += p; }
+	void AddCoin() { coin++;}
+	void AddPoint(int p, LPCOLLISIONEVENT e);
 
 	bool GetIsRunning() { return isRunning; }
 

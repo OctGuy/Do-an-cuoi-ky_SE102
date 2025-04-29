@@ -40,11 +40,15 @@ void CRaccoonTail::OnCollisionWith(LPCOLLISIONEVENT e)
     CParticle* particle = new CParticle(x, y, PARTICLE_TYPE_HIT);
     CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
     
+    CGame* game = CGame::GetInstance();
+    CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
+    CMario* mario = dynamic_cast<CMario*>(playScene->GetPlayer());
 
     if (dynamic_cast<CGoomba*>(e->obj))
     {
         OnCollisionWithGoomba(e);
         currentScene->Add(particle);
+        mario->AddPoint(100, e);
     }
     else if (dynamic_cast<CQuestionBrick*>(e->obj))
     {
@@ -59,6 +63,7 @@ void CRaccoonTail::OnCollisionWith(LPCOLLISIONEVENT e)
     {
         OnCollisionWithPiranhaPlant(e);
         currentScene->Add(particle);
+        mario->AddPoint(100, e);
     }
 }
 
