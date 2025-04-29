@@ -7,8 +7,9 @@ assets\cloud.txt
 assets\box.txt
 assets\powerup.txt
 assets\pipe.txt
-assets\scenery_object.txt
 assets\piranha_plant.txt
+assets\particle.txt
+assets\scenery_object.txt
 assets\fire_bullet.txt
 assets\HUD.txt
 assets\koopa.txt
