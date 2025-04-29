@@ -71,3 +71,6 @@
 
 25/4/2025
 - Adjust mario holding animation and adding kick animation (Phong)
+
+29/4/2025
+- Add particle effect. (Phong)
