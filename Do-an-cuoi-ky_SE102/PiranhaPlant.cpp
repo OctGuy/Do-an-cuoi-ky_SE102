@@ -182,6 +182,7 @@ void CPiranhaPlant::OnCollisionWith(LPCOLLISIONEVENT e) {
 		SetState(PIRANHA_STATE_DIE);
 		CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
 		koopa->SetState(KOOPA_STATE_DIE);
+		GetPlayer()->AddPoint(100, e);
 		//die_start = GetTickCount64();
 	}
 }

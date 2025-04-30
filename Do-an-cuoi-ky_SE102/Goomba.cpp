@@ -80,6 +80,10 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 			if (koopa->GetState() == KOOPA_STATE_SHELL_MOVE
 				|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
 				SetState(GOOMBA_STATE_DIE_REVERSE);
+				//Add point to player
+				CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+				CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+				mario->AddPoint(100, e);
 			}
 		}
 	}

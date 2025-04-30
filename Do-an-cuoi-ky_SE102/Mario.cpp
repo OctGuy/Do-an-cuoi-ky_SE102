@@ -262,8 +262,6 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 			koopa->SetState((koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE)
 				? KOOPA_STATE_SHELL_REVERSE_IDLE
 				: KOOPA_STATE_SHELL_IDLE);
-			vy = -MARIO_JUMP_DEFLECT_SPEED;
-			AddPoint(100, e);
 		}
 		else if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
 			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE) 
@@ -274,8 +272,9 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 			else
 				koopa->SetState(KOOPA_STATE_SHELL_REVERSE_MOVE);
 			koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
-			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
+		vy = -MARIO_JUMP_DEFLECT_SPEED;
+		AddPoint(100, e);
 	}
 	else {
 		if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
