@@ -1,0 +1,20 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#Need atleast 1 pixels padding on right and bottom to look good (no idea why)
+
+#HIT BY TAIL OR SHELL
+140000	2	13	19	30	50
+140001	20	13	37	30	50
+140002	38	13	55	30	50
+140003	56	13	73	30	50
+
+#POINT (100 - 8000)
+140010	2	2	13	11	50
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+#HIT BY TAIL OR SHELL
+12000	140000	100	140001	100	140002	100	140003	100
+
+#POINT
+12010	140010	100

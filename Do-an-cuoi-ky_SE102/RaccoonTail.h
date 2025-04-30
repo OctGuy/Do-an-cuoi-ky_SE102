@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Particle.h"
 
 #define RACCOON_TAIL_STATE_INACTIVE 200
 #define RACCOON_TAIL_STATE_ACTIVE 100

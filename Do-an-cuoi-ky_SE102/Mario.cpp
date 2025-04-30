@@ -113,11 +113,27 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 }
 
+void CMario::AddPoint(int p, LPCOLLISIONEVENT e)
+{
+	point += p;
+	//Gettiing the position of the object that mario touched to add particle
+	if (e != NULL)
+	{
+		CGame* game = CGame::GetInstance();
+		CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
+		float objX, objY;
+		e->obj->GetPosition(objX, objY);
+		CParticle* particle = new CParticle(objX, objY, PARTICLE_TYPE_POINT);
+		playScene->Add(particle);
+	}
+}
+
 void CMario::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
 	y += vy * dt;
 }
+
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
@@ -140,21 +156,37 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 
 	if (dynamic_cast<CQuestionBrick*>(e->obj))
+	{
 		OnCollisionWithBrick(e);
+	}
 	else if (dynamic_cast<CGoomba*>(e->obj))
+	{
 		OnCollisionWithGoomba(e);
+	}
 	else if (dynamic_cast<CCoin*>(e->obj))
+	{
 		OnCollisionWithCoin(e);
+	}
 	else if (dynamic_cast<CPortal*>(e->obj))
+	{
 		OnCollisionWithPortal(e);
+	}
 	else if (dynamic_cast<CPiranhaPlant*>(e->obj))
+	{
 		OnCollisionWithPiranhaPlant(e);
+	}
 	else if (dynamic_cast<CPowerUp*>(e->obj))
+	{
 		OnCollisionWithPowerUp(e);
+	}
 	else if (dynamic_cast<CFireBullet*>(e->obj))
+	{
 		OnCollisionWithBullet(e);
+	}
 	else if (dynamic_cast<CKoopa*>(e->obj))
+	{
 		OnCollisionWithKoopa(e);
+	}
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -174,7 +206,8 @@ void CMario::OnCollisionWithPowerUp(LPCOLLISIONEVENT e)
 		SetLevel(MARIO_LEVEL_BIG);
 	}
 	e->obj->Delete();
-	AddPoint(1000);
+	AddPoint(1000, e);
+
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -188,7 +221,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		{
 			goomba->SetState(GOOMBA_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
-			AddPoint(100);
+			AddPoint(100, e);
 		}
 	}
 	else if (goomba->GetState() != GOOMBA_STATE_DIE)
@@ -202,6 +235,7 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 	DebugOut(L">>> Mario touched coin >>> \n");
 	e->obj->Delete();
 	AddCoin();
+	AddPoint(50, e);
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
@@ -232,8 +266,6 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 			koopa->SetState((koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE)
 				? KOOPA_STATE_SHELL_REVERSE_IDLE
 				: KOOPA_STATE_SHELL_IDLE);
-			vy = -MARIO_JUMP_DEFLECT_SPEED;
-			AddPoint(100);
 		}
 		else if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
 			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE) 
@@ -244,8 +276,9 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 			else
 				koopa->SetState(KOOPA_STATE_SHELL_REVERSE_MOVE);
 			koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
-			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
+		vy = -MARIO_JUMP_DEFLECT_SPEED;
+		AddPoint(100, e);
 	}
 	else {
 		if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
