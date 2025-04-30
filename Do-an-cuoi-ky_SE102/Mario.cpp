@@ -116,12 +116,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CMario::AddPoint(int p, LPCOLLISIONEVENT e)
 {
 	point += p;
-	CGame* game = CGame::GetInstance();
-	CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
-	float objX, objY;
-	e->obj->GetPosition(objX, objY);
-	CParticle* particle = new CParticle(objX, objY, PARTICLE_TYPE_POINT);
-	playScene->Add(particle);
+	//Gettiing the position of the object that mario touched to add particle
+	if (e != NULL)
+	{
+		CGame* game = CGame::GetInstance();
+		CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
+		float objX, objY;
+		e->obj->GetPosition(objX, objY);
+		CParticle* particle = new CParticle(objX, objY, PARTICLE_TYPE_POINT);
+		playScene->Add(particle);
+	}
 }
 
 void CMario::OnNoCollision(DWORD dt)

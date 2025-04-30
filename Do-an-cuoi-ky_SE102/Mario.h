@@ -304,7 +304,7 @@ public:
 
 	//Update coin and point
 	void AddCoin() { coin++;}
-	void AddPoint(int p, LPCOLLISIONEVENT e);
+	void AddPoint(int p, LPCOLLISIONEVENT e = NULL);
 
 	bool GetIsRunning() { return isRunning; }
 
