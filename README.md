@@ -74,3 +74,6 @@
 
 29/4/2025
 - Add particle effect. (Phong)
+
+30/4/2025
+- Bug fix and finishing particle effects (Phong)
