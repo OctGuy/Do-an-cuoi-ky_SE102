@@ -1,5 +1,8 @@
 #pragma once
 #include "GameObject.h"
+#include "PlayScene.h"
+#include "Mario.h"
+#include "Game.h"
 
 #define POWER_UP_TYPE_MUSHROOM 1
 #define POWER_UP_TYPE_LEAF 2
