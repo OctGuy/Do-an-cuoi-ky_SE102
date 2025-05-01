@@ -125,5 +125,5 @@ void CRaccoonTail::GetBoundingBox(float& l, float& t, float& r, float& b)
     l = x;
     t = y;
     r = l + 1.f;
-    b = t + 16.f;
+	b = t + 8.f; //8.f is the right height of the tail as to not collide with the ground
 }
