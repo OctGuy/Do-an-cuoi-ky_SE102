@@ -24,6 +24,8 @@
 #define BRICK_TYPE_FLOOR_TOP_MIDDLE 4
 #define BRICK_TYPE_FLOOR_TOP_RIGHT 5
 
+#define BRICK_TYPE_DEATH 100 //Touch this brick and mario die
+
 #define BRICK_TYPE_CONVEX 10
 #define ID_ANI_BRICK_CONVEX 10010
 
@@ -43,7 +45,8 @@ public:
 	CBrick(float x, float y, int type) : CGameObject(x, y), type(type) {}
 	void Render();
 	void Update(DWORD dt) {}
+	int GetType() { return type; }
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
-
+	int IsBlocking() { return type != BRICK_TYPE_DEATH; }
 	int GetAnimationid();
 };

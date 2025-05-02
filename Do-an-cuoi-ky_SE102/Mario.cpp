@@ -157,7 +157,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (dynamic_cast<CQuestionBrick*>(e->obj))
 	{
-		OnCollisionWithBrick(e);
+		OnCollisionWithQuestionBrick(e);
 	}
 	else if (dynamic_cast<CGoomba*>(e->obj))
 	{
@@ -187,13 +187,27 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		OnCollisionWithKoopa(e);
 	}
-
+	else if (dynamic_cast<CBrick*>(e->obj))
+	{
+		OnCollisionWithBrick(e);
+	}
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 {
+	CBrick* brick = dynamic_cast<CBrick*>(e->obj);
+	if (brick->GetType() == BRICK_TYPE_DEATH)
+	{
+		DebugOut(L"[INFO] Mario die by brick\n");
+		SetState(MARIO_STATE_DIE);
+	}
+}
+
+
+void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
+{
 	CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
-	if (e->ny > 0)
+	if (e->ny > 0 && questionBrick)
 		questionBrick->Activate();
 }
 
