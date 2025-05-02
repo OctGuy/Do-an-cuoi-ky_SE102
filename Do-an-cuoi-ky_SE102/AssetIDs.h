@@ -25,6 +25,7 @@
 #define OBJECT_TYPE_QUESTION_BRICK 21
 #define OBJECT_TYPE_POWER_UP 22
 #define OBJECT_TYPE_HUD 30
+#define OBJECT_TYPE_WALL 49
 #define OBJECT_TYPE_PORTAL	50
 #pragma endregion
 

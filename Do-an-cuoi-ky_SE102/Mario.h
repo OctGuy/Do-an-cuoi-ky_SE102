@@ -28,7 +28,7 @@
 
 #define MARIO_FLYING_SPEED	-0.1f
 
-#define MARIO_JUMP_DEFLECT_SPEED  0.2f
+#define MARIO_JUMP_DEFLECT_SPEED  0.3f
 
 #pragma region MARIO_STATE
 #define MARIO_STATE_DIE				-10
@@ -236,6 +236,7 @@ class CMario : public CGameObject
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
+	void OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e);
 	void OnCollisionWithPowerUp(LPCOLLISIONEVENT e);
