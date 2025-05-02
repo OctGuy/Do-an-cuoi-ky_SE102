@@ -18,7 +18,6 @@ public:
     CRaccoonTail(float x, float y) : CGameObject(x, y)
     {
         this->startX = x;
-        this->isActive = false; // Initially inactive
         this->SetState(RACCOON_TAIL_STATE_INACTIVE);
         nx = -1;
     }

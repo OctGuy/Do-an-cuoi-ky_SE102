@@ -114,7 +114,7 @@ void CRaccoonTail::SetState(int state)
         break;
 
     case RACCOON_TAIL_STATE_INACTIVE:
-        isActive = false;
+		SetActive(false); // Set inactive state
         vx = 0; // Stop movement
         break;
     }
