@@ -187,12 +187,14 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		OnCollisionWithKoopa(e);
 	}
+
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 {
 	CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
-	questionBrick->OnCollisionWith(e);
+	if (e->ny > 0)
+		questionBrick->Activate();
 }
 
 void CMario::OnCollisionWithPowerUp(LPCOLLISIONEVENT e)
