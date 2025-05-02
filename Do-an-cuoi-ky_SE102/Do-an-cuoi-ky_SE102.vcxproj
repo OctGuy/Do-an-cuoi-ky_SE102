@@ -199,6 +199,7 @@
     <ClInclude Include="Textures.h" />
     <ClInclude Include="SceneryObject.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="Wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

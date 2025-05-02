@@ -15,6 +15,7 @@
 #include "FireBullet.h"
 #include "Koopa.h"
 #include "RaccoonTail.h"
+#include "Wall.h"
 
 using namespace std;
 
@@ -141,6 +142,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			type = atoi(tokens[3].c_str());
 			obj = new CBrick(x, y, type);
 			break;
+
+		case OBJECT_TYPE_WALL:
+		{
+			float rightBound = (float)atof(tokens[3].c_str());
+			float bottomBound = (float)atof(tokens[4].c_str());
+			type = atoi(tokens[5].c_str());
+			obj = new CWall(x, y, rightBound, bottomBound, type);
+			break;
+		}
 
 		case OBJECT_TYPE_QUESTION_BRICK:
 			type = atoi(tokens[3].c_str());

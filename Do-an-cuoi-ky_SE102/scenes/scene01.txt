@@ -17,7 +17,7 @@ assets\koopa.txt
 #RENDERING ORDER IS IMPORTANT
 [OBJECTS]
 # type	x	y	
-# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Coins, 5 = Platform, 6 = Box Platform, 7 = Pipe, 8 - Tussock, 9 - Piranha Plant, 10 - Fire Bullet, 11 - Koopa
+# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Coins, 5 = Platform, 6 = Box Platform, 7 = Pipe, 8 - Tussock, 9 - Piranha Plant, 10 - Fire Bullet, 11 - Koopa, 49 - Wall
 
 #BOX PLATFORM
 6	272	336	16	16	3	5	61002	62002	63002	64002	65002	66002	67002	68002	69002	60051	60052	60052
@@ -118,6 +118,10 @@ assets\koopa.txt
 #4	192	500
 7	2320	384	16	16	2	70000	70001	70002	70003	
 
+#INVISIBLE WALL
+49	0	0	8	400	-1
+49	0	0	2816	8	-1
+49	2808	0	8	400	-1
 
 # FLOOR 1
 #type	x	y	type of brick
