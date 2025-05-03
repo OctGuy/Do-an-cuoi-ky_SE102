@@ -79,6 +79,17 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 
+	//Make sure mario doesnt go out of boundary
+	if (x < 8.f) x = 8.f;
+	if (y < 8.f) y = 8.f;
+
+	float rightBoundary;
+	float bottomBoundary;
+	CPlayScene* playScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+	playScene->GetBoundary(rightBoundary, bottomBoundary);
+
+	if (x > rightBoundary - MARIO_BIG_BBOX_WIDTH - 8.f) x = rightBoundary - MARIO_BIG_BBOX_WIDTH - 8.f;
+
 	//Handle Koopa Picking and Kicking
 	if (Koopa)
 	{
