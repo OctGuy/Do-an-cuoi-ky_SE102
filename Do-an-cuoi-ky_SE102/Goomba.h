@@ -14,13 +14,29 @@
 #define GOOMBA_BBOX_HEIGHT 16
 #define GOOMBA_BBOX_HEIGHT_DIE 7
 
+#define GOOMBA_OPENED_WING_BBOX_WIDTH 20
+#define GOOMBA_OPENED_WING_BBOX_HEIGHT 24
+#define GOOMBA_CLOSED_WING_BBOX_WIDTH 20
+#define GOOMBA_CLOSED_WING_BBOX_HEIGHT 19
+
 #define GOOMBA_DIE_TIMEOUT 500
 #define GOOMBA_DIE_REVERSE_TIMEOUT 1500
 
+#pragma region BASE_GOOMBA
 #define GOOMBA_STATE_RISE 100
 #define GOOMBA_STATE_WALKING 110
 #define GOOMBA_STATE_DIE 200
 #define GOOMBA_STATE_DIE_REVERSE 201
+#pragma endregion
+
+#pragma region WINGED_GOOMBA
+#define GOOMBA_WING_STATE_FLY 202
+#define GOOMBA_WING_STATE_WALKING 203
+#define GOOMBA_WING_STATE_HIGH_JUMP 204
+#define GOOMBA_WING_STATE_LOW_JUMP 205
+#define GOOMBA_WING_STATE_DIE 206
+#define GOOMBA_WING_STATE_DIE_REVERSE 207
+#pragma endregion
 
 #define GOOMBA_TEXTURE_IDLE 31001
 
@@ -38,6 +54,7 @@ protected:
 	float ay; 
 
 	int originalY;
+	int type;
 
 	//Need to create an enemy class and implement this instead of just goomba
 	int currentAniId = GOOMBA_TEXTURE_IDLE; 
@@ -60,6 +77,6 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	void OnCollisionWithTail(LPCOLLISIONEVENT e);
 public: 	
-	CGoomba(float x, float y);
+	CGoomba(float x, float y, int type);
 	virtual void SetState(int state);
 };
