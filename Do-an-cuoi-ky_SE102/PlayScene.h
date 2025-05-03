@@ -51,6 +51,7 @@ public:
 	virtual void Unload();
 
 	LPGAMEOBJECT GetPlayer() { return player; }
+	void GetBoundary(float& right, float& bottom) { right = rightBoundary; bottom = bottomBoundary; }
 
 	void Add(LPGAMEOBJECT obj) { objects.push_back(obj); }
 
