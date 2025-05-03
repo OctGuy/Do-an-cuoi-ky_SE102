@@ -157,6 +157,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (e->ny < 0 && abs(e->ny) > abs(e->nx))
 		{
 			isOnPlatform = true;
+			isInAir = false; // Reset isInAir to false
+			slowfall_start = 0;
 			float fill1, fill2, fill3; //I dont know how to get the bounding box of the object without these variable
 			e->obj->GetBoundingBox(fill1, currentFloorY, fill2, fill3);
 		}
