@@ -214,6 +214,13 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		break;
 	}
 
+	if (GetIsHeld()) {
+		DebugOut(L"[INFO] Koopa is held\n");
+	}
+	else {
+		DebugOut(L"[INFO] Koopa is not held\n");
+	}
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

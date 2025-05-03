@@ -111,6 +111,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
+
+	if (isAbleToHold) {
+		DebugOut(L"[INFO] Koopa is held\n");
+	}
+	else {
+		DebugOut(L"[INFO] Koopa is not held\n");
+	}
 }
 
 void CMario::AddPoint(int p, LPCOLLISIONEVENT e)
@@ -303,8 +310,10 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_SHAKING) {
 			if (isAbleToHold) { // pick
 				this->Koopa = e->obj;
+				//koopa->SetIsHeld(true);
 			}
 			else { // Kick
+				//koopa->SetIsHeld(false);
 				isKicking = true;
 				kick_start = GetTickCount64();
 				if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||

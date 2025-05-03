@@ -73,12 +73,13 @@ public:
 	}
 
 	void SetIsHeld(bool isHeld) { this->isHeld = isHeld; }
+	bool GetIsHeld() { return isHeld; }
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void SetState(int state);
 	int IsCollidable() {
-		return	1;
+		return state != KOOPA_STATE_DIE;
 	}
 
 	int IsBlocking() { return 0; }
