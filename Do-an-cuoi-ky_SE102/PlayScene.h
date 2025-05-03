@@ -28,6 +28,8 @@ protected:
 	vector<LPGAMEOBJECT> objects;
 
 	D3DXCOLOR backgroundColor;
+	float rightBoundary;
+	float bottomBoundary;
 
 	BOOLEAN isCameraFollowMarioY = false; //Keep track of whether the camera should follow Mario's Y position
 
@@ -36,6 +38,7 @@ protected:
 
 	void _ParseSection_ASSETS(string line);
 	void _ParseSection_OBJECTS(string line);
+	void _ParseSection_SETTINGS(string line);
 
 	void LoadAssets(LPCWSTR assetFile);
 	

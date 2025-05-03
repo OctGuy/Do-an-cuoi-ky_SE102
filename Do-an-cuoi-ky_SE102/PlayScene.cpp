@@ -25,11 +25,14 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	player = NULL;
 	key_handler = new CSampleKeyHandler(this);
 	backgroundColor = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f); // Default to black
+	rightBoundary = 0;
+	bottomBoundary = 0;
 }
 
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_ASSETS	1
 #define SCENE_SECTION_OBJECTS	2
+#define SCENE_SECTION_SETTINGS	3
 
 #define ASSETS_SECTION_UNKNOWN -1
 #define ASSETS_SECTION_SPRITES 1
@@ -308,6 +311,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	objects.push_back(obj);
 }
 
+void CPlayScene::_ParseSection_SETTINGS(string line)
+{
+	vector<string> tokens = split(line);
+	if (tokens.size() < 2) return;
+	if (tokens[0] == "right")
+		rightBoundary = (float)atof(tokens[1].c_str());
+	else if (tokens[0] == "bottom")
+		bottomBoundary = (float)atof(tokens[1].c_str());
+	else
+		DebugOut(L"[ERROR] Unknown scene setting: %s\n", ToWSTR(tokens[0]).c_str());
+}
+
 void CPlayScene::LoadAssets(LPCWSTR assetFile)
 {
 	DebugOut(L"[INFO] Start loading assets from : %s \n", assetFile);
@@ -363,6 +378,7 @@ void CPlayScene::Load()
 		if (line[0] == '#') continue;	// skip comment lines	
 		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
 		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; continue; };
+		if (line == "[SETTINGS]") { section = SCENE_SECTION_SETTINGS; continue; };
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
 
 		//
@@ -372,6 +388,7 @@ void CPlayScene::Load()
 		{ 
 			case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+			case SCENE_SECTION_SETTINGS: _ParseSection_SETTINGS(line); break;
 		}
 	}
 
@@ -483,11 +500,12 @@ void CPlayScene::Update(DWORD dt)
 	}
 
 	if (cx < 0) cx = 0;
-	//This is calculated to be roughly the end of the map (might need to be adjusted to fit diffrent map)
-	else if (cx > 2816.f - game->GetBackBufferWidth() - 8.f) cx = 2816.f - game->GetBackBufferWidth() - 8.f;
+
+	//Boundary is set in the scene file under SETTINGS section
+	else if (cx > rightBoundary - game->GetBackBufferWidth() - 9.f) cx = rightBoundary - game->GetBackBufferWidth() - 9.f;
 
 	if (cy < 0) cy = 0;
-	else if (cy > 220.f) cy = 220.f;
+	else if (cy > bottomBoundary) cy = bottomBoundary;
 
 	CGame::GetInstance()->SetCamPos(cx, cy);
 
