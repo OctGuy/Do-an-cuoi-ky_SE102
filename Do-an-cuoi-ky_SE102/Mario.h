@@ -7,9 +7,9 @@
 #include "Particle.h"
 #include "debug.h"
 
-#define MARIO_INITIAL_SPEED		0.04f
+#define MARIO_INITIAL_SPEED		0.05f
 
-#define MARIO_WALKING_SPEED		0.09f
+#define MARIO_WALKING_SPEED		0.10f
 #define MARIO_RUNNING_SPEED		0.20f
 
 #define MARIO_ACCEL_WALK_X	0.00008f

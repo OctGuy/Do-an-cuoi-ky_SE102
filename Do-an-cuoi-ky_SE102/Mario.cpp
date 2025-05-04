@@ -922,19 +922,19 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 
 void CMario::SetLevel(int l)
 {
+	level = l;
 	if (preLevel == MARIO_LEVEL_RACCOON || level == MARIO_LEVEL_RACCOON)
-		CGame::GetInstance()->FreezeGame(200); //200 is the time it take to transform to and from raccon
+		CGame::GetInstance()->FreezeGame(240); //240 is the time it take to transform to and from raccon
 	else
 		CGame::GetInstance()->FreezeGame(); //The amount time freeze is unmodified
 
 	SetState(MARIO_STATE_IDLE);
 
 	// Adjust position to avoid falling off platform
-	if (this->level == MARIO_LEVEL_SMALL)
+	if (this->preLevel == MARIO_LEVEL_SMALL)
 	{
 		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
 	}
-	level = l;
 }
 
 void CMario::GetHurt()
