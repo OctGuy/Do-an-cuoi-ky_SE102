@@ -297,7 +297,9 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 				: KOOPA_STATE_SHELL_IDLE);
 		}
 		else if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
-			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE) 
+			koopa->GetState() == KOOPA_STATE_SHELL_SHAKING ||
+			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE ||
+			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_SHAKING)
 		{
 			if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
 				koopa->GetState() == KOOPA_STATE_SHELL_SHAKING)
