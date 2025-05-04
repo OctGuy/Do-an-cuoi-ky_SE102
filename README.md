@@ -85,7 +85,7 @@
 - Bug fixes and adding boundary to map (Phong)
 
 3/5/2025
-Animation Adjustment (Phong)
+- Animation Adjustment (Phong)
 
 4/5/2025
-Animation Adjustment (Phong)
+- Bug fixes and Animation Adjustment (Phong)
