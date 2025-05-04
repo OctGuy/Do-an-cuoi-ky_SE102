@@ -49,7 +49,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	ULONGLONG now = GetTickCount64();
 
 	// reset untouchable timer if untouchable time has passed
-	if (now - slowfall_start > MARIO_SLOW_FALL_DURATION)
+	if ((now - slowfall_start > MARIO_SLOW_FALL_DURATION) || vy == 0)
 	{
 		//DebugOut(L"Time Out\n");
 		slowfall_start = 0;
@@ -65,6 +65,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 
+	//Speacial animation timing (i want to make it so that the animation is not interrupted but this is the easiest method i can think of)
 	if (now - tailAttack_start > MARIO_TAIL_ATTACK_TIME)
 	{
 		tailAttack_start = 0;
@@ -122,6 +123,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
+
+	DebugOut(L"Is On Platform: %d\n", isOnPlatform);
 }
 
 void CMario::AddPoint(int p, LPCOLLISIONEVENT e)
@@ -157,7 +160,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (e->ny < 0 && abs(e->ny) > abs(e->nx))
 		{
 			isOnPlatform = true;
-			isInAir = false; // Reset isInAir to false
+			isInAir = false; // Reset isInAir to false because mario hit his head (OUCH!)
 			slowfall_start = 0;
 			float fill1, fill2, fill3; //I dont know how to get the bounding box of the object without these variable
 			e->obj->GetBoundingBox(fill1, currentFloorY, fill2, fill3);
@@ -588,7 +591,7 @@ int CMario::GetAniIdRaccoon()
 	}
 	else if (!isOnPlatform)
 	{
-		if (abs(vx) == MARIO_RUNNING_SPEED)
+		if (abs(vx) == MARIO_RUNNING_SPEED|| (isInAir && vy < 0))
 		{
 			if (isInAir)
 				if (nx >= 0)
@@ -839,10 +842,10 @@ void CMario::SetState(int state)
 		if (isOnPlatform && level != MARIO_LEVEL_SMALL)
 		{
 			state = MARIO_STATE_IDLE;
-			isSitting = true;
 			//vx = 0; vy = 0.0f;
 			if (!isSitting)
 				y += MARIO_SIT_HEIGHT_ADJUST;
+			isSitting = true;
 		}
 		break;
 
