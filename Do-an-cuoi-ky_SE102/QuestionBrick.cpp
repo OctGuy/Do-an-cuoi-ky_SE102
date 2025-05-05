@@ -91,6 +91,10 @@ void CQuestionBrick::Activate()
         {
             item = new CPSwitch(x, y - 13.f);
             playScene->Add(item);
+            CGame* game = CGame::GetInstance();
+            CPlayScene* scene = (CPlayScene*)game->GetCurrentScene();
+			CParticle* smoke = new CParticle(x, y - 13.f, PARTICLE_TYPE_SMOKE);
+			playScene->Add(smoke);
         }
         else
         {

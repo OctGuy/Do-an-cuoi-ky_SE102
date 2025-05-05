@@ -34,6 +34,8 @@ void CParticle::Render()
 		aniID = ID_ANI_PARTICLE_BRICK;
 	else if (type == PARTICLE_TYPE_BRICK_REVERSED || type == PARTICLE_TYPE_BRICK_REVERSED_LOW)
 		aniID = ID_ANI_PARTICLE_BRICK_REVERSED;
+	else if (type == PARTICLE_TYPE_SMOKE)
+		aniID = ID_ANI_PARTICLE_SMOKE;
 
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(aniID)->Render(x, y);
