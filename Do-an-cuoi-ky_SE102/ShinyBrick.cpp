@@ -13,6 +13,18 @@ void CShinyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CShinyBrick::Activate()
 {
+	CGame* game = CGame::GetInstance();
+	CPlayScene* scene = (CPlayScene*)game->GetCurrentScene();
+	CParticle* brick_bit = new CParticle(x, y, PARTICLE_TYPE_BRICK);
+    CParticle* brick_bit_low = new CParticle(x, y, PARTICLE_TYPE_BRICK_LOW);
+	CParticle* brick_bit_reversed = new CParticle(x, y, PARTICLE_TYPE_BRICK_REVERSED);
+	CParticle* brick_bit_reversed_low = new CParticle(x, y, PARTICLE_TYPE_BRICK_REVERSED_LOW);
+
+	scene->Add(brick_bit);
+	scene->Add(brick_bit_low);
+	scene->Add(brick_bit_reversed);
+	scene->Add(brick_bit_reversed_low);
+
     // Special activation condition will be checked here in the future
     if (IsActivationConditionMet())
     {

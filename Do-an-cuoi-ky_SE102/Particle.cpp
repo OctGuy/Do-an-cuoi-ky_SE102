@@ -2,8 +2,19 @@
 
 void CParticle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+    ULONGLONG now = GetTickCount64();
+
+	if (type == PARTICLE_TYPE_BRICK || type == PARTICLE_TYPE_BRICK_LOW || 
+        type == PARTICLE_TYPE_BRICK_REVERSED || type == PARTICLE_TYPE_BRICK_REVERSED_LOW)
+	{
+		if (now - creationTime >= PARTICLE_BRICK_LIFE_TIME/3)
+		{
+			vy = 0.26f;
+		}
+	}
+
     // Automatically delete the particle after its lifetime
-    if (GetTickCount64() - creationTime >= lifetime)
+    if (now - creationTime >= lifetime)
     {
         this->Delete();
     }
@@ -19,6 +30,10 @@ void CParticle::Render()
 		aniID = ID_ANI_PARTICLE_POINT;
 	else if (type == PARTICLE_TYPE_HIT)
 		aniID = ID_ANI_PARTICLE_HIT;
+	else if (type == PARTICLE_TYPE_BRICK || type == PARTICLE_TYPE_BRICK_LOW)
+		aniID = ID_ANI_PARTICLE_BRICK;
+	else if (type == PARTICLE_TYPE_BRICK_REVERSED || type == PARTICLE_TYPE_BRICK_REVERSED_LOW)
+		aniID = ID_ANI_PARTICLE_BRICK_REVERSED;
 
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(aniID)->Render(x, y);
