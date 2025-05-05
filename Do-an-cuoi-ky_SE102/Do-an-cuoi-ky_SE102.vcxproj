@@ -156,6 +156,7 @@
     <ClCompile Include="QuestionBrick.cpp" />
     <ClCompile Include="RaccoonTail.cpp" />
     <ClCompile Include="SampleKeyEventHandler.cpp" />
+    <ClCompile Include="ShinyBrick.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="PowerUp.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="RaccoonTail.h" />
     <ClInclude Include="SampleKeyEventHandler.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="ShinyBrick.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="PowerUp.h" />

@@ -16,6 +16,7 @@
 #include "Koopa.h"
 #include "RaccoonTail.h"
 #include "Wall.h"
+#include "ShinyBrick.h"
 
 using namespace std;
 
@@ -166,6 +167,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				objects.back()->SetActive(false);
 			}
 
+			break;
+
+		case OBJECT_TYPE_SHINY_BRICK:
+			type = atoi(tokens[3].c_str());
+			obj = new CShinyBrick(x, y, type);
 			break;
 
 		case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
