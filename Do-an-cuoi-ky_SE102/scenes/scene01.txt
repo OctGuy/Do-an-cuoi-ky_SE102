@@ -12,6 +12,7 @@ assets\box.txt
 assets\powerup.txt
 assets\pipe.txt
 assets\piranha_plant.txt
+assets\pswitch.txt
 assets\particle.txt
 assets\scenery_object.txt
 assets\fire_bullet.txt
@@ -240,6 +241,9 @@ assets\koopa.txt
 23	2096	384	30
 23	2096	400	30
 23	2112	400	30
+
+24	2112	384	0
+
 # COIN
 4	1073	320	
 4	1105	288

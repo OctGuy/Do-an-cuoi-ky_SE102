@@ -11,6 +11,7 @@
 #include "ShinyBrick.h"
 #include "PiranhaPlant.h"
 #include "Koopa.h"
+#include "PSwitch.h"
 
 #include "Collision.h"
 
@@ -212,6 +213,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		OnCollisionWithBrick(e);
 	}
+	else if (dynamic_cast<CPSwitch*>(e->obj))
+	{
+		OnCollisionWithPSwitch(e);
+	}
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -252,6 +257,15 @@ void CMario::OnCollisionWithPowerUp(LPCOLLISIONEVENT e)
 	e->obj->Delete();
 	AddPoint(1000, e);
 
+}
+
+void CMario::OnCollisionWithPSwitch(LPCOLLISIONEVENT e)
+{
+	CPSwitch* pSwitch = dynamic_cast<CPSwitch*>(e->obj);
+	if (e->ny < 0 && pSwitch)
+	{
+		pSwitch->Activate();
+	}
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
