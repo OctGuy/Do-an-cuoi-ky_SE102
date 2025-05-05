@@ -8,6 +8,7 @@
 #include "Coin.h"
 #include "Portal.h"
 #include "QuestionBrick.h"
+#include "ShinyBrick.h"
 #include "PiranhaPlant.h"
 #include "Koopa.h"
 
@@ -171,7 +172,11 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		vx = 0;
 	}
 
-	if (dynamic_cast<CQuestionBrick*>(e->obj))
+	if (dynamic_cast<CShinyBrick*>(e->obj))
+	{
+		OnCollisionWithShinyBrick(e);
+	}
+	else if (dynamic_cast<CQuestionBrick*>(e->obj))
 	{
 		OnCollisionWithQuestionBrick(e);
 	}
@@ -225,6 +230,13 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 	CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
 	if (e->ny > 0 && questionBrick)
 		questionBrick->Activate();
+}
+
+void CMario::OnCollisionWithShinyBrick(LPCOLLISIONEVENT e)
+{
+	CShinyBrick* shinyBrick = dynamic_cast<CShinyBrick*>(e->obj);
+	if (e->ny > 0 && shinyBrick)
+		shinyBrick->Activate();
 }
 
 void CMario::OnCollisionWithPowerUp(LPCOLLISIONEVENT e)
