@@ -1,4 +1,6 @@
 #include "ShinyBrick.h"
+#include "Game.h"
+#include "PlayScene.h"
 
 void CShinyBrick::Render()
 {
@@ -25,12 +27,6 @@ void CShinyBrick::Activate()
 	scene->Add(brick_bit_reversed);
 	scene->Add(brick_bit_reversed_low);
 
-    // Special activation condition will be checked here in the future
-    if (IsActivationConditionMet())
-    {
-        ActivateItem();
-    }
-
     // Delete itself immediately after activation
     Delete();
 }
@@ -49,21 +45,4 @@ void CShinyBrick::SetState(int state)
         Activate();
         break;
     }
-}
-
-void CShinyBrick::ActivateItem()
-{
-    //if (item == NULL) return;
-
-    //// Same implementation as parent class
-    //item->SetPosition(x, y);
-    //item->SetActive(true);
-    //item = NULL;
-}
-
-bool CShinyBrick::IsActivationConditionMet()
-{
-    // Placeholder function to be implemented later
-    // For now, always return true so item activates
-    return true;
 }

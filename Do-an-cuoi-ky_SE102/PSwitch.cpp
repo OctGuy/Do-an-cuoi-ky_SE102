@@ -41,14 +41,16 @@ void CPSwitch::Render()
     {
         CAnimations::GetInstance()->Get(ANI_ID_PSWTICH_UNACTIVATED)->Render(x, y);
     }
+
+	RenderBoundingBox();
 }
 
 void CPSwitch::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
     left = x;
     top = y;
-    right = x + 16; // Example width
-    bottom = y + 16; // Example height
+    right = x + 15.f; // Example width
+    bottom = y + 14.f; // Example height
 }
 
 void CPSwitch::SwitchCoinBricks(std::vector<LPGAMEOBJECT>* coObjects)

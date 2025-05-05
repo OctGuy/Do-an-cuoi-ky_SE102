@@ -1,4 +1,13 @@
 #include "QuestionBrick.h"
+#include "Coin.h"
+#include "PowerUp.h"
+#include "Koopa.h"
+#include "RaccoonTail.h"
+#include "PSwitch.h"
+#include "Game.h"
+#include "PlayScene.h"
+#include "Animations.h"
+#include "Collision.h"
 
 CMario* CQuestionBrick::GetPlayer()
 {
@@ -74,15 +83,15 @@ void CQuestionBrick::Activate()
 
         if (itemType == ITEM_TYPE_COIN)
         {
-            item = new CCoin(x, y);
+            item = new CCoin(x, y - 16.f);
             playScene->Add(item);
 			ActivateItem();
 		}
-        //else if (itemType == ITEM_TYPE_PSWITCH)
-        //{
-        //    item = new CPSwitch(x, y);
-        //    playScene->Add(item);
-        //}
+        else if (itemType == ITEM_TYPE_PSWITCH)
+        {
+            item = new CPSwitch(x, y - 13.f);
+            playScene->Add(item);
+        }
         else
         {
 			item = new CPowerUp(x, y);
@@ -115,7 +124,6 @@ void CQuestionBrick::ActivateItem()
 {
     if (item == NULL) return;
 	//THE ORDER OF THESE FUNCTIONS MATTER
-    item->SetPosition(x, y);
     item->SetActive(true);
     item->SetState(100); //100 is STATE_ACTIVE for all item (lazy implementation)
 	item = NULL; // Set item to NULL to prevent access error (PAINFUL LESSON)

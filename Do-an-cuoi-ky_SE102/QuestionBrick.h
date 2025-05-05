@@ -1,13 +1,15 @@
 #pragma once
 #include "Brick.h"
 #include "GameObject.h"
-#include "Mario.h" // Ensure this is included to define CMario
+#include "Mario.h"
 #include "debug.h"
-#include "Coin.h"
-#include "PowerUp.h"
-#include "Koopa.h"
-#include "RaccoonTail.h"
-//#include "PSwitch.h"
+
+// Forward declarations instead of includes
+class CCoin;
+class CPowerUp;
+class CKoopa;
+class CRaccoonTail;
+class CPSwitch;
 
 #define BRICK_BOUNCE_SPEED 0.1f
 #define BRICK_BOUNCE_HEIGHT 10.0f
@@ -23,7 +25,7 @@ class CQuestionBrick : public CBrick
     LPGAMEOBJECT item; // Pointer to Item for easier manipulation
     BOOLEAN hasItem;
 
-	int itemType; // Type of item in the brick
+    int itemType; // Type of item in the brick
     BOOLEAN isHit;
     float originalY;
     DWORD bounceStart;
@@ -34,7 +36,7 @@ public:
     {
         item = NULL;
         hasItem = false;
-		this->itemType = itemType;
+        this->itemType = itemType;
 
         isHit = false;
         originalY = y;
@@ -56,5 +58,5 @@ public:
     void Activate();
     void ActivateItem();
 
-    CMario* GetPlayer(); // No changes needed here
+    CMario* GetPlayer(); 
 };

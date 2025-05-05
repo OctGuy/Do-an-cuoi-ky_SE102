@@ -13,8 +13,4 @@ public:
     void Render();
     void SetState(int state);
     void Activate();
-    void ActivateItem();
-    
-    // Method to check special activation condition (to be implemented later)
-    virtual bool IsActivationConditionMet();
 };
