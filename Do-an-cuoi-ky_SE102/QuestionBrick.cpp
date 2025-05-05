@@ -50,7 +50,7 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
             if (!isBouncingFinished) // After brick stop bouncing, activate non-coin item
             {
                 isBouncingFinished = true;
-                if (!dynamic_cast<CCoin*>(item)) 
+                if (itemType != ITEM_TYPE_COIN)
                 {
                     ActivateItem();
                 }
@@ -69,15 +69,28 @@ void CQuestionBrick::Activate()
     if (!isHit)
     {
         CMario* mario = GetPlayer();
+        CPlayScene* playScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
         SetState(BRICK_STATE_BOUNCE);
-        if (dynamic_cast<CCoin*>(item)) //Only activate coin immidiately
-            ActivateItem();
+
+        if (itemType == ITEM_TYPE_COIN)
+        {
+            item = new CCoin(x, y);
+            playScene->Add(item);
+			ActivateItem();
+		}
+        //else if (itemType == ITEM_TYPE_PSWITCH)
+        //{
+        //    item = new CPSwitch(x, y);
+        //    playScene->Add(item);
+        //}
         else
         {
+			item = new CPowerUp(x, y);
             if (mario->GetLevel() == MARIO_LEVEL_SMALL)
                 dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_MUSHROOM);
             else
                 dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_LEAF);
+            playScene->Add(item);
         }
     }
 }
