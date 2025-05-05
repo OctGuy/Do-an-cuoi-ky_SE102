@@ -153,9 +153,11 @@
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Portal.cpp" />
+    <ClCompile Include="PSwitch.cpp" />
     <ClCompile Include="QuestionBrick.cpp" />
     <ClCompile Include="RaccoonTail.cpp" />
     <ClCompile Include="SampleKeyEventHandler.cpp" />
+    <ClCompile Include="ShinyBrick.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="PowerUp.cpp" />
@@ -188,10 +190,12 @@
     <ClInclude Include="Platform.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Portal.h" />
+    <ClInclude Include="PSwitch.h" />
     <ClInclude Include="QuestionBrick.h" />
     <ClInclude Include="RaccoonTail.h" />
     <ClInclude Include="SampleKeyEventHandler.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="ShinyBrick.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="PowerUp.h" />

@@ -31,6 +31,7 @@ public:
     void OnCollisionWith(LPCOLLISIONEVENT e) override;
     void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
     void OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithShinyBrick(LPCOLLISIONEVENT e);
     void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
     void OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e);
 

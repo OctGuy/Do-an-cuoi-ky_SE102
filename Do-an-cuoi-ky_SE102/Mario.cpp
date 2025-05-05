@@ -8,8 +8,10 @@
 #include "Coin.h"
 #include "Portal.h"
 #include "QuestionBrick.h"
+#include "ShinyBrick.h"
 #include "PiranhaPlant.h"
 #include "Koopa.h"
+#include "PSwitch.h"
 
 #include "Collision.h"
 
@@ -124,7 +126,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
-	DebugOut(L"Is On Platform: %d\n", isOnPlatform);
+	//DebugOut(L"Is On Platform: %d\n", isOnPlatform);
 }
 
 void CMario::AddPoint(int p, LPCOLLISIONEVENT e)
@@ -171,7 +173,11 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		vx = 0;
 	}
 
-	if (dynamic_cast<CQuestionBrick*>(e->obj))
+	if (dynamic_cast<CShinyBrick*>(e->obj))
+	{
+		OnCollisionWithShinyBrick(e);
+	}
+	else if (dynamic_cast<CQuestionBrick*>(e->obj))
 	{
 		OnCollisionWithQuestionBrick(e);
 	}
@@ -207,6 +213,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		OnCollisionWithBrick(e);
 	}
+	else if (dynamic_cast<CPSwitch*>(e->obj))
+	{
+		OnCollisionWithPSwitch(e);
+	}
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -227,6 +237,13 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 		questionBrick->Activate();
 }
 
+void CMario::OnCollisionWithShinyBrick(LPCOLLISIONEVENT e)
+{
+	CShinyBrick* shinyBrick = dynamic_cast<CShinyBrick*>(e->obj);
+	if (e->ny > 0 && shinyBrick)
+		shinyBrick->Activate();
+}
+
 void CMario::OnCollisionWithPowerUp(LPCOLLISIONEVENT e)
 {
 	if (dynamic_cast<CPowerUp*>(e->obj)->GetType() == POWER_UP_TYPE_LEAF && level != MARIO_LEVEL_RACCOON)
@@ -240,6 +257,15 @@ void CMario::OnCollisionWithPowerUp(LPCOLLISIONEVENT e)
 	e->obj->Delete();
 	AddPoint(1000, e);
 
+}
+
+void CMario::OnCollisionWithPSwitch(LPCOLLISIONEVENT e)
+{
+	CPSwitch* pSwitch = dynamic_cast<CPSwitch*>(e->obj);
+	if (e->ny < 0 && pSwitch)
+	{
+		pSwitch->Activate();
+	}
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)

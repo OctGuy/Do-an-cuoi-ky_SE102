@@ -16,6 +16,8 @@
 #include "Koopa.h"
 #include "RaccoonTail.h"
 #include "Wall.h"
+#include "ShinyBrick.h"
+#include "PSwitch.h"
 
 using namespace std;
 
@@ -110,6 +112,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	float y = (float)atof(tokens[2].c_str());
 
 	CGameObject *obj = NULL;
+
 	int type = 0;
 
 	switch (object_type)
@@ -156,21 +159,38 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 
 		case OBJECT_TYPE_QUESTION_BRICK:
+		{
 			type = atoi(tokens[3].c_str());
-			obj = new CQuestionBrick(x, y, type);
-			//WARNING: load item you want the quesiton brick to contain first then load the brick
+			int itemType = atoi(tokens[4].c_str());
+			obj = new CQuestionBrick(x, y, type, itemType);
+			break;
+		}
 
-			if (!objects.empty())
-			{
-				((CQuestionBrick*)obj)->SetItem(objects.back());
-				objects.back()->SetActive(false);
-			}
-
+		case OBJECT_TYPE_SHINY_BRICK:
+			type = atoi(tokens[3].c_str());
+			obj = new CShinyBrick(x, y, type);
 			break;
 
 		case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 
 		case OBJECT_TYPE_POWER_UP: obj = new CPowerUp(x, y); break;
+
+		case OBJECT_TYPE_PSWTICH:
+		{
+			//float numberOfShinyBrick = (float)atof(tokens[3].c_str());
+			obj = new CPSwitch(x, y);
+
+			//for(int i = 0; i < numberOfShinyBrick; i++)
+			//{
+			//	if (!objects.empty())
+			//	{
+			//		dynamic_cast<CPSwitch*>(obj)->AddShinyBrick(objects[objects.size() - i]);
+			//		objects.back()->SetActive(false);
+			//	}
+			//}
+
+			break;
+		}
 
 		case OBJECT_TYPE_PLATFORM:
 		{
