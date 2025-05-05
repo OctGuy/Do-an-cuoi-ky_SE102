@@ -4,6 +4,7 @@
 #include "Koopa.h"  
 #include "debug.h" 
 #include "QuestionBrick.h"
+#include "ShinyBrick.h"
 #include "PiranhaPlant.h"
 
 void CRaccoonTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -47,6 +48,10 @@ void CRaccoonTail::OnCollisionWith(LPCOLLISIONEVENT e)
         currentScene->Add(particle);
         mario->AddPoint(100, e);
     }
+    else if (dynamic_cast<CShinyBrick*>(e->obj))
+    {
+        OnCollisionWithShinyBrick(e);
+    }
     else if (dynamic_cast<CQuestionBrick*>(e->obj))
     {
         OnCollisionWithQuestionBrick(e);
@@ -77,6 +82,13 @@ void CRaccoonTail::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
     CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
     if (!questionBrick->IsHit())
         questionBrick->Activate();
+}
+
+void CRaccoonTail::OnCollisionWithShinyBrick(LPCOLLISIONEVENT e)
+{
+	DebugOut(L"[INFO] RaccoonTail hit shinybrick\n");
+	CShinyBrick* shinyBrick = dynamic_cast<CShinyBrick*>(e->obj);
+	shinyBrick->Activate();
 }
 
 void CRaccoonTail::OnCollisionWithKoopa(LPCOLLISIONEVENT e)

@@ -124,7 +124,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
-	DebugOut(L"Is On Platform: %d\n", isOnPlatform);
+	//DebugOut(L"Is On Platform: %d\n", isOnPlatform);
 }
 
 void CMario::AddPoint(int p, LPCOLLISIONEVENT e)
