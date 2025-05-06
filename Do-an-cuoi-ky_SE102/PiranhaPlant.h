@@ -75,7 +75,9 @@ public:
 	void SetState(int state);
 	void Shoot(int direction);
 	bool IsTargetInRange();	
+
 	CMario* GetPlayer();
+
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 };
 

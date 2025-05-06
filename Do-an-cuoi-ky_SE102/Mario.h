@@ -323,5 +323,6 @@ public:
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
-	//CKoopa* GetKoopa() { return Koopa ? dynamic_cast<CKoopa*>(Koopa) : NULL; }
+	LPGAMEOBJECT GetKoopa() { return Koopa; }
+	void SetKoopa(LPGAMEOBJECT koopa) { Koopa = koopa; }
 };

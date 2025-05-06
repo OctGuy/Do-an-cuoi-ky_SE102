@@ -82,7 +82,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//Handle Koopa Picking and Kicking
 	if (Koopa)
 	{
-		Koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * 2.f, y - 3.f);
+		if (level != MARIO_LEVEL_RACCOON)
+			Koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * 2.f, y - 3.f);
+		else 
+			Koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * 6.5f, y - 3.f);
 		Koopa->SetSpeed(0, 0);
 		//If koopa is out of shell while mario is still holding it, mario is hurt
 		if (Koopa->GetState() == KOOPA_STATE_WALKING_LEFT ||
@@ -115,6 +118,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
+
+	/*if (dynamic_cast<CKoopa*>(Koopa)->GetState() == KOOPA_STATE_DIE)
+	{
+		Koopa = NULL;
+	}*/
 }
 
 void CMario::AddPoint(int p, LPCOLLISIONEVENT e)

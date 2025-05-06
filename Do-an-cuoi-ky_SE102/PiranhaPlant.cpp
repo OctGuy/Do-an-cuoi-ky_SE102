@@ -189,7 +189,7 @@ void CPiranhaPlant::OnCollisionWith(LPCOLLISIONEVENT e) {
 		else {
 			koopa->SetState(KOOPA_STATE_SHELL_MOVE);
 			DebugOut(L"Koopa is collided with Piranha when Mario kick\n");
-			koopa->SetSpeed(-0.1f, 0);
+			koopa->SetSpeed(nx * 0.1f, 0);
 		}
 
 		SetState(PIRANHA_STATE_DIE);

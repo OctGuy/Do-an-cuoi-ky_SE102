@@ -57,6 +57,9 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+	CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+	
 	// Then handle other collision checks
 	//if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CGoomba*>(e->obj)) return;
@@ -81,8 +84,11 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 				|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
 				SetState(GOOMBA_STATE_DIE_REVERSE);
 				//Add point to player
-				CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
-				CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+				mario->AddPoint(100, e);
+			}
+			else if (koopa->GetIsHeld()) {
+				SetState(GOOMBA_STATE_DIE_REVERSE);
+				koopa->SetState(KOOPA_STATE_DIE);
 				mario->AddPoint(100, e);
 			}
 		}
