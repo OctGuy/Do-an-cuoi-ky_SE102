@@ -287,7 +287,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 			AddPoint(100, e);
 		}
 	}
-	else if (goomba->GetState() != GOOMBA_STATE_DIE)
+	else if (goomba->GetState() != GOOMBA_STATE_DIE || goomba->GetState() != GOOMBA_STATE_DIE_REVERSE)
 	{
 		GetHurt();
 	}
