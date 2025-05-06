@@ -96,7 +96,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//Handle Koopa Picking and Kicking
 	if (Koopa)
 	{
-		Koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * 2.f, y - 3.f);
+		if (level != MARIO_LEVEL_RACCOON)
+			Koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * 2.f, y - 3.f);
+		else 
+			Koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * 6.5f, y - 3.f);
 		Koopa->SetSpeed(0, 0);
 		//If koopa is out of shell while mario is still holding it, mario is hurt
 		if (Koopa->GetState() == KOOPA_STATE_WALKING_LEFT ||
@@ -107,6 +110,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				Koopa->SetState(KOOPA_STATE_WALKING_RIGHT);
 			else
 				Koopa->SetState(KOOPA_STATE_WALKING_LEFT);
+
+			dynamic_cast<CKoopa*>(Koopa)->SetIsHeld(false);
 			Koopa = NULL;
 		}
 		else
@@ -121,12 +126,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				else
 					Koopa->SetState(KOOPA_STATE_SHELL_REVERSE_MOVE);
 				Koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
+
+				dynamic_cast<CKoopa*>(Koopa)->SetIsHeld(false);
 				Koopa = NULL;
 			}
 		}
 	}
-
-	//DebugOut(L"Is On Platform: %d\n", isOnPlatform);
 }
 
 void CMario::AddPoint(int p, LPCOLLISIONEVENT e)
@@ -347,8 +352,10 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_SHAKING) {
 			if (isAbleToHold) { // pick
 				this->Koopa = e->obj;
+				koopa->SetIsHeld(true);
 			}
 			else { // Kick
+				//koopa->SetIsHeld(false);
 				isKicking = true;
 				kick_start = GetTickCount64();
 				if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
@@ -717,7 +724,7 @@ void CMario::Render()
 		aniId = GetAniIdRaccoon();
 	animations->Get(aniId)->Render(x, y);
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 
 	DebugOutTitle(L"Coins: %d", coin);
 }
@@ -945,9 +952,9 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 	else
 	{
 		left = x - MARIO_SMALL_BBOX_WIDTH / 2;
-		top = y - MARIO_SMALL_BBOX_HEIGHT / 2;
+		top = y - 2.0f - MARIO_SMALL_BBOX_HEIGHT / 2;
 		right = left + MARIO_SMALL_BBOX_WIDTH;
-		bottom = top + MARIO_SMALL_BBOX_HEIGHT;
+		bottom = top + MARIO_SMALL_BBOX_HEIGHT + 2.0f;
 	}
 }
 

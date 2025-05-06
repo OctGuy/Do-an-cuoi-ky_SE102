@@ -27,7 +27,7 @@
 #define PIRANHA_HIDE_TIMEOUT 2500
 #define PIRANHA_SNIP_TIMEOUT 3500
 #define PIRANHA_WAIT_FOR_SHOOT_TIMEOUT 2000
-#define PIRANHA_DIE_TIMEOUT 1500
+#define PIRANHA_DIE_TIMEOUT 205
 
 #pragma region PIRANHA_STATE_ID
 #define PIRANHA_STATE_HIDE 300
@@ -75,7 +75,9 @@ public:
 	void SetState(int state);
 	void Shoot(int direction);
 	bool IsTargetInRange();	
+
 	CMario* GetPlayer();
+
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 };
 

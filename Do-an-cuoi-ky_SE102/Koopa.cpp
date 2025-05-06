@@ -175,6 +175,11 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	//DebugOut(L"[INFO] Koopa velocity: %f %f\n", vx, vy);
 
+	 // Kiểm tra nếu Koopa đang ở trạng thái DIE
+	if (state == KOOPA_STATE_DIE && player && player->GetKoopa() == this) {
+		player->SetKoopa(NULL); // Đặt Koopa của Mario thành NULL
+	}
+
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -203,7 +208,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	case KOOPA_STATE_SHELL_REVERSE_SHAKING:
 		if (now - stateShakingStart > KOOPA_SHELL_SHAKING_DURATION) {
 			//DebugOut(L"[INFO] Koopa is out of shell\n");
-			vy = -0.4;
+			vy = -0.15;
 			SetState(KOOPA_STATE_WALKING_LEFT);
 		}
 		break;
@@ -213,6 +218,13 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		}
 		break;
 	}
+
+	/*if (IsCollidable()) {
+		DebugOut(L"[INFO] Koopa can hit\n");
+	}
+	else {
+		DebugOut(L"[INFO] Koopa can not hit\n");
+	}*/
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);

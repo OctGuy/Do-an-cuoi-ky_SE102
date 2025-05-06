@@ -178,12 +178,22 @@ bool CPiranhaPlant::IsTargetInRange() {
 }
 
 void CPiranhaPlant::OnCollisionWith(LPCOLLISIONEVENT e) {
+	CMario* mario = GetPlayer();
+
 	if (dynamic_cast<CKoopa*>(e->obj)) {
-		SetState(PIRANHA_STATE_DIE);
 		CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
-		koopa->SetState(KOOPA_STATE_DIE);
-		GetPlayer()->AddPoint(100, e);
-		//die_start = GetTickCount64();
+		if (koopa->GetIsHeld()) {
+			koopa->SetState(KOOPA_STATE_DIE);
+			DebugOut(L"Koopa is collided with Piranha when Mario hold\n");
+		}
+		else {
+			koopa->SetState(KOOPA_STATE_SHELL_MOVE);
+			DebugOut(L"Koopa is collided with Piranha when Mario kick\n");
+			koopa->SetSpeed(nx * 0.1f, 0);
+		}
+
+		SetState(PIRANHA_STATE_DIE);
+		die_start = GetTickCount64();
 	}
 }
 

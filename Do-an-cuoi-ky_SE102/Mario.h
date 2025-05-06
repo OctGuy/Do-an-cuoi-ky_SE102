@@ -305,6 +305,8 @@ public:
 	BOOLEAN IsInAir() { return isInAir; }
 	BOOLEAN IsTailAttacking() { return isTailAttacking; }
 
+	BOOLEAN IsHoldingKoopa() { return isAbleToHold; }
+
 	//Update coin and point
 	void AddCoin() { coin++;}
 	void AddPoint(int p, LPCOLLISIONEVENT e = NULL);
@@ -322,4 +324,7 @@ public:
 	void StartTailAttack() { isTailAttacking = true; tailAttack_start = GetTickCount64(); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+
+	LPGAMEOBJECT GetKoopa() { return Koopa; }
+	void SetKoopa(LPGAMEOBJECT koopa) { Koopa = koopa; }
 };

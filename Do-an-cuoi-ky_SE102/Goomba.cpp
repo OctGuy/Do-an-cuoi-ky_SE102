@@ -1,6 +1,6 @@
 #include "Goomba.h"
 
-CGoomba::CGoomba(float x, float y):CGameObject(x, y)
+CGoomba::CGoomba(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = 0;
@@ -8,19 +8,19 @@ CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 	SetState(GOOMBA_STATE_WALKING);
 }
 
-void CGoomba::GetBoundingBox(float &left, float &top, float &right, float &bottom)
+void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	if (state == GOOMBA_STATE_DIE)
 	{
-		left = x - GOOMBA_BBOX_WIDTH/2;
-		top = y - GOOMBA_BBOX_HEIGHT_DIE/2;
+		left = x - GOOMBA_BBOX_WIDTH / 2;
+		top = y - GOOMBA_BBOX_HEIGHT_DIE / 2;
 		right = left + GOOMBA_BBOX_WIDTH;
 		bottom = top + GOOMBA_BBOX_HEIGHT_DIE;
 	}
 	else
-	{ 
-		left = x - GOOMBA_BBOX_WIDTH/2;
-		top = y - GOOMBA_BBOX_HEIGHT/2;
+	{
+		left = x - GOOMBA_BBOX_WIDTH / 2;
+		top = y - GOOMBA_BBOX_HEIGHT / 2;
 		right = left + GOOMBA_BBOX_WIDTH;
 		bottom = top + GOOMBA_BBOX_HEIGHT;
 	}
@@ -57,6 +57,9 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+	CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+	
 	// Then handle other collision checks
 	//if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CGoomba*>(e->obj)) return;
@@ -69,7 +72,7 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (e->nx != 0)
 	{
 		if (e->obj->IsBlocking()) {
-			if(e->nx > 0)
+			if (e->nx > 0)
 				vx = GOOMBA_WALKING_SPEED;
 			else
 				vx = -GOOMBA_WALKING_SPEED;
@@ -81,8 +84,11 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 				|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
 				SetState(GOOMBA_STATE_DIE_REVERSE);
 				//Add point to player
-				CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
-				CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+				mario->AddPoint(100, e);
+			}
+			else if (koopa->GetIsHeld()) {
+				SetState(GOOMBA_STATE_DIE_REVERSE);
+				koopa->SetState(KOOPA_STATE_DIE);
 				mario->AddPoint(100, e);
 			}
 		}
@@ -101,7 +107,7 @@ void CGoomba::Render()
 
 	//Render Normally
 	int aniId = ID_ANI_GOOMBA_WALKING;
-	if (state == GOOMBA_STATE_DIE) 
+	if (state == GOOMBA_STATE_DIE)
 	{
 		aniId = ID_ANI_GOOMBA_DIE;
 	}
@@ -110,7 +116,7 @@ void CGoomba::Render()
 		aniId = ID_ANI_GOOMBA_DIE_REVERSE;
 	}
 
-	CAnimations::GetInstance()->Get(aniId)->Render(x,y, &currentAniId); //&currentAniId to get current sprite id 
+	CAnimations::GetInstance()->Get(aniId)->Render(x, y, &currentAniId); //&currentAniId to get current sprite id 
 	RenderBoundingBox();
 }
 
@@ -119,32 +125,32 @@ void CGoomba::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-		case GOOMBA_STATE_DIE:
-			die_start = GetTickCount64();
-			y += (GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE) / 2;
-			vx = 0;
-			vy = 0;
-			ay = 0; 
-			break;
+	case GOOMBA_STATE_DIE:
+		die_start = GetTickCount64();
+		y += (GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE) / 2;
+		vx = 0;
+		vy = 0;
+		ay = 0;
+		break;
 
-		case GOOMBA_STATE_WALKING: 
-			vx = -GOOMBA_WALKING_SPEED;
-			ay = GOOMBA_GRAVITY;
-			break;
+	case GOOMBA_STATE_WALKING:
+		vx = -GOOMBA_WALKING_SPEED;
+		ay = GOOMBA_GRAVITY;
+		break;
 
-		case GOOMBA_STATE_RISE:
-			originalY = y;
-			ay = 0;
-			vx = 0;
-			vy = -GOOMBA_RISE_SPEED; 
-			break;
+	case GOOMBA_STATE_RISE:
+		originalY = y;
+		ay = 0;
+		vx = 0;
+		vy = -GOOMBA_RISE_SPEED;
+		break;
 
-		case GOOMBA_STATE_DIE_REVERSE:
-			DebugOut(L"GOOMBA DIE REVERSE\n");
-			die_start = GetTickCount64();
-			vx = 0;
-			vy = -GOOMBA_DEFLECT_SPEED;
-			ay = GOOMBA_GRAVITY;
-			break;
+	case GOOMBA_STATE_DIE_REVERSE:
+		DebugOut(L"GOOMBA DIE REVERSE\n");
+		die_start = GetTickCount64();
+		vx = 0;
+		vy = -GOOMBA_DEFLECT_SPEED;
+		ay = GOOMBA_GRAVITY;
+		break;
 	}
 }
