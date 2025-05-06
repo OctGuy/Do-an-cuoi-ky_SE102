@@ -187,9 +187,13 @@ void CPiranhaPlant::OnCollisionWith(LPCOLLISIONEVENT e) {
 			DebugOut(L"Koopa is collided with Piranha when Mario hold\n");
 		}
 		else {
-			koopa->SetState(KOOPA_STATE_SHELL_MOVE);
-			DebugOut(L"Koopa is collided with Piranha when Mario kick\n");
-			koopa->SetSpeed(nx * 0.1f, 0);
+			if (koopa->GetState() == KOOPA_STATE_SHELL_MOVE
+				|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
+				koopa->SetState(koopa->GetState() == KOOPA_STATE_SHELL_MOVE
+				? KOOPA_STATE_SHELL_MOVE : KOOPA_STATE_SHELL_REVERSE_MOVE);
+				DebugOut(L"Koopa is collided with Piranha when Mario kick\n");
+				koopa->SetSpeed(nx * 0.1f, 0);
+			}
 		}
 
 		SetState(PIRANHA_STATE_DIE);
