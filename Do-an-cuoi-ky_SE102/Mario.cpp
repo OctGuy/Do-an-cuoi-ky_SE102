@@ -287,7 +287,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 			AddPoint(100, e);
 		}
 	}
-	else if (goomba->GetState() != GOOMBA_STATE_DIE || goomba->GetState() != GOOMBA_STATE_DIE_REVERSE)
+	else if (goomba->GetState() != GOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_DIE_REVERSE)
 	{
 		GetHurt();
 	}
@@ -351,7 +351,8 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE ||
 			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_SHAKING) {
 			if (isAbleToHold) { // pick
-				this->Koopa = e->obj;
+				//this->Koopa = e->obj;
+				this->Koopa = koopa;
 				koopa->SetIsHeld(true);
 			}
 			else { // Kick

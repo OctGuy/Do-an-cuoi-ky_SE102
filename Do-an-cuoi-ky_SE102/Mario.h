@@ -228,7 +228,6 @@ class CMario : public CGameObject
 	BOOLEAN isAbleToHold; //If player is holding S this should true
 	LPGAMEOBJECT Koopa; // Koopa object that Mario is holding
 
-
 	//Tracking point and coin
 	int coin;
 	int point;
