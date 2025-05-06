@@ -7,9 +7,9 @@
 #include "Particle.h"
 #include "debug.h"
 
-#define MARIO_INITIAL_SPEED		0.04f
+#define MARIO_INITIAL_SPEED		0.05f
 
-#define MARIO_WALKING_SPEED		0.09f
+#define MARIO_WALKING_SPEED		0.10f
 #define MARIO_RUNNING_SPEED		0.20f
 
 #define MARIO_ACCEL_WALK_X	0.00008f
@@ -24,7 +24,7 @@
 #define MARIO_GRAVITY			0.0015f
 #define MARIO_MAX_FALL_SPEED	0.3f
 #define MARIO_SLOW_FALL_SPEED	0.05f
-#define MARIO_SLOW_FALL_DURATION 500 
+#define MARIO_SLOW_FALL_DURATION 250 
 
 #define MARIO_FLYING_SPEED	-0.1f
 
@@ -237,11 +237,13 @@ class CMario : public CGameObject
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithShinyBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e);
 	void OnCollisionWithPowerUp(LPCOLLISIONEVENT e);
 	void OnCollisionWithBullet(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
+	void OnCollisionWithPSwitch(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();

@@ -8,8 +8,10 @@
 #include "Coin.h"
 #include "Portal.h"
 #include "QuestionBrick.h"
+#include "ShinyBrick.h"
 #include "PiranhaPlant.h"
 #include "Koopa.h"
+#include "PSwitch.h"
 
 #include "Collision.h"
 
@@ -49,7 +51,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	ULONGLONG now = GetTickCount64();
 
 	// reset untouchable timer if untouchable time has passed
-	if (now - slowfall_start > MARIO_SLOW_FALL_DURATION)
+	if ((now - slowfall_start > MARIO_SLOW_FALL_DURATION) || vy == 0)
 	{
 		//DebugOut(L"Time Out\n");
 		slowfall_start = 0;
@@ -65,6 +67,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 
+	//Speacial animation timing (i want to make it so that the animation is not interrupted but this is the easiest method i can think of)
 	if (now - tailAttack_start > MARIO_TAIL_ATTACK_TIME)
 	{
 		tailAttack_start = 0;
@@ -78,6 +81,17 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+
+	//Make sure mario doesnt go out of boundary
+	if (x < 8.f) x = 8.f;
+	if (y < 8.f) y = 8.f;
+
+	float rightBoundary;
+	float bottomBoundary;
+	CPlayScene* playScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+	playScene->GetBoundary(rightBoundary, bottomBoundary);
+
+	if (x > rightBoundary - MARIO_BIG_BBOX_WIDTH - 8.f) x = rightBoundary - MARIO_BIG_BBOX_WIDTH - 8.f;
 
 	//Handle Koopa Picking and Kicking
 	if (Koopa)
@@ -118,11 +132,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
-
-	/*if (dynamic_cast<CKoopa*>(Koopa)->GetState() == KOOPA_STATE_DIE)
-	{
-		Koopa = NULL;
-	}*/
 }
 
 void CMario::AddPoint(int p, LPCOLLISIONEVENT e)
@@ -158,6 +167,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (e->ny < 0 && abs(e->ny) > abs(e->nx))
 		{
 			isOnPlatform = true;
+			isInAir = false; // Reset isInAir to false because mario hit his head (OUCH!)
+			slowfall_start = 0;
 			float fill1, fill2, fill3; //I dont know how to get the bounding box of the object without these variable
 			e->obj->GetBoundingBox(fill1, currentFloorY, fill2, fill3);
 		}
@@ -167,7 +178,11 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		vx = 0;
 	}
 
-	if (dynamic_cast<CQuestionBrick*>(e->obj))
+	if (dynamic_cast<CShinyBrick*>(e->obj))
+	{
+		OnCollisionWithShinyBrick(e);
+	}
+	else if (dynamic_cast<CQuestionBrick*>(e->obj))
 	{
 		OnCollisionWithQuestionBrick(e);
 	}
@@ -203,6 +218,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		OnCollisionWithBrick(e);
 	}
+	else if (dynamic_cast<CPSwitch*>(e->obj))
+	{
+		OnCollisionWithPSwitch(e);
+	}
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -223,6 +242,13 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 		questionBrick->Activate();
 }
 
+void CMario::OnCollisionWithShinyBrick(LPCOLLISIONEVENT e)
+{
+	CShinyBrick* shinyBrick = dynamic_cast<CShinyBrick*>(e->obj);
+	if (e->ny > 0 && shinyBrick)
+		shinyBrick->Activate();
+}
+
 void CMario::OnCollisionWithPowerUp(LPCOLLISIONEVENT e)
 {
 	if (dynamic_cast<CPowerUp*>(e->obj)->GetType() == POWER_UP_TYPE_LEAF && level != MARIO_LEVEL_RACCOON)
@@ -236,6 +262,15 @@ void CMario::OnCollisionWithPowerUp(LPCOLLISIONEVENT e)
 	e->obj->Delete();
 	AddPoint(1000, e);
 
+}
+
+void CMario::OnCollisionWithPSwitch(LPCOLLISIONEVENT e)
+{
+	CPSwitch* pSwitch = dynamic_cast<CPSwitch*>(e->obj);
+	if (e->ny < 0 && pSwitch)
+	{
+		pSwitch->Activate();
+	}
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -296,7 +331,9 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 				: KOOPA_STATE_SHELL_IDLE);
 		}
 		else if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
-			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE) 
+			koopa->GetState() == KOOPA_STATE_SHELL_SHAKING ||
+			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE ||
+			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_SHAKING)
 		{
 			if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
 				koopa->GetState() == KOOPA_STATE_SHELL_SHAKING)
@@ -587,7 +624,7 @@ int CMario::GetAniIdRaccoon()
 	}
 	else if (!isOnPlatform)
 	{
-		if (abs(vx) == MARIO_RUNNING_SPEED)
+		if (abs(vx) == MARIO_RUNNING_SPEED|| (isInAir && vy < 0))
 		{
 			if (isInAir)
 				if (nx >= 0)
@@ -838,10 +875,10 @@ void CMario::SetState(int state)
 		if (isOnPlatform && level != MARIO_LEVEL_SMALL)
 		{
 			state = MARIO_STATE_IDLE;
-			isSitting = true;
 			//vx = 0; vy = 0.0f;
 			if (!isSitting)
 				y += MARIO_SIT_HEIGHT_ADJUST;
+			isSitting = true;
 		}
 		break;
 
@@ -923,19 +960,19 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 
 void CMario::SetLevel(int l)
 {
+	level = l;
 	if (preLevel == MARIO_LEVEL_RACCOON || level == MARIO_LEVEL_RACCOON)
-		CGame::GetInstance()->FreezeGame(200); //200 is the time it take to transform to and from raccon
+		CGame::GetInstance()->FreezeGame(240); //240 is the time it take to transform to and from raccon
 	else
 		CGame::GetInstance()->FreezeGame(); //The amount time freeze is unmodified
 
 	SetState(MARIO_STATE_IDLE);
 
 	// Adjust position to avoid falling off platform
-	if (this->level == MARIO_LEVEL_SMALL)
+	if (this->preLevel == MARIO_LEVEL_SMALL)
 	{
 		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
 	}
-	level = l;
 }
 
 void CMario::GetHurt()

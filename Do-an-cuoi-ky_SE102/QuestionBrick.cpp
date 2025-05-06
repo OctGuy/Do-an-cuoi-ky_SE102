@@ -1,4 +1,13 @@
 #include "QuestionBrick.h"
+#include "Coin.h"
+#include "PowerUp.h"
+#include "Koopa.h"
+#include "RaccoonTail.h"
+#include "PSwitch.h"
+#include "Game.h"
+#include "PlayScene.h"
+#include "Animations.h"
+#include "Collision.h"
 
 CMario* CQuestionBrick::GetPlayer()
 {
@@ -50,7 +59,7 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
             if (!isBouncingFinished) // After brick stop bouncing, activate non-coin item
             {
                 isBouncingFinished = true;
-                if (!dynamic_cast<CCoin*>(item)) 
+                if (itemType != ITEM_TYPE_COIN)
                 {
                     ActivateItem();
                 }
@@ -69,15 +78,32 @@ void CQuestionBrick::Activate()
     if (!isHit)
     {
         CMario* mario = GetPlayer();
+        CPlayScene* playScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
         SetState(BRICK_STATE_BOUNCE);
-        if (dynamic_cast<CCoin*>(item)) //Only activate coin immidiately
-            ActivateItem();
+
+        if (itemType == ITEM_TYPE_COIN)
+        {
+            item = new CCoin(x, y - 16.f);
+            playScene->Add(item);
+			ActivateItem();
+		}
+        else if (itemType == ITEM_TYPE_PSWITCH)
+        {
+            item = new CPSwitch(x, y - 13.f);
+            playScene->Add(item);
+            CGame* game = CGame::GetInstance();
+            CPlayScene* scene = (CPlayScene*)game->GetCurrentScene();
+			CParticle* smoke = new CParticle(x, y - 13.f, PARTICLE_TYPE_SMOKE);
+			playScene->Add(smoke);
+        }
         else
         {
+			item = new CPowerUp(x, y - 3.f);
             if (mario->GetLevel() == MARIO_LEVEL_SMALL)
                 dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_MUSHROOM);
             else
                 dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_LEAF);
+            playScene->Add(item);
         }
     }
 }
@@ -102,7 +128,6 @@ void CQuestionBrick::ActivateItem()
 {
     if (item == NULL) return;
 	//THE ORDER OF THESE FUNCTIONS MATTER
-    item->SetPosition(x, y);
     item->SetActive(true);
     item->SetState(100); //100 is STATE_ACTIVE for all item (lazy implementation)
 	item = NULL; // Set item to NULL to prevent access error (PAINFUL LESSON)

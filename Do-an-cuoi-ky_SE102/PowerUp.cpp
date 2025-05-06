@@ -66,10 +66,10 @@ void CPowerUp::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CPowerUp::UpdateMushroom()
 {
-	if (y <= originalY - MUSHROOM_BBOX_HEIGHT + 2.f) //2.f for mushroom rise adjustment
+	if (y <= originalY - MUSHROOM_BBOX_HEIGHT + 3.f) //3.f for mushroom rise height adjustment
 	{
 		//DebugOut(L"Maximum height reached");
-		y = originalY - MUSHROOM_BBOX_HEIGHT + 2.f;
+		y = originalY - MUSHROOM_BBOX_HEIGHT + 3.f;
 		SetState(MUSHROOM_STATE_WALKING);
 	}
 }

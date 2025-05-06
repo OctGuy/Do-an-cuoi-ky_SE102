@@ -4,12 +4,23 @@
 
 #define PARTICLE_TYPE_HIT 1
 #define PARTICLE_TYPE_POINT 2
+#define PARTICLE_TYPE_BRICK 3
+#define PARTICLE_TYPE_BRICK_LOW 4
+#define PARTICLE_TYPE_BRICK_REVERSED 5
+#define PARTICLE_TYPE_BRICK_REVERSED_LOW 6
+#define PARTICLE_TYPE_SMOKE 7
 
 #define PARTICLE_HIT_LIFE_TIME 250
 #define PARTICLE_POINT_LIFE_TIME 1000
+#define PARTICLE_BRICK_LIFE_TIME 800
+#define PARTICLE_SMOKE_LIFE_TIME 240
 
+#define ID_ANI_PARTICLE_SMOKE 302
 #define ID_ANI_PARTICLE_HIT 12000
 #define ID_ANI_PARTICLE_POINT 12010
+#define ID_ANI_PARTICLE_BRICK 12020
+#define ID_ANI_PARTICLE_BRICK_REVERSED 12021
+
 
 class CParticle : public CGameObject
 {
@@ -33,6 +44,31 @@ public:
             this->vy = 0.f;
             this->lifetime = PARTICLE_HIT_LIFE_TIME;
 		}
+        else if (type == PARTICLE_TYPE_BRICK) {
+            this->vx = 0.07f;
+            this->vy = -0.26f;
+            this->lifetime = PARTICLE_BRICK_LIFE_TIME;
+		}
+		else if (type == PARTICLE_TYPE_BRICK_LOW) {
+			this->vx = 0.07f;
+			this->vy = -0.13f;
+			this->lifetime = PARTICLE_BRICK_LIFE_TIME;
+		}
+		else if (type == PARTICLE_TYPE_BRICK_REVERSED) {
+			this->vx = -0.07f;
+			this->vy = -0.26f;
+			this->lifetime = PARTICLE_BRICK_LIFE_TIME;
+		}
+        else if (type == PARTICLE_TYPE_BRICK_REVERSED_LOW) {
+            this->vx = -0.07f;
+            this->vy = -0.13f;
+            this->lifetime = PARTICLE_BRICK_LIFE_TIME;
+        }
+        else if (type == PARTICLE_TYPE_SMOKE) {
+            this->vx = 0.f;
+            this->vy = -0.f;
+            this->lifetime = PARTICLE_SMOKE_LIFE_TIME;
+        }
         else {
             this->vx = 0.f;
             this->vy = 0.f;

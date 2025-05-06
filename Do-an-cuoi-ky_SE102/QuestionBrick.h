@@ -1,32 +1,43 @@
 #pragma once
 #include "Brick.h"
 #include "GameObject.h"
-#include "Mario.h" // Ensure this is included to define CMario
+#include "Mario.h"
 #include "debug.h"
-#include "Coin.h"
-#include "PowerUp.h"
-#include "Koopa.h"
-#include "RaccoonTail.h"
+
+// Forward declarations instead of includes
+class CCoin;
+class CPowerUp;
+class CKoopa;
+class CRaccoonTail;
+class CPSwitch;
 
 #define BRICK_BOUNCE_SPEED 0.1f
 #define BRICK_BOUNCE_HEIGHT 10.0f
 #define BRICK_BOUNCE_TIME 200
 #define BRICK_STATE_BOUNCE 100
 
+#define ITEM_TYPE_COIN 1
+#define ITEM_TYPE_POWERUP 2
+#define ITEM_TYPE_PSWITCH 3
+
 class CQuestionBrick : public CBrick
 {
     LPGAMEOBJECT item; // Pointer to Item for easier manipulation
     BOOLEAN hasItem;
+
+    int itemType; // Type of item in the brick
     BOOLEAN isHit;
     float originalY;
     DWORD bounceStart;
     BOOLEAN isBouncingFinished;
 
 public:
-    CQuestionBrick(float x, float y, int type) : CBrick(x, y, type)
+    CQuestionBrick(float x, float y, int type, int itemType) : CBrick(x, y, type)
     {
         item = NULL;
         hasItem = false;
+        this->itemType = itemType;
+
         isHit = false;
         originalY = y;
         bounceStart = 0;
@@ -40,13 +51,6 @@ public:
     }
 
     void OnCollisionWith(LPCOLLISIONEVENT e);
-    //void OnCollisionWithTail(LPCOLLISIONEVENT e);
-
-    void SetItem(LPGAMEOBJECT item) {
-        this->item = item;
-        if (item != NULL)
-            hasItem = true;
-    }
 
     BOOLEAN IsHit() { return isHit; }
 
@@ -54,5 +58,5 @@ public:
     void Activate();
     void ActivateItem();
 
-    CMario* GetPlayer(); // No changes needed here
+    CMario* GetPlayer(); 
 };

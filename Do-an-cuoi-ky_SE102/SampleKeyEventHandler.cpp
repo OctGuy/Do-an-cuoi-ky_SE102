@@ -38,7 +38,8 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
             }
             else // If already in air
             {
-                if (fabs(mario->GetVx()) >= MARIO_RUNNING_SPEED)
+                //if mario is at max speed or is already flying keep flying
+                if (fabs(mario->GetVx()) >= MARIO_RUNNING_SPEED|| (mario->IsInAir() && mario->GetVy() < 0))
                     mario->SetState(MARIO_STATE_FLYING);
                 else
                     mario->SetState(MARIO_STATE_SLOW_FALL);
