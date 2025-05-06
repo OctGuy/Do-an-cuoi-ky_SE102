@@ -203,7 +203,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	case KOOPA_STATE_SHELL_REVERSE_SHAKING:
 		if (now - stateShakingStart > KOOPA_SHELL_SHAKING_DURATION) {
 			//DebugOut(L"[INFO] Koopa is out of shell\n");
-			vy = -0.3;
+			vy = -0.15;
 			SetState(KOOPA_STATE_WALKING_LEFT);
 		}
 		break;
