@@ -89,3 +89,6 @@
 
 4/5/2025
 - Bug fixes and Animation Adjustment (Phong)
+
+5/5/2025
+- Added PSwitch and shiny brick
