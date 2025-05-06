@@ -31,21 +31,21 @@
 class CGoomba : public CGameObject
 {
 protected:
-	float ax;				
-	float ay; 
+	float ax;
+	float ay;
 
 	int originalY;
 
 	//Need to create an enemy class and implement this instead of just goomba
-	int currentAniId = GOOMBA_TEXTURE_IDLE; 
+	int currentAniId = GOOMBA_TEXTURE_IDLE;
 
 	ULONGLONG die_start;
 
-	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
+	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 
-	virtual int IsCollidable() { 
+	virtual int IsCollidable() {
 		if (state == GOOMBA_STATE_DIE_REVERSE
 			|| state == GOOMBA_STATE_DIE)
 			return 0;
@@ -55,7 +55,7 @@ protected:
 	virtual void OnNoCollision(DWORD dt);
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
-public: 	
+public:
 	CGoomba(float x, float y);
 	virtual void SetState(int state);
 };

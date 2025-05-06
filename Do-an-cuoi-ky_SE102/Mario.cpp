@@ -93,6 +93,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				Koopa->SetState(KOOPA_STATE_WALKING_RIGHT);
 			else
 				Koopa->SetState(KOOPA_STATE_WALKING_LEFT);
+
+			dynamic_cast<CKoopa*>(Koopa)->SetIsHeld(false);
 			Koopa = NULL;
 		}
 		else
@@ -107,16 +109,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				else
 					Koopa->SetState(KOOPA_STATE_SHELL_REVERSE_MOVE);
 				Koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
+
+				dynamic_cast<CKoopa*>(Koopa)->SetIsHeld(false);
 				Koopa = NULL;
 			}
 		}
-	}
-
-	if (isAbleToHold) {
-		DebugOut(L"[INFO] Koopa is held\n");
-	}
-	else {
-		DebugOut(L"[INFO] Koopa is not held\n");
 	}
 }
 
@@ -310,7 +307,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_SHAKING) {
 			if (isAbleToHold) { // pick
 				this->Koopa = e->obj;
-				//koopa->SetIsHeld(true);
+				koopa->SetIsHeld(true);
 			}
 			else { // Kick
 				//koopa->SetIsHeld(false);
