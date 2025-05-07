@@ -98,7 +98,7 @@ void CQuestionBrick::Activate()
         }
         else
         {
-			item = new CPowerUp(x, y - 3.f);
+			item = new CPowerUp(x, y - 16.f);
             if (mario->GetLevel() == MARIO_LEVEL_SMALL)
                 dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_MUSHROOM);
             else
@@ -128,9 +128,9 @@ void CQuestionBrick::ActivateItem()
 {
     if (item == NULL) return;
 	//THE ORDER OF THESE FUNCTIONS MATTER
-    item->SetActive(true);
     item->SetState(100); //100 is STATE_ACTIVE for all item (lazy implementation)
-	item = NULL; // Set item to NULL to prevent access error (PAINFUL LESSON)
+    item->SetActive(true);
+    item = NULL; // Set item to NULL to prevent access error (PAINFUL LESSON)
 }
 
 

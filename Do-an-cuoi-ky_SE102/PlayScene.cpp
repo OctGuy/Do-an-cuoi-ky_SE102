@@ -431,6 +431,7 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
 	{
+		if (!objects[i]->IsActive()) continue;
 		coObjects.push_back(objects[i]);
 	}
 
