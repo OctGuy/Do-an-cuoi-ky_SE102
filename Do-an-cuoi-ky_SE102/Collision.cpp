@@ -171,6 +171,18 @@ void CCollision::SweptAABB(
 		}
 	}
 
+	if (dynamic_cast<CPiranhaPlant*>(objSrc) && dynamic_cast<CKoopa*>(objDest)) {
+		if (dynamic_cast<CKoopa*>(objDest)->GetIsHeld()
+			|| dynamic_cast<CKoopa*>(objDest)->GetState() == KOOPA_STATE_SHELL_MOVE
+			|| dynamic_cast<CKoopa*>(objDest)->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
+			if (ml < sr && mr > sl && mt < sb && mb > st) {
+				t = 0.0f;      // collision at the start of the frame
+				nx = ny = 0.0f;
+				return;
+			}
+		}
+	}
+
 	//
 	// Broad-phase test 
 	//

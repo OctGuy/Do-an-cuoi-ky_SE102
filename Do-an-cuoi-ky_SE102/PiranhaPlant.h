@@ -79,5 +79,6 @@ public:
 	CMario* GetPlayer();
 
 	void OnCollisionWith(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 };
 

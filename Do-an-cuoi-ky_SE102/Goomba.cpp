@@ -65,9 +65,6 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
-	CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
-	
 	if (dynamic_cast<CGoomba*>(e->obj)) return;
 
 	if (e->ny != 0 && e->obj->IsBlocking())
@@ -95,13 +92,13 @@ void CGoomba::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 
 	if (koopa) {
 		if (koopaHeldByMario != nullptr && koopaHeldByMario == koopa && koopa->GetIsHeld()) {
-			DebugOut(L"Koopa is collided with Piranha when Mario hold\n");
+			DebugOut(L"Koopa is collided with Goomba when Mario hold\n");
 			SetState(GOOMBA_STATE_DIE_REVERSE);
 			koopa->SetState(KOOPA_STATE_DIE);
 		}
 		else if (koopa->GetState() == KOOPA_STATE_SHELL_MOVE
 			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
-			DebugOut(L"Koopa is collided with Piranha when Mario kick\n");
+			DebugOut(L"Koopa is collided with Goomba when Mario kick\n");
 			SetState(GOOMBA_STATE_DIE_REVERSE);
 		}
 
