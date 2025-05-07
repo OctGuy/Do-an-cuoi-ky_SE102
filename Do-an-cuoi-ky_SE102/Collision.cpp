@@ -144,33 +144,20 @@ void CCollision::SweptAABB(
 	t = -1.0f;			// no collision
 	nx = ny = 0;
 
-	if (dynamic_cast<CGoomba*>(objSrc) && dynamic_cast<CKoopa*>(objDest))
-	{
-		if (dynamic_cast<CKoopa*>(objDest)->GetIsHeld())
-		{
-			if (ml < sr && mr > sl && mt < sb && mb > st)
-			{
-				t = 0.0f;      // collision at the start of the frame
-				nx = ny = 0.0f;
-				return;
-			}
-		}
-	}
-
-	if (dynamic_cast<CGoomba*>(objSrc) && dynamic_cast<CKoopa*>(objDest))
-	{
+	// Invoke collision between Goomba and Koopa 
+	if (dynamic_cast<CGoomba*>(objSrc) && dynamic_cast<CKoopa*>(objDest)) {
 		if (dynamic_cast<CKoopa*>(objDest)->GetState() == KOOPA_STATE_SHELL_MOVE
-			|| dynamic_cast<CKoopa*>(objDest)->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE)
-		{
-			if (ml < sr && mr > sl && mt < sb && mb > st)
-			{
-				t = 0.0f;      // collision at the start of the frame
+			|| dynamic_cast<CKoopa*>(objDest)->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE
+			|| dynamic_cast<CKoopa*>(objDest)->GetIsHeld()) {
+			if (ml < sr && mr > sl && mt < sb && mb > st) {
+				t = 0.0f;      
 				nx = ny = 0.0f;
 				return;
 			}
 		}
 	}
 
+	// Invoke collision between Koopa and Piranha Plant
 	if (dynamic_cast<CPiranhaPlant*>(objSrc) && dynamic_cast<CKoopa*>(objDest)) {
 		if (dynamic_cast<CKoopa*>(objDest)->GetIsHeld()
 			|| dynamic_cast<CKoopa*>(objDest)->GetState() == KOOPA_STATE_SHELL_MOVE
