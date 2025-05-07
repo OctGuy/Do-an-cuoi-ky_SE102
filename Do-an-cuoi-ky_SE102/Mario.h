@@ -231,10 +231,12 @@ class CMario : public CGameObject
 	BOOLEAN isAbleToHold; //If player is holding S this should true
 	LPGAMEOBJECT Koopa; // Koopa object that Mario is holding
 
+
 	BOOLEAN isAbleToFly; //If player is running at max speed this should be true
 	ULONGLONG flying_start; // Time when Mario started flying
 
 	int pMeter;
+
 
 	//Tracking point and coin
 	int coin;
@@ -316,7 +318,10 @@ public:
 		return (state != MARIO_STATE_DIE);
 	}
 
-	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
+	int IsBlocking() { 
+		//return (state != MARIO_STATE_DIE && untouchable == 0); 
+		return 0;
+	}
 
 	BOOLEAN IsOnPlatform() { return isOnPlatform; }
 	BOOLEAN IsInAir() { return isInAir; }
