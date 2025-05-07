@@ -144,10 +144,23 @@ void CCollision::SweptAABB(
 	t = -1.0f;			// no collision
 	nx = ny = 0;
 
-	if (dynamic_cast<CKoopa*>(objSrc) && (dynamic_cast<CGoomba*>(objDest)
-		 || dynamic_cast<CPiranhaPlant*>(objDest)))
+	if (dynamic_cast<CGoomba*>(objSrc) && dynamic_cast<CKoopa*>(objDest))
 	{
-		if (dynamic_cast<CKoopa*>(objSrc)->GetIsHeld())
+		if (dynamic_cast<CKoopa*>(objDest)->GetIsHeld())
+		{
+			if (ml < sr && mr > sl && mt < sb && mb > st)
+			{
+				t = 0.0f;      // collision at the start of the frame
+				nx = ny = 0.0f;
+				return;
+			}
+		}
+	}
+
+	if (dynamic_cast<CGoomba*>(objSrc) && dynamic_cast<CKoopa*>(objDest))
+	{
+		if (dynamic_cast<CKoopa*>(objDest)->GetState() == KOOPA_STATE_SHELL_MOVE
+			|| dynamic_cast<CKoopa*>(objDest)->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE)
 		{
 			if (ml < sr && mr > sl && mt < sb && mb > st)
 			{
