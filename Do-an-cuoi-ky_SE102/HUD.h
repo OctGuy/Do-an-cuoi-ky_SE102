@@ -6,6 +6,8 @@
 #include "Mario.h"
 #include "AssetIDs.h"
 
+#define ID_ANI_P_METER_MAX 9000
+
 // Define texture and sprite IDs for HUD elements
 #define ID_TEX_HUD 100000
 #define FONT_BBOX_WIDTH 8
@@ -17,6 +19,7 @@ private:
     CMario* player;
     int score;
     int coin;
+    int pMeter; //Diferent from mario pMeter (0->6 instead of 0->600)
     int remainingTime;
     int lives;
     
@@ -35,4 +38,5 @@ public:
     // Helper methods
     void RenderNumber(int number, float x, float y, int length);
     void RenderText(string text, float x, float y);
+    void RenderSymbol(int id, float x, float y);
 }; typedef CHUD* LPHUD;

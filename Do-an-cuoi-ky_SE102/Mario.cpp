@@ -60,10 +60,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	//Check flying time
-	if (now - flying_start > MARIO_FLYING_TIME)
+	if (flying_start && now - flying_start > MARIO_FLYING_TIME)
 	{
-		DebugOut(L"Flying Time Out\n");
+		//DebugOut(L"Flying Time Out\n");
 		flying_start = 0;
+		pMeter = 0;
 		isAbleToFly = false; // Reset flying ability
 	}
 
@@ -91,15 +92,38 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 
 	//Check if mario is able to fly
-	if (isOnPlatform && !flying_start) {
-		if (fabs(vx) >= MARIO_RUNNING_SPEED)
-			isAbleToFly = true;
+	//if (isOnPlatform && !flying_start) {
+	//	if (fabs(vx) >= MARIO_RUNNING_SPEED)
+	//		isAbleToFly = true;
+	//	else
+	//		isAbleToFly = false;
+	//}
+
+	if (!flying_start) {
+		if (isOnPlatform && fabs(vx) > MARIO_WALKING_SPEED)
+		{
+			pMeter += 10.f;
+			//cap pmeter
+			if (pMeter > MARIO_P_METER_MAX)
+				pMeter = MARIO_P_METER_MAX;
+		}
 		else
-			isAbleToFly = false;
+		{
+			pMeter -= 5.f;
+			if (pMeter < 0)
+				pMeter = 0;
+		}
 	}
 
-	DebugOut(L"Is On Platform: %d - ", isOnPlatform);
-	DebugOut(L"Is Able To Fly: %d\n", isAbleToFly);
+	if (pMeter == MARIO_P_METER_MAX)
+		isAbleToFly = true;
+	else
+		isAbleToFly = false;
+
+	/*DebugOut(L"Is On Platform: %d - ", isOnPlatform);
+	DebugOut(L"Is Able To Fly: %d\n", isAbleToFly);*/
+
+	DebugOut(L"PMeter: %f\n", pMeter);
 
 	//Make sure mario doesnt go out of boundary
 	if (x < 8.f) x = 8.f;

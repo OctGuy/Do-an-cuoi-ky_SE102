@@ -198,6 +198,8 @@
 #define MARIO_KICK_TIME 250
 #define MARIO_FLYING_TIME 4000
 
+#define MARIO_P_METER_MAX 600
+
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
@@ -231,6 +233,8 @@ class CMario : public CGameObject
 
 	BOOLEAN isAbleToFly; //If player is running at max speed this should be true
 	ULONGLONG flying_start; // Time when Mario started flying
+
+	int pMeter;
 
 	//Tracking point and coin
 	int coin;
@@ -285,6 +289,7 @@ public:
 
 		Koopa = NULL;
 
+		pMeter = 0;
 		coin = 0;
 		point = 0;
 	}
@@ -303,6 +308,7 @@ public:
 	float GetAx() { return ax; }
 	int GetCoin() { return coin; }
 	int GetPoint() { return point; }
+	float GetPMeter() { return pMeter; }
 	int GetLevel() { return level; }
 
 	int IsCollidable()
