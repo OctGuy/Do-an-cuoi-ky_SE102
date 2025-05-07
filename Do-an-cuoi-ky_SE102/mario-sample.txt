@@ -19,6 +19,7 @@ height	240
 11	textures\enemies_full.png
 12	textures\enemies_full_flip.png
 13	textures\enemies_full_reverse.png
+14	textures\enemies_transparent.png
 20	textures\misc.png
 21	textures\misc_2.png
 30 	textures\tiles.png
