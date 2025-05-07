@@ -47,10 +47,10 @@ void CPSwitch::Render()
 
 void CPSwitch::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-    left = x;
-    top = y;
-    right = x + 15.f; // Example width
-    bottom = y + 14.f; // Example height
+    left = x - 8.f;
+    top = y - 8.f;
+    right = left + 16.f; // Example width
+    bottom = top + 16.f; // Example height
 }
 
 void CPSwitch::SwitchCoinBricks(std::vector<LPGAMEOBJECT>* coObjects)

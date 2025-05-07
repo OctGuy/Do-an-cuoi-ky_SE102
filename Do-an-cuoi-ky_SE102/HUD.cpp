@@ -22,6 +22,7 @@ void CHUD::Update(DWORD dt)
     if (player) {
         this->coin = player->GetCoin();
 		this->score = player->GetPoint();
+        this->pMeter = player->GetPMeter()/100;
     }
 
     // Update time
@@ -65,6 +66,21 @@ void CHUD::Render()
 
     //Render world number
 	RenderNumber(1, hud_x - 77, hud_y - 2, 1);
+
+    //Render P-Meter
+    CAnimations* animations = CAnimations::GetInstance();
+    int aniId = ID_ANI_P_METER_MAX;
+    CSprites* sprites = CSprites::GetInstance();
+    LPSPRITE sprite = sprites->Get(100038);
+
+    for (int i = 0; i < pMeter; i++)
+    {
+        sprite->Draw(hud_x - 62 + FONT_BBOX_WIDTH*i, hud_y - 3.f);
+    }
+    if (pMeter == 6)
+    {
+        animations->Get(aniId)->Render(hud_x - 65 + FONT_BBOX_WIDTH * 7, hud_y - 3.f);
+    }
 }
 
 void CHUD::RenderNumber(int number, float x, float y, int length)

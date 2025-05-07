@@ -26,5 +26,5 @@ public:
 	void SwitchCoinBricks(std::vector<LPGAMEOBJECT>* coObjects);
 
     int IsCollidable() override { return 1; } // Collidable
-    int IsBlocking() override { return 0; }  // Not blocking
+    int IsBlocking() override { return !isActivated; }  // Not blocking
 };
