@@ -40,22 +40,24 @@ protected:
 	int currentAniId = GOOMBA_TEXTURE_IDLE;
 
 	ULONGLONG die_start;
+public:
+	CGoomba(float x, float y);
 
-	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-	virtual void Render();
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void Render();
 
-	virtual int IsCollidable() {
+	int IsCollidable() {
 		if (state == GOOMBA_STATE_DIE_REVERSE
 			|| state == GOOMBA_STATE_DIE)
 			return 0;
 		return 1;
 	};
-	virtual int IsBlocking() { return 0; }
-	virtual void OnNoCollision(DWORD dt);
+	int IsBlocking() { return 0; }
+	void OnNoCollision(DWORD dt);
 
-	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
-public:
-	CGoomba(float x, float y);
-	virtual void SetState(int state);
+	void OnCollisionWith(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
+	void SetState(int state);
+	CMario* GetPlayer();
 };

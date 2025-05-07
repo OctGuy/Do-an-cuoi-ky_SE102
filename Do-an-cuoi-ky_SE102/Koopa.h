@@ -30,7 +30,7 @@
 #define KOOPA_SHELL_BBOX_WIDTH 16
 #define KOOPA_SHELL_BBOX_HEIGHT 14
 
-#define KOOPA_SHELL_DURATION 15000 //5000
+#define KOOPA_SHELL_DURATION 5000
 #define KOOPA_SHELL_SHAKING_DURATION 2000
 #define KOOPA_DIE_DURATION 3000
 
@@ -78,9 +78,7 @@ public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void SetState(int state);
-	int IsCollidable() {
-		return state != KOOPA_STATE_DIE;
-	}
+	int IsCollidable() { return (state != KOOPA_STATE_DIE); }
 
 	int IsBlocking() { return 0; }
 
@@ -90,6 +88,5 @@ public:
 	CMario* GetPlayer();
 
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
-	//void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 };
 

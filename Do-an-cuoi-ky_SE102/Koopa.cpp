@@ -51,7 +51,6 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 			OnCollisionWithBrick(e);
 		}	
 	}
-	//DebugOut(L"Koopa is on platform: %d\n", isOnPlatform);
 }
 
 void CKoopa::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
@@ -218,13 +217,6 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		}
 		break;
 	}
-
-	/*if (IsCollidable()) {
-		DebugOut(L"[INFO] Koopa can hit\n");
-	}
-	else {
-		DebugOut(L"[INFO] Koopa can not hit\n");
-	}*/
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);

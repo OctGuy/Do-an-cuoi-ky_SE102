@@ -228,7 +228,6 @@ class CMario : public CGameObject
 	BOOLEAN isAbleToHold; //If player is holding S this should true
 	LPGAMEOBJECT Koopa; // Koopa object that Mario is holding
 
-
 	//Tracking point and coin
 	int coin;
 	int point;
@@ -299,7 +298,10 @@ public:
 		return (state != MARIO_STATE_DIE);
 	}
 
-	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
+	int IsBlocking() { 
+		//return (state != MARIO_STATE_DIE && untouchable == 0); 
+		return 0;
+	}
 
 	BOOLEAN IsOnPlatform() { return isOnPlatform; }
 	BOOLEAN IsInAir() { return isInAir; }
