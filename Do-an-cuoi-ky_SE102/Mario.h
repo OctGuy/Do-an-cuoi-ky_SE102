@@ -196,6 +196,7 @@
 #define MARIO_UNTOUCHABLE_TIME 2500
 #define MARIO_TAIL_ATTACK_TIME 250
 #define MARIO_KICK_TIME 250
+#define MARIO_FLYING_TIME 4000
 
 class CMario : public CGameObject
 {
@@ -228,6 +229,8 @@ class CMario : public CGameObject
 	BOOLEAN isAbleToHold; //If player is holding S this should true
 	LPGAMEOBJECT Koopa; // Koopa object that Mario is holding
 
+	BOOLEAN isAbleToFly; //If player is running at max speed this should be true
+	ULONGLONG flying_start; // Time when Mario started flying
 
 	//Tracking point and coin
 	int coin;
@@ -267,6 +270,7 @@ public:
 		slowfall_start = -1;
 		tailAttack_start = -1;
 		kick_start = 1;
+		flying_start = -1;
 
 		isSitting = false;
 		isOnPlatform = false;
@@ -274,6 +278,7 @@ public:
 		isTailAttacking = false;
 		isAbleToHold = false;
 		isKicking = false;
+		isAbleToFly = false;
 
 		Tail = NULL;
 		currentFloorY = GROUND_Y; // Initialize to ground level
@@ -283,6 +288,12 @@ public:
 		coin = 0;
 		point = 0;
 	}
+	void StartFlying() 
+	{ 
+		if (!flying_start)
+			flying_start = GetTickCount64(); 
+	}
+
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	void SetState(int state);
@@ -304,7 +315,7 @@ public:
 	BOOLEAN IsOnPlatform() { return isOnPlatform; }
 	BOOLEAN IsInAir() { return isInAir; }
 	BOOLEAN IsTailAttacking() { return isTailAttacking; }
-
+	BOOLEAN IsAbleToFly() { return isAbleToFly; }
 	BOOLEAN IsHoldingKoopa() { return isAbleToHold; }
 
 	//Update coin and point
