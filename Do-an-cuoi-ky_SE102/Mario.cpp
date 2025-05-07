@@ -96,6 +96,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//Handle Koopa Picking and Kicking
 	if (Koopa)
 	{
+		//dynamic_cast<CKoopa*>(Koopa)->SetIsHeld(true);
 		if (level != MARIO_LEVEL_RACCOON)
 			Koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * 2.f, y - 3.f);
 		else 
@@ -106,7 +107,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			Koopa->GetState() == KOOPA_STATE_WALKING_RIGHT)
 		{
 			GetHurt();
-			if (nx = 1)
+			if (nx == 1)
 				Koopa->SetState(KOOPA_STATE_WALKING_RIGHT);
 			else
 				Koopa->SetState(KOOPA_STATE_WALKING_LEFT);
@@ -131,6 +132,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				Koopa = NULL;
 			}
 		}
+	}
+
+	if (Koopa) {
+		float kVx, kVy;
+		Koopa->GetSpeed(kVx, kVy);
+		DebugOut(L"[INFO] Koopa speed: %f %f\n", kVx, kVy);
 	}
 }
 
@@ -353,6 +360,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 			if (isAbleToHold) { // pick
 				//this->Koopa = e->obj;
 				this->Koopa = koopa;
+				
 				koopa->SetIsHeld(true);
 			}
 			else { // Kick

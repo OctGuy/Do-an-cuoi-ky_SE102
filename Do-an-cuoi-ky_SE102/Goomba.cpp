@@ -77,22 +77,25 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 			else
 				vx = -GOOMBA_WALKING_SPEED;
 		}
-		else if (dynamic_cast<CKoopa*>(e->obj)) {
+		else {
 			CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+			CKoopa* koopaHeldByMario = dynamic_cast<CKoopa*>(mario->GetKoopa());
 
-			if (koopa->GetIsHeld()) {
-				SetState(GOOMBA_STATE_DIE_REVERSE);
-				koopa->SetState(KOOPA_STATE_DIE);
-			}
-			else {
-				if (koopa->GetState() == KOOPA_STATE_SHELL_MOVE
+			if (koopa) {
+				if (koopaHeldByMario != nullptr && koopaHeldByMario == koopa && koopa->GetIsHeld()) {
+					DebugOut(L"Koopa is collided with Piranha when Mario hold\n");
+					SetState(GOOMBA_STATE_DIE_REVERSE);
+					koopa->SetState(KOOPA_STATE_DIE);
+				}
+				else if (koopa->GetState() == KOOPA_STATE_SHELL_MOVE
 					|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
+					DebugOut(L"Koopa is collided with Piranha when Mario kick\n");
 					SetState(GOOMBA_STATE_DIE_REVERSE);
 				}
-			}
 
-			mario->AddPoint(100, e);
- 		}
+				mario->AddPoint(100, e);
+			}
+		}
 	}
 }
 

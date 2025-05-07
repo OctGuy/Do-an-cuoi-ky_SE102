@@ -298,7 +298,10 @@ public:
 		return (state != MARIO_STATE_DIE);
 	}
 
-	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
+	int IsBlocking() { 
+		//return (state != MARIO_STATE_DIE && untouchable == 0); 
+		return 0;
+	}
 
 	BOOLEAN IsOnPlatform() { return isOnPlatform; }
 	BOOLEAN IsInAir() { return isInAir; }

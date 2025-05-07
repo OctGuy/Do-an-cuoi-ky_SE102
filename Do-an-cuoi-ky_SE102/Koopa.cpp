@@ -51,7 +51,6 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 			OnCollisionWithBrick(e);
 		}	
 	}
-	//DebugOut(L"Koopa is on platform: %d\n", isOnPlatform);
 }
 
 void CKoopa::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
@@ -219,11 +218,11 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		break;
 	}
 
-	/*if (IsCollidable()) {
-		DebugOut(L"[INFO] Koopa can hit\n");
+	/*if (GetIsHeld()) {
+		DebugOut(L"[INFO] Koopa is held\n");
 	}
 	else {
-		DebugOut(L"[INFO] Koopa can not hit\n");
+		DebugOut(L"[INFO] Koopa is not held\n");
 	}*/
 
 	CGameObject::Update(dt, coObjects);
