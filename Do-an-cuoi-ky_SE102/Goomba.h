@@ -40,6 +40,8 @@ protected:
 	int currentAniId = GOOMBA_TEXTURE_IDLE;
 
 	ULONGLONG die_start;
+public:
+	CGoomba(float x, float y);
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -55,7 +57,7 @@ protected:
 	void OnNoCollision(DWORD dt);
 
 	void OnCollisionWith(LPCOLLISIONEVENT e);
-public:
-	CGoomba(float x, float y);
+	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 	void SetState(int state);
+	CMario* GetPlayer();
 };

@@ -96,7 +96,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//Handle Koopa Picking and Kicking
 	if (Koopa)
 	{
-		//dynamic_cast<CKoopa*>(Koopa)->SetIsHeld(true);
 		if (level != MARIO_LEVEL_RACCOON)
 			Koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * 2.f, y - 3.f);
 		else 
@@ -133,18 +132,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
-
-	if (Koopa) {
-		float kVx, kVy;
-		Koopa->GetSpeed(kVx, kVy);
-		DebugOut(L"[INFO] Koopa speed: %f %f\n", kVx, kVy);
-	}
 }
 
 void CMario::AddPoint(int p, LPCOLLISIONEVENT e)
 {
 	point += p;
-	//Gettiing the position of the object that mario touched to add particle
+	//Get the position of the object that mario touched to add particle
 	if (e != NULL)
 	{
 		CGame* game = CGame::GetInstance();
@@ -331,19 +324,17 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 		if (koopa->GetState() == KOOPA_STATE_WALKING_LEFT
 			|| koopa->GetState() == KOOPA_STATE_WALKING_RIGHT
 			|| koopa->GetState() == KOOPA_STATE_SHELL_MOVE
-			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) 
-		{
+			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
 			koopa->SetState((koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE)
 				? KOOPA_STATE_SHELL_REVERSE_IDLE
 				: KOOPA_STATE_SHELL_IDLE);
 		}
-		else if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
-			koopa->GetState() == KOOPA_STATE_SHELL_SHAKING ||
-			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE ||
-			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_SHAKING)
-		{
-			if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
-				koopa->GetState() == KOOPA_STATE_SHELL_SHAKING)
+		else if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE 
+			|| koopa->GetState() == KOOPA_STATE_SHELL_SHAKING 
+			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE 
+			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_SHAKING) {
+			if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE 
+				|| koopa->GetState() == KOOPA_STATE_SHELL_SHAKING)
 				koopa->SetState(KOOPA_STATE_SHELL_MOVE);
 			else
 				koopa->SetState(KOOPA_STATE_SHELL_REVERSE_MOVE);
@@ -353,32 +344,29 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 		AddPoint(100, e);
 	}
 	else {
-		if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
-			koopa->GetState() == KOOPA_STATE_SHELL_SHAKING ||
-			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE ||
-			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_SHAKING) {
-			if (isAbleToHold) { // pick
-				//this->Koopa = e->obj;
+		if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE 
+			|| koopa->GetState() == KOOPA_STATE_SHELL_SHAKING 
+			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE 
+			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_SHAKING) {
+			if (isAbleToHold) {			// Mario picks Koopa
 				this->Koopa = koopa;
-				
 				koopa->SetIsHeld(true);
 			}
 			else { // Kick
-				//koopa->SetIsHeld(false);
 				isKicking = true;
 				kick_start = GetTickCount64();
-				if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
-					koopa->GetState() == KOOPA_STATE_SHELL_SHAKING)
+				if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE 
+					|| koopa->GetState() == KOOPA_STATE_SHELL_SHAKING)
 					koopa->SetState(KOOPA_STATE_SHELL_MOVE);
 				else
 					koopa->SetState(KOOPA_STATE_SHELL_REVERSE_MOVE);
 				koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
 			}
 		}
-		else if (koopa->GetState() == KOOPA_STATE_WALKING_LEFT ||
-			koopa->GetState() == KOOPA_STATE_WALKING_RIGHT ||
-			koopa->GetState() == KOOPA_STATE_SHELL_MOVE ||
-			koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
+		else if (koopa->GetState() == KOOPA_STATE_WALKING_LEFT 
+			|| koopa->GetState() == KOOPA_STATE_WALKING_RIGHT 
+			|| koopa->GetState() == KOOPA_STATE_SHELL_MOVE 
+			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
 			Koopa = NULL;
 			GetHurt();
 		}
@@ -1001,4 +989,3 @@ void CMario::GetHurt()
 		}
 	}
 }
-
