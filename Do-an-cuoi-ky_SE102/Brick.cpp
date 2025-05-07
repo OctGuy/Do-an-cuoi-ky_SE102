@@ -4,6 +4,10 @@ void CBrick::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 	int id = GetAnimationid();
+	if (id == -1)
+	{
+		return;
+	}
 	animations->Get(id)->Render(x, y);
 	//RenderBoundingBox();
 }
@@ -28,8 +32,11 @@ int CBrick::GetAnimationid()
 		return ID_ANI_BRICK_CLOUD;
 	else if (type == BRICK_TYPE_QUESTION)
 		return ID_ANI_QUESTION_BRICK;
+	else if (type == BRICK_TYPE_SHINY)
+		return ID_ANI_SHINY_BRICK;
 	else
-		return ID_ANI_BRICK_NORMAL;
+		return -1;
+
 }
 
 void CBrick::GetBoundingBox(float& l, float& t, float& r, float& b)

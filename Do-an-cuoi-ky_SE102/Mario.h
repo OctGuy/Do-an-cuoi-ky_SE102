@@ -4,12 +4,12 @@
 #include "Animation.h"
 #include "Animations.h"
 #include "RaccoonTail.h"
-
+#include "Particle.h"
 #include "debug.h"
 
-#define MARIO_INITIAL_SPEED		0.04f
+#define MARIO_INITIAL_SPEED		0.05f
 
-#define MARIO_WALKING_SPEED		0.09f
+#define MARIO_WALKING_SPEED		0.10f
 #define MARIO_RUNNING_SPEED		0.20f
 
 #define MARIO_ACCEL_WALK_X	0.00008f
@@ -24,11 +24,11 @@
 #define MARIO_GRAVITY			0.0015f
 #define MARIO_MAX_FALL_SPEED	0.3f
 #define MARIO_SLOW_FALL_SPEED	0.05f
-#define MARIO_SLOW_FALL_DURATION 500 
+#define MARIO_SLOW_FALL_DURATION 250 
 
 #define MARIO_FLYING_SPEED	-0.1f
 
-#define MARIO_JUMP_DEFLECT_SPEED  0.2f
+#define MARIO_JUMP_DEFLECT_SPEED  0.3f
 
 #pragma region MARIO_STATE
 #define MARIO_STATE_DIE				-10
@@ -59,8 +59,12 @@
 
 #pragma region ANIMATION_ID
 
+#define ID_ANI_MARIO_KICK_RIGHT 200
+#define ID_ANI_MARIO_KICK_LEFT 201
+
 #define ID_ANI_MARIO_CHANGE_LEVEL_RIGHT 300
 #define ID_ANI_MARIO_CHANGE_LEVEL_LEFT 301
+#define ID_ANI_MARIO_CHANGE_LEVEL_RACCOON 302
 
 #define ID_ANI_MARIO_IDLE_RIGHT 400
 #define ID_ANI_MARIO_IDLE_LEFT 401
@@ -122,6 +126,9 @@
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT 1600
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT 1601
 
+#define ID_ANI_MARIO_SMALL_KICK_RIGHT 1700
+#define ID_ANI_MARIO_SMALL_KICK_LEFT 1701
+
 //RACCOON MARIO
 #define ID_ANI_MARIO_RACCOON_IDLE_RIGHT 2000
 #define ID_ANI_MARIO_RACCOON_IDLE_LEFT 2001
@@ -163,6 +170,9 @@
 #define ID_ANI_MARIO_RACCOON_TAIL_ATTACK_RIGHT 2900
 #define ID_ANI_MARIO_RACCOON_TAIL_ATTACK_LEFT 2901
 
+#define ID_ANI_MARIO_RACCOON_KICK_RIGHT 3000
+#define ID_ANI_MARIO_RACCOON_KICK_LEFT 3001
+
 #pragma endregion
 
 #define GROUND_Y 350.0f
@@ -185,6 +195,7 @@
 
 #define MARIO_UNTOUCHABLE_TIME 2500
 #define MARIO_TAIL_ATTACK_TIME 250
+#define MARIO_KICK_TIME 250
 
 class CMario : public CGameObject
 {
@@ -198,13 +209,16 @@ class CMario : public CGameObject
 	float ay;				// acceleration on y 
 
 	int level;
+	int preLevel;
 	int untouchable;
 	ULONGLONG untouchable_start;
 	ULONGLONG slowfall_start;
 	ULONGLONG tailAttack_start;
+	ULONGLONG kick_start;
 
 	BOOLEAN isOnPlatform;
 	BOOLEAN isInAir;	//If Raccoon mario is flying or floating this should be true
+	BOOLEAN isKicking; 
 
 	BOOLEAN isTailAttacking; //If Raccoon mario is using tail attack this should be true
 	LPGAMEOBJECT Tail; // Raccoon tail object
@@ -214,7 +228,6 @@ class CMario : public CGameObject
 	BOOLEAN isAbleToHold; //If player is holding S this should true
 	LPGAMEOBJECT Koopa; // Koopa object that Mario is holding
 
-
 	//Tracking point and coin
 	int coin;
 	int point;
@@ -222,11 +235,14 @@ class CMario : public CGameObject
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
+	void OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithShinyBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e);
 	void OnCollisionWithPowerUp(LPCOLLISIONEVENT e);
 	void OnCollisionWithBullet(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
+	void OnCollisionWithPSwitch(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -243,16 +259,20 @@ public:
 		ay = MARIO_GRAVITY;
 
 		level = MARIO_LEVEL_SMALL;
+		preLevel = MARIO_LEVEL_SMALL;
 		untouchable = 0;
+
 		untouchable_start = -1;
 		slowfall_start = -1;
 		tailAttack_start = -1;
+		kick_start = 1;
 
 		isSitting = false;
 		isOnPlatform = false;
 		isInAir = false;
 		isTailAttacking = false;
 		isAbleToHold = false;
+		isKicking = false;
 
 		Tail = NULL;
 		currentFloorY = GROUND_Y; // Initialize to ground level
@@ -278,15 +298,20 @@ public:
 		return (state != MARIO_STATE_DIE);
 	}
 
-	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
+	int IsBlocking() { 
+		//return (state != MARIO_STATE_DIE && untouchable == 0); 
+		return 0;
+	}
 
 	BOOLEAN IsOnPlatform() { return isOnPlatform; }
 	BOOLEAN IsInAir() { return isInAir; }
 	BOOLEAN IsTailAttacking() { return isTailAttacking; }
 
+	BOOLEAN IsHoldingKoopa() { return isAbleToHold; }
+
 	//Update coin and point
-	void AddCoin() { coin++; AddPoint(100); }
-	void AddPoint(int p) { point += p; }
+	void AddCoin() { coin++;}
+	void AddPoint(int p, LPCOLLISIONEVENT e = NULL);
 
 	bool GetIsRunning() { return isRunning; }
 
@@ -301,4 +326,7 @@ public:
 	void StartTailAttack() { isTailAttacking = true; tailAttack_start = GetTickCount64(); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+
+	LPGAMEOBJECT GetKoopa() { return Koopa; }
+	void SetKoopa(LPGAMEOBJECT koopa) { Koopa = koopa; }
 };

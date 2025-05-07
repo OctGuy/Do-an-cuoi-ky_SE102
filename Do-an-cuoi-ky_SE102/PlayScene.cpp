@@ -15,6 +15,9 @@
 #include "FireBullet.h"
 #include "Koopa.h"
 #include "RaccoonTail.h"
+#include "Wall.h"
+#include "ShinyBrick.h"
+#include "PSwitch.h"
 
 using namespace std;
 
@@ -24,11 +27,14 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	player = NULL;
 	key_handler = new CSampleKeyHandler(this);
 	backgroundColor = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f); // Default to black
+	rightBoundary = 0;
+	bottomBoundary = 0;
 }
 
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_ASSETS	1
 #define SCENE_SECTION_OBJECTS	2
+#define SCENE_SECTION_SETTINGS	3
 
 #define ASSETS_SECTION_UNKNOWN -1
 #define ASSETS_SECTION_SPRITES 1
@@ -106,6 +112,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	float y = (float)atof(tokens[2].c_str());
 
 	CGameObject *obj = NULL;
+
 	int type = 0;
 
 	switch (object_type)
@@ -142,22 +149,48 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new CBrick(x, y, type);
 			break;
 
+		case OBJECT_TYPE_WALL:
+		{
+			float rightBound = (float)atof(tokens[3].c_str());
+			float bottomBound = (float)atof(tokens[4].c_str());
+			type = atoi(tokens[5].c_str());
+			obj = new CWall(x, y, rightBound, bottomBound, type);
+			break;
+		}
+
 		case OBJECT_TYPE_QUESTION_BRICK:
+		{
 			type = atoi(tokens[3].c_str());
-			obj = new CQuestionBrick(x, y, type);
-			//WARNING: load item you want the quesiton brick to contain first then load the brick
+			int itemType = atoi(tokens[4].c_str());
+			obj = new CQuestionBrick(x, y, type, itemType);
+			break;
+		}
 
-			if (!objects.empty())
-			{
-				((CQuestionBrick*)obj)->SetItem(objects.back());
-				objects.back()->SetActive(false);
-			}
-
+		case OBJECT_TYPE_SHINY_BRICK:
+			type = atoi(tokens[3].c_str());
+			obj = new CShinyBrick(x, y, type);
 			break;
 
 		case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 
 		case OBJECT_TYPE_POWER_UP: obj = new CPowerUp(x, y); break;
+
+		case OBJECT_TYPE_PSWTICH:
+		{
+			//float numberOfShinyBrick = (float)atof(tokens[3].c_str());
+			obj = new CPSwitch(x, y);
+
+			//for(int i = 0; i < numberOfShinyBrick; i++)
+			//{
+			//	if (!objects.empty())
+			//	{
+			//		dynamic_cast<CPSwitch*>(obj)->AddShinyBrick(objects[objects.size() - i]);
+			//		objects.back()->SetActive(false);
+			//	}
+			//}
+
+			break;
+		}
 
 		case OBJECT_TYPE_PLATFORM:
 		{
@@ -298,6 +331,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	objects.push_back(obj);
 }
 
+void CPlayScene::_ParseSection_SETTINGS(string line)
+{
+	vector<string> tokens = split(line);
+	if (tokens.size() < 2) return;
+	if (tokens[0] == "right")
+		rightBoundary = (float)atof(tokens[1].c_str());
+	else if (tokens[0] == "bottom")
+		bottomBoundary = (float)atof(tokens[1].c_str());
+	else
+		DebugOut(L"[ERROR] Unknown scene setting: %s\n", ToWSTR(tokens[0]).c_str());
+}
+
 void CPlayScene::LoadAssets(LPCWSTR assetFile)
 {
 	DebugOut(L"[INFO] Start loading assets from : %s \n", assetFile);
@@ -353,6 +398,7 @@ void CPlayScene::Load()
 		if (line[0] == '#') continue;	// skip comment lines	
 		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
 		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; continue; };
+		if (line == "[SETTINGS]") { section = SCENE_SECTION_SETTINGS; continue; };
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
 
 		//
@@ -362,6 +408,7 @@ void CPlayScene::Load()
 		{ 
 			case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+			case SCENE_SECTION_SETTINGS: _ParseSection_SETTINGS(line); break;
 		}
 	}
 
@@ -473,11 +520,12 @@ void CPlayScene::Update(DWORD dt)
 	}
 
 	if (cx < 0) cx = 0;
-	//This is calculated to be roughly the end of the map (might need to be adjusted to fit diffrent map)
-	else if (cx > 2816.f - game->GetBackBufferWidth() - 8.f) cx = 2816.f - game->GetBackBufferWidth() - 8.f;
+
+	//Boundary is set in the scene file under SETTINGS section
+	else if (cx > rightBoundary - game->GetBackBufferWidth() - 9.f) cx = rightBoundary - game->GetBackBufferWidth() - 9.f;
 
 	if (cy < 0) cy = 0;
-	else if (cy > 220.f) cy = 220.f;
+	else if (cy > bottomBoundary) cy = bottomBoundary;
 
 	CGame::GetInstance()->SetCamPos(cx, cy);
 

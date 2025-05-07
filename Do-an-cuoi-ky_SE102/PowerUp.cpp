@@ -66,10 +66,10 @@ void CPowerUp::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CPowerUp::UpdateMushroom()
 {
-	if (y <= originalY - MUSHROOM_BBOX_HEIGHT)
+	if (y <= originalY - MUSHROOM_BBOX_HEIGHT + 3.f) //3.f for mushroom rise height adjustment
 	{
 		//DebugOut(L"Maximum height reached");
-		y = originalY - MUSHROOM_BBOX_HEIGHT;
+		y = originalY - MUSHROOM_BBOX_HEIGHT + 3.f;
 		SetState(MUSHROOM_STATE_WALKING);
 	}
 }
@@ -132,10 +132,18 @@ void CPowerUp::SetState(int state)
 
 void CPowerUp::SetStateMushroom(int state)
 {
+	CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+	CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+	float marioX, marioY;
+	mario->GetPosition(marioX, marioY);
 	switch (state)
 	{
 	case MUSHROOM_STATE_WALKING:
-		vx = -MUSHROOM_WALKING_SPEED;  // Start moving left like Goomba
+		if (marioX > x)
+			nx = -1; 
+		else
+			nx = 1;
+		vx = nx*MUSHROOM_WALKING_SPEED;  // Start moving left like Goomba
 		ay = MUSHROOM_GRAVITY;  // Apply gravity
 		break;
 	case MUSHROOM_STATE_RISE:

@@ -65,3 +65,30 @@
 - Moving Koopa Shell killed Goomba (state die_reverse) (Thinh)
 - Add die_state for Koopa, Piranha Plant (Thinh)
 - Koopa shell killed Piranha Plant (Thinh)
+
+24/4/2025
+- Bug fix (Phong)
+
+25/4/2025
+- Adjust mario holding animation and adding kick animation (Phong)
+
+29/4/2025
+- Add particle effect. (Phong)
+
+30/4/2025
+- Bug fix and finishing particle effects (Phong)
+
+1/5/2025
+- Bug fixes (Phong)
+
+2/5/2025
+- Bug fixes and adding boundary to map (Phong)
+
+3/5/2025
+- Animation Adjustment (Phong)
+
+4/5/2025
+- Bug fixes and Animation Adjustment (Phong)
+
+5/5/2025
+- Added PSwitch and shiny brick

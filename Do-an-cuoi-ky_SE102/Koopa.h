@@ -19,16 +19,16 @@
 #define KOOPA_ANI_SHELL_REVERSE_SHAKING 8007
 #define KOOPA_ANI_DIE 8007 // same as shell move
 
-#define KOOPA_GRAVITY 0.002f
+#define KOOPA_GRAVITY 0.001f
 #define KOOPA_WALKING_SPEED 0.03f
 #define KOOPA_SHELL_SPEED 0.15f
-#define KOOPA_DEFLECT_SPEED 0.4f
+#define KOOPA_DEFLECT_SPEED 0.3f
 
 #define KOOPA_BBOX_WIDTH 16
 #define KOOPA_BBOX_HEIGHT 26
 
 #define KOOPA_SHELL_BBOX_WIDTH 16
-#define KOOPA_SHELL_BBOX_HEIGHT 16
+#define KOOPA_SHELL_BBOX_HEIGHT 14
 
 #define KOOPA_SHELL_DURATION 5000
 #define KOOPA_SHELL_SHAKING_DURATION 2000
@@ -43,6 +43,7 @@
 #define KOOPA_STATE_SHELL_REVERSE_MOVE 6
 #define KOOPA_STATE_SHELL_REVERSE_SHAKING 7
 #define KOOPA_STATE_DIE 8
+#define KOOPA_STATE_SHELL_REVERSE_JUMP	9
 
 
 class CKoopa : public CEnemy
@@ -72,13 +73,12 @@ public:
 	}
 
 	void SetIsHeld(bool isHeld) { this->isHeld = isHeld; }
+	bool GetIsHeld() { return isHeld; }
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void SetState(int state);
-	int IsCollidable() {
-		return	1;
-	}
+	int IsCollidable() { return (state != KOOPA_STATE_DIE); }
 
 	int IsBlocking() { return 0; }
 
@@ -88,6 +88,5 @@ public:
 	CMario* GetPlayer();
 
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
-	//void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 };
 

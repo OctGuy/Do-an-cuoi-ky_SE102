@@ -28,6 +28,8 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 
 	if (e->ny < 0) { // Stand on platform
 		vy = 0;
+		if (state == KOOPA_STATE_SHELL_REVERSE_JUMP)
+			SetState(KOOPA_STATE_SHELL_REVERSE_IDLE);
 		ay = KOOPA_GRAVITY; 
 		platform = e->obj;  // Set platform to what Koopa is standing on
 	}
@@ -49,7 +51,6 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 			OnCollisionWithBrick(e);
 		}	
 	}
-	//DebugOut(L"Koopa is on platform: %d\n", isOnPlatform);
 }
 
 void CKoopa::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
@@ -83,7 +84,8 @@ void CKoopa::Render() {
 		aniId = KOOPA_ANI_SHELL_MOVE;
 	else if (state == KOOPA_STATE_SHELL_SHAKING)
 		aniId = KOOPA_ANI_SHELL_SHAKING;
-	else if (state == KOOPA_STATE_SHELL_REVERSE_IDLE)
+	else if (state == KOOPA_STATE_SHELL_REVERSE_IDLE ||
+			 state == KOOPA_STATE_SHELL_REVERSE_JUMP)
 		aniId = KOOPA_ANI_SHELL_REVERSE_IDLE;
 	else if (state == KOOPA_STATE_SHELL_REVERSE_MOVE)
 		aniId = KOOPA_ANI_SHELL_REVERSE_MOVE;
@@ -132,6 +134,11 @@ void CKoopa::SetState(int state) {
 		stateShakingStart = GetTickCount64();
 		vx = 0;
 		break;
+	case KOOPA_STATE_SHELL_REVERSE_JUMP:
+		vy = -KOOPA_DEFLECT_SPEED;      // Jump up with reverse deflect speed
+		ay = KOOPA_GRAVITY;             // Apply gravity for natural arc
+		vx = -vx;                       // Reverse current x velocity
+		break;
 	case KOOPA_STATE_DIE:
 		DebugOut(L"[INFO] Koopa is dead\n");
 		die_start = GetTickCount64();
@@ -167,6 +174,11 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	//DebugOut(L"[INFO] Koopa velocity: %f %f\n", vx, vy);
 
+	 // Kiểm tra nếu Koopa đang ở trạng thái DIE
+	if (state == KOOPA_STATE_DIE && player && player->GetKoopa() == this) {
+		player->SetKoopa(NULL); // Đặt Koopa của Mario thành NULL
+	}
+
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -195,7 +207,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	case KOOPA_STATE_SHELL_REVERSE_SHAKING:
 		if (now - stateShakingStart > KOOPA_SHELL_SHAKING_DURATION) {
 			//DebugOut(L"[INFO] Koopa is out of shell\n");
-			vy = -0.4;
+			vy = -0.15;
 			SetState(KOOPA_STATE_WALKING_LEFT);
 		}
 		break;
