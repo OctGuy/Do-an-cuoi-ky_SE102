@@ -17,6 +17,7 @@ void CAnimation::Add(int spriteId, DWORD time)
 void CAnimation::Render(float x, float y, int* spriteId)
 {
 	ULONGLONG now = GetTickCount64();
+
 	if (currentFrame == -1)
 	{
 		currentFrame = 0;
