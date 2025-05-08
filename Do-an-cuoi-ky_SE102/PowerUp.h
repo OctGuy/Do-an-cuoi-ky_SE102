@@ -57,6 +57,7 @@ public:
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
 	void UpdateMushroom();
 	void UpdateLeaf();
+    virtual void Reload();
 
     void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 	int GetType() { return type; }

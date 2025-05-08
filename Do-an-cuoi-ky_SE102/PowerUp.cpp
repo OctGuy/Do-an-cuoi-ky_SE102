@@ -94,6 +94,11 @@ void CPowerUp::UpdateLeaf()
 
 }
 
+void CPowerUp::Reload()
+{
+	this->Delete();
+}
+
 void CPowerUp::OnNoCollision(DWORD dt)
 {
     x += vx * dt;
