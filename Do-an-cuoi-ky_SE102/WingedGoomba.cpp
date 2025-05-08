@@ -24,7 +24,7 @@ void CWingedGoomba::GetBoundingBox(float& left, float& top, float& right, float&
 	}
 	else {
 		left = x - GOOMBA_BASE_BBOX_WIDTH / 2;
-		top = y - GOOMBA_BASE_BBOX_HEIGHT / 2;
+		top = y - 1.0f - GOOMBA_BASE_BBOX_HEIGHT / 2;
 		right = left + GOOMBA_BASE_BBOX_WIDTH;
 		bottom = top + GOOMBA_BASE_BBOX_HEIGHT;
 	}
@@ -36,10 +36,26 @@ void CWingedGoomba::OnNoCollision(DWORD dt) {
 }
 
 void CWingedGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
-	if (e->ny < 0 && e->obj->IsBlocking()) { // Stand on platform
-		vy = 0;
-		ay = GOOMBA_WING_GRAVITY;
-		isOnPlatform = true;
+	//if (e->ny < 0 && e->obj->IsBlocking()) { // Stand on platform
+	//	vy = 0;
+	//	ay = GOOMBA_WING_GRAVITY;
+	//	isOnPlatform = true;
+	//}
+
+	if (e->obj->IsBlocking()) {
+		if (e->ny != 0) {
+			if (isBouncing) {
+				if (e->ny < 0) {
+					vy = -GOOMBA_WING_BOUNCE_SPEED;
+					bounceCount++;
+					isOnPlatform = true;
+				}
+				else vy = 0;
+			}
+		}
+		else if (e->nx != 0) {
+			vx = -vx;
+		}
 	}
 }
 
@@ -64,23 +80,34 @@ void CWingedGoomba::Render() {
 	if (aniId != -1)
 		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CWingedGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	vx += ax * dt;
 	vy += ay * dt;
 
-		//// Handle bouncing logic
-		//if (state == GOOMBA_WING_STATE_BOUNCE && isOnPlatform) {
-		//	if (bounceCount < 4) {
-		//		vy = -0.1f;
-		//		vx = -0.1f;
-		//		bounceCount++;
-		//		isOnPlatform = false;
-		//	}
-		//	else SetState(GOOMBA_WING_STATE_BOUNCE);
-		//}
+	isOnPlatform = false;
+
+	if (isBouncing && bounceCount >= 4) {
+		isBouncing = false;
+		SetState(GOOMBA_WING_STATE_WALKING);
+		bounceCount = 0;
+	}
+
+	if (isOnPlatform) {
+		DebugOut(L"GOOMBA WING ON PLATFORM\n");
+	}
+	else {
+		DebugOut(L"GOOMBA WING NOT ON PLATFORM\n");
+	}
+
+	if (state == GOOMBA_WING_STATE_WALKING) {
+		if (GetTickCount64() - walking_start > 1000) {
+			SetState(GOOMBA_WING_STATE_BOUNCE);
+			walking_start = GetTickCount64();
+		}
+	}
 
 	if ((state == GOOMBA_WING_STATE_DIE && GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT)
 		|| (state == GOOMBA_WING_STATE_DIE_REVERSE && GetTickCount64() - die_start > GOOMBA_DIE_REVERSE_TIMEOUT)) {
@@ -104,9 +131,11 @@ void CWingedGoomba::SetState(int state) {
 		ay = GOOMBA_WING_GRAVITY;
 		break;
 	case GOOMBA_WING_STATE_BOUNCE:
-		vx = 0;
-		ax = 0;
-		bounceCount = 0;
+		vx = (nx > 0) ? GOOMBA_WING_WALKING_SPEED : -GOOMBA_WING_WALKING_SPEED;
+		ay = GOOMBA_WING_GRAVITY;
+		vy = -GOOMBA_WING_BOUNCE_SPEED;
+		isBouncing = true;
+		bounceCount++;
 		break;
 	case GOOMBA_WING_STATE_DIE:
 		DebugOut(L"GOOMBA WING DIE\n");

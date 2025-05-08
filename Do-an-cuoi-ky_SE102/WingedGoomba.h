@@ -19,7 +19,7 @@
 
 #define GOOMBA_WING_GRAVITY 0.002f
 #define GOOMBA_WING_WALKING_SPEED 0.05f
-#define GOOMBA_RISE_SPEED 0.02f
+#define GOOMBA_WING_BOUNCE_SPEED 0.2f
 #define GOOMBA_WING_DEFLECT_SPEED 0.4f
 
 #define GOOMBA_WING_ANI_FLY 5003
@@ -35,7 +35,11 @@ protected:
 	float ax;
 	float ay;
 	ULONGLONG die_start;
+	ULONGLONG walking_start;
 	bool isOnPlatform;
+	bool isBouncing;
+	bool isInAir;
+	bool isTrackingMario;
 	int bounceCount;
 public:
 	CWingedGoomba(float x, float y);
