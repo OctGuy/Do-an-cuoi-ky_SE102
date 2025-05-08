@@ -97,13 +97,6 @@ void CWingedGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		bounceCount = 0;
 	}
 
-	if (isOnPlatform) {
-		DebugOut(L"GOOMBA WING ON PLATFORM\n");
-	}
-	else {
-		DebugOut(L"GOOMBA WING NOT ON PLATFORM\n");
-	}
-
 	if (state == GOOMBA_WING_STATE_WALKING) {
 		if (GetTickCount64() - walking_start > 1000) {
 			SetState(GOOMBA_WING_STATE_FLY);
