@@ -28,7 +28,9 @@ void CWingedGoomba::GetBoundingBox(float& left, float& top, float& right, float&
 		right = left + GOOMBA_BASE_BBOX_WIDTH;
 		bottom = top + GOOMBA_BBOX_HEIGHT_DIE;
 	}
-	else if (state == GOOMBA_WING_STATE_BOUNCE || state == GOOMBA_WING_STATE_FLY) {
+	else if (state == GOOMBA_WING_STATE_BOUNCE 
+		|| state == GOOMBA_WING_STATE_FLY 
+		|| state == GOOMBA_WING_STATE_TRACKING_MARIO) {
 		left = x - GOOMBA_WING_BBOX_WIDTH / 2;
 		top = y - GOOMBA_WING_BBOX_HEIGHT / 2;
 		right = left + GOOMBA_WING_BBOX_WIDTH;
