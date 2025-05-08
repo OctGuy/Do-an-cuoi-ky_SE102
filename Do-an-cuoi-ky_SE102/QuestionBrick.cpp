@@ -19,9 +19,14 @@ CMario* CQuestionBrick::GetPlayer()
 
 void CQuestionBrick::Render()
 {
-    if (isHit) {
-        CAnimations* animations = CAnimations::GetInstance();
-        int id = ID_ANI_QUESTION_BRICK_INACTIVE;
+    CAnimations* animations = CAnimations::GetInstance();
+    int id = -1;
+    if (bounceStart) {
+        id = ID_ANI_QUESTION_BRICK_BOUNCE;
+        animations->Get(id)->Render(x, y);
+    }
+    else if (isHit) {
+        id = ID_ANI_QUESTION_BRICK_INACTIVE;
         animations->Get(id)->Render(x, y);
     }
     else
@@ -40,21 +45,7 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
     if (isHit)
     {
-        if (GetTickCount64() - bounceStart < BRICK_BOUNCE_TIME)
-        {
-            y += vy * dt;
-            if (y <= originalY - BRICK_BOUNCE_HEIGHT)
-            {
-                y = originalY - BRICK_BOUNCE_HEIGHT;
-                vy = BRICK_BOUNCE_SPEED;
-            }
-            else if (y >= originalY)
-            {
-                y = originalY;
-                vy = 0;
-            }
-        }
-        else
+        if (GetTickCount64() - bounceStart >= BRICK_BOUNCE_TIME)
         {
             if (!isBouncingFinished) // After brick stop bouncing, activate non-coin item
             {
@@ -63,9 +54,11 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
                 {
                     ActivateItem();
                 }
+                //Reset aniamtion
+                CAnimations* animations = CAnimations::GetInstance();
+				animations->Get(ID_ANI_QUESTION_BRICK_BOUNCE)->Reset();
             }
-            y = originalY;
-            vy = 0;
+            bounceStart = 0;
         }
     }
 
@@ -118,7 +111,6 @@ void CQuestionBrick::SetState(int state)
             {
                 isHit = true;
                 bounceStart = GetTickCount64();
-                vy = -BRICK_BOUNCE_SPEED;
             }
             break;
     }
