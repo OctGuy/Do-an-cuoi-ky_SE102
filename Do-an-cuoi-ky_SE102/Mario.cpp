@@ -81,6 +81,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		tailAttack_start = 0;
 		isTailAttacking = false;
+		CAnimations* animations = CAnimations::GetInstance();
+		animations->Get(ID_ANI_MARIO_RACCOON_TAIL_ATTACK_RIGHT)->Reset();
+		animations->Get(ID_ANI_MARIO_RACCOON_TAIL_ATTACK_LEFT)->Reset();
 	}
 
 	if (now - kick_start > MARIO_KICK_TIME)
