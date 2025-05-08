@@ -5,6 +5,7 @@
 #include "Game.h"
 
 #include "Goomba.h"
+#include "WingedGoomba.h"
 #include "Coin.h"
 #include "Portal.h"
 #include "QuestionBrick.h"
@@ -98,7 +99,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		if (level != MARIO_LEVEL_RACCOON)
 			Koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * 2.f, y - 3.f);
-		else 
+		else
 			Koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * 7.f, y - 3.f);
 		Koopa->SetSpeed(0, 0);
 		//If koopa is out of shell while mario is still holding it, mario is hurt
@@ -222,6 +223,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		OnCollisionWithPSwitch(e);
 	}
+	else if (dynamic_cast<CWingedGoomba*>(e->obj))
+	{
+		OnCollisionWithWingedGoomba(e);
+	}
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -233,7 +238,6 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 		SetState(MARIO_STATE_DIE);
 	}
 }
-
 
 void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 {
@@ -293,6 +297,29 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	}
 }
 
+void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e) {
+	CWingedGoomba* wingedGoomba = dynamic_cast<CWingedGoomba*>(e->obj);
+
+	if (e->ny < 0) {
+		if (wingedGoomba->GetState() != GOOMBA_WING_STATE_DIE && wingedGoomba->GetState() != GOOMBA_WING_STATE_DIE_REVERSE) {
+			int state = wingedGoomba->GetState();
+			if (state == GOOMBA_WING_STATE_TRACKING_MARIO
+				|| state == GOOMBA_WING_STATE_BOUNCE
+				|| state == GOOMBA_WING_STATE_FLY) {
+				wingedGoomba->SetState(GOOMBA_WING_STATE_WALKING);
+			}
+			else if (state == GOOMBA_WING_STATE_WALKING) {
+				wingedGoomba->SetState(GOOMBA_WING_STATE_DIE);
+			}
+
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			AddPoint(100, e);
+		}
+	}
+	else if (wingedGoomba->GetState() != GOOMBA_WING_STATE_DIE && wingedGoomba->GetState() != GOOMBA_WING_STATE_DIE_REVERSE)
+		GetHurt();
+}
+
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	DebugOut(L">>> Mario touched coin >>> \n");
@@ -329,11 +356,11 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 				? KOOPA_STATE_SHELL_REVERSE_IDLE
 				: KOOPA_STATE_SHELL_IDLE);
 		}
-		else if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE 
-			|| koopa->GetState() == KOOPA_STATE_SHELL_SHAKING 
-			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE 
+		else if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE
+			|| koopa->GetState() == KOOPA_STATE_SHELL_SHAKING
+			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE
 			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_SHAKING) {
-			if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE 
+			if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE
 				|| koopa->GetState() == KOOPA_STATE_SHELL_SHAKING)
 				koopa->SetState(KOOPA_STATE_SHELL_MOVE);
 			else
@@ -344,9 +371,9 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 		AddPoint(100, e);
 	}
 	else {
-		if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE 
-			|| koopa->GetState() == KOOPA_STATE_SHELL_SHAKING 
-			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE 
+		if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE
+			|| koopa->GetState() == KOOPA_STATE_SHELL_SHAKING
+			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE
 			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_SHAKING) {
 			if (isAbleToHold) {			// Mario picks Koopa
 				this->Koopa = koopa;
@@ -355,7 +382,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 			else { // Kick
 				isKicking = true;
 				kick_start = GetTickCount64();
-				if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE 
+				if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE
 					|| koopa->GetState() == KOOPA_STATE_SHELL_SHAKING)
 					koopa->SetState(KOOPA_STATE_SHELL_MOVE);
 				else
@@ -363,9 +390,9 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 				koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
 			}
 		}
-		else if (koopa->GetState() == KOOPA_STATE_WALKING_LEFT 
-			|| koopa->GetState() == KOOPA_STATE_WALKING_RIGHT 
-			|| koopa->GetState() == KOOPA_STATE_SHELL_MOVE 
+		else if (koopa->GetState() == KOOPA_STATE_WALKING_LEFT
+			|| koopa->GetState() == KOOPA_STATE_WALKING_RIGHT
+			|| koopa->GetState() == KOOPA_STATE_SHELL_MOVE
 			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
 			Koopa = NULL;
 			GetHurt();
@@ -604,7 +631,7 @@ int CMario::GetAniIdRaccoon()
 						aniId = ID_ANI_MARIO_RACCOON_RUNNING_HOLDING_RIGHT;
 					else
 						aniId = ID_ANI_MARIO_RACCOON_RUNNING_HOLDING_LEFT;
-				else 
+				else
 					if (nx >= 0)
 						aniId = ID_ANI_MARIO_RACCOON_WALKING_HOLDING_RIGHT;
 					else
@@ -621,7 +648,7 @@ int CMario::GetAniIdRaccoon()
 	}
 	else if (!isOnPlatform)
 	{
-		if (abs(vx) == MARIO_RUNNING_SPEED|| (isInAir && vy < 0))
+		if (abs(vx) == MARIO_RUNNING_SPEED || (isInAir && vy < 0))
 		{
 			if (isInAir)
 				if (nx >= 0)
@@ -711,7 +738,7 @@ void CMario::Render()
 				aniId = ID_ANI_MARIO_CHANGE_LEVEL_RIGHT;
 			else
 				aniId = ID_ANI_MARIO_CHANGE_LEVEL_LEFT;
-		}	
+		}
 	}
 	else if (level == MARIO_LEVEL_BIG)
 		aniId = GetAniIdBig();

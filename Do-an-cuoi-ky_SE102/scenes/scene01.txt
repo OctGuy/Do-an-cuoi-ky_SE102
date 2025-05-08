@@ -266,7 +266,7 @@ assets\winged_goomba.txt
 #5	120	90	16	16	8	20001	20001	20001
 
 # GOOMBA
-2	240	400
+#2	240	400
 2 	423	375
 
 #WINGED GOOMBA

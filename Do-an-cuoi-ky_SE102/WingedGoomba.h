@@ -31,6 +31,7 @@
 #define GOOMBA_WING_ANI_WALKING 5006
 #define GOOMBA_WING_ANI_DIE 5007
 #define GOOMBA_WING_ANI_DIE_REVERSE 5008
+#define GOOMBA_WING_ANI_TRACKING_MARIO 5009
 
 class CWingedGoomba : public CEnemy
 {
@@ -63,5 +64,6 @@ public:
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	void SetState(int state);
 	CMario* GetPlayer();
+	void TrackingMario();
 };
 

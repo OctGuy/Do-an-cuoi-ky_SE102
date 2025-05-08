@@ -9,8 +9,11 @@ CWingedGoomba::CWingedGoomba(float x, float y) : CEnemy (x, y) {
 	die_start = -1;
 	tracking_start = -1;
 	isOnPlatform = false;
+	isBouncing = false;
+	isInAir = false;
+	isTrackingMario = false;
 	bounceCount = 0;
-	SetState(GOOMBA_WING_STATE_WALKING);
+	SetState(GOOMBA_WING_STATE_BOUNCE);
 }
 
 CMario* CWingedGoomba::GetPlayer() {
@@ -64,7 +67,7 @@ void CWingedGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 			else if (isInAir) {
 				if (e->ny < 0) {
 					vy = 0;
-					isInAir = 0;
+					isInAir = false;
 					isOnPlatform = true;
 					SetState(GOOMBA_WING_STATE_TRACKING_MARIO);
 				}
@@ -95,7 +98,7 @@ void CWingedGoomba::Render() {
 			aniId = GOOMBA_WING_ANI_OPEN_WING;
 	}
 	else if (state == GOOMBA_WING_STATE_TRACKING_MARIO)
-		aniId = GOOMBA_WING_ANI_CLOSE_WING;
+		aniId = GOOMBA_WING_ANI_TRACKING_MARIO;
 
 	if (aniId != -1)
 		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
@@ -130,32 +133,51 @@ void CWingedGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
+void CWingedGoomba::TrackingMario() {
+	CMario* player = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	float mX, mY;
+	player->GetPosition(mX, mY);
+	vx = (x < mX) ? GOOMBA_WING_WALKING_SPEED : -GOOMBA_WING_WALKING_SPEED;
+	nx = (x < mX) ? 1 : -1;
+}
+
 void CWingedGoomba::SetState(int state) {
-	CMario* mario = GetPlayer();
 	CGameObject::SetState(state);
 
 	switch (state) {
 	case GOOMBA_WING_STATE_FLY:
-		float marioX, marioY;
-		mario->GetPosition(marioX, marioY);
-		vx = (x > marioX) ? -GOOMBA_WING_WALKING_SPEED : GOOMBA_WING_WALKING_SPEED;
+	{
+		TrackingMario();
+		vx = (nx > 0) ? GOOMBA_WING_WALKING_SPEED : -GOOMBA_WING_WALKING_SPEED;
 		ay = GOOMBA_WING_GRAVITY;
 		vy = -GOOMBA_WING_FLY_UP_SPEED;
 		isInAir = true;
 		break;
+	}
+		
 	case GOOMBA_WING_STATE_WALKING:
-		vx = -GOOMBA_WING_WALKING_SPEED;
+	{
+		isBouncing = false;
+		isInAir = false;
+		isTrackingMario = false;
+		vx = (nx > 0) ? GOOMBA_WING_WALKING_SPEED : -GOOMBA_WING_WALKING_SPEED;
 		ay = GOOMBA_WING_GRAVITY;
 		break;
+	}
+		
 	case GOOMBA_WING_STATE_BOUNCE:
-		mario->GetPosition(marioX, marioY);
-		vx = (x > marioX) ? -GOOMBA_WING_WALKING_SPEED : GOOMBA_WING_WALKING_SPEED;
+	{
+		vx = (nx > 0) ? GOOMBA_WING_WALKING_SPEED : -GOOMBA_WING_WALKING_SPEED;
+		//TrackingMario();
 		ay = GOOMBA_WING_GRAVITY;
 		vy = -GOOMBA_WING_BOUNCE_SPEED;
 		isBouncing = true;
 		bounceCount++;
 		break;
-	case GOOMBA_WING_STATE_DIE:
+	}
+		
+	case GOOMBA_WING_STATE_DIE: 
+	{
 		DebugOut(L"GOOMBA WING DIE\n");
 		die_start = GetTickCount64();
 		y += (GOOMBA_BASE_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE) / 2;
@@ -163,21 +185,25 @@ void CWingedGoomba::SetState(int state) {
 		vy = 0;
 		ay = 0;
 		break;
+	}
 	case GOOMBA_WING_STATE_DIE_REVERSE:
+	{
 		DebugOut(L"GOOMBA WING DIE REVERSE\n");
 		die_start = GetTickCount64();
 		vx = 0;
 		vy = -GOOMBA_WING_DEFLECT_SPEED;
 		ay = GOOMBA_WING_GRAVITY;
 		break;
+	}
 	case GOOMBA_WING_STATE_TRACKING_MARIO:
+	{
 		isTrackingMario = true;
 		tracking_start = GetTickCount64();
-		mario->GetPosition(marioX, marioY);
-		vx = (x > marioX) ? -GOOMBA_WING_WALKING_SPEED : GOOMBA_WING_WALKING_SPEED;
+		TrackingMario();
 		vy = 0;
 		ay = GOOMBA_WING_GRAVITY;
 		break;
+	}
 	default:
 		break;
 	}
