@@ -135,6 +135,7 @@ public:
 
 	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
 	void Load(LPCWSTR gameFile);
+	void ReloadCurrentScene();
 	void SwitchScene();
 	void InitiateSwitchScene(int scene_id);
 
