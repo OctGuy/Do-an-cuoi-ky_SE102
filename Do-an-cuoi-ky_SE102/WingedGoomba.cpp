@@ -47,6 +47,15 @@ void CWingedGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 				}
 				else vy = 0;
 			}
+			else if (isInAir) {
+				if (e->ny < 0) {
+					vy = 0;
+					isInAir = 0;
+					isOnPlatform = true;
+					SetState(GOOMBA_WING_STATE_WALKING);
+				}
+				else vy = 0;
+			}
 		}
 		else if (e->nx != 0) {
 			vx = -vx;
@@ -97,7 +106,7 @@ void CWingedGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	if (state == GOOMBA_WING_STATE_WALKING) {
 		if (GetTickCount64() - walking_start > 1000) {
-			SetState(GOOMBA_WING_STATE_BOUNCE);
+			SetState(GOOMBA_WING_STATE_FLY);
 			walking_start = GetTickCount64();
 		}
 	}
@@ -117,8 +126,10 @@ void CWingedGoomba::SetState(int state) {
 
 	switch (state) {
 	case GOOMBA_WING_STATE_FLY:
+		vx = (nx > 0) ? GOOMBA_WING_WALKING_SPEED : -GOOMBA_WING_WALKING_SPEED;
+		ay = GOOMBA_WING_GRAVITY;
+		vy = -GOOMBA_WING_FLY_UP_SPEED;
 		isInAir = true;
-
 		break;
 	case GOOMBA_WING_STATE_WALKING:
 		vx = -GOOMBA_WING_WALKING_SPEED;
