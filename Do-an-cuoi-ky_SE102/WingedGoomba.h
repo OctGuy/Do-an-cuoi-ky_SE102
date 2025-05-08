@@ -7,6 +7,7 @@
 #define GOOMBA_WING_STATE_BOUNCE 204
 #define GOOMBA_WING_STATE_DIE 205
 #define GOOMBA_WING_STATE_DIE_REVERSE 206
+#define GOOMBA_WING_STATE_TRACKING_MARIO 207
 
 #define GOOMBA_BASE_BBOX_WIDTH 16
 #define GOOMBA_BASE_BBOX_HEIGHT 16
@@ -16,6 +17,7 @@
 
 #define GOOMBA_DIE_TIMEOUT 500
 #define GOOMBA_DIE_REVERSE_TIMEOUT 1500
+#define GOOMBA_TRACKING_TIMEOUT 1000
 
 #define GOOMBA_WING_GRAVITY 0.001f
 #define GOOMBA_WING_WALKING_SPEED 0.05f
@@ -36,7 +38,7 @@ protected:
 	float ax;
 	float ay;
 	ULONGLONG die_start;
-	ULONGLONG walking_start;
+	ULONGLONG tracking_start;
 	bool isOnPlatform;
 	bool isBouncing;
 	bool isInAir;
@@ -59,9 +61,7 @@ public:
 	void OnNoCollision(DWORD dt);
 
 	void OnCollisionWith(LPCOLLISIONEVENT e);
-	//void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 	void SetState(int state);
 	CMario* GetPlayer();
-	//bool GetIsOnPlatform() { return isOnPlatform; }
 };
 
