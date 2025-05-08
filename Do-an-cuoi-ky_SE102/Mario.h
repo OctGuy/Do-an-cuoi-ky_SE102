@@ -293,13 +293,9 @@ public:
 	int GetPoint() { return point; }
 	int GetLevel() { return level; }
 
-	int IsCollidable()
-	{
-		return (state != MARIO_STATE_DIE);
-	}
+	int IsCollidable() { return (state != MARIO_STATE_DIE); }
 
 	int IsBlocking() { 
-		//return (state != MARIO_STATE_DIE && untouchable == 0); 
 		return 0;
 	}
 
@@ -310,7 +306,7 @@ public:
 	BOOLEAN IsHoldingKoopa() { return isAbleToHold; }
 
 	//Update coin and point
-	void AddCoin() { coin++;}
+	void AddCoin() { coin++; }
 	void AddPoint(int p, LPCOLLISIONEVENT e = NULL);
 
 	bool GetIsRunning() { return isRunning; }
@@ -322,8 +318,15 @@ public:
 	void SetTail(LPGAMEOBJECT tail) { this->Tail = tail; }
 	void GetHurt();
 
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
-	void StartTailAttack() { isTailAttacking = true; tailAttack_start = GetTickCount64(); }
+	void StartUntouchable() { 
+		untouchable = 1; 
+		untouchable_start = GetTickCount64(); 
+	}
+
+	void StartTailAttack() { 
+		isTailAttacking = true; 
+		tailAttack_start = GetTickCount64();
+	}
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
