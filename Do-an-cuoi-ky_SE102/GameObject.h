@@ -22,6 +22,8 @@ protected:
 
 	float x; 
 	float y;
+	float loadX;	//the coordinates of the object when it is first loaded
+	float loadY;
 
 	float vx;
 	float vy;
@@ -38,6 +40,7 @@ public:
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
+	void GetLoadPosition(float& x, float& y) { x = this->loadX; y = this->loadY; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
 	void GetNx(int& nx) { nx = this->nx; }
 
@@ -51,7 +54,13 @@ public:
 	void RenderBoundingBox();
 
 	CGameObject();
-	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; }
+	CGameObject(float x, float y) :CGameObject() 
+	{ 
+		this->x = x; 
+		this->loadX = x;
+		this->y = y; 
+		this->loadY = y;
+	}
 
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
