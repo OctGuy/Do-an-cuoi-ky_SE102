@@ -467,8 +467,8 @@ void CPlayScene::Update(DWORD dt)
 {
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		//if (objects[i] == player)
-		//	continue;
+		if (objects[i] == player)
+			continue;
 
 		if (IsWithinLoadChunk(objects[i]) == -1)
 		{
