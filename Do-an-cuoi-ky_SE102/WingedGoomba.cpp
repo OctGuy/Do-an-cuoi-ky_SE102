@@ -33,15 +33,10 @@ void CWingedGoomba::GetBoundingBox(float& left, float& top, float& right, float&
 void CWingedGoomba::OnNoCollision(DWORD dt) {
 	x += vx * dt;
 	y += vy * dt;
+	isOnPlatform = false;
 }
 
 void CWingedGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
-	//if (e->ny < 0 && e->obj->IsBlocking()) { // Stand on platform
-	//	vy = 0;
-	//	ay = GOOMBA_WING_GRAVITY;
-	//	isOnPlatform = true;
-	//}
-
 	if (e->obj->IsBlocking()) {
 		if (e->ny != 0) {
 			if (isBouncing) {
@@ -87,9 +82,7 @@ void CWingedGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	vx += ax * dt;
 	vy += ay * dt;
 
-	isOnPlatform = false;
-
-	if (isBouncing && bounceCount >= 4) {
+	if (isBouncing && bounceCount >= 5) {
 		isBouncing = false;
 		SetState(GOOMBA_WING_STATE_WALKING);
 		bounceCount = 0;
@@ -124,7 +117,8 @@ void CWingedGoomba::SetState(int state) {
 
 	switch (state) {
 	case GOOMBA_WING_STATE_FLY:
-		
+		isInAir = true;
+
 		break;
 	case GOOMBA_WING_STATE_WALKING:
 		vx = -GOOMBA_WING_WALKING_SPEED;
