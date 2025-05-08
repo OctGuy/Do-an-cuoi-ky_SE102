@@ -66,6 +66,7 @@ public:
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
+	virtual void Reload();
 
 	int IsCollidable() {
 		if (state == GOOMBA_STATE_DIE_REVERSE

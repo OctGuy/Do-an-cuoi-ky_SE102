@@ -472,10 +472,8 @@ void CPlayScene::Update(DWORD dt)
 
 		if (IsWithinLoadChunk(objects[i]) == -1)
 		{
+			objects[i]->Reload();
 			objects[i]->SetActive(false);
-			float loadX, loady;
-			objects[i]->GetLoadPosition(loadX, loady);
-			objects[i]->SetPosition(loadX, loady);
 		}
 		else if (IsWithinLoadChunk(objects[i]) == 1)
 		{

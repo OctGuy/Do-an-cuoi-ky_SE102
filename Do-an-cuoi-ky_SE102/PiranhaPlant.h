@@ -75,6 +75,7 @@ public:
 	void SetState(int state);
 	void Shoot(int direction);
 	bool IsTargetInRange();	
+	virtual void Reload();
 
 	CMario* GetPlayer();
 

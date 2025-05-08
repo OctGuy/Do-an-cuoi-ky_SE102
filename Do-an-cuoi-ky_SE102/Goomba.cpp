@@ -131,6 +131,13 @@ void CGoomba::Render()
 	RenderBoundingBox();
 }
 
+void CGoomba::Reload()
+{
+	// Reset the Goomba's state and position
+	CGameObject::Reload();
+	SetState(GOOMBA_STATE_WALKING);
+}
+
 void CGoomba::SetState(int state)
 {
 	CGameObject::SetState(state);
