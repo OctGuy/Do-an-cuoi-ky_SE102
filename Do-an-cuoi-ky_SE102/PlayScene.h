@@ -17,7 +17,7 @@
 #include "HUD.h"
 //#include "Koopas.h"
 
-#define LOAD_CHUNK_WIDTH 16
+#define LOAD_CHUNK_WIDTH 32
 #define LOAD_CHUNK_HEIGHT 128
 
 class CPlayScene: public CScene
