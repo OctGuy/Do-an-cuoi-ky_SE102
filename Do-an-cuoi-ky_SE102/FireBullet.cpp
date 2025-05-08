@@ -68,6 +68,11 @@ void CFireBullet::SetState(int state) {
 	CGameObject::SetState(state);
 }
 
+void CFireBullet::Reload()
+{
+	this->Delete();
+}
+
 void CFireBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	// Same as piranha plant update
