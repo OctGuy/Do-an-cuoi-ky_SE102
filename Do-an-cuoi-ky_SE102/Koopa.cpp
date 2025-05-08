@@ -213,11 +213,26 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		break;
 	case KOOPA_STATE_DIE:
 		if (now - die_start > KOOPA_DIE_DURATION) {
-			isDeleted = true;
+			this->Delete();
 		}
 		break;
 	}
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+}
+
+void CKoopa::Reload()
+{
+	CGameObject::Reload();
+	this->ax = 0;
+	this->ay = KOOPA_GRAVITY;
+	SetState(KOOPA_STATE_WALKING_LEFT);
+	stateShellStart = -1;
+	stateShakingStart = -1;
+	die_start = -1;
+	isHeld = false;
+	platform = NULL;
+	isDeleted = false;
+	isActive = true;
 }

@@ -11,6 +11,15 @@ CPiranhaPlant::CPiranhaPlant(float x, float y) : CEnemy(x, y)
 	die_start = -1;
 }
 
+
+void CPiranhaPlant::Reload()
+{
+	CGameObject::Reload();
+	SetState(PIRANHA_STATE_HIDE);
+	isShooting = false;				// Initialize shooting state
+	//die_start = -1;
+}
+
 CMario* CPiranhaPlant::GetPlayer()
 {
 	CGame* game = CGame::GetInstance();

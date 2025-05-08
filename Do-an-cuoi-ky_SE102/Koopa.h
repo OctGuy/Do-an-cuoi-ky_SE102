@@ -32,7 +32,7 @@
 
 #define KOOPA_SHELL_DURATION 5000
 #define KOOPA_SHELL_SHAKING_DURATION 2000
-#define KOOPA_DIE_DURATION 3000
+#define KOOPA_DIE_DURATION 500
 
 #define KOOPA_STATE_WALKING_LEFT 0
 #define KOOPA_STATE_WALKING_RIGHT 1
@@ -78,6 +78,7 @@ public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void SetState(int state);
+	virtual void Reload();
 	int IsCollidable() { return (state != KOOPA_STATE_DIE); }
 
 	int IsBlocking() { return 0; }

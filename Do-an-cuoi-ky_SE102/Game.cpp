@@ -508,6 +508,15 @@ void CGame::Load(LPCWSTR gameFile)
 	SwitchScene();
 }
 
+void CGame::ReloadCurrentScene()
+{
+	if (scenes[current_scene] != nullptr)
+	{
+		scenes[current_scene]->Unload(); // Unload the current scene
+		scenes[current_scene]->Load();   // Reload the scene
+	}
+}
+
 void CGame::SwitchScene()
 {
 	if (next_scene < 0 || next_scene == current_scene) return; 
