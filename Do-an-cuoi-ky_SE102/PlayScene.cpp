@@ -130,7 +130,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			player = (CMario*)obj;
 
 			// Create the tail for Mario
-			LPGAMEOBJECT tail = new CRaccoonTail(x, y);
+			LPGAMEOBJECT tail = new CRaccoonTail(x, y + 16.f);
 
 			// Set the tail for Mario
 			dynamic_cast<CMario*>(player)->SetTail(tail);

@@ -5,7 +5,7 @@
 #define RACCOON_TAIL_STATE_INACTIVE 200
 #define RACCOON_TAIL_STATE_ACTIVE 100
 
-#define RACCOON_TAIL_SPEED 0.20f 
+#define RACCOON_TAIL_SPEED 0.30f 
 #define RACCOON_TAIL_RANGE 20.0f
 
 class CRaccoonTail : public CGameObject
