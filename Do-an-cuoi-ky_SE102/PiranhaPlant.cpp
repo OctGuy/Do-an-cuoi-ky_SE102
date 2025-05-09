@@ -31,7 +31,7 @@ CMario* CPiranhaPlant::GetPlayer()
 void CPiranhaPlant::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x - PIRANHA_BBOX_WIDTH / 2;
-	top = y - (PIRANHA_BBOX_HEIGHT - 10.0f) / 2;
+	top = y - PIRANHA_BBOX_HEIGHT / 2;
 	right = left + PIRANHA_BBOX_WIDTH;
 	bottom = top + PIRANHA_BBOX_HEIGHT;
 }
@@ -64,6 +64,8 @@ void CPiranhaPlant::SetState(int state)
 	default:
 		break;
 	}
+
+	DebugOut(L"[INFO] Piranha Plant state: %d\n", state);
 }
 
 int CPiranhaPlant::GetSnippingDirection()
@@ -120,7 +122,7 @@ void CPiranhaPlant::Render()
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(aniId)->Render(x, y);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CPiranhaPlant::Shoot(int direction)

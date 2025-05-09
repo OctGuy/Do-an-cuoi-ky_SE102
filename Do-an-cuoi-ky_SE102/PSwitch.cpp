@@ -43,7 +43,7 @@ void CPSwitch::Render()
         CAnimations::GetInstance()->Get(ANI_ID_PSWTICH_UNACTIVATED)->Render(x, y);
     }
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CPSwitch::GetBoundingBox(float& left, float& top, float& right, float& bottom)

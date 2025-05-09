@@ -33,7 +33,7 @@ void CPowerUp::Render()
     {
         RenderLeaf();
     }
-    RenderBoundingBox();
+    //RenderBoundingBox();
 }
 
 void CPowerUp::RenderMushroom()
