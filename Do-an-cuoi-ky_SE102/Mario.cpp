@@ -125,7 +125,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CPlayScene* playScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
 	playScene->GetBoundary(rightBoundary, bottomBoundary);
 
-	if (x > rightBoundary - MARIO_BIG_BBOX_WIDTH - 8.f) x = rightBoundary - MARIO_BIG_BBOX_WIDTH - 8.f;
+	if (x > rightBoundary - MARIO_BIG_BBOX_WIDTH - 8.f) { x = rightBoundary - MARIO_BIG_BBOX_WIDTH - 8.f; vx = 0; }
 
 	//Handle Koopa Picking and Kicking
 	if (Koopa)
