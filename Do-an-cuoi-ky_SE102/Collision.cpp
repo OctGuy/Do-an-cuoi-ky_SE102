@@ -52,10 +52,7 @@ void CCollision::SweptAABB(
 	//Objects doesnt overlap so no collision
 	if (br < sl || bl > sr || bb < st || bt > sb) return;
 
-	// Object over lapping but not moving
-	// Still initialize t = 1.0f to indicate that there is a collision
-	// Why 1.0f? Because we want to use this value to calculate the normal vector for object to still move normally
-	// Why nx and not ny? cause it didnt cause any error :D
+	// Object over lapping but not moving->no collision
 	if (dx == 0 && dy == 0)
 
 		return;
@@ -173,10 +170,7 @@ void CCollision::SweptAABB(
 	//Objects doesnt overlap so no collision
 	if (br < sl || bl > sr || bb < st || bt > sb) return;
 
-	// Object over lapping but not moving
-	// Still initialize t = 1.0f to indicate that there is a collision
-	// Why 1.0f? Because we want to use this value to calculate the normal vector for object to still move normally
-	// Why nx and not ny? cause it didnt cause any error :D
+	// Object over lapping but not moving -> no collision
 	if (dx == 0 && dy == 0) return;
 
 	if (dx > 0)
