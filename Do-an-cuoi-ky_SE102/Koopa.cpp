@@ -162,7 +162,7 @@ bool CKoopa::IsOnPlatform() {
 	float l, t, r, b;
 	platform->GetBoundingBox(l, t, r, b);
 
-	if (checkX >= l && checkX <= r) {
+	if (checkX >= l - 8.0f && checkX <= r + 8.0f) {
 		return true;
 	}
 
