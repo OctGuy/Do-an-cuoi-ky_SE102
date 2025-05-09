@@ -178,7 +178,7 @@ void CMario::AddPoint(int p, LPCOLLISIONEVENT e)
 		CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
 		float objX, objY;
 		e->obj->GetPosition(objX, objY);
-		CParticle* particle = new CParticle(objX, objY, PARTICLE_TYPE_POINT);
+		CParticle* particle = new CParticle(objX, objY, PARTICLE_TYPE_POINT, p);
 		playScene->Add(particle);
 	}
 }
@@ -291,14 +291,19 @@ void CMario::OnCollisionWithPowerUp(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CPowerUp*>(e->obj)->GetType() == POWER_UP_TYPE_LEAF && level != MARIO_LEVEL_RACCOON)
 	{
 		SetLevel(MARIO_LEVEL_RACCOON);
+		AddPoint(1000, e);
 	}
 	else if (dynamic_cast<CPowerUp*>(e->obj)->GetType() == POWER_UP_TYPE_MUSHROOM && level == MARIO_LEVEL_SMALL)
 	{
 		SetLevel(MARIO_LEVEL_BIG);
+		AddPoint(1000, e);
+	}
+	else if (dynamic_cast<CPowerUp*>(e->obj)->GetType() == POWER_UP_TYPE_1UP_MUSHROOM)
+	{
+		AddPoint(0, e);
 	}
 	e->obj->Delete();
-	AddPoint(1000, e);
-
+	
 }
 
 void CMario::OnCollisionWithPSwitch(LPCOLLISIONEVENT e)

@@ -27,7 +27,28 @@ void CParticle::Render()
 {
     int aniID = -1;
 	if (type == PARTICLE_TYPE_POINT)
-		aniID = ID_ANI_PARTICLE_POINT;
+    {
+		if (point == 100)
+			aniID = ID_ANI_PARTICLE_POINT_100;
+		else if (point == 200)
+			aniID = ID_ANI_PARTICLE_POINT_200;
+		else if (point == 400)
+			aniID = ID_ANI_PARTICLE_POINT_400;
+		else if (point == 800)
+			aniID = ID_ANI_PARTICLE_POINT_800;
+		else if (point == 1000)
+			aniID = ID_ANI_PARTICLE_POINT_1000;
+		else if (point == 2000)
+			aniID = ID_ANI_PARTICLE_POINT_2000;
+		else if (point == 4000)
+			aniID = ID_ANI_PARTICLE_POINT_4000;
+		else if (point == 8000)
+			aniID = ID_ANI_PARTICLE_POINT_8000;
+		else if (point == 10000 || point == 0)
+			aniID = ID_ANI_PARTICLE_POINT_1UP;
+		else
+			aniID = ID_ANI_PARTICLE_POINT_100;
+    }
 	else if (type == PARTICLE_TYPE_HIT)
 		aniID = ID_ANI_PARTICLE_HIT;
 	else if (type == PARTICLE_TYPE_BRICK || type == PARTICLE_TYPE_BRICK_LOW)

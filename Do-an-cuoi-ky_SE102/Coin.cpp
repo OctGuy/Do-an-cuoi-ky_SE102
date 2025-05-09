@@ -64,7 +64,7 @@ void CCoin::CollectCoin()
 	CGame* game = CGame::GetInstance();
 	CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
 	CMario* mario = dynamic_cast<CMario*>(playScene->GetPlayer());
-	CParticle* particle = new CParticle(x, y, PARTICLE_TYPE_POINT);
+	CParticle* particle = new CParticle(x, y, PARTICLE_TYPE_POINT, 100);
 	playScene->Add(particle);
 	if (playScene)
 	{

@@ -17,7 +17,15 @@
 
 #define ID_ANI_PARTICLE_SMOKE 302
 #define ID_ANI_PARTICLE_HIT 12000
-#define ID_ANI_PARTICLE_POINT 12010
+#define ID_ANI_PARTICLE_POINT_100 12010
+#define ID_ANI_PARTICLE_POINT_200 12011
+#define ID_ANI_PARTICLE_POINT_400 12012
+#define ID_ANI_PARTICLE_POINT_800 12013
+#define ID_ANI_PARTICLE_POINT_1000 12014
+#define ID_ANI_PARTICLE_POINT_2000 12015
+#define ID_ANI_PARTICLE_POINT_4000 12016
+#define ID_ANI_PARTICLE_POINT_8000 12017
+#define ID_ANI_PARTICLE_POINT_1UP 12018
 #define ID_ANI_PARTICLE_BRICK 12020
 #define ID_ANI_PARTICLE_BRICK_REVERSED 12021
 
@@ -28,9 +36,10 @@ protected:
     DWORD lifetime; // Duration the particle will exist
     DWORD creationTime; // Time when the particle was created
 	int type; // Type of particle (e.g., smoke, explosion, etc.)
+    int point; // To choose the correct point particle to show
 
 public:
-    CParticle(float x, float y, int type) : CGameObject(x, y)
+    CParticle(float x, float y, int type, int p = 0) : CGameObject(x, y)
     {
         this->creationTime = GetTickCount64();
 		this->type = type;
@@ -38,6 +47,7 @@ public:
 			this->vx = 0.f;
 			this->vy = -0.05f;
             this->lifetime = PARTICLE_POINT_LIFE_TIME;
+			this->point = p;
 		}
 		else if (type == PARTICLE_TYPE_HIT) {
             this->vx = 0.f;
