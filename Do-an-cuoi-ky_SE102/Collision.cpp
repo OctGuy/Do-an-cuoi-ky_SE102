@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "Goomba.h"
 #include "PiranhaPlant.h"
+#include "WingedGoomba.h"
 #include "debug.h"
 
 #define BLOCK_PUSH_FACTOR 0.01f
@@ -145,25 +146,15 @@ void CCollision::SweptAABB(
 	nx = ny = 0;
 
 	// Invoke collision between Goomba and Koopa 
-	if (dynamic_cast<CGoomba*>(objSrc) && dynamic_cast<CKoopa*>(objDest)) {
+	if ((dynamic_cast<CGoomba*>(objSrc) 
+		|| dynamic_cast<CWingedGoomba*>(objSrc)
+		|| dynamic_cast<CPiranhaPlant*>(objSrc))
+		&& dynamic_cast<CKoopa*>(objDest)) {
 		if (dynamic_cast<CKoopa*>(objDest)->GetState() == KOOPA_STATE_SHELL_MOVE
 			|| dynamic_cast<CKoopa*>(objDest)->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE
 			|| dynamic_cast<CKoopa*>(objDest)->GetIsHeld()) {
 			if (ml < sr && mr > sl && mt < sb && mb > st) {
 				t = 0.0f;      
-				nx = ny = 0.0f;
-				return;
-			}
-		}
-	}
-
-	// Invoke collision between Koopa and Piranha Plant
-	if (dynamic_cast<CPiranhaPlant*>(objSrc) && dynamic_cast<CKoopa*>(objDest)) {
-		if (dynamic_cast<CKoopa*>(objDest)->GetIsHeld()
-			|| dynamic_cast<CKoopa*>(objDest)->GetState() == KOOPA_STATE_SHELL_MOVE
-			|| dynamic_cast<CKoopa*>(objDest)->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
-			if (ml < sr && mr > sl && mt < sb && mb > st) {
-				t = 0.0f;      // collision at the start of the frame
 				nx = ny = 0.0f;
 				return;
 			}
@@ -186,9 +177,7 @@ void CCollision::SweptAABB(
 	// Still initialize t = 1.0f to indicate that there is a collision
 	// Why 1.0f? Because we want to use this value to calculate the normal vector for object to still move normally
 	// Why nx and not ny? cause it didnt cause any error :D
-	if (dx == 0 && dy == 0)
-
-		return;
+	if (dx == 0 && dy == 0) return;
 
 	if (dx > 0)
 	{
