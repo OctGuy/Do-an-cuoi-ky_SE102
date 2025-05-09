@@ -19,6 +19,7 @@ class CPSwitch;
 #define ITEM_TYPE_COIN 1
 #define ITEM_TYPE_POWERUP 2
 #define ITEM_TYPE_PSWITCH 3
+#define ITEM_TYPE_1UP_MUSHROOM 4
 
 class CQuestionBrick : public CBrick
 {

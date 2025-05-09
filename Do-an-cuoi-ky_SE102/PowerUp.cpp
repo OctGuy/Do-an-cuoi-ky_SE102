@@ -68,7 +68,7 @@ void CPowerUp::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     vy += ay * dt;
     vx += ax * dt;
 
-    if (type == POWER_UP_TYPE_MUSHROOM)
+    if (type == POWER_UP_TYPE_MUSHROOM || type == POWER_UP_TYPE_1UP_MUSHROOM)
     {
         UpdateMushroom();
     }
@@ -148,7 +148,7 @@ void CPowerUp::SetState(int state)
 {
     CGameObject::SetState(state);
 
-    if (type == POWER_UP_TYPE_MUSHROOM)
+    if (type == POWER_UP_TYPE_MUSHROOM || type == POWER_UP_TYPE_1UP_MUSHROOM)
     {
         SetStateMushroom(state);
     }
@@ -165,6 +165,8 @@ void CPowerUp::SetStateMushroom(int state)
     float marioX, marioY;
     mario->GetPosition(marioX, marioY);
 
+	CGameObject::SetState(state);
+
     switch (state)
     {
     case MUSHROOM_STATE_WALKING:
@@ -177,7 +179,6 @@ void CPowerUp::SetStateMushroom(int state)
         isRising = false;
         break;
     case MUSHROOM_STATE_RISE:
-        // Store original position but don't move
         y -= MUSHROOM_BBOX_HEIGHT/2;
         isRising = true;
         rise_start = GetTickCount64();
@@ -191,6 +192,8 @@ void CPowerUp::SetStateMushroom(int state)
 
 void CPowerUp::SetStateLeaf(int state)
 {
+    CGameObject::SetState(state);
+
     switch (state)
     {
     case LEAF_STATE_FALLING:

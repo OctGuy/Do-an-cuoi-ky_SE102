@@ -8,6 +8,7 @@
 #include "PlayScene.h"
 #include "Animations.h"
 #include "Collision.h"
+#include "1UpMushroom.h"
 
 CMario* CQuestionBrick::GetPlayer()
 {
@@ -88,6 +89,12 @@ void CQuestionBrick::Activate()
             CPlayScene* scene = (CPlayScene*)game->GetCurrentScene();
 			CParticle* smoke = new CParticle(x, y - 13.f, PARTICLE_TYPE_SMOKE);
 			playScene->Add(smoke);
+        }
+        else if (itemType == ITEM_TYPE_1UP_MUSHROOM)
+        {
+            item = new C1UpMushroom(x, y - 8.f);
+            dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_1UP_MUSHROOM);
+			playScene->Add(item);
         }
         else
         {
