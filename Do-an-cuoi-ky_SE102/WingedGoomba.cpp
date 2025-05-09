@@ -22,64 +22,70 @@ CMario* CWingedGoomba::GetPlayer() {
 }
 
 void CWingedGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
-	if (state == GOOMBA_WING_STATE_DIE) {
-		left = x - GOOMBA_BASE_BBOX_WIDTH / 2;
-		top = y - GOOMBA_BBOX_HEIGHT_DIE / 2;
-		right = left + GOOMBA_BASE_BBOX_WIDTH;
-		bottom = top + GOOMBA_BBOX_HEIGHT_DIE;
-	}
-	else if (state == GOOMBA_WING_STATE_BOUNCE 
-		|| state == GOOMBA_WING_STATE_FLY 
-		|| state == GOOMBA_WING_STATE_TRACKING_MARIO) {
-		left = x - GOOMBA_WING_BBOX_WIDTH / 2;
-		top = y - GOOMBA_WING_BBOX_HEIGHT / 2;
-		right = left + GOOMBA_WING_BBOX_WIDTH;
-		bottom = top + GOOMBA_WING_BBOX_HEIGHT;
-	}
-	else {
-		left = x - GOOMBA_BASE_BBOX_WIDTH / 2;
-		top = y - 1.0f - GOOMBA_BASE_BBOX_HEIGHT / 2;
-		right = left + GOOMBA_BASE_BBOX_WIDTH;
-		bottom = top + GOOMBA_BASE_BBOX_HEIGHT;
-	}
+	//if (state == GOOMBA_WING_STATE_DIE) {
+	//	left = x - GOOMBA_BASE_BBOX_WIDTH / 2;
+	//	top = y - GOOMBA_BBOX_HEIGHT_DIE / 2;
+	//	right = left + GOOMBA_BASE_BBOX_WIDTH;
+	//	bottom = top + GOOMBA_BBOX_HEIGHT_DIE;
+	//}
+	//else if (state == GOOMBA_WING_STATE_BOUNCE 
+	//	|| state == GOOMBA_WING_STATE_FLY 
+	//	|| state == GOOMBA_WING_STATE_TRACKING_MARIO) {
+	//	left = x - GOOMBA_WING_BBOX_WIDTH / 2;
+	//	top = y - GOOMBA_WING_BBOX_HEIGHT / 2;
+	//	right = left + GOOMBA_WING_BBOX_WIDTH;
+	//	bottom = top + GOOMBA_WING_BBOX_HEIGHT;
+	//}
+	//else {
+	//	left = x - GOOMBA_BASE_BBOX_WIDTH / 2;
+	//	top = y - 1.0f - GOOMBA_BASE_BBOX_HEIGHT / 2;
+	//	right = left + GOOMBA_BASE_BBOX_WIDTH;
+	//	bottom = top + GOOMBA_BASE_BBOX_HEIGHT;
+	//}
+	left = x - GOOMBA_BASE_BBOX_WIDTH / 2;
+	top = y - 1.0f - GOOMBA_BASE_BBOX_HEIGHT / 2;
+	right = left + GOOMBA_BASE_BBOX_WIDTH;
+	bottom = top + GOOMBA_BASE_BBOX_HEIGHT;
 }
 
 void CWingedGoomba::OnNoCollision(DWORD dt) {
 	x += vx * dt;
 	y += vy * dt;
-	isOnPlatform = false;
+	
 }
 
 void CWingedGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (e->obj->IsBlocking()) {
-		if (e->ny != 0) {
+		if (e->ny != 0) { 
+			vy = 0; 
 			if (state == GOOMBA_WING_STATE_BOUNCE) {
-				if (e->ny < 0) {
-					vy = -GOOMBA_WING_BOUNCE_SPEED;
+				if (e->ny < 0) { 
+					vy = -GOOMBA_WING_BOUNCE_SPEED; // Bounce up
 					bounceCount++;
 					isOnPlatform = true;
 				}
-				else vy = 0;
 			}
 			else if (state == GOOMBA_WING_STATE_FLY) {
-				if (e->ny < 0) {
-					vy = 0;
+				if (e->ny < 0) { 
 					isOnPlatform = true;
-					SetState(GOOMBA_WING_STATE_TRACKING_MARIO);
+					SetState(GOOMBA_WING_STATE_TRACKING_MARIO); // Start tracking Mario
 				}
-				else vy = 0;
+			}
+			else if (state == GOOMBA_WING_STATE_WALKING) {
+				if (e->ny < 0) { 
+					isOnPlatform = true;
+				}
 			}
 		}
-		else if (e->nx != 0) {
-			if (e->nx > 0)
-				vx = GOOMBA_WING_WALKING_SPEED;
-			else
-				vx = -GOOMBA_WING_WALKING_SPEED;
+		else if (e->nx != 0) { 
+			if (state == GOOMBA_WING_STATE_WALKING || state == GOOMBA_WING_STATE_BOUNCE || state == GOOMBA_WING_STATE_TRACKING_MARIO) {
+				vx = -vx; // Reverse horizontal direction
+				nx = -nx; // Flip facing direction
+			}
 		}
 	}
 
-	if (dynamic_cast<CKoopa*>(e->obj))
-		OnCollisionWithKoopa(e);
+	if (dynamic_cast<CKoopa*>(e->obj)) OnCollisionWithKoopa(e);
 }
 
 void CWingedGoomba::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
@@ -134,8 +140,10 @@ void CWingedGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	vy += ay * dt;
 
 	if (state == GOOMBA_WING_STATE_BOUNCE) {
-		if (bounceCount >= 5)
+		if (bounceCount >= 5) {
 			SetState(GOOMBA_WING_STATE_FLY);
+			bounceCount = 0;
+		}
 	}
 
 	if (state == GOOMBA_WING_STATE_TRACKING_MARIO) {
@@ -149,9 +157,11 @@ void CWingedGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		return;
 	}
 
-	DebugOut(L"[INFO] Winged Goomba state: %d\n", state);
+	isOnPlatform = false;
 
-	CGameObject::Update(dt, coObjects);
+	//DebugOut(L"[INFO] Winged Goomba state: %d\n", state);
+
+	//CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -174,18 +184,17 @@ void CWingedGoomba::SetState(int state) {
 	switch (state) {
 	case GOOMBA_WING_STATE_FLY:
 	{
-		DebugOut(L"GOOMBA WING FLY\n");
+		//DebugOut(L"GOOMBA WING FLY\n");
 		TrackingMario();
 		vx = (nx > 0) ? GOOMBA_WING_WALKING_SPEED : -GOOMBA_WING_WALKING_SPEED;
 		ay = GOOMBA_WING_GRAVITY;
 		vy = -GOOMBA_WING_FLY_UP_SPEED;
-		bounceCount = 0;
 		break;
 	}
 		
 	case GOOMBA_WING_STATE_WALKING:
 	{
-		DebugOut(L"GOOMBA WING WALKING\n");
+		//DebugOut(L"GOOMBA WING WALKING\n");
 		vx = (nx > 0) ? GOOMBA_WING_WALKING_SPEED : -GOOMBA_WING_WALKING_SPEED;
 		ay = GOOMBA_WING_GRAVITY;
 		break;
@@ -193,7 +202,7 @@ void CWingedGoomba::SetState(int state) {
 		
 	case GOOMBA_WING_STATE_BOUNCE:
 	{
-		DebugOut(L"GOOMBA WING BOUNCE\n");
+		//DebugOut(L"GOOMBA WING BOUNCE\n");
 		vx = (nx > 0) ? GOOMBA_WING_WALKING_SPEED : -GOOMBA_WING_WALKING_SPEED;
 		ay = GOOMBA_WING_GRAVITY;
 		vy = -GOOMBA_WING_BOUNCE_SPEED;
@@ -203,7 +212,7 @@ void CWingedGoomba::SetState(int state) {
 		
 	case GOOMBA_WING_STATE_DIE: 
 	{
-		DebugOut(L"GOOMBA WING DIE\n");
+		//DebugOut(L"GOOMBA WING DIE\n");
 		die_start = GetTickCount64();
 		y += (GOOMBA_BASE_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE) / 2;
 		vx = 0;
@@ -213,7 +222,7 @@ void CWingedGoomba::SetState(int state) {
 	}
 	case GOOMBA_WING_STATE_DIE_REVERSE:
 	{
-		DebugOut(L"GOOMBA WING DIE REVERSE\n");
+		//DebugOut(L"GOOMBA WING DIE REVERSE\n");
 		die_start = GetTickCount64();
 		vx = 0;
 	vy = -GOOMBA_WING_DEFLECT_SPEED;
@@ -222,7 +231,7 @@ void CWingedGoomba::SetState(int state) {
 	}
 	case GOOMBA_WING_STATE_TRACKING_MARIO:
 	{
-		DebugOut(L"GOOMBA WING TRACKING MARIO\n");
+		//DebugOut(L"GOOMBA WING TRACKING MARIO\n");
 		tracking_start = GetTickCount64();
 		TrackingMario();
 		vy = 0;

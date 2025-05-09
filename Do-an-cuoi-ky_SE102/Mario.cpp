@@ -336,9 +336,7 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e) {
 	if (e->ny < 0) {
 		int state = wingedGoomba->GetState();
 		if (state != GOOMBA_WING_STATE_DIE && state != GOOMBA_WING_STATE_DIE_REVERSE) {
-			if (state == GOOMBA_WING_STATE_TRACKING_MARIO
-				|| state == GOOMBA_WING_STATE_BOUNCE
-				|| state == GOOMBA_WING_STATE_FLY) {
+			if (state != GOOMBA_WING_STATE_WALKING) {
 				DebugOut(L"[INFO] Mario jump on Winged Goomba\n");
 				wingedGoomba->SetState(GOOMBA_WING_STATE_WALKING);
 			}
