@@ -41,9 +41,6 @@ protected:
 	ULONGLONG die_start;
 	ULONGLONG tracking_start;
 	bool isOnPlatform;
-	bool isBouncing;
-	bool isInAir;
-	bool isTrackingMario;
 	int bounceCount;
 public:
 	CWingedGoomba(float x, float y);
