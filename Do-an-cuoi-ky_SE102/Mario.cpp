@@ -288,9 +288,10 @@ void CMario::OnCollisionWithShinyBrick(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithPowerUp(LPCOLLISIONEVENT e)
 {
-	if (dynamic_cast<CPowerUp*>(e->obj)->GetType() == POWER_UP_TYPE_LEAF && level != MARIO_LEVEL_RACCOON)
+	if (dynamic_cast<CPowerUp*>(e->obj)->GetType() == POWER_UP_TYPE_LEAF)
 	{
-		SetLevel(MARIO_LEVEL_RACCOON);
+		if(level != MARIO_LEVEL_RACCOON)
+			SetLevel(MARIO_LEVEL_RACCOON);
 		AddPoint(1000, e);
 	}
 	else if (dynamic_cast<CPowerUp*>(e->obj)->GetType() == POWER_UP_TYPE_MUSHROOM && level == MARIO_LEVEL_SMALL)
