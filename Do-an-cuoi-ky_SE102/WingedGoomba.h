@@ -16,7 +16,7 @@
 #define GOOMBA_BBOX_HEIGHT_DIE 7
 
 #define GOOMBA_WING_DIE_TIMEOUT 500
-#define GOOMBA_WING_DIE_REVERSE_TIMEOUT 5000
+#define GOOMBA_WING_DIE_REVERSE_TIMEOUT 1000
 #define GOOMBA_TRACKING_TIMEOUT 1000
 
 #define GOOMBA_WING_GRAVITY 0.001f
@@ -63,4 +63,5 @@ public:
 	void SetState(int state);
 	CMario* GetPlayer();
 	void TrackingMario();
+	void Reload();
 };

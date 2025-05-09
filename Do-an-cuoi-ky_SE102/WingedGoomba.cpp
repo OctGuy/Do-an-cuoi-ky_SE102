@@ -149,6 +149,8 @@ void CWingedGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		return;
 	}
 
+	DebugOut(L"[INFO] Winged Goomba state: %d\n", state);
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -161,12 +163,18 @@ void CWingedGoomba::TrackingMario() {
 	nx = (x < mX) ? 1 : -1;
 }
 
+void CWingedGoomba::Reload() {
+	CGameObject::Reload();
+	SetState(GOOMBA_WING_STATE_BOUNCE);
+}
+
 void CWingedGoomba::SetState(int state) {
 	CGameObject::SetState(state);
 
 	switch (state) {
 	case GOOMBA_WING_STATE_FLY:
 	{
+		DebugOut(L"GOOMBA WING FLY\n");
 		TrackingMario();
 		vx = (nx > 0) ? GOOMBA_WING_WALKING_SPEED : -GOOMBA_WING_WALKING_SPEED;
 		ay = GOOMBA_WING_GRAVITY;
@@ -177,6 +185,7 @@ void CWingedGoomba::SetState(int state) {
 		
 	case GOOMBA_WING_STATE_WALKING:
 	{
+		DebugOut(L"GOOMBA WING WALKING\n");
 		vx = (nx > 0) ? GOOMBA_WING_WALKING_SPEED : -GOOMBA_WING_WALKING_SPEED;
 		ay = GOOMBA_WING_GRAVITY;
 		break;
@@ -184,6 +193,7 @@ void CWingedGoomba::SetState(int state) {
 		
 	case GOOMBA_WING_STATE_BOUNCE:
 	{
+		DebugOut(L"GOOMBA WING BOUNCE\n");
 		vx = (nx > 0) ? GOOMBA_WING_WALKING_SPEED : -GOOMBA_WING_WALKING_SPEED;
 		ay = GOOMBA_WING_GRAVITY;
 		vy = -GOOMBA_WING_BOUNCE_SPEED;
@@ -206,12 +216,13 @@ void CWingedGoomba::SetState(int state) {
 		DebugOut(L"GOOMBA WING DIE REVERSE\n");
 		die_start = GetTickCount64();
 		vx = 0;
-		vy = -GOOMBA_WING_DEFLECT_SPEED;
+	vy = -GOOMBA_WING_DEFLECT_SPEED;
 		ay = GOOMBA_WING_GRAVITY;
 		break;
 	}
 	case GOOMBA_WING_STATE_TRACKING_MARIO:
 	{
+		DebugOut(L"GOOMBA WING TRACKING MARIO\n");
 		tracking_start = GetTickCount64();
 		TrackingMario();
 		vy = 0;
