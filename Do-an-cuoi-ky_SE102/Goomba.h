@@ -14,11 +14,6 @@
 #define GOOMBA_BBOX_HEIGHT 16
 #define GOOMBA_BBOX_HEIGHT_DIE 7
 
-#define GOOMBA_OPENED_WING_BBOX_WIDTH 20
-#define GOOMBA_OPENED_WING_BBOX_HEIGHT 24
-#define GOOMBA_CLOSED_WING_BBOX_WIDTH 20
-#define GOOMBA_CLOSED_WING_BBOX_HEIGHT 19
-
 #define GOOMBA_DIE_TIMEOUT 500
 #define GOOMBA_DIE_REVERSE_TIMEOUT 500
 
@@ -29,23 +24,11 @@
 #define GOOMBA_STATE_DIE_REVERSE 201
 #pragma endregion
 
-#pragma region WINGED_GOOMBA
-#define GOOMBA_WING_STATE_FLY 202
-#define GOOMBA_WING_STATE_WALKING 203
-#define GOOMBA_WING_STATE_HIGH_JUMP 204
-#define GOOMBA_WING_STATE_LOW_JUMP 205
-#define GOOMBA_WING_STATE_DIE 206
-#define GOOMBA_WING_STATE_DIE_REVERSE 207
-#pragma endregion
-
 #define GOOMBA_TEXTURE_IDLE 31001
 
 #define ID_ANI_GOOMBA_WALKING 5000
 #define ID_ANI_GOOMBA_DIE 5001
 #define ID_ANI_GOOMBA_DIE_REVERSE 5002
-
-#define BASE_GOOMBA_TYPE 1
-#define WINGED_GOOMBA_TYPE 2
 
 class CGoomba : public CGameObject
 {
@@ -54,7 +37,6 @@ protected:
 	float ay;
 
 	int originalY;
-	int type;
 
 	//Need to create an enemy class and implement this instead of just goomba
 	int currentAniId = GOOMBA_TEXTURE_IDLE;

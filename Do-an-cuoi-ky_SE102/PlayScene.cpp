@@ -18,6 +18,7 @@
 #include "Wall.h"
 #include "ShinyBrick.h"
 #include "PSwitch.h"
+#include "WingedGoomba.h"
 
 using namespace std;
 
@@ -308,6 +309,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		case OBJECT_TYPE_KOOPA:
 		{
 			obj = new CKoopa(x, y);
+			break;
+		}
+
+		case OBJECT_TYPE_WINGED_GOOMBA:
+		{
+			obj = new CWingedGoomba(x, y);
+			DebugOut(L"Loaded Winged Goomba\n");
 			break;
 		}
 
