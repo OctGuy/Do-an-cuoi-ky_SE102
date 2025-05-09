@@ -117,8 +117,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isAbleToFly = false;
 
 	//Make sure mario doesnt go out of boundary
-	if (x < 8.f) x = 8.f;
-	if (y < 8.f) y = 8.f;
+	if (x < 8.f) { x = 8.f; vx = 0; }
+	if (y < 8.f) { y = 8.f; vy = 0; }
 
 	float rightBoundary;
 	float bottomBoundary;

@@ -23,8 +23,9 @@ CMario* CWingedGoomba::GetPlayer() {
 }
 
 void CWingedGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
+
 	left = x - GOOMBA_BASE_BBOX_WIDTH / 2;
-	top = y - 1.0f - GOOMBA_BASE_BBOX_HEIGHT / 2;
+	top = y - GOOMBA_BASE_BBOX_HEIGHT / 2;
 	right = left + GOOMBA_BASE_BBOX_WIDTH;
 	bottom = top + GOOMBA_BASE_BBOX_HEIGHT;
 }
@@ -64,6 +65,8 @@ void CWingedGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 			}
 		}
 	}
+	else
+		if (dynamic_cast<CGoomba*>(e->obj)) vx = -vx; // Reverse horizontal direction
 
 	if (dynamic_cast<CKoopa*>(e->obj)) OnCollisionWithKoopa(e);
 }
@@ -206,7 +209,7 @@ void CWingedGoomba::SetState(int state) {
 		//DebugOut(L"GOOMBA WING DIE REVERSE\n");
 		die_start = GetTickCount64();
 		vx = 0;
-		vy = -GOOMBA_WING_DEFLECT_SPEED;
+	vy = -GOOMBA_WING_DEFLECT_SPEED;
 		ay = GOOMBA_WING_GRAVITY;
 		break;
 	}

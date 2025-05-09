@@ -145,7 +145,7 @@ void CCollision::SweptAABB(
 	t = -1.0f;			// no collision
 	nx = ny = 0;
 
-	// Invoke collision between Goomba, WingedGoomba, PiranhaPlant and Koopa 
+	// Invoke collision between Goomba and Koopa 
 	if ((dynamic_cast<CGoomba*>(objSrc) 
 		|| dynamic_cast<CWingedGoomba*>(objSrc)
 		|| dynamic_cast<CPiranhaPlant*>(objSrc))
