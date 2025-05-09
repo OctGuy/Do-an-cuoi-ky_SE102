@@ -121,7 +121,7 @@ assets\winged_goomba.txt
 
 #INVISIBLE WALL
 #49	0	0	8	400	-1
-49	0	0	2816	8	-1
+#49	0	0	2816	8	-1
 #49	2808	0	8	400	-1
 
 # FLOOR 1
@@ -262,11 +262,11 @@ assets\winged_goomba.txt
 # GOOMBA
 2	240	400
 2 	423	375
+2	908	384
+2	840	384
 
 #WINGED GOOMBA
 12	976	384
-2	908	384
-2	840	384
 
 #KOOPA
 11	558 	343
