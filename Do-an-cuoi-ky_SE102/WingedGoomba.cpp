@@ -22,28 +22,9 @@ CMario* CWingedGoomba::GetPlayer() {
 }
 
 void CWingedGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
-	//if (state == GOOMBA_WING_STATE_DIE) {
-	//	left = x - GOOMBA_BASE_BBOX_WIDTH / 2;
-	//	top = y - GOOMBA_BBOX_HEIGHT_DIE / 2;
-	//	right = left + GOOMBA_BASE_BBOX_WIDTH;
-	//	bottom = top + GOOMBA_BBOX_HEIGHT_DIE;
-	//}
-	//else if (state == GOOMBA_WING_STATE_BOUNCE 
-	//	|| state == GOOMBA_WING_STATE_FLY 
-	//	|| state == GOOMBA_WING_STATE_TRACKING_MARIO) {
-	//	left = x - GOOMBA_WING_BBOX_WIDTH / 2;
-	//	top = y - GOOMBA_WING_BBOX_HEIGHT / 2;
-	//	right = left + GOOMBA_WING_BBOX_WIDTH;
-	//	bottom = top + GOOMBA_WING_BBOX_HEIGHT;
-	//}
-	//else {
-	//	left = x - GOOMBA_BASE_BBOX_WIDTH / 2;
-	//	top = y - 1.0f - GOOMBA_BASE_BBOX_HEIGHT / 2;
-	//	right = left + GOOMBA_BASE_BBOX_WIDTH;
-	//	bottom = top + GOOMBA_BASE_BBOX_HEIGHT;
-	//}
+
 	left = x - GOOMBA_BASE_BBOX_WIDTH / 2;
-	top = y - 1.0f - GOOMBA_BASE_BBOX_HEIGHT / 2;
+	top = y - GOOMBA_BASE_BBOX_HEIGHT / 2;
 	right = left + GOOMBA_BASE_BBOX_WIDTH;
 	bottom = top + GOOMBA_BASE_BBOX_HEIGHT;
 }
