@@ -64,6 +64,8 @@ void CPiranhaPlant::SetState(int state)
 	default:
 		break;
 	}
+
+	DebugOut(L"[INFO] Piranha Plant state: %d\n", state);
 }
 
 int CPiranhaPlant::GetSnippingDirection()
