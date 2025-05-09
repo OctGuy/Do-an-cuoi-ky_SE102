@@ -3,7 +3,7 @@
 #include "Game.h"
 #include "PlayScene.h"
 
-CWingedGoomba::CWingedGoomba(float x, float y) : CEnemy (x, y) {
+CWingedGoomba::CWingedGoomba(float x, float y) : CGameObject (x, y) {
 	this->ax = 0;
 	this->ay = GOOMBA_WING_GRAVITY;
 	die_start = -1;
@@ -75,8 +75,35 @@ void CWingedGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 			}
 		}
 		else if (e->nx != 0) {
-			vx = -vx;
+			if (e->nx > 0)
+				vx = GOOMBA_WING_WALKING_SPEED;
+			else
+				vx = -GOOMBA_WING_WALKING_SPEED;
 		}
+	}
+
+	if (dynamic_cast<CKoopa*>(e->obj))
+		OnCollisionWithKoopa(e);
+}
+
+void CWingedGoomba::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
+	CMario* mario = GetPlayer();
+	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+	CKoopa* koopaHeldByMario = dynamic_cast<CKoopa*>(mario->GetKoopa());
+
+	if (koopa) {
+		if (koopaHeldByMario != nullptr && koopaHeldByMario == koopa && koopa->GetIsHeld()) {
+			DebugOut(L"Koopa is collided with Goomba when Mario hold\n");
+			SetState(GOOMBA_WING_STATE_DIE_REVERSE);
+			koopa->SetState(KOOPA_STATE_DIE);
+		}
+		else if (koopa->GetState() == KOOPA_STATE_SHELL_MOVE
+			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
+			DebugOut(L"Koopa is collided with Goomba when Mario kick\n");
+			SetState(GOOMBA_STATE_DIE_REVERSE);
+		}
+
+		mario->AddPoint(100, e);
 	}
 }
 
@@ -151,6 +178,8 @@ void CWingedGoomba::SetState(int state) {
 		vx = (nx > 0) ? GOOMBA_WING_WALKING_SPEED : -GOOMBA_WING_WALKING_SPEED;
 		ay = GOOMBA_WING_GRAVITY;
 		vy = -GOOMBA_WING_FLY_UP_SPEED;
+		isTrackingMario = false;
+		isBouncing = false;
 		isInAir = true;
 		break;
 	}
@@ -172,6 +201,7 @@ void CWingedGoomba::SetState(int state) {
 		ay = GOOMBA_WING_GRAVITY;
 		vy = -GOOMBA_WING_BOUNCE_SPEED;
 		isBouncing = true;
+		isTrackingMario = false;
 		bounceCount++;
 		break;
 	}
@@ -198,6 +228,8 @@ void CWingedGoomba::SetState(int state) {
 	case GOOMBA_WING_STATE_TRACKING_MARIO:
 	{
 		isTrackingMario = true;
+		isInAir = false;
+		isBouncing = false;
 		tracking_start = GetTickCount64();
 		TrackingMario();
 		vy = 0;

@@ -33,7 +33,7 @@
 #define GOOMBA_WING_ANI_DIE_REVERSE 5008
 #define GOOMBA_WING_ANI_TRACKING_MARIO 5009
 
-class CWingedGoomba : public CEnemy
+class CWingedGoomba : public CGameObject
 {
 protected:
 	float ax;
@@ -58,10 +58,11 @@ public:
 			return 0;
 		return 1;
 	};
+
 	int IsBlocking() { return 0; }
 	void OnNoCollision(DWORD dt);
-
 	void OnCollisionWith(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 	void SetState(int state);
 	CMario* GetPlayer();
 	void TrackingMario();
