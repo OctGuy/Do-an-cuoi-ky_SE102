@@ -91,7 +91,7 @@ void CQuestionBrick::Activate()
         }
         else
         {
-			item = new CPowerUp(x, y - 16.f);
+			item = new CPowerUp(x, y - 8.f);
             if (mario->GetLevel() == MARIO_LEVEL_SMALL)
                 dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_MUSHROOM);
             else
