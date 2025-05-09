@@ -19,7 +19,7 @@ void CFireBullet::Render()
 		animations->Get(aniId)->Render(x, y);
 	}
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CFireBullet::SetState(int state) {

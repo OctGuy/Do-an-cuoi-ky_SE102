@@ -376,7 +376,13 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e)
 {
-	GetHurt();
+	CPiranhaPlant* piranhaPlant = dynamic_cast<CPiranhaPlant*>(e->obj);
+	if (piranhaPlant) {
+		if (piranhaPlant->GetState() != PIRANHA_STATE_HIDE
+			&& piranhaPlant->GetState() != PIRANHA_STATE_DIE)
+		GetHurt();
+	}
+	
 }
 
 void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e) {
@@ -788,7 +794,7 @@ void CMario::Render()
 		aniId = GetAniIdRaccoon();
 	animations->Get(aniId)->Render(x, y);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 
 	DebugOutTitle(L"Coins: %d", coin);
 }

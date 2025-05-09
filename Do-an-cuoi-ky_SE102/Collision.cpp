@@ -161,6 +161,14 @@ void CCollision::SweptAABB(
 		}
 	}
 
+	if (dynamic_cast<CMario*>(objSrc) && dynamic_cast<CFireBullet*>(objDest)) {
+		if (ml < sr && mr > sl && mt < sb && mb > st) {
+			t = 0.0f;
+			nx = ny = 0.0f;
+			return;
+		}
+	}
+
 	//
 	// Broad-phase test 
 	//

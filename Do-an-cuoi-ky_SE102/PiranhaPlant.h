@@ -19,9 +19,8 @@
 #define DISTANCE_PIRANHA_NOT_INVOKE 25.5
 
 #define PIRANHA_BBOX_WIDTH 16
-#define PIRANHA_BBOX_HEIGHT 32
+#define PIRANHA_BBOX_HEIGHT 26
 #define PIRANHA_BBOX_HEIGHT_RISE 24
-
 #define PIRANHA_MOVE_SPEED 0.03f
 
 #define PIRANHA_HIDE_TIMEOUT 2500
@@ -66,7 +65,7 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	virtual int IsCollidable() {
-		if (state == PIRANHA_STATE_DIE)
+		if (state == PIRANHA_STATE_DIE || state == PIRANHA_STATE_HIDE)
 			return 0;
 		return 1;
 	};

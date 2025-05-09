@@ -115,7 +115,7 @@ void CWingedGoomba::Render() {
 	if (aniId != -1)
 		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CWingedGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {

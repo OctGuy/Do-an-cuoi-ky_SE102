@@ -128,7 +128,7 @@ void CGoomba::Render()
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y, &currentAniId); //&currentAniId to get current sprite id 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CGoomba::Reload()
