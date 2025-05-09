@@ -143,8 +143,8 @@ void CWingedGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			SetState(GOOMBA_WING_STATE_BOUNCE);
 	}
 
-	if ((state == GOOMBA_WING_STATE_DIE && GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT)
-		|| (state == GOOMBA_WING_STATE_DIE_REVERSE && GetTickCount64() - die_start > GOOMBA_DIE_REVERSE_TIMEOUT)) {
+	if ((state == GOOMBA_WING_STATE_DIE && GetTickCount64() - die_start > GOOMBA_WING_DIE_TIMEOUT)
+		|| (state == GOOMBA_WING_STATE_DIE_REVERSE && GetTickCount64() - die_start > GOOMBA_WING_DIE_REVERSE_TIMEOUT)) {
 		this->Delete();
 		return;
 	}
