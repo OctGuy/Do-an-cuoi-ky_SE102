@@ -119,7 +119,7 @@ void CRaccoonTail::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e)
 void CRaccoonTail::Render()
 {
     // Render bounding box for debugging purposes
-    RenderBoundingBox();
+    //RenderBoundingBox();
 }
 
 void CRaccoonTail::SetState(int state)

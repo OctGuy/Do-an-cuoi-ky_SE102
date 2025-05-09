@@ -122,7 +122,7 @@ void CPiranhaPlant::Render()
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(aniId)->Render(x, y);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CPiranhaPlant::Shoot(int direction)

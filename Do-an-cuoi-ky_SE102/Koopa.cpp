@@ -97,7 +97,7 @@ void CKoopa::Render() {
 	if (aniId != -1)
 		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CKoopa::SetState(int state) {
