@@ -95,14 +95,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 
-	//Check if mario is able to fly
-	//if (isOnPlatform && !flying_start) {
-	//	if (fabs(vx) >= MARIO_RUNNING_SPEED)
-	//		isAbleToFly = true;
-	//	else
-	//		isAbleToFly = false;
-	//}
-
 	if (!flying_start) {
 		if (isOnPlatform && fabs(vx) > MARIO_WALKING_SPEED)
 		{
@@ -123,11 +115,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isAbleToFly = true;
 	else
 		isAbleToFly = false;
-
-	/*DebugOut(L"Is On Platform: %d - ", isOnPlatform);
-	DebugOut(L"Is Able To Fly: %d\n", isAbleToFly);*/
-
-	//DebugOut(L"PMeter: %f\n", pMeter);
 
 	//Make sure mario doesnt go out of boundary
 	if (x < 8.f) x = 8.f;
@@ -916,16 +903,6 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_FLYING:
-		// Only apply flying if already in the air
-		//if (!isOnPlatform)
-		//{
-		//	DebugOut(L"[INFO] Mario flying\n");
-		//	vy = MARIO_FLYING_SPEED; // Apply upward boost
-		//	slowfall_start = GetTickCount64();
-		//	maxVy = MARIO_FLYING_SPEED; // Use flying speed as max speed
-		//	isInAir = true;
-		//	ay = 0; // Temporarily remove gravity
-		//}
 		DebugOut(L"[INFO] Mario flying\n");
 		vy = MARIO_FLYING_SPEED; // Apply upward boost
 		slowfall_start = GetTickCount64();

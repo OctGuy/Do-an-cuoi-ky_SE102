@@ -178,18 +178,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		case OBJECT_TYPE_PSWTICH:
 		{
-			//float numberOfShinyBrick = (float)atof(tokens[3].c_str());
 			obj = new CPSwitch(x, y);
-
-			//for(int i = 0; i < numberOfShinyBrick; i++)
-			//{
-			//	if (!objects.empty())
-			//	{
-			//		dynamic_cast<CPSwitch*>(obj)->AddShinyBrick(objects[objects.size() - i]);
-			//		objects.back()->SetActive(false);
-			//	}
-			//}
-
 			break;
 		}
 
@@ -256,12 +245,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				cell_width, cell_height, height,
 				sprite_tl, sprite_tr, sprite_bl, sprite_br
 			);
-
-			/*if (!objects.empty())
-			{
-				dynamic_cast<CPipe*>(obj)->SetItem(objects.back());
-				objects.back()->SetActive(false);
-			}*/
 			break;
 		}
 
@@ -285,18 +268,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			}
 
 			obj = new CSceneryObject(x, y, length, width, cellWidth, cellHeight, spriteIDs);
-
-			//DebugOut(L"Loaded Tussock with spriteIDs:\n");
-			//for (size_t i = 0; i < spriteIDs.size(); i++) {
-			//	for (size_t j = 0; j < spriteIDs[i].size(); j++) {
-			//		DebugOut(L"%d ", spriteIDs[i][j]);
-			//	}
-			//	DebugOut(L"\n"); // New line after each row
-			//}
-			/*CGame* game = CGame::GetInstance();
-			DebugOut(L"BackBufferWidth: %d\n", game->GetBackBufferWidth());
-			DebugOut(L"BackBufferHeight: %d\n", game->GetBackBufferHeight());*/
-
 			break;
 		}
 

@@ -64,4 +64,3 @@ public:
 	CMario* GetPlayer();
 	void TrackingMario();
 };
-
