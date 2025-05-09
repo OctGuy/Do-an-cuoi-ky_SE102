@@ -6,6 +6,7 @@
 #include "QuestionBrick.h"
 #include "ShinyBrick.h"
 #include "PiranhaPlant.h"
+#include "WingedGoomba.h"
 
 void CRaccoonTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -67,6 +68,11 @@ void CRaccoonTail::OnCollisionWith(LPCOLLISIONEVENT e)
         currentScene->Add(particle);
         mario->AddPoint(100, e);
     }
+    else if (dynamic_cast<CWingedGoomba*>(e->obj)) {
+        OnCollisionWithWingedGoomba(e);
+        currentScene->Add(particle);
+        mario->AddPoint(100, e);
+    }
 }
 
 void CRaccoonTail::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -74,6 +80,13 @@ void CRaccoonTail::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
     DebugOut(L"[INFO] RaccoonTail hit Goomba\n");
     CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
     goomba->SetState(GOOMBA_STATE_DIE_REVERSE);
+}
+
+void CRaccoonTail::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
+{
+	DebugOut(L"[INFO] RaccoonTail hit WingedGoomba\n");
+    CWingedGoomba* wingedGoomba = dynamic_cast<CWingedGoomba*>(e->obj);
+    wingedGoomba->SetState(GOOMBA_WING_STATE_DIE_REVERSE);
 }
 
 void CRaccoonTail::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)

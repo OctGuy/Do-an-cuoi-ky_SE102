@@ -89,13 +89,13 @@ void CWingedGoomba::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 
 	if (koopa) {
 		if (koopaHeldByMario != nullptr && koopaHeldByMario == koopa && koopa->GetIsHeld()) {
-			DebugOut(L"Koopa is collided with Goomba when Mario hold\n");
+			DebugOut(L"Koopa is collided with WingedGoomba when Mario hold\n");
 			SetState(GOOMBA_WING_STATE_DIE_REVERSE);
 			koopa->SetState(KOOPA_STATE_DIE);
 		}
 		else if (koopa->GetState() == KOOPA_STATE_SHELL_MOVE
 			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
-			DebugOut(L"Koopa is collided with Goomba when Mario kick\n");
+			DebugOut(L"Koopa is collided with WingedGoomba when Mario kick\n");
 			SetState(GOOMBA_STATE_DIE_REVERSE);
 		}
 
