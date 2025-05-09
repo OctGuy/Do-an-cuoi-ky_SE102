@@ -9,6 +9,7 @@ CWingedGoomba::CWingedGoomba(float x, float y) : CGameObject (x, y) {
 	die_start = -1;
 	tracking_start = -1;
 	isOnPlatform = false;
+	wasOnPlatform = false;
 	bounceCount = 0;
 	SetState(GOOMBA_WING_STATE_BOUNCE);
 }
@@ -32,7 +33,6 @@ void CWingedGoomba::GetBoundingBox(float& left, float& top, float& right, float&
 void CWingedGoomba::OnNoCollision(DWORD dt) {
 	x += vx * dt;
 	y += vy * dt;
-	
 }
 
 void CWingedGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
@@ -104,7 +104,7 @@ void CWingedGoomba::Render() {
 	else if (state == GOOMBA_WING_STATE_WALKING)
 		aniId = GOOMBA_WING_ANI_WALKING;
 	else if (state == GOOMBA_WING_STATE_BOUNCE) {
-		if (isOnPlatform)
+		if (isOnPlatform || wasOnPlatform)
 			aniId = GOOMBA_WING_ANI_CLOSE_WING;
 		else
 			aniId = GOOMBA_WING_ANI_OPEN_WING;
@@ -140,6 +140,7 @@ void CWingedGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		return;
 	}
 
+	wasOnPlatform = isOnPlatform;
 	isOnPlatform = false;
 
 	//DebugOut(L"[INFO] Winged Goomba state: %d\n", state);
