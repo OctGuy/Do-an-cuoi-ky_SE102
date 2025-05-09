@@ -96,7 +96,7 @@ void CWingedGoomba::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 		else if (koopa->GetState() == KOOPA_STATE_SHELL_MOVE
 			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
 			DebugOut(L"Koopa is collided with WingedGoomba when Mario kick\n");
-			SetState(GOOMBA_STATE_DIE_REVERSE);
+			SetState(GOOMBA_WING_STATE_DIE_REVERSE);
 		}
 
 		mario->AddPoint(100, e);
