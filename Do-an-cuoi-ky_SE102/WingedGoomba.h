@@ -41,6 +41,7 @@ protected:
 	ULONGLONG die_start;
 	ULONGLONG tracking_start;
 	bool isOnPlatform;
+	bool wasOnPlatform;
 	int bounceCount;
 public:
 	CWingedGoomba(float x, float y);
