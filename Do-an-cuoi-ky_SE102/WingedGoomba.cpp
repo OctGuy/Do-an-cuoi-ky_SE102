@@ -65,6 +65,8 @@ void CWingedGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 			}
 		}
 	}
+	else
+		if (dynamic_cast<CGoomba*>(e->obj)) vx = -vx; // Reverse horizontal direction
 
 	if (dynamic_cast<CKoopa*>(e->obj)) OnCollisionWithKoopa(e);
 }

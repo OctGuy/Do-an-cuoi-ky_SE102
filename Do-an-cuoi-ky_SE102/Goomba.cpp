@@ -1,5 +1,5 @@
 #include "Goomba.h"
-
+#include "WingedGoomba.h"
 CGoomba::CGoomba(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -65,7 +65,7 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (dynamic_cast<CGoomba*>(e->obj)) return;
+	if (dynamic_cast<CGoomba*>(e->obj) || dynamic_cast<CWingedGoomba*>(e->obj)) vx = -vx;
 
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
