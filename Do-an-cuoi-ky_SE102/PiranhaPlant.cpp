@@ -31,7 +31,7 @@ CMario* CPiranhaPlant::GetPlayer()
 void CPiranhaPlant::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x - PIRANHA_BBOX_WIDTH / 2;
-	top = y - (PIRANHA_BBOX_HEIGHT - 10.0f) / 2;
+	top = y - PIRANHA_BBOX_HEIGHT / 2;
 	right = left + PIRANHA_BBOX_WIDTH;
 	bottom = top + PIRANHA_BBOX_HEIGHT;
 }

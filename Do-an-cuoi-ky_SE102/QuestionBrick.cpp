@@ -38,7 +38,14 @@ void CQuestionBrick::OnCollisionWith(LPCOLLISIONEVENT e)
 {
     if (e->nx != 0 && dynamic_cast<CKoopa*>(e->src_obj))
     {
-		Activate();
+	    Activate();
+    }
+
+    if (e->ny != 0 && dynamic_cast<CKoopa*>(e->obj)) {
+		CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+        if (koopa->GetState() == KOOPA_STATE_WALKING_LEFT
+            || koopa->GetState() == KOOPA_STATE_WALKING_RIGHT)
+            koopa->SetState(KOOPA_STATE_SHELL_REVERSE_IDLE);
     }
 }
 
