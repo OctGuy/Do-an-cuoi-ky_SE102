@@ -24,10 +24,7 @@ void CGameObject::Reload()
 	this->y = loadY;
 	this->vx = 0;
 	this->vy = 0;
-	//this->nx = 1;
-	//this->state = -1;
-	//this->isDeleted = false;
-	//this->isActive = true;
+
 }
 
 void CGameObject::RenderBoundingBox()

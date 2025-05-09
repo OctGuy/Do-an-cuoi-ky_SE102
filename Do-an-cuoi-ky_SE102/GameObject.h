@@ -44,7 +44,7 @@ public:
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
 	void GetNx(int& nx) { nx = this->nx; }
 
-	void SetActive(bool isActive) { this->isActive = isActive;} 
+	virtual void SetActive(bool isActive) { this->isActive = isActive;} 
 	bool IsActive() { return isActive; }
 
 	int GetState() { return this->state; }

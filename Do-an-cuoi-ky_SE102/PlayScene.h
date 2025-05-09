@@ -54,6 +54,8 @@ public:
 
 	LPGAMEOBJECT GetPlayer() { return player; }
 	void GetBoundary(float& right, float& bottom) { right = rightBoundary; bottom = bottomBoundary; }
+	vector<LPGAMEOBJECT>& GetObjects() { return objects; }
+
 
 	void Add(LPGAMEOBJECT obj) { objects.push_back(obj); }
 

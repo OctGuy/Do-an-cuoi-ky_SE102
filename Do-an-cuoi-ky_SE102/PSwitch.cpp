@@ -21,13 +21,14 @@ void CPSwitch::Update(DWORD dt, std::vector<LPGAMEOBJECT>* coObjects)
     {
 		DebugOut(L"[INFO] PSwitch is activated\n");
         numOfActivation++;
-		SwitchCoinBricks(coObjects); // Switch coins and bricks
+		SwitchCoinBricks(); // Switch coins and bricks
     }
 	if (activationTime && currentTime - activationTime > SWITCH_DURATION)
 	{
 		DebugOut(L"[INFO] 10 second passed\n");
         numOfActivation++;
-		SwitchCoinBricks(coObjects); // Switch coins and bricks
+		isActivated = false; // Deactivate the switch
+		SwitchCoinBricks(); // Switch coins and bricks
 	}
 }
 
@@ -53,6 +54,16 @@ void CPSwitch::GetBoundingBox(float& left, float& top, float& right, float& bott
     bottom = top + 16.f; // Example height
 }
 
+void CPSwitch::SetActive(bool isActive)
+{
+    if (this->isActivated == true)
+    {
+        this->isActive = true; // This mean that the P switch wont be unloaded when it is activated to ensure it switch coin and brick correctly
+    }
+    else
+		CGameObject::SetActive(isActive); // Call the base class method
+}
+
 void CPSwitch::SwitchCoinBricks(std::vector<LPGAMEOBJECT>* coObjects)
 {
     CPlayScene* playScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
@@ -76,5 +87,48 @@ void CPSwitch::SwitchCoinBricks(std::vector<LPGAMEOBJECT>* coObjects)
             LPGAMEOBJECT coin = new CCoin(bx, by); // Create a coin
             playScene->Add(coin); // Add the coin to the game
         }
+    }
+}
+
+void CPSwitch::SwitchCoinBricks()
+{
+    CPlayScene* playScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+    if (!playScene) return;
+
+    // Create a temporary vector to hold new objects (to avoid modifying while iterating and create an infinite loop)
+    vector<LPGAMEOBJECT> newObjects;
+
+    vector<LPGAMEOBJECT>& allObjects = playScene->GetObjects();
+
+    for (LPGAMEOBJECT obj : allObjects)
+    {
+        if (!obj || obj->IsDeleted()) continue; // Skip null or deleted objects
+
+        if (dynamic_cast<CCoin*>(obj)) 
+        {
+            float cx, cy;
+            obj->GetPosition(cx, cy);
+            obj->Delete(); 
+
+            // Create a shiny brick and add to new objects list
+            LPGAMEOBJECT shinyBrick = new CShinyBrick(cx, cy, 30);
+            newObjects.push_back(shinyBrick);
+        }
+        else if (dynamic_cast<CShinyBrick*>(obj)) 
+        {
+            float bx, by;
+            obj->GetPosition(bx, by);
+            obj->Delete(); 
+
+            // Create a coin and add to new objects list
+            LPGAMEOBJECT coin = new CCoin(bx, by);
+            newObjects.push_back(coin);
+        }
+    }
+
+    // Add all new objects to the scene
+    for (LPGAMEOBJECT newObj : newObjects)
+    {
+        playScene->Add(newObj);
     }
 }
