@@ -126,7 +126,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	/*DebugOut(L"Is On Platform: %d - ", isOnPlatform);
 	DebugOut(L"Is Able To Fly: %d\n", isAbleToFly);*/
 
-	DebugOut(L"PMeter: %f\n", pMeter);
+	//DebugOut(L"PMeter: %f\n", pMeter);
 
 	//Make sure mario doesnt go out of boundary
 	if (x < 8.f) x = 8.f;

@@ -52,7 +52,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
         }
         break;
     case DIK_A:
-        if (mario->GetLevel() == MARIO_LEVEL_RACCOON && !mario->IsTailAttacking())
+        if (mario->GetLevel() == MARIO_LEVEL_RACCOON && !mario->IsTailAttacking() && !mario->IsSitting())
             mario->SetState(MARIO_STATE_TAIL_ATTACK);
 		mario->SetState(MARIO_STATE_HOLD);
         break;

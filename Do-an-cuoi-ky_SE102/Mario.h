@@ -328,6 +328,7 @@ public:
 	BOOLEAN IsTailAttacking() { return isTailAttacking; }
 	BOOLEAN IsAbleToFly() { return isAbleToFly; }
 	BOOLEAN IsHoldingKoopa() { return isAbleToHold; }
+	BOOLEAN IsSitting() { return isSitting;  }
 
 	//Update coin and point
 	void AddCoin() { coin++;}
