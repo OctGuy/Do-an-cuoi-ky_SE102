@@ -20,7 +20,7 @@ HOW TO INSTALL Microsoft.DXSDK.D3DX
 
 
 ================================================================ */
-
+//This is my commit
 #include <windows.h>
 #include <d3d10.h>
 #include <d3dx10.h>
