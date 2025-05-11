@@ -86,10 +86,10 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 					vx = -GOOMBA_WALKING_SPEED;
 			}
 		}
-
+	}
+	else
 		if (dynamic_cast<CKoopa*>(e->obj))
 			OnCollisionWithKoopa(e);
-	}
 }
 
 void CGoomba::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {

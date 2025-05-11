@@ -43,19 +43,12 @@ void CRaccoonTail::OnCollisionWith(LPCOLLISIONEVENT e)
     CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
     CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
 
-    if(e->nx != 0)
+    if(e->nx == 0 && e->ny == 0)
     {
         if (dynamic_cast<CGoomba*>(e->obj)) {
             OnCollisionWithGoomba(e);
             currentScene->Add(particle);
             mario->AddPoint(100, e);
-        }
-        else if (dynamic_cast<CShinyBrick*>(e->obj)) {
-            OnCollisionWithShinyBrick(e);
-        }
-        else if (dynamic_cast<CQuestionBrick*>(e->obj))
-        {
-            OnCollisionWithQuestionBrick(e);
         }
         else if (dynamic_cast<CKoopa*>(e->obj)) {
             OnCollisionWithKoopa(e);
@@ -70,6 +63,18 @@ void CRaccoonTail::OnCollisionWith(LPCOLLISIONEVENT e)
             OnCollisionWithWingedGoomba(e);
             currentScene->Add(particle);
             mario->AddPoint(100, e);
+        }
+    }
+    else 
+    {
+        if (dynamic_cast<CShinyBrick*>(e->obj)) 
+        {
+            OnCollisionWithShinyBrick(e);
+        }
+        else if (dynamic_cast<CQuestionBrick*>(e->obj))
+        {
+            DebugOut(L"[INFO] RaccoonTail hit questionbrick\n");
+            OnCollisionWithQuestionBrick(e);
         }
     }
 }
