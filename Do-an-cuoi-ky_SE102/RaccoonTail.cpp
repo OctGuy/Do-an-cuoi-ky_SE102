@@ -43,31 +43,34 @@ void CRaccoonTail::OnCollisionWith(LPCOLLISIONEVENT e)
     CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
     CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
 
-    if (dynamic_cast<CGoomba*>(e->obj)) {
-        OnCollisionWithGoomba(e);
-        currentScene->Add(particle);
-        mario->AddPoint(100, e);
-    }
-    else if (dynamic_cast<CShinyBrick*>(e->obj)) {
-        OnCollisionWithShinyBrick(e);
-    }
-    else if (dynamic_cast<CQuestionBrick*>(e->obj))
+    if(e->nx != 0)
     {
-        OnCollisionWithQuestionBrick(e);
-    }
-    else if (dynamic_cast<CKoopa*>(e->obj)) {
-        OnCollisionWithKoopa(e);
-        currentScene->Add(particle);
-    }
-    else if (dynamic_cast<CPiranhaPlant*>(e->obj)) {
-        OnCollisionWithPiranhaPlant(e);
-        currentScene->Add(particle);
-        mario->AddPoint(100, e);
-    }
-    else if (dynamic_cast<CWingedGoomba*>(e->obj)) {
-        OnCollisionWithWingedGoomba(e);
-        currentScene->Add(particle);
-        mario->AddPoint(100, e);
+        if (dynamic_cast<CGoomba*>(e->obj)) {
+            OnCollisionWithGoomba(e);
+            currentScene->Add(particle);
+            mario->AddPoint(100, e);
+        }
+        else if (dynamic_cast<CShinyBrick*>(e->obj)) {
+            OnCollisionWithShinyBrick(e);
+        }
+        else if (dynamic_cast<CQuestionBrick*>(e->obj))
+        {
+            OnCollisionWithQuestionBrick(e);
+        }
+        else if (dynamic_cast<CKoopa*>(e->obj)) {
+            OnCollisionWithKoopa(e);
+            currentScene->Add(particle);
+        }
+        else if (dynamic_cast<CPiranhaPlant*>(e->obj)) {
+            OnCollisionWithPiranhaPlant(e);
+            currentScene->Add(particle);
+            mario->AddPoint(100, e);
+        }
+        else if (dynamic_cast<CWingedGoomba*>(e->obj)) {
+            OnCollisionWithWingedGoomba(e);
+            currentScene->Add(particle);
+            mario->AddPoint(100, e);
+        }
     }
 }
 
