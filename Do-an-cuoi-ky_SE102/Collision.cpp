@@ -1,9 +1,6 @@
-#pragma once
 #include "Collision.h"
 #include "GameObject.h"
-#include "Goomba.h"
-#include "PiranhaPlant.h"
-#include "WingedGoomba.h"
+
 #include "debug.h"
 
 #define BLOCK_PUSH_FACTOR 0.01f
@@ -22,7 +19,7 @@ CCollision* CCollision::GetInstance()
 }
 
 /*
-	SweptAABB 
+	SweptAABB
 */
 void CCollision::SweptAABB(
 	float ml, float mt, float mr, float mb,
@@ -40,130 +37,10 @@ void CCollision::SweptAABB(
 	t = -1.0f;			// no collision
 	nx = ny = 0;
 
-	//
-	// Broad-phase test 
-	//
-
-	float bl = dx > 0 ? ml : ml + dx;
-	float bt = dy > 0 ? mt : mt + dy;
-	float br = dx > 0 ? mr + dx : mr;
-	float bb = dy > 0 ? mb + dy : mb;
-
-	//Objects doesnt overlap so no collision
-	if (br < sl || bl > sr || bb < st || bt > sb) return;
-
-	// Object over lapping but not moving->no collision
-	if (dx == 0 && dy == 0)
-
+	if (ml < sr && mr > sl && mt < sb && mb > st) {
+		t = 0.0f;
+		nx = ny = 0.0f;
 		return;
-
-	if (dx > 0)
-	{
-		dx_entry = sl - mr;
-		dx_exit = sr - ml;
-	}
-	else if (dx < 0)
-	{
-		dx_entry = sr - ml;
-		dx_exit = sl - mr;
-	}
-
-
-	if (dy > 0)
-	{
-		dy_entry = st - mb;
-		dy_exit = sb - mt;
-	}
-	else if (dy < 0)
-	{
-		dy_entry = sb - mt;
-		dy_exit = st - mb;
-	}
-
-	if (dx == 0)
-	{
-		tx_entry = -9999999.0f;
-		tx_exit = 99999999.0f;
-	}
-	else
-	{
-		tx_entry = dx_entry / dx;
-		tx_exit = dx_exit / dx;
-	}
-
-	if (dy == 0)
-	{
-		ty_entry = -99999999999.0f;
-		ty_exit = 99999999999.0f;
-	}
-	else
-	{
-		ty_entry = dy_entry / dy;
-		ty_exit = dy_exit / dy;
-	}
-
-
-	if ((tx_entry < 0.0f && ty_entry < 0.0f) || tx_entry > 1.0f || ty_entry > 1.0f) return;
-
-	t_entry = max(tx_entry, ty_entry);
-	t_exit = min(tx_exit, ty_exit);
-
-	if (t_entry > t_exit) return;
-
-	t = t_entry;
-
-	if (tx_entry > ty_entry)
-	{
-		ny = 0.0f;
-		dx > 0 ? nx = -1.0f : nx = 1.0f;
-	}
-	else
-	{
-		nx = 0.0f;
-		dy > 0 ? ny = -1.0f : ny = 1.0f;
-	}
-
-}
-
-void CCollision::SweptAABB(
-	float ml, float mt, float mr, float mb,
-	float dx, float dy,
-	float sl, float st, float sr, float sb,
-	float& t, float& nx, float& ny,
-	LPGAMEOBJECT objSrc, LPGAMEOBJECT objDest)
-{
-
-	float dx_entry, dx_exit, tx_entry, tx_exit;
-	float dy_entry, dy_exit, ty_entry, ty_exit;
-
-	float t_entry;
-	float t_exit;
-
-	t = -1.0f;			// no collision
-	nx = ny = 0;
-
-	// Invoke collision between Goomba and Koopa 
-	if ((dynamic_cast<CGoomba*>(objSrc) 
-		|| dynamic_cast<CWingedGoomba*>(objSrc)
-		|| dynamic_cast<CPiranhaPlant*>(objSrc))
-		&& dynamic_cast<CKoopa*>(objDest)) {
-		if (dynamic_cast<CKoopa*>(objDest)->GetState() == KOOPA_STATE_SHELL_MOVE
-			|| dynamic_cast<CKoopa*>(objDest)->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE
-			|| dynamic_cast<CKoopa*>(objDest)->GetIsHeld()) {
-			if (ml < sr && mr > sl && mt < sb && mb > st) {
-				t = 0.0f;      
-				nx = ny = 0.0f;
-				return;
-			}
-		}
-	}
-
-	if (dynamic_cast<CMario*>(objSrc) && dynamic_cast<CFireBullet*>(objDest)) {
-		if (ml < sr && mr > sl && mt < sb && mb > st) {
-			t = 0.0f;
-			nx = ny = 0.0f;
-			return;
-		}
 	}
 
 	//
@@ -175,11 +52,10 @@ void CCollision::SweptAABB(
 	float br = dx > 0 ? mr + dx : mr;
 	float bb = dy > 0 ? mb + dy : mb;
 
-	//Objects doesnt overlap so no collision
 	if (br < sl || bl > sr || bb < st || bt > sb) return;
 
-	// Object over lapping but not moving -> no collision
-	if (dx == 0 && dy == 0) return;
+
+	if (dx == 0 && dy == 0) return;		// moving object is not moving > obvious no collision
 
 	if (dx > 0)
 	{
@@ -281,9 +157,8 @@ LPCOLLISIONEVENT CCollision::SweptAABB(LPGAMEOBJECT objSrc, DWORD dt, LPGAMEOBJE
 		ml, mt, mr, mb,
 		dx, dy,
 		sl, st, sr, sb,
-		t, nx, ny,
-		objSrc, objDest
-	);	
+		t, nx, ny
+	);
 
 	CCollisionEvent* e = new CCollisionEvent(t, nx, ny, dx, dy, objDest, objSrc);
 	return e;
@@ -301,7 +176,9 @@ void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDe
 	{
 		LPCOLLISIONEVENT e = SweptAABB(objSrc, dt, objDests->at(i));
 
-		if (e->WasCollided()==1)
+		if (objSrc == objDests->at(i)) continue;	// ignore self collision
+
+		if (e->WasCollided() == 1)
 			coEvents.push_back(e);
 		else
 			delete e;
@@ -310,10 +187,10 @@ void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDe
 	//std::sort(coEvents.begin(), coEvents.end(), CCollisionEvent::compare);
 }
 
-void CCollision::Filter( LPGAMEOBJECT objSrc,
+void CCollision::Filter(LPGAMEOBJECT objSrc,
 	vector<LPCOLLISIONEVENT>& coEvents,
-	LPCOLLISIONEVENT &colX,
-	LPCOLLISIONEVENT &colY,
+	LPCOLLISIONEVENT& colX,
+	LPCOLLISIONEVENT& colY,
 	int filterBlock = 1,		// 1 = only filter block collisions, 0 = filter all collisions 
 	int filterX = 1,			// 1 = process events on X-axis, 0 = skip events on X 
 	int filterY = 1)			// 1 = process events on Y-axis, 0 = skip events on Y
@@ -329,10 +206,10 @@ void CCollision::Filter( LPGAMEOBJECT objSrc,
 	{
 		LPCOLLISIONEVENT c = coEvents[i];
 		if (c->isDeleted) continue;
-		if (c->obj->IsDeleted()) continue; 
+		if (c->obj->IsDeleted()) continue;
 
 		// ignore collision event with object having IsBlocking = 0 (like coin, mushroom, etc)
-		if (filterBlock == 1 && !c->obj->IsBlocking()) 
+		if (filterBlock == 1 && !c->obj->IsBlocking())
 		{
 			continue;
 		}
@@ -351,13 +228,13 @@ void CCollision::Filter( LPGAMEOBJECT objSrc,
 }
 
 /*
-*  Simple/Sample collision framework 
-*  NOTE: Student might need to improve this based on game logic 
+*  Simple/Sample collision framework
+*  NOTE: Student might need to improve this based on game logic
 */
 void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vector<LPCOLLISIONEVENT> coEvents;
-	LPCOLLISIONEVENT colX = NULL; 
+	LPCOLLISIONEVENT colX = NULL;
 	LPCOLLISIONEVENT colY = NULL;
 
 	coEvents.clear();
@@ -382,7 +259,7 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 		dx = vx * dt;
 		dy = vy * dt;
 
-		if (colX != NULL && colY != NULL) 
+		if (colX != NULL && colY != NULL)
 		{
 			if (colY->t < colX->t)	// was collision on Y first ?
 			{
@@ -409,7 +286,7 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 
 				if (colX_other != NULL)
 				{
-					x += colX_other->t * dx +colX_other->nx * BLOCK_PUSH_FACTOR;
+					x += colX_other->t * dx + colX_other->nx * BLOCK_PUSH_FACTOR;
 					objSrc->OnCollisionWith(colX_other);
 				}
 				else
@@ -452,24 +329,24 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 			}
 		}
 		else
-		if (colX != NULL)
-		{
-			x += colX->t * dx + colX->nx * BLOCK_PUSH_FACTOR;
-			y += dy;
-			objSrc->OnCollisionWith(colX);
-		}
-		else 
-			if (colY != NULL)
+			if (colX != NULL)
 			{
-				x += dx;
-				y += colY->t * dy + colY->ny * BLOCK_PUSH_FACTOR;
-				objSrc->OnCollisionWith(colY);
-			}
-			else // both colX & colY are NULL 
-			{
-				x += dx;
+				x += colX->t * dx + colX->nx * BLOCK_PUSH_FACTOR;
 				y += dy;
+				objSrc->OnCollisionWith(colX);
 			}
+			else
+				if (colY != NULL)
+				{
+					x += dx;
+					y += colY->t * dy + colY->ny * BLOCK_PUSH_FACTOR;
+					objSrc->OnCollisionWith(colY);
+				}
+				else // both colX & colY are NULL 
+				{
+					x += dx;
+					y += dy;
+				}
 
 		objSrc->SetPosition(x, y);
 	}
@@ -483,7 +360,9 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 		if (e->isDeleted) continue;
 		if (e->obj->IsBlocking()) continue;  // blocking collisions were handled already, skip them
 
-		objSrc->OnCollisionWith(e);			
+		objSrc->OnCollisionWith(e);
 	}
+
+
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
