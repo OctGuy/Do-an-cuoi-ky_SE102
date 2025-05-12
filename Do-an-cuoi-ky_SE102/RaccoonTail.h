@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "Particle.h"
 
-#define RACCOON_TAIL_BBOX_WIDTH 16
+#define RACCOON_TAIL_BBOX_WIDTH 8
 #define RACCOON_TAIL_BBOX_HEIGHT 16
 
 #define RACCOON_TAIL_STATE_INACTIVE 200
