@@ -10,24 +10,6 @@
 
 void CRaccoonTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (!IsActive()) return;
-    if (state == RACCOON_TAIL_STATE_ACTIVE)
-    {
-        // Move horizontally around the x-axis
-        x += vx * dt;
-        // Reverse direction if it exceeds the range
-        if (x >= startX + RACCOON_TAIL_RANGE)
-        {
-            vx = -RACCOON_TAIL_SPEED;
-            nx = 1;
-        }
-		else if (x <= startX - RACCOON_TAIL_RANGE)
-		{
-			SetActive(false); // Set inactive state if out of range
-            vx = 0;
-            nx = -1;
-		}
-    }
 
 
 	//DebugOut(L"[INFO] Raccoon Tail state: %d\n", state);
@@ -43,39 +25,33 @@ void CRaccoonTail::OnCollisionWith(LPCOLLISIONEVENT e)
     CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
     CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
 
-    if(e->nx == 0 && e->ny == 0)
-    {
-        if (dynamic_cast<CGoomba*>(e->obj)) {
-            OnCollisionWithGoomba(e);
-            currentScene->Add(particle);
-            mario->AddPoint(100, e);
-        }
-        else if (dynamic_cast<CKoopa*>(e->obj)) {
-            OnCollisionWithKoopa(e);
-            currentScene->Add(particle);
-        }
-        else if (dynamic_cast<CPiranhaPlant*>(e->obj)) {
-            OnCollisionWithPiranhaPlant(e);
-            currentScene->Add(particle);
-            mario->AddPoint(100, e);
-        }
-        else if (dynamic_cast<CWingedGoomba*>(e->obj)) {
-            OnCollisionWithWingedGoomba(e);
-            currentScene->Add(particle);
-            mario->AddPoint(100, e);
-        }
+    if (dynamic_cast<CGoomba*>(e->obj)) {
+        OnCollisionWithGoomba(e);
+        currentScene->Add(particle);
+        mario->AddPoint(100, e);
     }
-    else 
+    else if (dynamic_cast<CKoopa*>(e->obj)) {
+        OnCollisionWithKoopa(e);
+        currentScene->Add(particle);
+    }
+    else if (dynamic_cast<CPiranhaPlant*>(e->obj)) {
+        OnCollisionWithPiranhaPlant(e);
+        currentScene->Add(particle);
+        mario->AddPoint(100, e);
+    }
+    else if (dynamic_cast<CWingedGoomba*>(e->obj)) {
+        OnCollisionWithWingedGoomba(e);
+        currentScene->Add(particle);
+        mario->AddPoint(100, e);
+    }
+    else if (dynamic_cast<CShinyBrick*>(e->obj)) 
     {
-        if (dynamic_cast<CShinyBrick*>(e->obj)) 
-        {
-            OnCollisionWithShinyBrick(e);
-        }
-        else if (dynamic_cast<CQuestionBrick*>(e->obj))
-        {
-            DebugOut(L"[INFO] RaccoonTail hit questionbrick\n");
-            OnCollisionWithQuestionBrick(e);
-        }
+        OnCollisionWithShinyBrick(e);
+    }
+    else if (dynamic_cast<CQuestionBrick*>(e->obj))
+    {
+        DebugOut(L"[INFO] RaccoonTail hit questionbrick\n");
+        OnCollisionWithQuestionBrick(e);
     }
 }
 
@@ -127,7 +103,7 @@ void CRaccoonTail::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e)
 void CRaccoonTail::Render()
 {
     // Render bounding box for debugging purposes
-    //RenderBoundingBox();
+    RenderBoundingBox();
 }
 
 void CRaccoonTail::SetState(int state)
@@ -151,8 +127,8 @@ void CRaccoonTail::SetState(int state)
 
 void CRaccoonTail::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-    l = x;
-    t = y;
-    r = l + 1.f;
-	b = t + 8.f; //8.f is the right height of the tail as to not collide with the ground
+    l = x - RACCOON_TAIL_BBOX_WIDTH;
+    t = y - RACCOON_TAIL_BBOX_HEIGHT;
+    r = l + RACCOON_TAIL_BBOX_WIDTH * 2;
+	b = t + RACCOON_TAIL_BBOX_HEIGHT; //8.f is the right height of the tail as to not collide with the ground
 }

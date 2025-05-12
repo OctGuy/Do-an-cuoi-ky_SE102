@@ -82,6 +82,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		tailAttack_start = 0;
 		isTailAttacking = false;
+		Tail->SetActive(false); // Deactivate the tail after the attack animation
 		CAnimations* animations = CAnimations::GetInstance();
 		animations->Get(ID_ANI_MARIO_RACCOON_TAIL_ATTACK_RIGHT)->Reset();
 		animations->Get(ID_ANI_MARIO_RACCOON_TAIL_ATTACK_LEFT)->Reset();
@@ -168,6 +169,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				Koopa = NULL;
 			}
 		}
+	}
+
+	//Handle Raccoon Tail
+	if (Tail && tailAttack_start)
+	{
+		Tail->SetPosition(x, y + 4.f);
 	}
 }
 
@@ -809,7 +816,7 @@ void CMario::Render()
 		aniId = GetAniIdRaccoon();
 	animations->Get(aniId)->Render(x, y);
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 
 	DebugOutTitle(L"Coins: %d", coin);
 }
