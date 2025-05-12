@@ -43,7 +43,12 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 
 	if (state == KOOPA_STATE_SHELL_MOVE || state == KOOPA_STATE_SHELL_REVERSE_MOVE) {
 		if (e->nx != 0 && e->obj->IsBlocking()) {
-			vx = -vx;
+			if (e->nx > 0) {
+				vx = KOOPA_SHELL_SPEED;
+			}
+			else {
+				vx = -KOOPA_SHELL_SPEED;
+			}
 		}
 
 		if (dynamic_cast<CQuestionBrick*>(e->obj)) {
@@ -217,6 +222,8 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		}
 		break;
 	}
+
+	DebugOut(L"KOOPA SPEED: %f \n", vx);
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
