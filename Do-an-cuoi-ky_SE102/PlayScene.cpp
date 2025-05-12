@@ -464,6 +464,7 @@ void CPlayScene::Update(DWORD dt)
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		if (!objects[i]->IsActive()) continue;
+		if (!objects[i]->IsCollidable()) continue;
 		coObjects.push_back(objects[i]);
 	}
 

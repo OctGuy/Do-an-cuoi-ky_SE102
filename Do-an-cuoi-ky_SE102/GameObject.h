@@ -74,6 +74,11 @@ public:
 	//
 	virtual int IsCollidable() { return 0; }
 
+	//
+	// When an object is tangible it can be block by other object
+	//
+	virtual int IsTangible() { return 1; } 
+
 	// When no collision has been detected (triggered by CCollision::Process)
 	virtual void OnNoCollision(DWORD dt) {};
 

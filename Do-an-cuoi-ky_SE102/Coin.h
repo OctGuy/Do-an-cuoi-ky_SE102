@@ -36,6 +36,7 @@ public:
 
 	void SetState(int state);
 	int IsBlocking() { return 0; }
+	int IsCollidable() { return 1; }
 
 	void CollectCoin();
 };

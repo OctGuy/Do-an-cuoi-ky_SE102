@@ -259,7 +259,7 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 		dx = vx * dt;
 		dy = vy * dt;
 
-		if (colX != NULL && colY != NULL)
+		if (colX != NULL && colY != NULL && objSrc->IsTangible())
 		{
 			if (colY->t < colX->t)	// was collision on Y first ?
 			{
@@ -329,14 +329,14 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 			}
 		}
 		else
-			if (colX != NULL)
+			if (colX != NULL && objSrc->IsTangible())
 			{
 				x += colX->t * dx + colX->nx * BLOCK_PUSH_FACTOR;
 				y += dy;
 				objSrc->OnCollisionWith(colX);
 			}
 			else
-				if (colY != NULL)
+				if (colY != NULL && objSrc->IsTangible())
 				{
 					x += dx;
 					y += colY->t * dy + colY->ny * BLOCK_PUSH_FACTOR;
