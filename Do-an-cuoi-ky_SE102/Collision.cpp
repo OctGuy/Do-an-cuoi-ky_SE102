@@ -352,14 +352,12 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 	}
 
 	//
-	// Scan all non-blocking collisions for further collision logic
+	// Scan all collisions for further collision logic
 	//
 	for (UINT i = 0; i < coEvents.size(); i++)
 	{
 		LPCOLLISIONEVENT e = coEvents[i];
 		if (e->isDeleted) continue;
-		if (e->obj->IsBlocking()) continue;  // blocking collisions were handled already, skip them
-
 		objSrc->OnCollisionWith(e);
 	}
 
