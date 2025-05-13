@@ -27,7 +27,7 @@ void CPSwitch::Update(DWORD dt, std::vector<LPGAMEOBJECT>* coObjects)
 	{
 		DebugOut(L"[INFO] 10 second passed\n");
         numOfActivation++;
-		isActivated = false; // Deactivate the switch
+		//isActivated = false; // Deactivate the switch
 		SwitchCoinBricks(); // Switch coins and bricks
 	}
 }
@@ -102,31 +102,28 @@ void CPSwitch::SwitchCoinBricks()
 
     for (LPGAMEOBJECT obj : allObjects)
     {
-        if (!obj || obj->IsDeleted()) continue; // Skip null or deleted objects
+        if (!obj || obj->IsDeleted()) continue; 
 
-        if (dynamic_cast<CCoin*>(obj)) 
+		if (dynamic_cast<CCoin*>(obj)) //Replace coin with shiny brick
         {
             float cx, cy;
             obj->GetPosition(cx, cy);
             obj->Delete(); 
 
-            // Create a shiny brick and add to new objects list
             LPGAMEOBJECT shinyBrick = new CShinyBrick(cx, cy, 30);
             newObjects.push_back(shinyBrick);
         }
-        else if (dynamic_cast<CShinyBrick*>(obj)) 
+		else if (dynamic_cast<CShinyBrick*>(obj)) //Replace shint brick with coin
         {
             float bx, by;
             obj->GetPosition(bx, by);
             obj->Delete(); 
 
-            // Create a coin and add to new objects list
             LPGAMEOBJECT coin = new CCoin(bx, by);
             newObjects.push_back(coin);
         }
     }
 
-    // Add all new objects to the scene
     for (LPGAMEOBJECT newObj : newObjects)
     {
         playScene->Add(newObj);

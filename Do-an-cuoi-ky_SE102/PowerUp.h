@@ -73,6 +73,7 @@ public:
     void SetStateMushroom(int state);
     void SetStateLeaf(int state);
 
-    int IsCollidable() { return type == POWER_UP_TYPE_LEAF ? 0 : 1; }
+    int IsCollidable() { return 1; }
     int IsBlocking() { return 0; }
+	int IsTangible() { return type != POWER_UP_TYPE_LEAF; } 
 };

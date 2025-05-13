@@ -2,6 +2,9 @@
 #include "GameObject.h"
 #include "Particle.h"
 
+#define RACCOON_TAIL_BBOX_WIDTH 10.f
+#define RACCOON_TAIL_BBOX_HEIGHT 16
+
 #define RACCOON_TAIL_STATE_INACTIVE 200
 #define RACCOON_TAIL_STATE_ACTIVE 100
 
@@ -38,5 +41,6 @@ public:
 
     int IsCollidable() { return 1; }
     int IsBlocking() { return 0; }
+	int IsTangible() { return 0; }
     //ool IsActive() { return isActive; }
 };

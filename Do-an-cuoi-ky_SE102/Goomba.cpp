@@ -40,11 +40,11 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vx += ax * dt;
 
 	// Handle rising logic
-	if (state == GOOMBA_STATE_RISE && y <= originalY - GOOMBA_BBOX_HEIGHT)
-	{
-		y = originalY - GOOMBA_BBOX_HEIGHT;
-		SetState(GOOMBA_STATE_WALKING); // Transition to walking state
-	}
+	//if (state == GOOMBA_STATE_RISE && y <= originalY - GOOMBA_BBOX_HEIGHT)
+	//{
+	//	y = originalY - GOOMBA_BBOX_HEIGHT;
+	//	SetState(GOOMBA_STATE_WALKING); // Transition to walking state
+	//}
 
 	if (((state == GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT))
 		|| (state == GOOMBA_STATE_DIE_REVERSE) && (GetTickCount64() - die_start > GOOMBA_DIE_REVERSE_TIMEOUT))
@@ -53,7 +53,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	}
 
-	CGameObject::Update(dt, coObjects);
+	//CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -65,24 +65,31 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (dynamic_cast<CGoomba*>(e->obj) || dynamic_cast<CWingedGoomba*>(e->obj)) vx = -vx;
+	//if (dynamic_cast<CGoomba*>(e->obj) || dynamic_cast<CWingedGoomba*>(e->obj)) vx = -vx;
 
-	if (e->ny != 0 && e->obj->IsBlocking())
+	//if (!e->obj->IsBlocking()) return;
+	if (e->ny != 0 || e->nx != 0)
 	{
-		vy = 0;
-		ay = GOOMBA_GRAVITY; // Reset gravity to default
-	}
-	else if (e->nx != 0)
-	{
-		if (e->obj->IsBlocking()) {
-			if (e->nx > 0)
-				vx = GOOMBA_WALKING_SPEED;
-			else
-				vx = -GOOMBA_WALKING_SPEED;
+		if (e->ny != 0 && e->obj->IsBlocking())
+		{
+			//DebugOut(L"GOOMBA COLLISION WITH BLOCKING OBJECT\n");
+			vy = 0;
+			ay = GOOMBA_GRAVITY; // Reset gravity to default
+		}
+		else if (e->nx != 0)
+		{
+			if (e->obj->IsBlocking()) {
+				DebugOut(L"GOOMBA COLLISION WITH BLOCKING OBJECT\n");
+				if (e->nx > 0)
+					vx = GOOMBA_WALKING_SPEED;
+				else
+					vx = -GOOMBA_WALKING_SPEED;
+			}
 		}
 	}
-	else if (dynamic_cast<CKoopa*>(e->obj))
-		OnCollisionWithKoopa(e);
+	else
+		if (dynamic_cast<CKoopa*>(e->obj))
+			OnCollisionWithKoopa(e);
 }
 
 void CGoomba::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
@@ -91,18 +98,18 @@ void CGoomba::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 	CKoopa* koopaHeldByMario = dynamic_cast<CKoopa*>(mario->GetKoopa());
 
 	if (koopa) {
-		if (koopaHeldByMario != nullptr && koopaHeldByMario == koopa && koopa->GetIsHeld()) {
+		if (koopa->GetIsHeld()) {
 			DebugOut(L"Koopa is collided with Goomba when Mario hold\n");
 			SetState(GOOMBA_STATE_DIE_REVERSE);
 			koopa->SetState(KOOPA_STATE_DIE);
+			mario->AddPoint(100, e);
 		}
 		else if (koopa->GetState() == KOOPA_STATE_SHELL_MOVE
 			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
 			DebugOut(L"Koopa is collided with Goomba when Mario kick\n");
 			SetState(GOOMBA_STATE_DIE_REVERSE);
+			mario->AddPoint(100, e);
 		}
-
-		mario->AddPoint(100, e);
 	}
 }
 
@@ -153,6 +160,7 @@ void CGoomba::SetState(int state)
 
 	case GOOMBA_STATE_WALKING:
 		vx = -GOOMBA_WALKING_SPEED;
+		ax = 0;
 		ay = GOOMBA_GRAVITY;
 		break;
 
