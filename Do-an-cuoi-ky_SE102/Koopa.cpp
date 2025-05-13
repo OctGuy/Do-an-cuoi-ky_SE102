@@ -223,7 +223,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		break;
 	}
 
-	DebugOut(L"KOOPA SPEED: %f \n", vx);
+	//DebugOut(L"KOOPA SPEED: %f \n", vx);
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
