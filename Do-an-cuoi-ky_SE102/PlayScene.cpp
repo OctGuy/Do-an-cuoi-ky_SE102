@@ -528,7 +528,6 @@ void CPlayScene::Render()
 	ID3D10Device* pD3DDevice = game->GetDirect3DDevice();
 	ID3D10RenderTargetView* pRTV = game->GetRenderTargetView();
 
-	// Clear the back buffer with the background color
 	pD3DDevice->ClearRenderTargetView(pRTV, backgroundColor);
 
 	// Render all game objects

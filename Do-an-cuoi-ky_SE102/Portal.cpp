@@ -44,3 +44,14 @@ void CPortal::GetBoundingBox(float &l, float &t, float &r, float &b)
 	r = x + width/2;
 	b = y + height/2;
 }
+
+void CPortal::Reload()
+{
+	CGameObject::Reload();
+}
+
+void CPortal::SetActive(bool isActive)
+{
+	DebugOut(L"[INFO] Portal %d is %s\n", scene_id, isActive ? L"active" : L"inactive");
+	CGameObject::SetActive(isActive);
+}

@@ -41,6 +41,6 @@ public:
 
     int IsCollidable() { return 1; }
     int IsBlocking() { return 0; }
-	int IsTangible() { return 0; }
+	int IsTangible() { return 1; }
     //ool IsActive() { return isActive; }
 };

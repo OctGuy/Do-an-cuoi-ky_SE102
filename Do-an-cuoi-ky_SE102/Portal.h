@@ -14,7 +14,10 @@ class CPortal : public CGameObject
 public:
 	CPortal(float l, float t, float r, float b, int scene_id);
 	virtual void Render();
-	virtual void GetBoundingBox(float &l, float &t, float &r, float &b);
+	void GetBoundingBox(float &l, float &t, float &r, float &b);
+	void Reload();
+
+	void SetActive(bool isActive);
 
 	void RenderBoundingBox(void);
 	

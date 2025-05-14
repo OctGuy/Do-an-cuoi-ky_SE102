@@ -358,6 +358,9 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 	{
 		LPCOLLISIONEVENT e = coEvents[i];
 		if (e->isDeleted) continue;
+		// ignore collision with blocking objects and non-tangible objects
+		if (e->obj->IsBlocking() && !objSrc->IsTangible()) continue;	
+
 		objSrc->OnCollisionWith(e);
 	}
 
