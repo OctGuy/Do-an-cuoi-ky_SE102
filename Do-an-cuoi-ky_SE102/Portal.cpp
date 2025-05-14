@@ -2,15 +2,6 @@
 #include "Game.h"
 #include "Textures.h"
 
-CPortal::CPortal(float l, float t, float r, float b, int scene_id )
-{
-	this->scene_id = scene_id;
-	x = l; 
-	y = t;
-	width = r - l;
-	height = b - t;
-}
-
 void CPortal::RenderBoundingBox()
 {
 	D3DXVECTOR3 p(x, y, 0);
@@ -34,15 +25,16 @@ void CPortal::RenderBoundingBox()
 
 void CPortal::Render()
 {
+	DebugOut(L"[INFO] Portal position %f %f\n", x, y);
 	RenderBoundingBox();
 }
 
 void CPortal::GetBoundingBox(float &l, float &t, float &r, float &b)
 {
-	l = x - width/2;
-	t = y - height/2;
-	r = x + width/2;
-	b = y + height/2;
+	l = x - PORTAL_BBOX_WIDTH/2;
+	t = y - PORTAL_BBOX_HEIGHT/2;
+	r = l + PORTAL_BBOX_WIDTH;
+	b = t + PORTAL_BBOX_HEIGHT;
 }
 
 void CPortal::Reload()
@@ -52,6 +44,6 @@ void CPortal::Reload()
 
 void CPortal::SetActive(bool isActive)
 {
-	DebugOut(L"[INFO] Portal %d is %s\n", scene_id, isActive ? L"active" : L"inactive");
 	CGameObject::SetActive(isActive);
+	DebugOut(L"[INFO] Portal %d is %s\n", scene_id, this->isActive ? L"active" : L"inactive");
 }

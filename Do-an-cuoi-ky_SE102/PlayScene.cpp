@@ -292,10 +292,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		case OBJECT_TYPE_PORTAL:
 		{
-			float r = (float)atof(tokens[3].c_str());
-			float b = (float)atof(tokens[4].c_str());
-			int scene_id = atoi(tokens[5].c_str());
-			obj = new CPortal(x, y, r, b, scene_id);
+			int scene_id = atoi(tokens[3].c_str());
+			obj = new CPortal(x, y, scene_id);
 		}
 		break;
 
@@ -449,14 +447,24 @@ void CPlayScene::Update(DWORD dt)
 		if (objects[i] == player)
 			continue;
 
-		if (IsWithinLoadChunk(objects[i]) == -1)
+		int chunkStatus = IsWithinLoadChunk(objects[i]);
+
+		if (chunkStatus == -1) // Object is far off-screen
 		{
-			objects[i]->Reload();
-			objects[i]->SetActive(false);
+			// Only deactivate and reload if it's currently active
+			if (objects[i]->IsActive())
+			{
+				objects[i]->Reload(); // Reset object state (e.g., position)
+				objects[i]->SetActive(false); // Set as inactive
+			}
 		}
-		else if (IsWithinLoadChunk(objects[i]) == 1)
+		else if (chunkStatus == 1) // Object is in the near off-screen buffer (but not fully on-screen yet)
 		{
-			objects[i]->SetActive(true);
+			// Only activate if it's currently inactive
+			if (!objects[i]->IsActive())
+			{
+				objects[i]->SetActive(true); // Set as active
+			}
 		}
 	}
 
