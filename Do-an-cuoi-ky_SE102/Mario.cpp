@@ -13,7 +13,7 @@
 #include "PiranhaPlant.h"
 #include "Koopa.h"
 #include "PSwitch.h"
-
+#include "MovingPlatform.h"
 #include "Collision.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -95,6 +95,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+
+	DebugOut(L"[INFO] Mario is On Platform: %d\n", isOnPlatform);
 
 	if (!flying_start) {
 		if (isOnPlatform && fabs(vx) > MARIO_WALKING_SPEED)
@@ -269,6 +271,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		OnCollisionWithWingedGoomba(e);
 	}
+	else if (dynamic_cast<CMovingPlatform*>(e->obj)) {
+		OnCollisionWithMovingPlatform(e);
+	}
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -370,6 +375,12 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e) {
 			&& wingedGoomba->GetState() != GOOMBA_WING_STATE_DIE_REVERSE)
 			GetHurt();
 	}
+}
+
+void CMario::OnCollisionWithMovingPlatform(LPCOLLISIONEVENT e)
+{
+	if (e->ny < 0 && vx == 0 && vy == 0)
+		e->obj->GetSpeed(vx, vy);
 }
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)

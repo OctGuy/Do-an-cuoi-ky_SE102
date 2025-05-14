@@ -25,7 +25,7 @@ void CPortal::RenderBoundingBox()
 
 void CPortal::Render()
 {
-	DebugOut(L"[INFO] Portal position %f %f\n", x, y);
+	//DebugOut(L"[INFO] Portal position %f %f\n", x, y);
 	RenderBoundingBox();
 }
 
