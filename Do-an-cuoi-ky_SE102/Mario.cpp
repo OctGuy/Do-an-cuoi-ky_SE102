@@ -386,7 +386,7 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e) {
 	}
 }
 
-void CMario::OnCollisionWithMovingPlatform(LPCOLLISIONEVENT e)
+void CMario::OnCollisionWithMovingPlatform(LPCOLLISIONEVENT e) //Unstable need to be work on more
 {
 	if (e->ny < 0) {
 		float vxx;
@@ -396,7 +396,7 @@ void CMario::OnCollisionWithMovingPlatform(LPCOLLISIONEVENT e)
 		y += 1.f; // Move mario downward to activate the bellow condition
 	}
 	else if (e->ny == 0 && e->nx == 0) {
-		//DebugOut(L"[INFO] Mario is on moving platform\n");
+		DebugOut(L"[INFO] Mario is on moving platform\n");
 		float mVx, mVy;
 		e->obj->GetSpeed(mVx, mVy);
 		if (vy != mVy) vy = mVy; //Make mario fall at the same speed as platform
@@ -404,6 +404,21 @@ void CMario::OnCollisionWithMovingPlatform(LPCOLLISIONEVENT e)
 		isOnFallingPlatform = true;
 		float fill1, fill2, fill3; //I dont know how to get the bounding box of the object without these variable
 		e->obj->GetBoundingBox(fill1, currentFloorY, fill2, fill3);
+	}
+	else if (e->nx != 0)
+	{
+		float mVx, mVy;
+		e->obj->GetSpeed(mVx, mVy);
+		if (e->nx > 0)
+		{
+			vx = mVx * 1.7f; 
+			ax = -MARIO_FRICTION;
+		}
+		else
+		{
+			vx = mVx * 1.7f; 
+			ax = MARIO_FRICTION;
+		}
 	}
 }
 
