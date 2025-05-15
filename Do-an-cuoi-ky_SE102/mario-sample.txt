@@ -22,6 +22,7 @@ height	240
 14	textures\enemies_transparent.png
 20	textures\PowerUp.png
 30 	textures\tiles.png
+31	textures\tile1-4.png
 40	textures\Hud.png
 41	textures\Hud_2.png
 50	textures\Particle.png

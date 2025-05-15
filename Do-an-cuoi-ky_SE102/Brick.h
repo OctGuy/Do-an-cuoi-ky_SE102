@@ -55,5 +55,6 @@ public:
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	int IsBlocking() { return type != BRICK_TYPE_DEATH; }
 	int IsCollidable() { return 1; }
+	int IsTangible() { return 0; }
 	int GetAnimationid();
 };

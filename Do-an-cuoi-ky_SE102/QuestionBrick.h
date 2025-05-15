@@ -4,13 +4,6 @@
 #include "Mario.h"
 #include "debug.h"
 
-// Forward declarations instead of includes
-class CCoin;
-class CPowerUp;
-class CKoopa;
-class CRaccoonTail;
-class CPSwitch;
-
 #define BRICK_BOUNCE_SPEED 0.1f
 #define BRICK_BOUNCE_HEIGHT 10.0f
 #define BRICK_BOUNCE_TIME 210

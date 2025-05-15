@@ -222,6 +222,7 @@ class CMario : public CGameObject
 	BOOLEAN isOnPlatform;
 	BOOLEAN isInAir;	//If Raccoon mario is flying or floating this should be true
 	BOOLEAN isKicking;
+	BOOLEAN isOnFallingPlatform;
 
 	BOOLEAN isTailAttacking; //If Raccoon mario is using tail attack this should be true
 	LPGAMEOBJECT Tail; // Raccoon tail object
@@ -254,6 +255,7 @@ class CMario : public CGameObject
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithPSwitch(LPCOLLISIONEVENT e);
 	void OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e);
+	void OnCollisionWithMovingPlatform(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -286,6 +288,7 @@ public:
 		isAbleToHold = false;
 		isKicking = false;
 		isAbleToFly = false;
+		isOnFallingPlatform = false;
 
 		Tail = NULL;
 		currentFloorY = GROUND_Y; // Initialize to ground level

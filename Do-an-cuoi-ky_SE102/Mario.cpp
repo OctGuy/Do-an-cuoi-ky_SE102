@@ -13,7 +13,7 @@
 #include "PiranhaPlant.h"
 #include "Koopa.h"
 #include "PSwitch.h"
-
+#include "MovingPlatform.h"
 #include "Collision.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -45,6 +45,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	//reset is On platform for correct jumpinga animation
 	isOnPlatform = false;
+
+	//Reset normal gravity and set isOnPlatform to true to make sure mario can still jump on falling platform
+	if (isOnFallingPlatform)
+	{
+		isOnPlatform = true;
+		isOnFallingPlatform = false;
+		ay = MARIO_GRAVITY; 
+	}
 
 	//Update preLevel before current level
 	preLevel = level;
@@ -95,6 +103,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+
+	//DebugOut(L"[INFO] Mario is On Platform: %d\n", isOnPlatform);
+	//DebugOut(L"[INFO] Mario is current FloorY: %f\n", currentFloorY);
 
 	if (!flying_start) {
 		if (isOnPlatform && fabs(vx) > MARIO_WALKING_SPEED)
@@ -269,6 +280,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		OnCollisionWithWingedGoomba(e);
 	}
+	else if (dynamic_cast<CMovingPlatform*>(e->obj)) {
+		OnCollisionWithMovingPlatform(e);
+	}
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -369,6 +383,42 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e) {
 		if (wingedGoomba->GetState() != GOOMBA_WING_STATE_DIE
 			&& wingedGoomba->GetState() != GOOMBA_WING_STATE_DIE_REVERSE)
 			GetHurt();
+	}
+}
+
+void CMario::OnCollisionWithMovingPlatform(LPCOLLISIONEVENT e) //Unstable need to be work on more
+{
+	if (e->ny < 0) {
+		float vxx;
+		ay = 0;
+		e->obj->GetSpeed(vxx, vy);
+		isOnFallingPlatform = true;
+		y += 1.f; // Move mario downward to activate the bellow condition
+	}
+	else if (e->ny == 0 && e->nx == 0) {
+		DebugOut(L"[INFO] Mario is on moving platform\n");
+		float mVx, mVy;
+		e->obj->GetSpeed(mVx, mVy);
+		if (vy != mVy) vy = mVy; //Make mario fall at the same speed as platform
+		ay = 0;
+		isOnFallingPlatform = true;
+		float fill1, fill2, fill3; //I dont know how to get the bounding box of the object without these variable
+		e->obj->GetBoundingBox(fill1, currentFloorY, fill2, fill3);
+	}
+	else if (e->nx != 0)
+	{
+		float mVx, mVy;
+		e->obj->GetSpeed(mVx, mVy);
+		if (e->nx > 0)
+		{
+			vx = mVx * 1.7f; 
+			ax = -MARIO_FRICTION;
+		}
+		else
+		{
+			vx = mVx * 1.7f; 
+			ax = MARIO_FRICTION;
+		}
 	}
 }
 
@@ -962,7 +1012,7 @@ void CMario::SetState(int state)
 		if (isRunning && isOnPlatform) break;
 		if (isOnPlatform && level != MARIO_LEVEL_SMALL)
 		{
-			state = MARIO_STATE_IDLE;
+			//state = MARIO_STATE_IDLE;
 			//vx = 0; vy = 0.0f;
 			if (!isSitting)
 				y += MARIO_SIT_HEIGHT_ADJUST;

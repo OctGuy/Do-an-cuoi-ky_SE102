@@ -19,6 +19,7 @@
 #include "ShinyBrick.h"
 #include "PSwitch.h"
 #include "WingedGoomba.h"
+#include "MovingPlatform.h"
 
 using namespace std;
 
@@ -192,6 +193,24 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			int sprite_end = atoi(tokens[8].c_str());
 
 			obj = new CPlatform(
+				x, y,
+				cell_width, cell_height, length,
+				sprite_begin, sprite_middle, sprite_end
+			);
+
+			break;
+		}
+
+		case OBJECT_TYPE_MOVING_PLATFORM:
+		{
+			float cell_width = (float)atof(tokens[3].c_str());
+			float cell_height = (float)atof(tokens[4].c_str());
+			int length = atoi(tokens[5].c_str());
+			int sprite_begin = atoi(tokens[6].c_str());
+			int sprite_middle = atoi(tokens[7].c_str());
+			int sprite_end = atoi(tokens[8].c_str());
+
+			obj = new CMovingPlatform(
 				x, y,
 				cell_width, cell_height, length,
 				sprite_begin, sprite_middle, sprite_end
@@ -454,16 +473,16 @@ void CPlayScene::Update(DWORD dt)
 			// Only deactivate and reload if it's currently active
 			if (objects[i]->IsActive())
 			{
-				objects[i]->Reload(); // Reset object state (e.g., position)
-				objects[i]->SetActive(false); // Set as inactive
+				objects[i]->Reload();
+				objects[i]->SetActive(false);\
 			}
 		}
-		else if (chunkStatus == 1) // Object is in the near off-screen buffer (but not fully on-screen yet)
+		else if (chunkStatus == 1) // Object is in the load chunk (but not fully on-screen yet)
 		{
 			// Only activate if it's currently inactive
 			if (!objects[i]->IsActive())
 			{
-				objects[i]->SetActive(true); // Set as active
+				objects[i]->SetActive(true);
 			}
 		}
 	}

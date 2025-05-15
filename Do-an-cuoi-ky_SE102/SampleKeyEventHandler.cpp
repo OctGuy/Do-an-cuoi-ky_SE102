@@ -127,6 +127,9 @@ void CSampleKeyHandler::KeyState(BYTE* states)
     CGame* game = CGame::GetInstance();
     CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
+    if (game->IsKeyDown(DIK_S))
+		mario->SetState(MARIO_STATE_JUMP);
+
     if (game->IsKeyDown(DIK_LEFT))
     {
         if (game->IsKeyDown(DIK_A))

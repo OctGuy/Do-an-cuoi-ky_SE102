@@ -140,6 +140,8 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="MovingPlatform.cpp" />
+    <ClCompile Include="MovingPlatform.h" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="FireBullet.cpp" />
     <ClCompile Include="Game.cpp" />
