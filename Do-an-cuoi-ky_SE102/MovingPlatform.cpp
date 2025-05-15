@@ -41,3 +41,10 @@ void CMovingPlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
 	CPlatform::GetBoundingBox(l, t, r, b);
 }
 
+void CMovingPlatform::Reload()
+{
+	//DebugOut(L"[INFO] Reload MovingPlatform\n");
+	CGameObject::Reload();
+	vx = -MOVING_PLATFORM_HORIZONTAL_SPEED;
+}
+

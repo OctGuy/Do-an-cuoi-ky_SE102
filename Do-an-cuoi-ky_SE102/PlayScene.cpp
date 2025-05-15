@@ -473,16 +473,16 @@ void CPlayScene::Update(DWORD dt)
 			// Only deactivate and reload if it's currently active
 			if (objects[i]->IsActive())
 			{
-				objects[i]->Reload(); // Reset object state (e.g., position)
-				objects[i]->SetActive(false); // Set as inactive
+				objects[i]->Reload();
+				objects[i]->SetActive(false);\
 			}
 		}
-		else if (chunkStatus == 1) // Object is in the near off-screen buffer (but not fully on-screen yet)
+		else if (chunkStatus == 1) // Object is in the load chunk (but not fully on-screen yet)
 		{
 			// Only activate if it's currently inactive
 			if (!objects[i]->IsActive())
 			{
-				objects[i]->SetActive(true); // Set as active
+				objects[i]->SetActive(true);
 			}
 		}
 	}

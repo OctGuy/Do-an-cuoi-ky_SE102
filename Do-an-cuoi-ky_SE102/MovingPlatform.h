@@ -23,6 +23,7 @@ public:
 	virtual void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
 	void GetBoundingBox(float& l, float& t, float& r, float& b) override;
+	void Reload();
 
 	void OnNoCollision(DWORD dt);
 
