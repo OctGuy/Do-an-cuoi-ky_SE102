@@ -1,4 +1,4 @@
-#include "GameObject.h"
+#pragma once
 #include "Platform.h"
 
 #define MOVING_PLATFORM_HORIZONTAL_SPEED 0.05f
@@ -8,6 +8,7 @@ using namespace std;
 
 class CMovingPlatform : public CPlatform
 {
+private:
 	void OnCollisionWithMario(LPCOLLISIONEVENT e);
 public:
 	CMovingPlatform(float x, float y,
@@ -19,7 +20,7 @@ public:
 		this->vy = 0;
 	}
 
-	void Render() override;
+	virtual void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
 	void GetBoundingBox(float& l, float& t, float& r, float& b) override;
 
