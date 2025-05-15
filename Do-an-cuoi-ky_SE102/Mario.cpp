@@ -15,6 +15,7 @@
 #include "PSwitch.h"
 #include "MovingPlatform.h"
 #include "Collision.h"
+#include "TunnelBlock.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -83,6 +84,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
+	}
+
+	//Check if mario is tunneling
+	if (tunnel_start && now - tunnel_start > MARIO_TUNNEL_TIME)
+	{
+		tunnel_start = 0;
+		isTunneling = false;
+		ay = MARIO_GRAVITY; // Reset gravity to default because tunnnel set ay to 0
 	}
 
 	//Speacial animation timing (i want to make it so that the animation is not interrupted but this is the easiest method i can think of)
@@ -187,6 +196,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		Tail->SetPosition(x, y + 4.f);
 	}
+
+	//DebugOut(L"[INFO] Mario: %d %d\n", isAbleToTunnelDown, isAbleToTunnelUp);
 }
 
 void CMario::AddPoint(int p, LPCOLLISIONEVENT e)
@@ -282,6 +293,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	else if (dynamic_cast<CMovingPlatform*>(e->obj)) {
 		OnCollisionWithMovingPlatform(e);
+	}
+	else if (dynamic_cast<CTunnelBlock*>(e->obj))
+	{
+		OnCollisionWithTunnelBlock(e);
 	}
 }
 
@@ -418,6 +433,37 @@ void CMario::OnCollisionWithMovingPlatform(LPCOLLISIONEVENT e) //Unstable need t
 		{
 			vx = mVx * 1.7f; 
 			ax = MARIO_FRICTION;
+		}
+	}
+}
+
+void CMario::OnCollisionWithTunnelBlock(LPCOLLISIONEVENT e)
+{
+	CTunnelBlock* tunnelBlock = dynamic_cast<CTunnelBlock*>(e->obj);
+	if (e->ny != 0) 
+	{
+		if (e->ny < 0 && isAbleToTunnelDown)
+		{
+			DebugOut(L"Tunnel Down\n");
+			SetState(MARIO_STATE_TUNNEL_DOWN);
+			y += 1.f; 
+		}
+		else if (e->ny > 0 && isAbleToTunnelUp)
+		{
+			DebugOut(L"Tunnel Up\n");
+			SetState(MARIO_STATE_TUNNEL_UP);
+			y -= 1.f; 
+		}
+	}
+	else if (e->nx == 0 && e->ny == 0)
+	{
+		if (!isTunneling)
+		{
+			float destX, destY;
+			tunnelBlock->GetDestination(destX, destY);
+			SetPosition(destX, destY);
+			isTunneling = true;
+			tunnel_start = GetTickCount64();
 		}
 	}
 }
@@ -1062,6 +1108,24 @@ void CMario::SetState(int state)
 	case MARIO_STATE_DROP:
 		isAbleToHold = false;
 		//Koopa = NULL;
+		break;
+
+	case MARIO_STATE_TUNNEL_DOWN:
+		isTunneling = true;
+		tunnel_start = GetTickCount64();
+		ay = 0;
+		ax = 0;
+		vx = 0;
+		vy = MARIO_TUNNELING_SPEED;
+		break;
+
+	case MARIO_STATE_TUNNEL_UP:
+		isTunneling = true;
+		tunnel_start = GetTickCount64();
+		vx = 0;
+		ax = 0;
+		ay = 0;
+		vy = -MARIO_TUNNELING_SPEED;
 		break;
 	}
 

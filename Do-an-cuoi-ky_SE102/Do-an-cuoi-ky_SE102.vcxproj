@@ -166,6 +166,7 @@
     <ClCompile Include="PowerUp.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="SceneryObject.cpp" />
+    <ClCompile Include="TunnelBlock.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="WingedGoomba.cpp" />
   </ItemGroup>
@@ -207,6 +208,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="SceneryObject.h" />
+    <ClInclude Include="TunnelBlock.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Wall.h" />
     <ClInclude Include="WingedGoomba.h" />

@@ -20,6 +20,7 @@
 #include "PSwitch.h"
 #include "WingedGoomba.h"
 #include "MovingPlatform.h"
+#include "TunnelBlock.h"
 
 using namespace std;
 
@@ -315,6 +316,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new CPortal(x, y, scene_id);
 		}
 		break;
+
+		case OBJECT_TYPE_TUNNEL_BLOCK:
+		{
+			int destX = atoi(tokens[3].c_str());
+			int destY = atoi(tokens[4].c_str());
+			obj = new CTunnelBlock(
+				x, y,
+				destX, destY
+			);
+			break;
+		}
 
 		default:
 			DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);

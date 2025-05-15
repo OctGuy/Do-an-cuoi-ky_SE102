@@ -9,7 +9,7 @@ void CBrick::Render()
 		return;
 	}
 	animations->Get(id)->Render(x, y);
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 int CBrick::GetAnimationid()

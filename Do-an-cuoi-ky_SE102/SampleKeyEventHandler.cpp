@@ -10,6 +10,8 @@ CGame* game = CGame::GetInstance();
 
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
+    CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+
     // Always process pause key regardless of game state
     if (KeyCode == DIK_P)
     {
@@ -18,17 +20,19 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
     }
 
     // If game is paused, ignore all other input
-    if (game->IsPaused() || game->IsTimeFrozen())
+    if (game->IsPaused() || game->IsTimeFrozen() || mario->IsTunneling())
         return;
-
-    CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
     //DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
     switch (KeyCode)
     {
     case DIK_DOWN:
         mario->SetState(MARIO_STATE_SIT);
+		mario->SetAbleToTunnelDown(true);
         break;
+    case DIK_UP:
+        mario->SetAbleToTunnelUp(true);
+		break;
     case DIK_S:
         if (mario->GetLevel() == MARIO_LEVEL_RACCOON)
         {
@@ -73,12 +77,12 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 
 void CSampleKeyHandler::OnKeyUp(int KeyCode)
 {
-    // If game is paused, ignore all other input
-    if (game->IsPaused() || game->IsTimeFrozen())
-        return;
-
     CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
     CGame* game = CGame::GetInstance();
+
+    // If game is paused, ignore all other input
+    if (game->IsPaused() || game->IsTimeFrozen() || mario->IsTunneling())
+        return;
 
     //DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
     switch (KeyCode)
@@ -114,18 +118,22 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
         break;
     case DIK_DOWN:
         mario->SetState(MARIO_STATE_SIT_RELEASE);
+        mario->SetAbleToTunnelDown(false);
+        break;
+    case DIK_UP:
+        mario->SetAbleToTunnelUp(false);
         break;
     }
 }
 
 void CSampleKeyHandler::KeyState(BYTE* states)
 {
-    // If game is paused, ignore all other input
-    if (game->IsPaused() || game->IsTimeFrozen())
-        return;
-
     CGame* game = CGame::GetInstance();
     CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+
+    // If game is paused, ignore all other input
+    if (game->IsPaused() || game->IsTimeFrozen() || mario->IsTunneling())
+        return;
 
     if (game->IsKeyDown(DIK_S))
 		mario->SetState(MARIO_STATE_JUMP);
