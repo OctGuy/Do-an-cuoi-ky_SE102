@@ -140,7 +140,9 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="MovingPlatform.cpp" />
+    <ClCompile Include="MovingPlatform.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="MovingPlatform.h" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="FireBullet.cpp" />

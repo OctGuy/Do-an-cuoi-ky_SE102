@@ -457,13 +457,22 @@ void CMario::OnCollisionWithTunnelBlock(LPCOLLISIONEVENT e)
 	}
 	else if (e->nx == 0 && e->ny == 0)
 	{
-		if (!isTunneling)
+		if (!isTunneling && tunnelBlock->GetType() == TUNNEL_BLOCK_TYPE_ENTER) //Teleport to the correct destinarion after finishing tunneling
 		{
 			float destX, destY;
 			tunnelBlock->GetDestination(destX, destY);
 			SetPosition(destX, destY);
-			isTunneling = true;
-			tunnel_start = GetTickCount64();
+		}
+		else //Doesnt really do anything, mostly for animation purpose
+		{
+			if (tunnelBlock->GetType() == TUNNEL_BLOCK_TYPE_UP)
+			{
+				SetState(MARIO_STATE_TUNNEL_UP);
+			}
+			else if (tunnelBlock->GetType() == TUNNEL_BLOCK_TYPE_DOWN)
+			{
+				SetState(MARIO_STATE_TUNNEL_DOWN);
+			}
 		}
 	}
 }

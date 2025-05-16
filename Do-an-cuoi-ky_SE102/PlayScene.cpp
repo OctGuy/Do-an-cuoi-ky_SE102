@@ -321,9 +321,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{
 			int destX = atoi(tokens[3].c_str());
 			int destY = atoi(tokens[4].c_str());
+			int type = atoi(tokens[5].c_str());
 			obj = new CTunnelBlock(
 				x, y,
-				destX, destY
+				destX, destY, type
 			);
 			break;
 		}
