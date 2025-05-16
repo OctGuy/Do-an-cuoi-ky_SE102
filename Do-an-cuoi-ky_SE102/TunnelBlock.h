@@ -14,14 +14,19 @@ class CTunnelBlock : public CGameObject
 	float destY;
 
 	int type;
+
+	float camLockPos;
+	float camBottomBound;
 public:
-	CTunnelBlock(float x, float y, float destX, float destY, int type)
+	CTunnelBlock(float x, float y, float destX, float destY, int type, float camLockPos, float camBottomBound)
         : CGameObject(x, y)
     {
 		this->destX = destX;
 		this->destY = destY;
 
 		this->type = type;
+		this->camLockPos = camLockPos;
+		this->camBottomBound = camBottomBound;
     }
 
     void Render() override;

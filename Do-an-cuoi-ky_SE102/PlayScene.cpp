@@ -322,9 +322,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			int destX = atoi(tokens[3].c_str());
 			int destY = atoi(tokens[4].c_str());
 			int type = atoi(tokens[5].c_str());
+			float camLockPos = (float)atof(tokens[6].c_str());
+			float camBottomBound = (float)atof(tokens[7].c_str());
 			obj = new CTunnelBlock(
 				x, y,
-				destX, destY, type
+				destX, destY, type,
+				camLockPos, camBottomBound
 			);
 			break;
 		}
@@ -545,7 +548,7 @@ void CPlayScene::Update(DWORD dt)
 	}
 	else {
 		// Regular fixed camera Y position when not flying
-		cy = 220.0f;
+		cy = camLockPos;
 	}
 
 	if (cx < 0) cx = 0;

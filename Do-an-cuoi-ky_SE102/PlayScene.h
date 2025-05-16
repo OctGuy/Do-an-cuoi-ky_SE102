@@ -30,8 +30,10 @@ protected:
 	vector<LPGAMEOBJECT> objects;
 
 	D3DXCOLOR backgroundColor;
+
 	float rightBoundary;
 	float bottomBoundary;
+	float camLockPos = 220.f; //temporary until i figure something else out
 
 	BOOLEAN isCameraFollowMarioY = false; //Keep track of whether the camera should follow Mario's Y position
 
@@ -70,6 +72,9 @@ public:
 	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);
 
 	void ActivateAllObjects();
+
+	void SetCamLockPos(float camLockPos) { this->camLockPos = camLockPos; }
+	void SetCamBottomBound(float camBottomBoundary) { this->bottomBoundary = camBottomBoundary; }
 };
 
 typedef CPlayScene* LPPLAYSCENE;
