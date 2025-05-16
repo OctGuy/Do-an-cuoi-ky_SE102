@@ -361,7 +361,3 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/Do-an-cuoi-ky_SE102/PSwitch.h
-/Do-an-cuoi-ky_SE102/MovingPlatform.h
-/Do-an-cuoi-ky_SE102/Platform.cpp
-/Do-an-cuoi-ky_SE102/Platform.h
