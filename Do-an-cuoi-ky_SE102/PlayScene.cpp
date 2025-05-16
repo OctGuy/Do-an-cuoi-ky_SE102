@@ -354,7 +354,7 @@ void CPlayScene::_ParseSection_SETTINGS(string line)
 	else if (tokens[0] == "bottom")
 		bottomBoundary = (float)atof(tokens[1].c_str());
 	else if (tokens[0] == "left")
-		leftBoundary = (float)atof(tokens[1].c_str());;
+		leftBoundary = (float)atof(tokens[1].c_str());
 	else
 		DebugOut(L"[ERROR] Unknown scene setting: %s\n", ToWSTR(tokens[0]).c_str());
 }
