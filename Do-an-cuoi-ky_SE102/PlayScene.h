@@ -33,7 +33,7 @@ protected:
 
 	float rightBoundary;
 	float bottomBoundary;
-	float camLockPos = 220.f; //temporary until i figure something else out
+	float camLockPos = 231.f; //temporary until i figure something else out
 
 	BOOLEAN isCameraFollowMarioY = false; //Keep track of whether the camera should follow Mario's Y position
 
