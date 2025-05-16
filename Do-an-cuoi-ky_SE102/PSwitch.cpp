@@ -64,32 +64,6 @@ void CPSwitch::SetActive(bool isActive)
 		CGameObject::SetActive(isActive); // Call the base class method
 }
 
-void CPSwitch::SwitchCoinBricks(std::vector<LPGAMEOBJECT>* coObjects)
-{
-    CPlayScene* playScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
-    for (LPGAMEOBJECT obj : *coObjects)
-    {
-        if (dynamic_cast<CCoin*>(obj)) // If it's a coin
-        {
-            float cx, cy;
-            obj->GetPosition(cx, cy);
-            obj->Delete(); // Mark the coin for deletion
-
-            LPGAMEOBJECT shinyBrick = new CShinyBrick(cx, cy, 30); // Create a shiny brick
-            playScene->Add(shinyBrick); // Add the shiny brick to the game
-        }
-        else if (dynamic_cast<CShinyBrick*>(obj)) // If it's a shiny brick
-        {
-            float bx, by;
-            obj->GetPosition(bx, by);
-            obj->Delete(); // Mark the shiny brick for deletion
-
-            LPGAMEOBJECT coin = new CCoin(bx, by); // Create a coin
-            playScene->Add(coin); // Add the coin to the game
-        }
-    }
-}
-
 void CPSwitch::SwitchCoinBricks()
 {
     CPlayScene* playScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());

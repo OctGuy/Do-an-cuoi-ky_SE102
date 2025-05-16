@@ -25,6 +25,13 @@ public:
     }
 
     void Render() override;
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
+	void SetActive(bool isActive) { this->isActive = true; }
+
+	void OnNoCollision(DWORD dt) override;
+	void OnCollisionWith(LPCOLLISIONEVENT e) override;
+	void OnCollisionWithMario(LPCOLLISIONEVENT e);
+
     void GetBoundingBox(float& l, float& t, float& r, float& b) override;
     int IsCollidable() override { return 1; }
 	int IsBlocking() override { return 1; }

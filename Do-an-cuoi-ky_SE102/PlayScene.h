@@ -68,6 +68,8 @@ public:
 	//Check if object is within load chunk
 	int IsWithinLoadChunk(LPGAMEOBJECT obj); //1: in load chunk. -1: out of load chunk. 0: within camera's view
 	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);
+
+	void ActivateAllObjects();
 };
 
 typedef CPlayScene* LPPLAYSCENE;

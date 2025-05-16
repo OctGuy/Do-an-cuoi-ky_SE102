@@ -645,6 +645,17 @@ int CPlayScene::IsWithinLoadChunk(LPGAMEOBJECT obj)
 
 bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }
 
+void CPlayScene::ActivateAllObjects()
+{
+	for (size_t i = 0; i < objects.size(); i++)
+	{
+		if (!objects[i]->IsActive())
+		{
+			objects[i]->SetActive(true);
+		}
+	}
+}
+
 void CPlayScene::PurgeDeletedObjects()
 {
 	vector<LPGAMEOBJECT>::iterator it;

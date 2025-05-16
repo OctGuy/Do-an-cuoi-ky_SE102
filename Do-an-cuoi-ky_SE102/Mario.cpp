@@ -442,13 +442,13 @@ void CMario::OnCollisionWithTunnelBlock(LPCOLLISIONEVENT e)
 	CTunnelBlock* tunnelBlock = dynamic_cast<CTunnelBlock*>(e->obj);
 	if (e->ny != 0) 
 	{
-		if (e->ny < 0 && isAbleToTunnelDown)
+		if (e->ny < 0 && isAbleToTunnelDown && tunnelBlock->GetType() == TUNNEL_BLOCK_TYPE_ENTER)
 		{
 			DebugOut(L"Tunnel Down\n");
 			SetState(MARIO_STATE_TUNNEL_DOWN);
 			y += 1.f; 
 		}
-		else if (e->ny > 0 && isAbleToTunnelUp)
+		else if (e->ny > 0 && isAbleToTunnelUp && tunnelBlock->GetType() == TUNNEL_BLOCK_TYPE_ENTER)
 		{
 			DebugOut(L"Tunnel Up\n");
 			SetState(MARIO_STATE_TUNNEL_UP);
