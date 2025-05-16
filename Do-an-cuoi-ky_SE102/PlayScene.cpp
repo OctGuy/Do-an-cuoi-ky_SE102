@@ -323,11 +323,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			int destY = atoi(tokens[4].c_str());
 			int type = atoi(tokens[5].c_str());
 			float camLockPos = (float)atof(tokens[6].c_str());
-			float camBottomBound = (float)atof(tokens[7].c_str());
+			float camLeftBound = (float)atof(tokens[7].c_str());
+			float camBottomBound = (float)atof(tokens[8].c_str());
+			float camRightBound = (float)atof(tokens[9].c_str());
 			obj = new CTunnelBlock(
 				x, y,
 				destX, destY, type,
-				camLockPos, camBottomBound
+				camLockPos, camLeftBound, camBottomBound, camRightBound
 			);
 			break;
 		}
@@ -351,6 +353,8 @@ void CPlayScene::_ParseSection_SETTINGS(string line)
 		rightBoundary = (float)atof(tokens[1].c_str());
 	else if (tokens[0] == "bottom")
 		bottomBoundary = (float)atof(tokens[1].c_str());
+	else if (tokens[0] == "left")
+		leftBoundary = (float)atof(tokens[1].c_str());;
 	else
 		DebugOut(L"[ERROR] Unknown scene setting: %s\n", ToWSTR(tokens[0]).c_str());
 }
@@ -551,10 +555,10 @@ void CPlayScene::Update(DWORD dt)
 		cy = camLockPos;
 	}
 
-	if (cx < 0) cx = 0;
-
-	//Boundary is set in the scene file under SETTINGS section
-	else if (cx > rightBoundary - game->GetBackBufferWidth() - 9.f) cx = rightBoundary - game->GetBackBufferWidth() - 9.f;
+	if (cx < leftBoundary)
+		cx = leftBoundary;
+	else if (cx > rightBoundary - game->GetBackBufferWidth() - 9.f)
+		cx = rightBoundary - game->GetBackBufferWidth() - 9.f;
 
 	if (cy < 0) cy = 0;
 	else if (cy > bottomBoundary) cy = bottomBoundary;

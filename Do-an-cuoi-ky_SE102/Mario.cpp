@@ -19,7 +19,6 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	//DebugOut(L"[INFO] Mario Update: %f %f\n", x, y);
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -138,15 +137,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isAbleToFly = false;
 
 	//Make sure mario doesnt go out of boundary
-	if (x < 8.f) { x = 8.f; vx = 0; }
-	if (y < 8.f) { y = 8.f; vy = 0; }
-
+	float leftBoundary;
 	float rightBoundary;
 	float bottomBoundary;
 	CPlayScene* playScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
-	playScene->GetBoundary(rightBoundary, bottomBoundary);
-
-	if (x > rightBoundary - MARIO_BIG_BBOX_WIDTH - 8.f) { x = rightBoundary - MARIO_BIG_BBOX_WIDTH - 8.f; vx = 0; }
+	playScene->GetBoundary(leftBoundary, rightBoundary, bottomBoundary);
+	
+	if (x < leftBoundary + 8.f) { x = leftBoundary + 8.f; vx = 0; }
+	if (y < 8.f) { y = 8.f; vy = 0; }
 
 	//Handle Koopa Picking and Kicking
 	if (Koopa)
@@ -198,6 +196,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	//DebugOut(L"[INFO] Mario: %d %d\n", isAbleToTunnelDown, isAbleToTunnelUp);
+	//DebugOut(L"[INFO] Mario Update: %f %f\n", x, y);
 }
 
 void CMario::AddPoint(int p, LPCOLLISIONEVENT e)

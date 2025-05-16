@@ -31,6 +31,7 @@ protected:
 
 	D3DXCOLOR backgroundColor;
 
+	float leftBoundary = 0.f; 
 	float rightBoundary;
 	float bottomBoundary;
 	float camLockPos = 231.f; //temporary until i figure something else out
@@ -55,7 +56,7 @@ public:
 	virtual void Unload();
 
 	LPGAMEOBJECT GetPlayer() { return player; }
-	void GetBoundary(float& right, float& bottom) { right = rightBoundary; bottom = bottomBoundary; }
+	void GetBoundary(float& left, float& right, float& bottom) { left = leftBoundary; right = rightBoundary; bottom = bottomBoundary; }
 	vector<LPGAMEOBJECT>& GetObjects() { return objects; }
 
 
@@ -74,7 +75,9 @@ public:
 	void ActivateAllObjects();
 
 	void SetCamLockPos(float camLockPos) { this->camLockPos = camLockPos; }
+	void SetCamLeftBound(float camLeftBoundary) { this->leftBoundary = camLeftBoundary; }
 	void SetCamBottomBound(float camBottomBoundary) { this->bottomBoundary = camBottomBoundary; }
+	void SetCamRightBound(float camRightBoundary) { this->rightBoundary = camRightBoundary; }
 };
 
 typedef CPlayScene* LPPLAYSCENE;

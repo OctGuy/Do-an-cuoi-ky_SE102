@@ -37,7 +37,9 @@ void CTunnelBlock::OnCollisionWithMario(LPCOLLISIONEVENT e)
 
         if (type == TUNNEL_BLOCK_TYPE_ENTER) return;
 		playScene->SetCamLockPos(camLockPos); 
+		playScene->SetCamLeftBound(camLeftBound);
 		playScene->SetCamBottomBound(camBottomBound);
+		playScene->SetCamRightBound(camRightBound);
 
     }
 }
