@@ -9,7 +9,7 @@ void CBrick::Render()
 		return;
 	}
 	animations->Get(id)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 int CBrick::GetAnimationid()
@@ -34,6 +34,8 @@ int CBrick::GetAnimationid()
 		return ID_ANI_QUESTION_BRICK;
 	else if (type == BRICK_TYPE_SHINY)
 		return ID_ANI_SHINY_BRICK;
+	else if (type == BRICK_TYPE_SECRET)
+		return ID_ANI_SECRET_BRICK;
 	else
 		return -1;
 
