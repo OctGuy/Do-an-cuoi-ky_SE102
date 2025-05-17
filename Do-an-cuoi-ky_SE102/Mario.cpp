@@ -504,26 +504,25 @@ void CMario::OnCollisionWithGoalRoulette(LPCOLLISIONEVENT e)
 	if (particle)
 		playScene->Add(particle);
 
-	// Add the card to the cards vector and iterate through it
-	cards[currentEmptyCard] = card;
-	currentEmptyCard++;
+	// Add the card to the cards vector 
+	cards.push_back(card);
 
-	// If the currentEmptyCard index exceeds the size of the cards vector, 
+	// If the currentEmptyCard index exceeds 3, 
 	// reset it to 0 and add points based on the cards
 	// I dont think this is needed because we only have 2 levels but maybe who know  ¯\_(ツ)_/¯
-	if (currentEmptyCard >= cards.size())
-	{
-		currentEmptyCard = 0;
-		for (int i = 0; i < cards.size(); i++)
-		{
-			if (cards[i] == CARD_TYPE_MUSHROOM)
-				AddPoint(1000, e);
-			else if (cards[i] == CARD_TYPE_PLANT)
-				AddPoint(2000, e);
-			else if (cards[i] == CARD_TYPE_STAR)
-				AddPoint(3000, e);
-		}
-	}
+	//if (cards.size() > 3)
+	//{
+	//	cards.clear()
+	//	for (int i = 0; i < cards.size(); i++)
+	//	{
+	//		if (cards[i] == CARD_TYPE_MUSHROOM)
+	//			AddPoint(1000, e);
+	//		else if (cards[i] == CARD_TYPE_PLANT)
+	//			AddPoint(2000, e);
+	//		else if (cards[i] == CARD_TYPE_STAR)
+	//			AddPoint(3000, e);
+	//	}
+	//}
 
 	goalRoulette->Delete();
 }

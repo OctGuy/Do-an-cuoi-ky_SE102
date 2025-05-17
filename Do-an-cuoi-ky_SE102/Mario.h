@@ -318,9 +318,6 @@ public:
 
 		Koopa = NULL;
 
-		cards.clear();
-		currentEmptyCard = 0;
-
 		pMeter = 0;
 		coin = 0;
 		point = 0;
