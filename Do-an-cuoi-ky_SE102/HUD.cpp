@@ -1,5 +1,5 @@
 #include "HUD.h"
-
+#include "GoalRoulette.h"
 CHUD::CHUD(CMario* player)
 {
     // Load sprites for HUD elements
@@ -23,6 +23,7 @@ void CHUD::Update(DWORD dt)
         this->coin = player->GetCoin();
 		this->score = player->GetPoint();
         this->pMeter = player->GetPMeter()/100;
+		this->cards = player->GetCards();
     }
 
     // Update time
@@ -81,6 +82,18 @@ void CHUD::Render()
     {
         animations->Get(aniId)->Render(hud_x - 65 + FONT_BBOX_WIDTH * 7, hud_y - 3.f);
     }
+
+	//Render cards
+	for (size_t i = 0; i < cards.size(); i++)
+	{
+		if (cards[i] == CARD_TYPE_MUSHROOM)
+			sprite = sprites->Get(ID_SPRITE_CARD_MUSHROOM);
+		else if (cards[i] == CARD_TYPE_PLANT)
+			sprite = sprites->Get(ID_SPRITE_CARD_PLANT);
+		else if (cards[i] == CARD_TYPE_STAR)
+			sprite = sprites->Get(ID_SPRITE_CARD_STAR);
+        sprite->Draw(hud_x + 55 + CARD_BBOX_WIDTH * i, hud_y + 1.f);
+	}
 }
 
 void CHUD::RenderNumber(int number, float x, float y, int length)

@@ -318,6 +318,8 @@ public:
 
 		Koopa = NULL;
 
+		cards.push_back(1);
+
 		pMeter = 0;
 		coin = 0;
 		point = 0;
@@ -338,6 +340,7 @@ public:
 	int GetCoin() { return coin; }
 	int GetPoint() { return point; }
 	float GetPMeter() { return pMeter; }
+	vector<int> GetCards() { return cards; }
 	int GetLevel() { return level; }
 
 	int IsCollidable() { return (state != MARIO_STATE_DIE); }
