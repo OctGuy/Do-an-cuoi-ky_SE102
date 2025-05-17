@@ -318,8 +318,6 @@ public:
 
 		Koopa = NULL;
 
-		cards.push_back(1);
-
 		pMeter = 0;
 		coin = 0;
 		point = 0;
