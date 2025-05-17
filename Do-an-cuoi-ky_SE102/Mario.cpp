@@ -578,7 +578,11 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 int CMario::GetAniIdSmall()
 {
 	int aniId = -1;
-	if (isKicking)
+	if (isTunneling)
+	{
+		aniId = ID_ANI_MARIO_SMALL_FACE_THE_SCREEN;
+	}
+	else if (isKicking)
 	{
 		if (nx >= 0)
 			aniId = ID_ANI_MARIO_SMALL_KICK_RIGHT;
@@ -676,8 +680,11 @@ int CMario::GetAniIdSmall()
 int CMario::GetAniIdBig()
 {
 	int aniId = -1;
-
-	if (isKicking)
+	if (isTunneling)
+	{
+		aniId = ID_ANI_MARIO_FACE_THE_SCREEN;
+	}
+	else if (isKicking)
 	{
 		if (nx >= 0)
 			aniId = ID_ANI_MARIO_KICK_RIGHT;
@@ -776,7 +783,11 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdRaccoon()
 {
 	int aniId = -1;
-	if (isKicking)
+	if (isTunneling)
+	{
+		aniId = ID_ANI_MARIO_RACCOON_FACE_THE_SCREEN;
+	}
+	else if (isKicking)
 	{
 		if (nx >= 0)
 			aniId = ID_ANI_MARIO_RACCOON_KICK_RIGHT;
@@ -1121,6 +1132,7 @@ void CMario::SetState(int state)
 	case MARIO_STATE_TUNNEL_DOWN:
 		isTunneling = true;
 		tunnel_start = GetTickCount64();
+		currentFloorY = y;
 		ay = 0;
 		ax = 0;
 		vx = 0;
@@ -1130,9 +1142,10 @@ void CMario::SetState(int state)
 	case MARIO_STATE_TUNNEL_UP:
 		isTunneling = true;
 		tunnel_start = GetTickCount64();
-		vx = 0;
-		ax = 0;
+		currentFloorY = y;
 		ay = 0;
+		ax = 0;
+		vx = 0;
 		vy = -MARIO_TUNNELING_SPEED;
 		break;
 	}
