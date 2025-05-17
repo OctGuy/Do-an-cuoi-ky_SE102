@@ -140,6 +140,7 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="GoalRoulette.cpp" />
     <ClCompile Include="MovingPlatform.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -187,6 +188,7 @@
     <ClInclude Include="FireBullet.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GoalRoulette.h" />
     <ClInclude Include="Goomba.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="KeyEventHandler.h" />
