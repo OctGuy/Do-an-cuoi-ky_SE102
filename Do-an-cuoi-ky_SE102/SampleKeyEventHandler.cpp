@@ -20,7 +20,10 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
     }
 
     // If game is paused, ignore all other input
-    if (game->IsPaused() || game->IsTimeFrozen() || mario->IsTunneling())
+    if (game->IsPaused() 
+        || game->IsTimeFrozen() 
+        || mario->IsTunneling()
+        || mario->IsInputBlocked())
         return;
 
     //DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
@@ -81,7 +84,10 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
     CGame* game = CGame::GetInstance();
 
     // If game is paused, ignore all other input
-    if (game->IsPaused() || game->IsTimeFrozen() || mario->IsTunneling())
+    if (game->IsPaused()
+        || game->IsTimeFrozen()
+        || mario->IsTunneling()
+        || mario->IsInputBlocked())
         return;
 
     //DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
@@ -132,7 +138,10 @@ void CSampleKeyHandler::KeyState(BYTE* states)
     CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
     // If game is paused, ignore all other input
-    if (game->IsPaused() || game->IsTimeFrozen() || mario->IsTunneling())
+    if (game->IsPaused()
+        || game->IsTimeFrozen()
+        || mario->IsTunneling()
+        || mario->IsInputBlocked())
         return;
 
     if (game->IsKeyDown(DIK_S))

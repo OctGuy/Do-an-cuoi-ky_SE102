@@ -256,6 +256,8 @@ class CMario : public CGameObject
 	vector<int> cards;
 	int currentEmptyCard;
 
+	BOOLEAN isInputBlocked; 
+
 	//Tracking point and coin
 	int coin;
 	int point;
@@ -312,6 +314,7 @@ public:
 		isTunneling = false;
 		isAbleToTunnelDown = false;
 		isAbleToTunnelUp = false;
+		isInputBlocked = false;
 
 		Tail = NULL;
 		currentFloorY = GROUND_Y; // Initialize to ground level
@@ -354,6 +357,7 @@ public:
 	BOOLEAN IsHoldingKoopa() { return isAbleToHold; }
 	BOOLEAN IsSitting() { return isSitting;  }
 	BOOLEAN IsTunneling() { return isTunneling; }
+	BOOLEAN IsInputBlocked() { return isInputBlocked; }
 
 	//Update coin and point
 	void AddCoin() { coin++; }

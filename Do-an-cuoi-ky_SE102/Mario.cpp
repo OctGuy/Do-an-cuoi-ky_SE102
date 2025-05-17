@@ -485,7 +485,6 @@ void CMario::OnCollisionWithTunnelBlock(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithGoalRoulette(LPCOLLISIONEVENT e)
 {
 	CGoalRoulette* goalRoulette = dynamic_cast<CGoalRoulette*>(e->obj);
-
 	int card = goalRoulette->GetCurrentCard();
 	CGame* game = CGame::GetInstance();
 	CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
@@ -503,6 +502,14 @@ void CMario::OnCollisionWithGoalRoulette(LPCOLLISIONEVENT e)
 
 	if (particle)
 		playScene->Add(particle);
+
+	// Force mrio to walk right
+	SetState(MARIO_STATE_WALKING_RIGHT);
+	isInputBlocked = true; //Restrict input
+
+	//Open portal to "next" scene
+	LPGAMEOBJECT portal = new CPortal(objX + 115.f, objY + 65.f, 2);	//Just put 2 for now because we dont have alot of level
+	playScene->Add(portal);
 
 	// Add the card to the cards vector 
 	cards.push_back(card);
