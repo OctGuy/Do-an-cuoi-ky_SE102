@@ -91,6 +91,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		tunnel_start = 0;
 		isTunneling = false;
 		ay = MARIO_GRAVITY; // Reset gravity to default because tunnnel set ay to 0
+		isAbleToTunnelDown = false;
+		isAbleToTunnelUp = false;
 	}
 
 	//Speacial animation timing (i want to make it so that the animation is not interrupted but this is the easiest method i can think of)
