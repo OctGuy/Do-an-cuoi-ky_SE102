@@ -456,7 +456,8 @@ void CMario::OnCollisionWithTunnelBlock(LPCOLLISIONEVENT e)
 	}
 	else if (e->nx == 0 && e->ny == 0)
 	{
-		if (!isTunneling && tunnelBlock->GetType() == TUNNEL_BLOCK_TYPE_ENTER) //Teleport to the correct destinarion after finishing tunneling
+		if (!isTunneling && tunnelBlock->GetType() == TUNNEL_BLOCK_TYPE_ENTER 
+			&& (isAbleToTunnelDown || isAbleToTunnelUp)) //Teleport to the correct destinarion after finishing tunneling
 		{
 			float destX, destY;
 			tunnelBlock->GetDestination(destX, destY);
