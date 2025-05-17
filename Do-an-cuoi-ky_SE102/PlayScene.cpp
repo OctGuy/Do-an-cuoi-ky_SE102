@@ -20,6 +20,7 @@
 #include "PSwitch.h"
 #include "WingedGoomba.h"
 #include "MovingPlatform.h"
+#include "TunnelBlock.h"
 
 using namespace std;
 
@@ -316,6 +317,23 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		break;
 
+		case OBJECT_TYPE_TUNNEL_BLOCK:
+		{
+			int destX = atoi(tokens[3].c_str());
+			int destY = atoi(tokens[4].c_str());
+			int type = atoi(tokens[5].c_str());
+			float camLockPos = (float)atof(tokens[6].c_str());
+			float camLeftBound = (float)atof(tokens[7].c_str());
+			float camBottomBound = (float)atof(tokens[8].c_str());
+			float camRightBound = (float)atof(tokens[9].c_str());
+			obj = new CTunnelBlock(
+				x, y,
+				destX, destY, type,
+				camLockPos, camLeftBound, camBottomBound, camRightBound
+			);
+			break;
+		}
+
 		default:
 			DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 			return;
@@ -335,6 +353,8 @@ void CPlayScene::_ParseSection_SETTINGS(string line)
 		rightBoundary = (float)atof(tokens[1].c_str());
 	else if (tokens[0] == "bottom")
 		bottomBoundary = (float)atof(tokens[1].c_str());
+	else if (tokens[0] == "left")
+		leftBoundary = (float)atof(tokens[1].c_str());
 	else
 		DebugOut(L"[ERROR] Unknown scene setting: %s\n", ToWSTR(tokens[0]).c_str());
 }
@@ -532,13 +552,13 @@ void CPlayScene::Update(DWORD dt)
 	}
 	else {
 		// Regular fixed camera Y position when not flying
-		cy = 220.0f;
+		cy = camLockPos;
 	}
 
-	if (cx < 0) cx = 0;
-
-	//Boundary is set in the scene file under SETTINGS section
-	else if (cx > rightBoundary - game->GetBackBufferWidth() - 9.f) cx = rightBoundary - game->GetBackBufferWidth() - 9.f;
+	if (cx < leftBoundary)
+		cx = leftBoundary;
+	else if (cx > rightBoundary - game->GetBackBufferWidth() - 9.f)
+		cx = rightBoundary - game->GetBackBufferWidth() - 9.f;
 
 	if (cy < 0) cy = 0;
 	else if (cy > bottomBoundary) cy = bottomBoundary;
@@ -631,6 +651,17 @@ int CPlayScene::IsWithinLoadChunk(LPGAMEOBJECT obj)
 }
 
 bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }
+
+void CPlayScene::ActivateAllObjects()
+{
+	for (size_t i = 0; i < objects.size(); i++)
+	{
+		if (!objects[i]->IsActive())
+		{
+			objects[i]->SetActive(true);
+		}
+	}
+}
 
 void CPlayScene::PurgeDeletedObjects()
 {

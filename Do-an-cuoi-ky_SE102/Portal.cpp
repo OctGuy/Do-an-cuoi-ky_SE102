@@ -45,5 +45,5 @@ void CPortal::Reload()
 void CPortal::SetActive(bool isActive)
 {
 	CGameObject::SetActive(isActive);
-	DebugOut(L"[INFO] Portal %d is %s\n", scene_id, this->isActive ? L"active" : L"inactive");
+	//DebugOut(L"[INFO] Portal %d is %s\n", scene_id, this->isActive ? L"active" : L"inactive");
 }

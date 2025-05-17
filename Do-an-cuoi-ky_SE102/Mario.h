@@ -12,6 +12,8 @@
 #define MARIO_WALKING_SPEED		0.10f
 #define MARIO_RUNNING_SPEED		0.20f
 
+#define MARIO_TUNNELING_SPEED	0.02f
+
 #define MARIO_ACCEL_WALK_X	0.00008f
 #define MARIO_ACCEL_RUN_X	0.0001f
 
@@ -54,6 +56,9 @@
 #define MARIO_STATE_DROP	801
 
 #define MARIO_STATE_TAIL_ATTACK		900
+
+#define MARIO_STATE_TUNNEL_DOWN	   101
+#define MARIO_STATE_TUNNEL_UP	   102
 #pragma endregion
 
 
@@ -70,6 +75,7 @@
 #define ID_ANI_MARIO_IDLE_LEFT 401
 #define ID_ANI_MARIO_IDLE_HOLDING_RIGHT 402
 #define ID_ANI_MARIO_IDLE_HOLDING_LEFT 403
+#define ID_ANI_MARIO_FACE_THE_SCREEN 404
 
 #define ID_ANI_MARIO_WALKING_RIGHT 500
 #define ID_ANI_MARIO_WALKING_LEFT 501
@@ -104,6 +110,7 @@
 #define ID_ANI_MARIO_SMALL_IDLE_LEFT 1102
 #define ID_ANI_MARIO_SMALL_IDLE_HOLDING_RIGHT 1103
 #define ID_ANI_MARIO_SMALL_IDLE_HOLDING_LEFT 1104
+#define ID_ANI_MARIO_SMALL_FACE_THE_SCREEN 1105
 
 #define ID_ANI_MARIO_SMALL_WALKING_RIGHT 1200
 #define ID_ANI_MARIO_SMALL_WALKING_LEFT 1201
@@ -134,6 +141,7 @@
 #define ID_ANI_MARIO_RACCOON_IDLE_LEFT 2001
 #define ID_ANI_MARIO_RACCOON_IDLE_HOLDING_RIGHT 2002
 #define ID_ANI_MARIO_RACCOON_IDLE_HOLDING_LEFT 2003
+#define ID_ANI_MARIO_RACCOON_FACE_THE_SCREEN 2004
 
 #define ID_ANI_MARIO_RACCOON_WALKING_RIGHT 2100
 #define ID_ANI_MARIO_RACCOON_WALKING_LEFT 2101
@@ -197,6 +205,7 @@
 #define MARIO_TAIL_ATTACK_TIME 250
 #define MARIO_KICK_TIME 250
 #define MARIO_FLYING_TIME 4000
+#define MARIO_TUNNEL_TIME 1000
 
 #define MARIO_P_METER_MAX 600
 
@@ -233,11 +242,16 @@ class CMario : public CGameObject
 	LPGAMEOBJECT Koopa; // Koopa object that Mario is holding
 
 
-	BOOLEAN isAbleToFly; //If player is running at max speed this should be true
+	BOOLEAN isAbleToFly; //If pMeter is max speed this should be true
 	ULONGLONG flying_start; // Time when Mario started flying
 
 	int pMeter;
 
+	BOOLEAN isAbleToTunnelDown;
+	BOOLEAN isAbleToTunnelUp;
+
+	BOOLEAN isTunneling; // If player is tunneling using the pipe this should be true
+	ULONGLONG tunnel_start; // Time when Mario started tunneling
 
 	//Tracking point and coin
 	int coin;
@@ -256,6 +270,7 @@ class CMario : public CGameObject
 	void OnCollisionWithPSwitch(LPCOLLISIONEVENT e);
 	void OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithMovingPlatform(LPCOLLISIONEVENT e);
+	void OnCollisionWithTunnelBlock(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -280,6 +295,7 @@ public:
 		tailAttack_start = -1;
 		kick_start = 1;
 		flying_start = -1;
+		tunnel_start = -1;
 
 		isSitting = false;
 		isOnPlatform = false;
@@ -289,6 +305,9 @@ public:
 		isKicking = false;
 		isAbleToFly = false;
 		isOnFallingPlatform = false;
+		isTunneling = false;
+		isAbleToTunnelDown = false;
+		isAbleToTunnelUp = false;
 
 		Tail = NULL;
 		currentFloorY = GROUND_Y; // Initialize to ground level
@@ -329,6 +348,7 @@ public:
 	BOOLEAN IsAbleToFly() { return isAbleToFly; }
 	BOOLEAN IsHoldingKoopa() { return isAbleToHold; }
 	BOOLEAN IsSitting() { return isSitting;  }
+	BOOLEAN IsTunneling() { return isTunneling; }
 
 	//Update coin and point
 	void AddCoin() { coin++; }
@@ -342,6 +362,10 @@ public:
 	void SetLevel(int l);
 	void SetTail(LPGAMEOBJECT tail) { this->Tail = tail; }
 	void GetHurt();
+
+	//Set Tunneling
+	void SetAbleToTunnelDown(BOOLEAN able) { isAbleToTunnelDown = able; }
+	void SetAbleToTunnelUp(BOOLEAN able) { isAbleToTunnelUp = able; }
 
 	void StartUntouchable() {
 		untouchable = 1;

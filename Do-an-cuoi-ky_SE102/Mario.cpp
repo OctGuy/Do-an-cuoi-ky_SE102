@@ -15,10 +15,10 @@
 #include "PSwitch.h"
 #include "MovingPlatform.h"
 #include "Collision.h"
+#include "TunnelBlock.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	//DebugOut(L"[INFO] Mario Update: %f %f\n", x, y);
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -85,6 +85,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 
+	//Check if mario is tunneling
+	if (tunnel_start && now - tunnel_start > MARIO_TUNNEL_TIME)
+	{
+		tunnel_start = 0;
+		isTunneling = false;
+		ay = MARIO_GRAVITY; // Reset gravity to default because tunnnel set ay to 0
+		isAbleToTunnelDown = false;
+		isAbleToTunnelUp = false;
+	}
+
 	//Speacial animation timing (i want to make it so that the animation is not interrupted but this is the easiest method i can think of)
 	if (now - tailAttack_start > MARIO_TAIL_ATTACK_TIME)
 	{
@@ -129,15 +139,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isAbleToFly = false;
 
 	//Make sure mario doesnt go out of boundary
-	if (x < 8.f) { x = 8.f; vx = 0; }
-	if (y < 8.f) { y = 8.f; vy = 0; }
-
+	float leftBoundary;
 	float rightBoundary;
 	float bottomBoundary;
 	CPlayScene* playScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
-	playScene->GetBoundary(rightBoundary, bottomBoundary);
-
-	if (x > rightBoundary - MARIO_BIG_BBOX_WIDTH - 8.f) { x = rightBoundary - MARIO_BIG_BBOX_WIDTH - 8.f; vx = 0; }
+	playScene->GetBoundary(leftBoundary, rightBoundary, bottomBoundary);
+	
+	if (x < leftBoundary + 8.f) { x = leftBoundary + 8.f; vx = 0; }
+	if (y < 8.f) { y = 8.f; vy = 0; }
 
 	//Handle Koopa Picking and Kicking
 	if (Koopa)
@@ -187,6 +196,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		Tail->SetPosition(x, y + 4.f);
 	}
+
+	//DebugOut(L"[INFO] Mario: %d %d\n", isAbleToTunnelDown, isAbleToTunnelUp);
+	//DebugOut(L"[INFO] Mario Update: %f %f\n", x, y);
 }
 
 void CMario::AddPoint(int p, LPCOLLISIONEVENT e)
@@ -282,6 +294,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	else if (dynamic_cast<CMovingPlatform*>(e->obj)) {
 		OnCollisionWithMovingPlatform(e);
+	}
+	else if (dynamic_cast<CTunnelBlock*>(e->obj))
+	{
+		OnCollisionWithTunnelBlock(e);
 	}
 }
 
@@ -422,6 +438,47 @@ void CMario::OnCollisionWithMovingPlatform(LPCOLLISIONEVENT e) //Unstable need t
 	}
 }
 
+void CMario::OnCollisionWithTunnelBlock(LPCOLLISIONEVENT e)
+{
+	CTunnelBlock* tunnelBlock = dynamic_cast<CTunnelBlock*>(e->obj);
+	if (e->ny != 0) 
+	{
+		if (e->ny < 0 && isAbleToTunnelDown && tunnelBlock->GetType() == TUNNEL_BLOCK_TYPE_ENTER)
+		{
+			DebugOut(L"Tunnel Down\n");
+			SetState(MARIO_STATE_TUNNEL_DOWN);
+			y += 1.f; 
+		}
+		else if (e->ny > 0 && isAbleToTunnelUp && tunnelBlock->GetType() == TUNNEL_BLOCK_TYPE_ENTER)
+		{
+			DebugOut(L"Tunnel Up\n");
+			SetState(MARIO_STATE_TUNNEL_UP);
+			y -= 1.f; 
+		}
+	}
+	else if (e->nx == 0 && e->ny == 0)
+	{
+		if (!isTunneling && tunnelBlock->GetType() == TUNNEL_BLOCK_TYPE_ENTER 
+			&& (isAbleToTunnelDown || isAbleToTunnelUp)) //Teleport to the correct destinarion after finishing tunneling
+		{
+			float destX, destY;
+			tunnelBlock->GetDestination(destX, destY);
+			SetPosition(destX, destY);
+		}
+		else //Doesnt really do anything, mostly for animation purpose
+		{
+			if (tunnelBlock->GetType() == TUNNEL_BLOCK_TYPE_UP)
+			{
+				SetState(MARIO_STATE_TUNNEL_UP);
+			}
+			else if (tunnelBlock->GetType() == TUNNEL_BLOCK_TYPE_DOWN)
+			{
+				SetState(MARIO_STATE_TUNNEL_DOWN);
+			}
+		}
+	}
+}
+
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	DebugOut(L">>> Mario touched coin >>> \n");
@@ -524,7 +581,11 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 int CMario::GetAniIdSmall()
 {
 	int aniId = -1;
-	if (isKicking)
+	if (isTunneling)
+	{
+		aniId = ID_ANI_MARIO_SMALL_FACE_THE_SCREEN;
+	}
+	else if (isKicking)
 	{
 		if (nx >= 0)
 			aniId = ID_ANI_MARIO_SMALL_KICK_RIGHT;
@@ -622,8 +683,11 @@ int CMario::GetAniIdSmall()
 int CMario::GetAniIdBig()
 {
 	int aniId = -1;
-
-	if (isKicking)
+	if (isTunneling)
+	{
+		aniId = ID_ANI_MARIO_FACE_THE_SCREEN;
+	}
+	else if (isKicking)
 	{
 		if (nx >= 0)
 			aniId = ID_ANI_MARIO_KICK_RIGHT;
@@ -722,7 +786,11 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdRaccoon()
 {
 	int aniId = -1;
-	if (isKicking)
+	if (isTunneling)
+	{
+		aniId = ID_ANI_MARIO_RACCOON_FACE_THE_SCREEN;
+	}
+	else if (isKicking)
 	{
 		if (nx >= 0)
 			aniId = ID_ANI_MARIO_RACCOON_KICK_RIGHT;
@@ -1062,6 +1130,26 @@ void CMario::SetState(int state)
 	case MARIO_STATE_DROP:
 		isAbleToHold = false;
 		//Koopa = NULL;
+		break;
+
+	case MARIO_STATE_TUNNEL_DOWN:
+		isTunneling = true;
+		tunnel_start = GetTickCount64();
+		currentFloorY = y;
+		ay = 0;
+		ax = 0;
+		vx = 0;
+		vy = MARIO_TUNNELING_SPEED;
+		break;
+
+	case MARIO_STATE_TUNNEL_UP:
+		isTunneling = true;
+		tunnel_start = GetTickCount64();
+		currentFloorY = y;
+		ay = 0;
+		ax = 0;
+		vx = 0;
+		vy = -MARIO_TUNNELING_SPEED;
 		break;
 	}
 

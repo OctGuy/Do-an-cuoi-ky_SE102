@@ -140,7 +140,9 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="MovingPlatform.cpp" />
+    <ClCompile Include="MovingPlatform.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="MovingPlatform.h" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="FireBullet.cpp" />
@@ -166,6 +168,7 @@
     <ClCompile Include="PowerUp.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="SceneryObject.cpp" />
+    <ClCompile Include="TunnelBlock.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="WingedGoomba.cpp" />
   </ItemGroup>
@@ -207,6 +210,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="SceneryObject.h" />
+    <ClInclude Include="TunnelBlock.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Wall.h" />
     <ClInclude Include="WingedGoomba.h" />

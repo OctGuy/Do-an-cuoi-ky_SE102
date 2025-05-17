@@ -16,6 +16,8 @@ protected:
 	float cellHeight;
 	int spriteIdTL, spriteIdTR, spriteIdBL, spriteIdBR;
 
+
+
 	//LPGAMEOBJECT entity; //pointer to the entity that is "inside" the pipe 
 
 public:
