@@ -269,6 +269,7 @@ assets\winged_goomba.txt
 
 #GOAL ROULETTE
 27	2686	334
+27	50	400
 
 # PLATFORM
 #5	90	136	16	16	16	51000	52000	53000
@@ -341,4 +342,4 @@ assets\winged_goomba.txt
 4	2191	465
 4	2175	481
 # PORTAL 
-50	100	350	2
+#50	100	350	2

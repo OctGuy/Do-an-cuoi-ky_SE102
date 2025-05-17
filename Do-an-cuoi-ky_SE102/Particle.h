@@ -9,11 +9,15 @@
 #define PARTICLE_TYPE_BRICK_REVERSED 5
 #define PARTICLE_TYPE_BRICK_REVERSED_LOW 6
 #define PARTICLE_TYPE_SMOKE 7
+#define PARTICLE_TYPE_MUSHROOM 8
+#define PARTICLE_TYPE_PLANT 9
+#define PARTICLE_TYPE_STAR 10
 
 #define PARTICLE_HIT_LIFE_TIME 250
 #define PARTICLE_POINT_LIFE_TIME 1000
 #define PARTICLE_BRICK_LIFE_TIME 800
 #define PARTICLE_SMOKE_LIFE_TIME 240
+#define PARTICLE_CARD_LIFE_TIME 300
 
 #define ID_ANI_PARTICLE_SMOKE 302
 #define ID_ANI_PARTICLE_HIT 12000
@@ -28,6 +32,10 @@
 #define ID_ANI_PARTICLE_POINT_1UP 12018
 #define ID_ANI_PARTICLE_BRICK 12020
 #define ID_ANI_PARTICLE_BRICK_REVERSED 12021
+#define ID_ANI_PARTICLE_BRICK_LOW 12022
+#define ID_ANI_PARTICLE_MUSHROOM 12030
+#define ID_ANI_PARTICLE_PLANT 12031
+#define ID_ANI_PARTICLE_STAR 12032
 
 
 class CParticle : public CGameObject
@@ -79,11 +87,26 @@ public:
             this->vy = -0.f;
             this->lifetime = PARTICLE_SMOKE_LIFE_TIME;
         }
-        else {
-            this->vx = 0.f;
-            this->vy = 0.f;
-			lifetime = 0;
-        }
+		else if (type == PARTICLE_TYPE_MUSHROOM) {
+			this->vx = 0.f;
+			this->vy = -0.1f;
+			this->lifetime = PARTICLE_CARD_LIFE_TIME;
+		}
+		else if (type == PARTICLE_TYPE_PLANT) {
+			this->vx = 0.f;
+			this->vy = -0.1f;
+			this->lifetime = PARTICLE_CARD_LIFE_TIME;
+		}
+		else if (type == PARTICLE_TYPE_STAR) {
+			this->vx = 0.f;
+			this->vy = -0.1f;
+			this->lifetime = PARTICLE_CARD_LIFE_TIME;
+		}
+		else {
+			this->vx = 0.f;
+			this->vy = 0.f;
+			this->lifetime = 0;
+		}
     }
 
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = nullptr) override;

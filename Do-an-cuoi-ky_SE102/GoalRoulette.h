@@ -25,4 +25,6 @@ public:
 
 	int IsCollidable() override { return 1; }
 	int IsBlocking() override { return 0; }
+
+	int GetCurrentCard() { return currentCard; }
 };

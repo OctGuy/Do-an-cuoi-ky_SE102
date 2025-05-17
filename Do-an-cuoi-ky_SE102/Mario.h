@@ -253,6 +253,9 @@ class CMario : public CGameObject
 	BOOLEAN isTunneling; // If player is tunneling using the pipe this should be true
 	ULONGLONG tunnel_start; // Time when Mario started tunneling
 
+	vector<int> cards;
+	int currentEmptyCard;
+
 	//Tracking point and coin
 	int coin;
 	int point;
@@ -271,6 +274,7 @@ class CMario : public CGameObject
 	void OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithMovingPlatform(LPCOLLISIONEVENT e);
 	void OnCollisionWithTunnelBlock(LPCOLLISIONEVENT e);
+	void OnCollisionWithGoalRoulette(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -313,6 +317,9 @@ public:
 		currentFloorY = GROUND_Y; // Initialize to ground level
 
 		Koopa = NULL;
+
+		cards.clear();
+		currentEmptyCard = 0;
 
 		pMeter = 0;
 		coin = 0;

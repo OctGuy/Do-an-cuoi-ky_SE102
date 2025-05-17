@@ -57,6 +57,12 @@ void CParticle::Render()
 		aniID = ID_ANI_PARTICLE_BRICK_REVERSED;
 	else if (type == PARTICLE_TYPE_SMOKE)
 		aniID = ID_ANI_PARTICLE_SMOKE;
+	else if (type == PARTICLE_TYPE_MUSHROOM)
+		aniID = ID_ANI_PARTICLE_MUSHROOM;
+	else if (type == PARTICLE_TYPE_PLANT)
+		aniID = ID_ANI_PARTICLE_PLANT;
+	else if (type == PARTICLE_TYPE_STAR)
+		aniID = ID_ANI_PARTICLE_STAR;
 
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(aniID)->Render(x, y);
