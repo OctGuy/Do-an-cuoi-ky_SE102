@@ -21,6 +21,7 @@
 #include "WingedGoomba.h"
 #include "MovingPlatform.h"
 #include "TunnelBlock.h"
+#include "GoalRoulette.h"
 
 using namespace std;
 
@@ -331,6 +332,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				destX, destY, type,
 				camLockPos, camLeftBound, camBottomBound, camRightBound
 			);
+			break;
+		}
+
+		case OBJECT_TYPE_GOAL_ROULETTE:
+		{
+			obj = new CGoalRoulette(x, y);
 			break;
 		}
 

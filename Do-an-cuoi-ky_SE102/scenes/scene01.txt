@@ -115,7 +115,7 @@ assets\winged_goomba.txt
 #INVISIBLE WALL
 #49	0	0	8	400	-1
 #49	0	0	2816	8	-1
-#49	2808	0	8	400	-1
+49	2816	0	2824	400	-1
 
 # FLOOR 1
 #type	x	y	type of brick
@@ -266,6 +266,10 @@ assets\winged_goomba.txt
 4	1761	128
 4	1809	96
 4	1841	128
+
+#GOAL ROULETTE
+27	2686	334
+#27	50	400
 
 # PLATFORM
 #5	90	136	16	16	16	51000	52000	53000

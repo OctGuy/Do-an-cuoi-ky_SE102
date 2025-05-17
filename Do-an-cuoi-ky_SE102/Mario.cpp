@@ -1,4 +1,4 @@
-#include <algorithm>
+﻿#include <algorithm>
 #include "debug.h"
 
 #include "Mario.h"
@@ -16,6 +16,7 @@
 #include "MovingPlatform.h"
 #include "Collision.h"
 #include "TunnelBlock.h"
+#include "GoalRoulette.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -91,8 +92,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		tunnel_start = 0;
 		isTunneling = false;
 		ay = MARIO_GRAVITY; // Reset gravity to default because tunnnel set ay to 0
-		isAbleToTunnelDown = false;
-		isAbleToTunnelUp = false;
 	}
 
 	//Speacial animation timing (i want to make it so that the animation is not interrupted but this is the easiest method i can think of)
@@ -299,6 +298,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		OnCollisionWithTunnelBlock(e);
 	}
+	else if (dynamic_cast<CGoalRoulette*>(e->obj))
+	{
+		OnCollisionWithGoalRoulette(e);
+	}
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -478,6 +481,59 @@ void CMario::OnCollisionWithTunnelBlock(LPCOLLISIONEVENT e)
 		}
 	}
 }
+
+void CMario::OnCollisionWithGoalRoulette(LPCOLLISIONEVENT e)
+{
+	CGoalRoulette* goalRoulette = dynamic_cast<CGoalRoulette*>(e->obj);
+	int card = goalRoulette->GetCurrentCard();
+	CGame* game = CGame::GetInstance();
+	CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
+	float objX, objY;
+	e->obj->GetPosition(objX, objY);
+
+	CParticle* particle = nullptr;
+
+	if (card == CARD_TYPE_MUSHROOM)
+		particle = new CParticle(objX, objY, PARTICLE_TYPE_MUSHROOM, 0);
+	else if (card == CARD_TYPE_PLANT)
+		particle = new CParticle(objX, objY, PARTICLE_TYPE_PLANT, 0);
+	else if (card == CARD_TYPE_STAR)
+		particle = new CParticle(objX, objY, PARTICLE_TYPE_STAR, 0);
+
+	if (particle)
+		playScene->Add(particle);
+
+	// Force mrio to walk right
+	SetState(MARIO_STATE_WALKING_RIGHT);
+	isInputBlocked = true; //Restrict input
+
+	//Open portal to "next" scene
+	LPGAMEOBJECT portal = new CPortal(objX + 115.f, objY + 65.f, 2);	//Just put 2 for now because we dont have alot of level
+	playScene->Add(portal);
+
+	// Add the card to the cards vector 
+	cards.push_back(card);
+
+	// If the currentEmptyCard index exceeds 3, 
+	// reset it to 0 and add points based on the cards
+	// I dont think this is needed because we only have 2 levels but maybe who know  ¯\_(ツ)_/¯
+	//if (cards.size() > 3)
+	//{
+	//	cards.clear()
+	//	for (int i = 0; i < cards.size(); i++)
+	//	{
+	//		if (cards[i] == CARD_TYPE_MUSHROOM)
+	//			AddPoint(1000, e);
+	//		else if (cards[i] == CARD_TYPE_PLANT)
+	//			AddPoint(2000, e);
+	//		else if (cards[i] == CARD_TYPE_STAR)
+	//			AddPoint(3000, e);
+	//	}
+	//}
+
+	goalRoulette->Delete();
+}
+
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
