@@ -41,6 +41,11 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 			SetState(KOOPA_STATE_WALKING_LEFT);
 	}
 
+	if (e->nx == 0 && e->ny == 0 && e->obj->IsBlocking())
+	{
+		isInWall = true;
+	}
+
 	if (state == KOOPA_STATE_SHELL_MOVE || state == KOOPA_STATE_SHELL_REVERSE_MOVE) {
 		if (e->nx != 0 && e->obj->IsBlocking()) {
 			if (e->nx > 0) {
@@ -188,6 +193,8 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	vx += ax * dt;
 
 	ULONGLONG now = GetTickCount64();
+
+	isInWall = false; 
 
 	bool isOnPlatform = IsOnPlatform();
 	if (!isOnPlatform) {

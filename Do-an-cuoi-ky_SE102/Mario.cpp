@@ -184,13 +184,20 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				isKicking = true;
 				kick_start = now;
-				if (Koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
-					Koopa->GetState() == KOOPA_STATE_SHELL_SHAKING)
-					Koopa->SetState(KOOPA_STATE_SHELL_MOVE);
+
+				//If koopa is in a wall and mario is kicking it, mario kill it
+				if (dynamic_cast<CKoopa*>(Koopa)->IsInWall())
+					Koopa->SetState(KOOPA_STATE_DIE);
 				else
-					Koopa->SetState(KOOPA_STATE_SHELL_REVERSE_MOVE);
-				//Koopa is kicked in the direction mario is looking
-				Koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
+				{
+					if (Koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
+						Koopa->GetState() == KOOPA_STATE_SHELL_SHAKING)
+						Koopa->SetState(KOOPA_STATE_SHELL_MOVE);
+					else
+						Koopa->SetState(KOOPA_STATE_SHELL_REVERSE_MOVE);
+					//Koopa is kicked in the direction mario is looking
+					Koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
+				}
 
 				dynamic_cast<CKoopa*>(Koopa)->SetIsHeld(false);
 				Koopa = NULL;
