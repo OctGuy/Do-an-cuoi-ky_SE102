@@ -14,7 +14,7 @@ void CAnimation::Add(int spriteId, DWORD time)
 	frames.push_back(frame);
 }
 
-void CAnimation::Render(float x, float y, int* spriteId)
+void CAnimation::Render(float x, float y, float opacity, int* spriteId)
 {
 	ULONGLONG now = GetTickCount64();
 
@@ -41,6 +41,6 @@ void CAnimation::Render(float x, float y, int* spriteId)
 		*spriteId = frames[currentFrame]->GetSprite()->GetID();
 	}
 
-	frames[currentFrame]->GetSprite()->Draw(x, y);
+	frames[currentFrame]->GetSprite()->Draw(x, y, opacity);
 }
 

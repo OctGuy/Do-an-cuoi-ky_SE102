@@ -134,7 +134,7 @@ void CGoomba::Render()
 		aniId = ID_ANI_GOOMBA_DIE_REVERSE;
 	}
 
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y, &currentAniId); //&currentAniId to get current sprite id 
+	CAnimations::GetInstance()->Get(aniId)->Render(x, y, 1.0f ,&currentAniId); //&currentAniId to get current sprite id 
 	//RenderBoundingBox();
 }
 

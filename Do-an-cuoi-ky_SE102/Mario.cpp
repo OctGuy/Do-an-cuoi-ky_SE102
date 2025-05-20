@@ -80,10 +80,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	// reset untouchable timer if untouchable time has passed
 	// In the Update() method, modify the untouchable timer check:
-	if (untouchable && now - untouchable_start > MARIO_UNTOUCHABLE_TIME)
+	if (untouchable)
 	{
-		untouchable_start = 0;
-		untouchable = 0;
+		if(now - untouchable_start > MARIO_UNTOUCHABLE_TIME)
+			{
+				untouchable_start = 0;
+				untouchable = 0;
+				opacity = 1.0f;
+			}
+		else if (((now - untouchable_start) / MARIO_LOW_OPACITY_TIME) % 2 == 1)
+			opacity = 0.6f;
+		else if (((now - untouchable_start) / MARIO_LOW_OPACITY_TIME) % 2 == 0)
+			opacity = 0.0f;
 	}
 
 	//Check if mario is tunneling
@@ -988,7 +996,8 @@ void CMario::Render()
 		aniId = GetAniIdSmall();
 	else if (level == MARIO_LEVEL_RACCOON)
 		aniId = GetAniIdRaccoon();
-	animations->Get(aniId)->Render(x, y);
+
+	animations->Get(aniId)->Render(x, y, opacity);
 
 	RenderBoundingBox();
 

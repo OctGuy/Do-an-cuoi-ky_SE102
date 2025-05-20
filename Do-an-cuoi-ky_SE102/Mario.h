@@ -201,7 +201,9 @@
 #define MARIO_SMALL_BBOX_HEIGHT 12
 
 
-#define MARIO_UNTOUCHABLE_TIME 2500
+#define MARIO_UNTOUCHABLE_TIME 2400
+#define MARIO_LOW_OPACITY_TIME (MARIO_UNTOUCHABLE_TIME/40)
+
 #define MARIO_TAIL_ATTACK_TIME 250
 #define MARIO_KICK_TIME 250
 #define MARIO_FLYING_TIME 4000
@@ -257,6 +259,8 @@ class CMario : public CGameObject
 	int currentEmptyCard;
 
 	BOOLEAN isInputBlocked; 
+
+	float opacity;
 
 	//Tracking point and coin
 	int coin;
@@ -320,6 +324,8 @@ public:
 		currentFloorY = GROUND_Y; // Initialize to ground level
 
 		Koopa = NULL;
+
+		opacity = 1.0f;
 
 		pMeter = 0;
 		coin = 0;
