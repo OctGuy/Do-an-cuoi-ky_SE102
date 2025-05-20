@@ -82,6 +82,7 @@ void CRaccoonTail::OnCollisionWithShinyBrick(LPCOLLISIONEVENT e)
 	//DebugOut(L"[INFO] RaccoonTail hit shinybrick\n");
 	CShinyBrick* shinyBrick = dynamic_cast<CShinyBrick*>(e->obj);
 	shinyBrick->Activate();
+    SetActive(false); //Deactivate so tail wont break multible brick
 }
 
 void CRaccoonTail::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
@@ -90,6 +91,7 @@ void CRaccoonTail::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
     CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
     koopa->SetSpeed(nx * KOOPA_SHELL_SPEED / 2, 0); // Set speed for Koopa
     koopa->SetState(KOOPA_STATE_SHELL_REVERSE_JUMP);
+    SetActive(false);
 }
 
 void CRaccoonTail::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e)
