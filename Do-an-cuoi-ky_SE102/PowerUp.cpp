@@ -140,7 +140,10 @@ void CPowerUp::OnCollisionWith(LPCOLLISIONEVENT e)
     }
     else if (e->nx != 0)
     {
-        vx = -vx;  // Reverse direction when hitting a wall
+        if (e->nx > 0)
+            vx = MUSHROOM_WALKING_SPEED;
+        else
+            vx = -MUSHROOM_WALKING_SPEED;
     }
 }
 
