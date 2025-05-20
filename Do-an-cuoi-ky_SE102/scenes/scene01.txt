@@ -167,7 +167,7 @@ assets\winged_goomba.txt
 1	2224	416	5
 
 #HOLE 4
-1	2240	432	100
+1	2240	427	100
 
 # FLOOR 6
 1	2256	416	3

@@ -1133,7 +1133,7 @@ void CMario::SetState(int state)
 			DebugOut(L"[INFO] Mario tail attack\n");
 			if (Tail)
 			{
-				Tail->SetPosition(x, y + 10.f);
+				Tail->SetPosition(x, y + 6.f);
 				Tail->SetState(RACCOON_TAIL_STATE_ACTIVE);
 			}
 			tailAttack_start = GetTickCount64();
