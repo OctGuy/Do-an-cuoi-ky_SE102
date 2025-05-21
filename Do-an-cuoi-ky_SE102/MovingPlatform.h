@@ -20,13 +20,9 @@ public:
 		this->vy = 0;
 	}
 
-	virtual void Render();
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
-	void GetBoundingBox(float& l, float& t, float& r, float& b) override;
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Reload();
-
 	void OnNoCollision(DWORD dt);
-
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	int IsCollidable() { return 1; }

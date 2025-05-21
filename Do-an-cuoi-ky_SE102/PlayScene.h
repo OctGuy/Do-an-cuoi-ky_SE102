@@ -15,7 +15,6 @@
 #include "Pipe.h"
 #include "SceneryObject.h"
 #include "HUD.h"
-//#include "Koopas.h"
 
 #define LOAD_CHUNK_WIDTH 32
 #define LOAD_CHUNK_HEIGHT 128

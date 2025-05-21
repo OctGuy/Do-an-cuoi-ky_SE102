@@ -51,7 +51,7 @@ public:
 	virtual void Delete() { isDeleted = true;  }
 	bool IsDeleted() { return isDeleted; }
 
-	void RenderBoundingBox();
+	virtual void RenderBoundingBox();
 
 	CGameObject();
 	CGameObject(float x, float y) :CGameObject() 

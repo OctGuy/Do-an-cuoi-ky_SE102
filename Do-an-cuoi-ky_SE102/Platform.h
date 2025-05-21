@@ -27,12 +27,14 @@ public:
 	}
 
 	virtual void Render();
-	virtual void Update(DWORD dt) {}
+	virtual void Update() {}
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void RenderBoundingBox();
+	virtual void OnCollisionWith(LPCOLLISIONEVENT e) {}
+	virtual void OnNoCollision(DWORD dt) {}
 
-	int IsDirectionColliable(float nx, float ny);
-	int IsCollidable() override { return 1; }
+	virtual int IsDirectionColliable(float nx, float ny);
+	virtual int IsCollidable() override { return 1; }
 };
 
 typedef CPlatform* LPPLATFORM;

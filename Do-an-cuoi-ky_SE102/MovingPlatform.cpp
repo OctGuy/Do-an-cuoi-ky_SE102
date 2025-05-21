@@ -2,15 +2,8 @@
 #include "Mario.h"
 #include <vector>
 
-void CMovingPlatform::Render()
-{
-	CPlatform::Render();
-}
-
 void CMovingPlatform::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	//DebugOut(L"[INFO] MovingPlatform Update: %f %f\n", vx, vy);
-
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -34,11 +27,6 @@ void CMovingPlatform::OnCollisionWithMario(LPCOLLISIONEVENT e)
 		vx = 0;
 		vy = MOVING_PLATFORM_VERTICAL_SPEED;
 	}
-}
-
-void CMovingPlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
-{
-	CPlatform::GetBoundingBox(l, t, r, b);
 }
 
 void CMovingPlatform::Reload()

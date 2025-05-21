@@ -28,8 +28,8 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 
 	if (e->ny < 0) { // Stand on platform
 		vy = 0;
-		if (state == KOOPA_STATE_SHELL_REVERSE_JUMP)
-			SetState(KOOPA_STATE_SHELL_REVERSE_IDLE);
+		/*if (state == KOOPA_STATE_SHELL_REVERSE_JUMP)
+			SetState(KOOPA_STATE_SHELL_REVERSE_IDLE);*/
 		ay = KOOPA_GRAVITY; 
 		platform = e->obj;  // Set platform to what Koopa is standing on
 	}
