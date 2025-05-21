@@ -26,15 +26,12 @@ void CKoopa::OnNoCollision(DWORD dt) {
 void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (!e->obj->IsBlocking()) return;
 
-	if (e->ny == 0)
-		platform = nullptr;
-
 	if (e->ny < 0) { // Stand on platform
 		vy = 0;
 		if (state == KOOPA_STATE_SHELL_REVERSE_JUMP)
 			SetState(KOOPA_STATE_SHELL_REVERSE_IDLE);
 		ay = KOOPA_GRAVITY; 
-		platform = e->obj;  // Set platform to what Koopa is standing on
+		//platform = e->obj;  // Set platform to what Koopa is standing on
 	}
 
 	if (e->nx != 0) { 
@@ -173,62 +170,71 @@ void CKoopa::SetState(int state) {
 	CGameObject::SetState(state);
 }
 
-bool CKoopa::IsOnPlatform(const vector<LPGAMEOBJECT>* coObjects) {
-	if (platform == nullptr) {
+bool CKoopa::IsPlatformEdge(float checkDistance, vector<LPGAMEOBJECT>& coObjects)
+{
+	float verticalTolerance = 2.5f;   // Use consistent tolerance (was 2.5f in provided code)
+	float horizontalTolerance = 2.0f; // For adjacency
+	float l, t, r, b;
+	GetBoundingBox(l, t, r, b);
+	float koopaBottomY = b;
+	float direction = (state == KOOPA_STATE_WALKING_LEFT) ? -1.0f : 1.0f;
+
+	// Find all platforms the Koopa is currently standing on
+	vector<LPGAMEOBJECT> supportingPlatforms;
+	for (const auto& obj : coObjects)
+	{
+		if (obj == this || obj->IsDeleted() || !obj->IsBlocking()) continue;
+
+		float objL, objT, objR, objB;
+		obj->GetBoundingBox(objL, objT, objR, objB);
+
+		if (l < objR && r > objL && // Horizontal overlap
+			koopaBottomY >= objT - verticalTolerance && koopaBottomY <= objT + verticalTolerance) // Vertical proximity
+		{
+			supportingPlatforms.push_back(obj);
+		}
+	}
+
+	if (supportingPlatforms.empty())
+	{
+		// DebugOut(L"[INFO] No supporting platform found for Koopa at Y_bottom=%f\n", koopaBottomY);
 		return false;
 	}
 
-	// Get the bounding box of the current platform brick
-	float l, t, r, b;
-	platform->GetBoundingBox(l, t, r, b);
+	// Find consecutive platforms
+	float combinedLeft = FLT_MAX;
+	float combinedRight = -FLT_MAX;
+	float combinedTop = 0.0f;
 
-	// Expand left to include all adjacent bricks
-	bool found;
-	do {
-		found = false;
-		for (auto obj : *coObjects) {
-			if (obj == platform) continue;
-			CBrick* brick = dynamic_cast<CBrick*>(obj);
-			if (!brick) continue;
+	for (const auto& platform : supportingPlatforms)
+	{
+		float platformL, platformT, platformR, platformB;
+		platform->GetBoundingBox(platformL, platformT, platformR, platformB);
 
-			float bl, bt, br, bb;
-			brick->GetBoundingBox(bl, bt, br, bb);
-
-			// Check if brick is at the same Y and directly to the left
-			if (abs(bt - t) < 0.01f && abs(bb - b) < 0.01f && abs(br - l) < 0.01f) {
-				l = bl;
-				found = true;
-				break;
-			}
+		if (combinedLeft == FLT_MAX)
+		{
+			combinedLeft = platformL;
+			combinedRight = platformR;
+			combinedTop = platformT;
+			continue;
 		}
-	} while (found);
 
-	// Expand right to include all adjacent bricks
-	do {
-		found = false;
-		for (auto obj : *coObjects) {
-			if (obj == platform) continue;
-			CBrick* brick = dynamic_cast<CBrick*>(obj);
-			if (!brick) continue;
-
-			float bl, bt, br, bb;
-			brick->GetBoundingBox(bl, bt, br, bb);
-
-			// Check if brick is at the same Y and directly to the right
-			if (abs(bt - t) < 0.01f && abs(bb - b) < 0.01f && abs(bl - r) < 0.01f) {
-				r = br;
-				found = true;
-				break;
-			}
+		if (std::abs(platformT - combinedTop) <= verticalTolerance)
+		{
+			combinedLeft = min(combinedLeft, platformL);
+			combinedRight = max(combinedRight, platformR);
 		}
-	} while (found);
+	}
 
-	// Now l, r are the left/right bounds of the whole brick platform
-	float checkX = x + (vx > 0 ? KOOPA_BBOX_WIDTH / 2 : -KOOPA_BBOX_WIDTH / 2);
-
-	// Add a small margin if needed
-	if (checkX >= l - 8.0f && checkX <= r + 8.0f) {
-		return true;
+	// Check edge
+	float projectedX = x + direction * checkDistance;
+	if (direction < 0)
+	{
+		if (projectedX <= combinedLeft + 0.001f) return true;
+	}
+	else
+	{
+		if (projectedX >= combinedRight - 0.001f) return true;
 	}
 
 	return false;
@@ -250,12 +256,15 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	isInWall = false; 
 
-	bool isOnPlatform = IsOnPlatform(coObjects);
-	if (!isOnPlatform) {
-		if (state == KOOPA_STATE_WALKING_LEFT)
+	if (state == KOOPA_STATE_WALKING_LEFT) {
+		if (IsPlatformEdge(0.1f, *coObjects)) {
 			SetState(KOOPA_STATE_WALKING_RIGHT);
-		else if (state == KOOPA_STATE_WALKING_RIGHT)
+		}
+	}
+	else if (state == KOOPA_STATE_WALKING_RIGHT) {
+		if (IsPlatformEdge(0.1f, *coObjects)) {
 			SetState(KOOPA_STATE_WALKING_LEFT);
+		}
 	}
 
 	switch (state) 
@@ -300,7 +309,7 @@ void CKoopa::Reload()
 	stateShakingStart = -1;
 	die_start = -1;
 	isHeld = false;
-	platform = nullptr;
+	//platform = nullptr;
 	isDeleted = false;
 	isActive = true;
 }
