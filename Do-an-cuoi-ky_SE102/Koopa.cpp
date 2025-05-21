@@ -114,37 +114,46 @@ void CKoopa::SetState(int state) {
 	switch (state)
 	{
 	case KOOPA_STATE_WALKING_LEFT:
+		DebugOut(L"[INFO] Koopa is walking left\n");
 		vx = -KOOPA_WALKING_SPEED;
 		break;
 	case KOOPA_STATE_WALKING_RIGHT:
 		//vy = -0.4;
+		DebugOut(L"[INFO] Koopa is walking right\n");
 		vx = KOOPA_WALKING_SPEED;
 		break;
 	case KOOPA_STATE_SHELL_IDLE:
+		DebugOut(L"[INFO] Koopa is in shell\n");
 		stateShellStart = GetTickCount64();
 		vx = 0;
 		break;
 	case KOOPA_STATE_SHELL_MOVE:
+		DebugOut(L"[INFO] Koopa is in shell and moving\n");
 		ay = KOOPA_GRAVITY;				// Natural fall down when Koopa is out of platform or box
 		vx = 0;							// Set vx when Collision
 		break;
 	case KOOPA_STATE_SHELL_SHAKING:
+		DebugOut(L"[INFO] Koopa is shaking in shell\n");
 		stateShakingStart = GetTickCount64();
 		vx = 0;
 		break;
 	case KOOPA_STATE_SHELL_REVERSE_IDLE:
+		DebugOut(L"[INFO] Koopa is in shell and reverse\n");
 		stateShellStart = GetTickCount64();
 		vx = 0;
 		break;
 	case KOOPA_STATE_SHELL_REVERSE_MOVE:
+		DebugOut(L"[INFO] Koopa is in shell and reverse moving\n");
 		ay = KOOPA_GRAVITY;				// Natural fall down when Koopa is out of platform or box
 		vx = 0;							// Set vx when Collision
 		break;
 	case KOOPA_STATE_SHELL_REVERSE_SHAKING:
+		DebugOut(L"[INFO] Koopa is shaking in shell and reverse\n");
 		stateShakingStart = GetTickCount64();
 		vx = 0;
 		break;
 	case KOOPA_STATE_SHELL_REVERSE_JUMP:
+		DebugOut(L"[INFO] Koopa is in shell and reverse jump\n");
 		vy = -KOOPA_DEFLECT_SPEED;      // Jump up with reverse deflect speed
 		ay = KOOPA_GRAVITY;             // Apply gravity for natural arc
 		vx = -vx;                       // Reverse current x velocity
