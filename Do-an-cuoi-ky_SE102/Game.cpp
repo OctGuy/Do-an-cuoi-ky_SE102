@@ -514,6 +514,7 @@ void CGame::ReloadCurrentScene()
 	{
 		scenes[current_scene]->Unload(); // Unload the current scene
 		scenes[current_scene]->Load();   // Reload the scene
+		LoadSave();
 	}
 }
 

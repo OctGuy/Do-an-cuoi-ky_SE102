@@ -9,7 +9,7 @@
 32001	44	19	63	30	10
 
 #DIE_REVERSE
-32002	180	1714	197	1731	13
+32002	17	1714	34	1731	13
 
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
