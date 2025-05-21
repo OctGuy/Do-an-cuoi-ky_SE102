@@ -514,6 +514,7 @@ void CGame::ReloadCurrentScene()
 	{
 		scenes[current_scene]->Unload(); // Unload the current scene
 		scenes[current_scene]->Load();   // Reload the scene
+		LoadSave();
 	}
 }
 
@@ -532,13 +533,32 @@ void CGame::SwitchScene()
 	LPSCENE s = scenes[next_scene];
 	this->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
+	LoadSave();
 }
 
 void CGame::InitiateSwitchScene(int scene_id)
 {
+	Save();
 	next_scene = scene_id;
 }
 
+void CGame::Save()
+{
+	CPlayScene* playScene = dynamic_cast<CPlayScene*>(scenes[current_scene]);
+	CMario* mario = dynamic_cast<CMario*>(playScene->GetPlayer());
+	this->point = mario->GetPoint();
+	this->coin = mario->GetCoin();
+	this->cards = mario->GetCards();
+}
+
+void CGame::LoadSave()
+{
+	CPlayScene* playScene = dynamic_cast<CPlayScene*>(scenes[current_scene]);
+	CMario* mario = dynamic_cast<CMario*>(playScene->GetPlayer());
+	mario->SetPoint(this->point);
+	mario->SetCoin(this->coin);
+	mario->SetCards(this->cards);
+}
 
 void CGame::_ParseSection_TEXTURES(string line)
 {
@@ -551,7 +571,6 @@ void CGame::_ParseSection_TEXTURES(string line)
 
 	CTextures::GetInstance()->Add(texID, path.c_str());
 }
-
 
 CGame::~CGame()
 {

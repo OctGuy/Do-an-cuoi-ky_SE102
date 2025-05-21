@@ -350,6 +350,10 @@ public:
 	vector<int> GetCards() { return cards; }
 	int GetLevel() { return level; }
 
+	void SetPoint(int p) { point = p; }
+	void SetCoin(int c) { coin = c; }
+	void SetCards(vector<int> c) { cards = c; }
+
 	int IsCollidable() { return (state != MARIO_STATE_DIE); }
 
 	int IsBlocking() {
