@@ -71,7 +71,7 @@ public:
 		die_start = -1;
 		isHeld = false;
 		isInWall = false;
-		platform = NULL;
+		platform = nullptr;
 	}
 
 	void SetIsHeld(bool isHeld) { this->isHeld = isHeld; }

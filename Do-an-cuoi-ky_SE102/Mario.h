@@ -320,10 +320,10 @@ public:
 		isAbleToTunnelUp = false;
 		isInputBlocked = false;
 
-		Tail = NULL;
+		Tail = nullptr;
 		currentFloorY = GROUND_Y; // Initialize to ground level
 
-		Koopa = NULL;
+		Koopa = nullptr;
 
 		opacity = 1.0f;
 
@@ -367,7 +367,7 @@ public:
 
 	//Update coin and point
 	void AddCoin() { coin++; }
-	void AddPoint(int p, LPCOLLISIONEVENT e = NULL);
+	void AddPoint(int p, LPCOLLISIONEVENT e = nullptr);
 
 	bool GetIsRunning() { return isRunning; }
 

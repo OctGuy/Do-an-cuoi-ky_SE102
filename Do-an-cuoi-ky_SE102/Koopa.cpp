@@ -70,13 +70,13 @@ void CKoopa::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
 
 CMario* CKoopa::GetPlayer() {
 	CGame* game = CGame::GetInstance();
-	if (game == NULL) return NULL;
+	if (game == nullptr) return nullptr;
 
 	CPlayScene* scene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
-	if (scene == NULL) return NULL;
+	if (scene == nullptr) return nullptr;
 
 	CMario* player = dynamic_cast<CMario*>(scene->GetPlayer());
-	if (player == NULL) return NULL;
+	if (player == nullptr) return nullptr;
 
 	return player;
 }
@@ -163,7 +163,7 @@ void CKoopa::SetState(int state) {
 }
 
 bool CKoopa::IsOnPlatform() {
-	if (platform == NULL) {
+	if (platform == nullptr) {
 		return false;
 	}
 
@@ -186,7 +186,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	 // Kiểm tra nếu Koopa đang ở trạng thái DIE
 	if (state == KOOPA_STATE_DIE && player && player->GetKoopa() == this) {
-		player->SetKoopa(NULL); // Đặt Koopa của Mario thành NULL
+		player->SetKoopa(nullptr); // Đặt Koopa của Mario thành NULL
 	}
 
 	vy += ay * dt;
@@ -246,7 +246,7 @@ void CKoopa::Reload()
 	stateShakingStart = -1;
 	die_start = -1;
 	isHeld = false;
-	platform = NULL;
+	platform = nullptr;
 	isDeleted = false;
 	isActive = true;
 }

@@ -132,11 +132,11 @@ void CQuestionBrick::SetState(int state)
 
 void CQuestionBrick::ActivateItem()
 {
-    if (item == NULL) return;
+    if (item == nullptr) return;
 	//THE ORDER OF THESE FUNCTIONS MATTER
     item->SetState(100); //100 is STATE_ACTIVE for all item (lazy implementation)
     item->SetActive(true);
-    item = NULL; // Set item to NULL to prevent access error (PAINFUL LESSON)
+    item = nullptr; // Set item to NULL to prevent access error (PAINFUL LESSON)
 }
 
 

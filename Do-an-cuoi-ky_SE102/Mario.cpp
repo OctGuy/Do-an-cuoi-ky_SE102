@@ -176,7 +176,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				Koopa->SetState(KOOPA_STATE_WALKING_LEFT);
 
 			dynamic_cast<CKoopa*>(Koopa)->SetIsHeld(false);
-			Koopa = NULL;
+			Koopa = nullptr;
 		}
 		else
 		{
@@ -200,7 +200,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 
 				dynamic_cast<CKoopa*>(Koopa)->SetIsHeld(false);
-				Koopa = NULL;
+				Koopa = nullptr;
 			}
 		}
 	}
@@ -219,7 +219,7 @@ void CMario::AddPoint(int p, LPCOLLISIONEVENT e)
 {
 	point += p;
 	//Get the position of the object that mario touched to add particle
-	if (e != NULL)
+	if (e != nullptr)
 	{
 		CGame* game = CGame::GetInstance();
 		CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
@@ -594,12 +594,12 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 				: KOOPA_STATE_SHELL_IDLE);
 		}
 		else if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE
-			|| koopa->GetState() == KOOPA_STATE_SHELL_SHAKING
-			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE
-			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_SHAKING) 
+				|| koopa->GetState() == KOOPA_STATE_SHELL_SHAKING
+				|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE
+				|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_SHAKING) 
 		{
 			if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE
-			 || koopa->GetState() == KOOPA_STATE_SHELL_SHAKING)
+				|| koopa->GetState() == KOOPA_STATE_SHELL_SHAKING)
 				koopa->SetState(KOOPA_STATE_SHELL_MOVE);
 			else
 				koopa->SetState(KOOPA_STATE_SHELL_REVERSE_MOVE);
@@ -630,11 +630,11 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 			}
 		}
 		else if (koopa->GetState() == KOOPA_STATE_WALKING_LEFT
-			|| koopa->GetState() == KOOPA_STATE_WALKING_RIGHT
-			|| koopa->GetState() == KOOPA_STATE_SHELL_MOVE
-			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) 
+				|| koopa->GetState() == KOOPA_STATE_WALKING_RIGHT
+				|| koopa->GetState() == KOOPA_STATE_SHELL_MOVE
+				|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) 
 		{
-			Koopa = NULL;
+			Koopa = nullptr;
 			GetHurt();
 		}
 	}

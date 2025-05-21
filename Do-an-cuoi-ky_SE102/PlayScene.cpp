@@ -28,7 +28,7 @@ using namespace std;
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
-	player = NULL;
+	player = nullptr;
 	key_handler = new CSampleKeyHandler(this);
 	backgroundColor = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f); // Default to black
 	rightBoundary = 0;
@@ -60,7 +60,7 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 	int texID = atoi(tokens[5].c_str());
 
 	LPTEXTURE tex = CTextures::GetInstance()->Get(texID);
-	if (tex == NULL)
+	if (tex == nullptr)
 	{
 		DebugOut(L"[ERROR] Texture ID %d not found!\n", texID);
 		return; 
@@ -115,7 +115,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	float x = (float)atof(tokens[1].c_str());
 	float y = (float)atof(tokens[2].c_str());
 
-	CGameObject *obj = NULL;
+	CGameObject *obj = nullptr;
 
 	int type = 0;
 
@@ -123,7 +123,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		case OBJECT_TYPE_MARIO:
 		{
-			if (player != NULL)
+			if (player != nullptr)
 			{
 				DebugOut(L"[ERROR] MARIO object was created before!\n");
 				return;
@@ -530,7 +530,7 @@ void CPlayScene::Update(DWORD dt)
 
 	if(player) HUD->Update(dt);
 
-	if (player == NULL) return;
+	if (player == nullptr) return;
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
@@ -619,7 +619,7 @@ void CPlayScene::Unload()
 		delete objects[i];
 
 	objects.clear();
-	player = NULL;
+	player = nullptr;
 
 	if (HUD) {
 		delete HUD;
@@ -657,7 +657,7 @@ int CPlayScene::IsWithinLoadChunk(LPGAMEOBJECT obj)
 		return 1;
 }
 
-bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }
+bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == nullptr; }
 
 void CPlayScene::ActivateAllObjects()
 {
@@ -679,7 +679,7 @@ void CPlayScene::PurgeDeletedObjects()
 		if (o->IsDeleted())
 		{
 			delete o;
-			*it = NULL;
+			*it = nullptr;
 		}
 	}
 
