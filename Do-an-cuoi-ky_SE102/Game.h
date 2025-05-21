@@ -62,7 +62,12 @@ class CGame
 	bool isTimeFrozen = false;
 	ULONGLONG freezeDuration;
 	bool isPaused = false;   
-	ULONGLONG freeze_start = 0; // Time when freeze started
+	ULONGLONG freeze_start = 0;
+
+	//Manage mario saves through each scene
+	int point = 0;
+	int coin = 0;
+	vector<int> cards;
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
@@ -141,6 +146,8 @@ public:
 
 	void _ParseSection_TEXTURES(string line);
 
+	void Save();
+	void LoadSave();
 
 	~CGame();
 };
