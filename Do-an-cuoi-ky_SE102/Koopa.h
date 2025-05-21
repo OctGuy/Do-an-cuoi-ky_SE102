@@ -89,9 +89,11 @@ public:
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
-	bool IsOnPlatform();
+	bool IsOnPlatform(const vector<LPGAMEOBJECT>* coObjects);
 	CMario* GetPlayer();
 
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
+
+	//void GetAdjacentBricksBoundingBox(LPGAMEOBJECT platform, const vector<LPGAMEOBJECT>* coObjects, float& l, float& t, float& r, float& b);
 };
 

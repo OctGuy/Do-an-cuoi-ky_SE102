@@ -26,10 +26,13 @@ void CKoopa::OnNoCollision(DWORD dt) {
 void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (!e->obj->IsBlocking()) return;
 
+	if (e->ny == 0)
+		platform = nullptr;
+
 	if (e->ny < 0) { // Stand on platform
 		vy = 0;
-		/*if (state == KOOPA_STATE_SHELL_REVERSE_JUMP)
-			SetState(KOOPA_STATE_SHELL_REVERSE_IDLE);*/
+		if (state == KOOPA_STATE_SHELL_REVERSE_JUMP)
+			SetState(KOOPA_STATE_SHELL_REVERSE_IDLE);
 		ay = KOOPA_GRAVITY; 
 		platform = e->obj;  // Set platform to what Koopa is standing on
 	}
@@ -57,7 +60,6 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 		}
 
 		if (dynamic_cast<CQuestionBrick*>(e->obj)) {
-			//DebugOut(L"Koopa collided with QuestionBrick\n");
 			OnCollisionWithBrick(e);
 		}	
 	}
@@ -123,37 +125,37 @@ void CKoopa::SetState(int state) {
 		vx = KOOPA_WALKING_SPEED;
 		break;
 	case KOOPA_STATE_SHELL_IDLE:
-		DebugOut(L"[INFO] Koopa is in shell\n");
+		DebugOut(L"[INFO] Koopa is shell idle\n");
 		stateShellStart = GetTickCount64();
 		vx = 0;
 		break;
 	case KOOPA_STATE_SHELL_MOVE:
-		DebugOut(L"[INFO] Koopa is in shell and moving\n");
+		DebugOut(L"[INFO] Koopa is in shell move\n");
 		ay = KOOPA_GRAVITY;				// Natural fall down when Koopa is out of platform or box
 		vx = 0;							// Set vx when Collision
 		break;
 	case KOOPA_STATE_SHELL_SHAKING:
-		DebugOut(L"[INFO] Koopa is shaking in shell\n");
+		DebugOut(L"[INFO] Koopa is shell shaking\n");
 		stateShakingStart = GetTickCount64();
 		vx = 0;
 		break;
 	case KOOPA_STATE_SHELL_REVERSE_IDLE:
-		DebugOut(L"[INFO] Koopa is in shell and reverse\n");
+		DebugOut(L"[INFO] Koopa is shell reverse idle\n");
 		stateShellStart = GetTickCount64();
 		vx = 0;
 		break;
 	case KOOPA_STATE_SHELL_REVERSE_MOVE:
-		DebugOut(L"[INFO] Koopa is in shell and reverse moving\n");
+		DebugOut(L"[INFO] Koopa is shell reverse move\n");
 		ay = KOOPA_GRAVITY;				// Natural fall down when Koopa is out of platform or box
 		vx = 0;							// Set vx when Collision
 		break;
 	case KOOPA_STATE_SHELL_REVERSE_SHAKING:
-		DebugOut(L"[INFO] Koopa is shaking in shell and reverse\n");
+		DebugOut(L"[INFO] Koopa is shell reverse shaking\n");
 		stateShakingStart = GetTickCount64();
 		vx = 0;
 		break;
 	case KOOPA_STATE_SHELL_REVERSE_JUMP:
-		DebugOut(L"[INFO] Koopa is in shell and reverse jump\n");
+		DebugOut(L"[INFO] Koopa is shell reverse jump\n");
 		vy = -KOOPA_DEFLECT_SPEED;      // Jump up with reverse deflect speed
 		ay = KOOPA_GRAVITY;             // Apply gravity for natural arc
 		vx = -vx;                       // Reverse current x velocity
@@ -171,16 +173,60 @@ void CKoopa::SetState(int state) {
 	CGameObject::SetState(state);
 }
 
-bool CKoopa::IsOnPlatform() {
+bool CKoopa::IsOnPlatform(const vector<LPGAMEOBJECT>* coObjects) {
 	if (platform == nullptr) {
 		return false;
 	}
 
-	float checkX = x + (vx > 0 ? KOOPA_BBOX_WIDTH / 2 : -KOOPA_BBOX_WIDTH / 2);
-	//float checkY = y + KOOPA_BBOX_HEIGHT / 2 + 1;
+	// Get the bounding box of the current platform brick
 	float l, t, r, b;
 	platform->GetBoundingBox(l, t, r, b);
 
+	// Expand left to include all adjacent bricks
+	bool found;
+	do {
+		found = false;
+		for (auto obj : *coObjects) {
+			if (obj == platform) continue;
+			CBrick* brick = dynamic_cast<CBrick*>(obj);
+			if (!brick) continue;
+
+			float bl, bt, br, bb;
+			brick->GetBoundingBox(bl, bt, br, bb);
+
+			// Check if brick is at the same Y and directly to the left
+			if (abs(bt - t) < 0.01f && abs(bb - b) < 0.01f && abs(br - l) < 0.01f) {
+				l = bl;
+				found = true;
+				break;
+			}
+		}
+	} while (found);
+
+	// Expand right to include all adjacent bricks
+	do {
+		found = false;
+		for (auto obj : *coObjects) {
+			if (obj == platform) continue;
+			CBrick* brick = dynamic_cast<CBrick*>(obj);
+			if (!brick) continue;
+
+			float bl, bt, br, bb;
+			brick->GetBoundingBox(bl, bt, br, bb);
+
+			// Check if brick is at the same Y and directly to the right
+			if (abs(bt - t) < 0.01f && abs(bb - b) < 0.01f && abs(bl - r) < 0.01f) {
+				r = br;
+				found = true;
+				break;
+			}
+		}
+	} while (found);
+
+	// Now l, r are the left/right bounds of the whole brick platform
+	float checkX = x + (vx > 0 ? KOOPA_BBOX_WIDTH / 2 : -KOOPA_BBOX_WIDTH / 2);
+
+	// Add a small margin if needed
 	if (checkX >= l - 8.0f && checkX <= r + 8.0f) {
 		return true;
 	}
@@ -193,9 +239,8 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	//DebugOut(L"[INFO] Koopa velocity: %f %f\n", vx, vy);
 
-	 // Kiểm tra nếu Koopa đang ở trạng thái DIE
 	if (state == KOOPA_STATE_DIE && player && player->GetKoopa() == this) {
-		player->SetKoopa(nullptr); // Đặt Koopa của Mario thành NULL
+		player->SetKoopa(nullptr); 
 	}
 
 	vy += ay * dt;
@@ -205,7 +250,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	isInWall = false; 
 
-	bool isOnPlatform = IsOnPlatform();
+	bool isOnPlatform = IsOnPlatform(coObjects);
 	if (!isOnPlatform) {
 		if (state == KOOPA_STATE_WALKING_LEFT)
 			SetState(KOOPA_STATE_WALKING_RIGHT);
