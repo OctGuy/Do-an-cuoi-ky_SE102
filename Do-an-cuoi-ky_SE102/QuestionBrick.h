@@ -28,7 +28,7 @@ class CQuestionBrick : public CBrick
 public:
     CQuestionBrick(float x, float y, int type, int itemType) : CBrick(x, y, type)
     {
-        item = NULL;
+        item = nullptr;
         hasItem = false;
         this->itemType = itemType;
 

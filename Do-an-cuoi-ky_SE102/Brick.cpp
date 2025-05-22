@@ -38,7 +38,6 @@ int CBrick::GetAnimationid()
 		return ID_ANI_SECRET_BRICK;
 	else
 		return -1;
-
 }
 
 void CBrick::GetBoundingBox(float& l, float& t, float& r, float& b)

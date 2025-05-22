@@ -26,7 +26,7 @@ public:
     }
 
 
-    void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
+    void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = nullptr) override;
     void Render() override;
     void SetState(int state) override;
     void GetBoundingBox(float& l, float& t, float& r, float& b);

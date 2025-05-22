@@ -51,7 +51,7 @@ public:
 	virtual void Delete() { isDeleted = true;  }
 	bool IsDeleted() { return isDeleted; }
 
-	void RenderBoundingBox();
+	virtual void RenderBoundingBox();
 
 	CGameObject();
 	CGameObject(float x, float y) :CGameObject() 
@@ -64,7 +64,7 @@ public:
 
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {};
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = nullptr) {};
 	virtual void Render() = 0;
 	virtual void SetState(int state) { this->state = state; }
 	virtual void Reload();

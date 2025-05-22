@@ -121,11 +121,11 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hIcon = (HICON)LoadImage(hInstance, WINDOW_ICON_PATH, IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
-	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
 	wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
-	wc.lpszMenuName = NULL;
+	wc.lpszMenuName = nullptr;
 	wc.lpszClassName = WINDOW_CLASS_NAME;
-	wc.hIconSm = NULL;
+	wc.hIconSm = nullptr;
 
 	RegisterClassEx(&wc);
 
@@ -138,10 +138,10 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 			50,
 			ScreenWidth,
 			ScreenHeight,
-			NULL,
-			NULL,
+			nullptr,
+			nullptr,
 			hInstance,
-			NULL);
+			nullptr);
 
 	if (!hWnd) 
 	{
@@ -165,7 +165,7 @@ int Run()
 
 	while (!done)
 	{
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 		{
 			if (msg.message == WM_QUIT) done = 1;
 

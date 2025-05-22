@@ -23,7 +23,7 @@ struct CCollisionEvent
 	bool isDeleted;		
 
 	CCollisionEvent(float t, float nx, float ny, float dx = 0, float dy = 0, 
-		LPGAMEOBJECT obj = NULL, LPGAMEOBJECT src_obj = NULL)
+		LPGAMEOBJECT obj = nullptr, LPGAMEOBJECT src_obj = nullptr)
 	{
 		this->t = t;
 		this->nx = nx;
@@ -61,23 +61,6 @@ public:
 		float& t,
 		float& nx,
 		float& ny);
-
-	static void SweptAABB(
-		float ml,			// move left 
-		float mt,			// move top
-		float mr,			// move right 
-		float mb,			// move bottom
-		float dx,			// 
-		float dy,			// 
-		float sl,			// static left
-		float st,
-		float sr,
-		float sb,
-		float& t,
-		float& nx,
-		float& ny,
-		LPGAMEOBJECT src, 
-		LPGAMEOBJECT dest);
 
 	LPCOLLISIONEVENT SweptAABB(
 		LPGAMEOBJECT objSrc, 

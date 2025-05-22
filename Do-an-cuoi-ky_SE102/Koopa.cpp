@@ -31,7 +31,7 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 		if (state == KOOPA_STATE_SHELL_REVERSE_JUMP)
 			SetState(KOOPA_STATE_SHELL_REVERSE_IDLE);
 		ay = KOOPA_GRAVITY; 
-		platform = e->obj;  // Set platform to what Koopa is standing on
+		//platform = e->obj;  // Set platform to what Koopa is standing on
 	}
 
 	if (e->nx != 0) { 
@@ -57,7 +57,6 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 		}
 
 		if (dynamic_cast<CQuestionBrick*>(e->obj)) {
-			//DebugOut(L"Koopa collided with QuestionBrick\n");
 			OnCollisionWithBrick(e);
 		}	
 	}
@@ -70,13 +69,13 @@ void CKoopa::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
 
 CMario* CKoopa::GetPlayer() {
 	CGame* game = CGame::GetInstance();
-	if (game == NULL) return NULL;
+	if (game == nullptr) return nullptr;
 
 	CPlayScene* scene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
-	if (scene == NULL) return NULL;
+	if (scene == nullptr) return nullptr;
 
 	CMario* player = dynamic_cast<CMario*>(scene->GetPlayer());
-	if (player == NULL) return NULL;
+	if (player == nullptr) return nullptr;
 
 	return player;
 }
@@ -114,37 +113,46 @@ void CKoopa::SetState(int state) {
 	switch (state)
 	{
 	case KOOPA_STATE_WALKING_LEFT:
+		DebugOut(L"[INFO] Koopa is walking left\n");
 		vx = -KOOPA_WALKING_SPEED;
 		break;
 	case KOOPA_STATE_WALKING_RIGHT:
 		//vy = -0.4;
+		DebugOut(L"[INFO] Koopa is walking right\n");
 		vx = KOOPA_WALKING_SPEED;
 		break;
 	case KOOPA_STATE_SHELL_IDLE:
+		DebugOut(L"[INFO] Koopa is shell idle\n");
 		stateShellStart = GetTickCount64();
 		vx = 0;
 		break;
 	case KOOPA_STATE_SHELL_MOVE:
+		DebugOut(L"[INFO] Koopa is in shell move\n");
 		ay = KOOPA_GRAVITY;				// Natural fall down when Koopa is out of platform or box
 		vx = 0;							// Set vx when Collision
 		break;
 	case KOOPA_STATE_SHELL_SHAKING:
+		DebugOut(L"[INFO] Koopa is shell shaking\n");
 		stateShakingStart = GetTickCount64();
 		vx = 0;
 		break;
 	case KOOPA_STATE_SHELL_REVERSE_IDLE:
+		DebugOut(L"[INFO] Koopa is shell reverse idle\n");
 		stateShellStart = GetTickCount64();
 		vx = 0;
 		break;
 	case KOOPA_STATE_SHELL_REVERSE_MOVE:
+		DebugOut(L"[INFO] Koopa is shell reverse move\n");
 		ay = KOOPA_GRAVITY;				// Natural fall down when Koopa is out of platform or box
 		vx = 0;							// Set vx when Collision
 		break;
 	case KOOPA_STATE_SHELL_REVERSE_SHAKING:
+		DebugOut(L"[INFO] Koopa is shell reverse shaking\n");
 		stateShakingStart = GetTickCount64();
 		vx = 0;
 		break;
 	case KOOPA_STATE_SHELL_REVERSE_JUMP:
+		DebugOut(L"[INFO] Koopa is shell reverse jump\n");
 		vy = -KOOPA_DEFLECT_SPEED;      // Jump up with reverse deflect speed
 		ay = KOOPA_GRAVITY;             // Apply gravity for natural arc
 		vx = -vx;                       // Reverse current x velocity
@@ -162,18 +170,71 @@ void CKoopa::SetState(int state) {
 	CGameObject::SetState(state);
 }
 
-bool CKoopa::IsOnPlatform() {
-	if (platform == NULL) {
+bool CKoopa::IsPlatformEdge(float checkDistance, vector<LPGAMEOBJECT>& coObjects)
+{
+	float verticalTolerance = 2.5f;   // Use consistent tolerance (was 2.5f in provided code)
+	float horizontalTolerance = 2.0f; // For adjacency
+	float l, t, r, b;
+	GetBoundingBox(l, t, r, b);
+	float koopaBottomY = b;
+	float direction = (state == KOOPA_STATE_WALKING_LEFT) ? -1.0f : 1.0f;
+
+	// Find all platforms the Koopa is currently standing on
+	vector<LPGAMEOBJECT> supportingPlatforms;
+	for (const auto& obj : coObjects)
+	{
+		if (obj == this || obj->IsDeleted() || !obj->IsBlocking()) continue;
+
+		float objL, objT, objR, objB;
+		obj->GetBoundingBox(objL, objT, objR, objB);
+
+		if (l < objR && r > objL && // Horizontal overlap
+			koopaBottomY >= objT - verticalTolerance && koopaBottomY <= objT + verticalTolerance) // Vertical proximity
+		{
+			supportingPlatforms.push_back(obj);
+		}
+	}
+
+	if (supportingPlatforms.empty())
+	{
+		// DebugOut(L"[INFO] No supporting platform found for Koopa at Y_bottom=%f\n", koopaBottomY);
 		return false;
 	}
 
-	float checkX = x + (vx > 0 ? KOOPA_BBOX_WIDTH / 2 : -KOOPA_BBOX_WIDTH / 2);
-	//float checkY = y + KOOPA_BBOX_HEIGHT / 2 + 1;
-	float l, t, r, b;
-	platform->GetBoundingBox(l, t, r, b);
+	// Find consecutive platforms
+	float combinedLeft = FLT_MAX;
+	float combinedRight = -FLT_MAX;
+	float combinedTop = 0.0f;
 
-	if (checkX >= l - 8.0f && checkX <= r + 8.0f) {
-		return true;
+	for (const auto& platform : supportingPlatforms)
+	{
+		float platformL, platformT, platformR, platformB;
+		platform->GetBoundingBox(platformL, platformT, platformR, platformB);
+
+		if (combinedLeft == FLT_MAX)
+		{
+			combinedLeft = platformL;
+			combinedRight = platformR;
+			combinedTop = platformT;
+			continue;
+		}
+
+		if (std::abs(platformT - combinedTop) <= verticalTolerance)
+		{
+			combinedLeft = min(combinedLeft, platformL);
+			combinedRight = max(combinedRight, platformR);
+		}
+	}
+
+	// Check edge
+	float projectedX = x + direction * checkDistance;
+	if (direction < 0)
+	{
+		if (projectedX <= combinedLeft + 0.001f) return true;
+	}
+	else
+	{
+		if (projectedX >= combinedRight - 0.001f) return true;
 	}
 
 	return false;
@@ -184,9 +245,8 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	//DebugOut(L"[INFO] Koopa velocity: %f %f\n", vx, vy);
 
-	 // Kiểm tra nếu Koopa đang ở trạng thái DIE
 	if (state == KOOPA_STATE_DIE && player && player->GetKoopa() == this) {
-		player->SetKoopa(NULL); // Đặt Koopa của Mario thành NULL
+		player->SetKoopa(nullptr); 
 	}
 
 	vy += ay * dt;
@@ -196,12 +256,15 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	isInWall = false; 
 
-	bool isOnPlatform = IsOnPlatform();
-	if (!isOnPlatform) {
-		if (state == KOOPA_STATE_WALKING_LEFT)
+	if (state == KOOPA_STATE_WALKING_LEFT) {
+		if (IsPlatformEdge(0.1f, *coObjects)) {
 			SetState(KOOPA_STATE_WALKING_RIGHT);
-		else if (state == KOOPA_STATE_WALKING_RIGHT)
+		}
+	}
+	else if (state == KOOPA_STATE_WALKING_RIGHT) {
+		if (IsPlatformEdge(0.1f, *coObjects)) {
 			SetState(KOOPA_STATE_WALKING_LEFT);
+		}
 	}
 
 	switch (state) 
@@ -246,7 +309,7 @@ void CKoopa::Reload()
 	stateShakingStart = -1;
 	die_start = -1;
 	isHeld = false;
-	platform = NULL;
+	//platform = nullptr;
 	isDeleted = false;
 	isActive = true;
 }

@@ -10,17 +10,11 @@
 
 void CRaccoonTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-
-
-	//DebugOut(L"[INFO] Raccoon Tail state: %d\n", state);
-
     CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CRaccoonTail::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-    //if (!IsActive()) return;
-
     CParticle* particle = new CParticle(x, y, PARTICLE_TYPE_HIT);
     CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
     CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
@@ -100,7 +94,6 @@ void CRaccoonTail::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e)
     CPiranhaPlant* piranha = dynamic_cast<CPiranhaPlant*>(e->obj);
     piranha->SetState(PIRANHA_STATE_DIE);
 }
-
 
 void CRaccoonTail::Render()
 {

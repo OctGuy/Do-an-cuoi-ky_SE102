@@ -204,6 +204,7 @@ void CWingedGoomba::SetState(int state) {
 		ay = 0;
 		break;
 	}
+
 	case GOOMBA_WING_STATE_DIE_REVERSE:
 	{
 		//DebugOut(L"GOOMBA WING DIE REVERSE\n");

@@ -40,13 +40,6 @@ void CQuestionBrick::OnCollisionWith(LPCOLLISIONEVENT e)
     {
 	    Activate();
     }
-
-    if (e->ny != 0 && dynamic_cast<CKoopa*>(e->obj)) {
-		CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
-        if (koopa->GetState() == KOOPA_STATE_WALKING_LEFT
-            || koopa->GetState() == KOOPA_STATE_WALKING_RIGHT)
-            koopa->SetState(KOOPA_STATE_SHELL_REVERSE_IDLE);
-    }
 }
 
 void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -132,11 +125,11 @@ void CQuestionBrick::SetState(int state)
 
 void CQuestionBrick::ActivateItem()
 {
-    if (item == NULL) return;
+    if (item == nullptr) return;
 	//THE ORDER OF THESE FUNCTIONS MATTER
     item->SetState(100); //100 is STATE_ACTIVE for all item (lazy implementation)
     item->SetActive(true);
-    item = NULL; // Set item to NULL to prevent access error (PAINFUL LESSON)
+    item = nullptr; // Set item to NULL to prevent access error (PAINFUL LESSON)
 }
 
 
