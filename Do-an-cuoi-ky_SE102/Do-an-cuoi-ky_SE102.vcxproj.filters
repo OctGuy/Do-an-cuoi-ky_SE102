@@ -132,6 +132,15 @@
     <ClCompile Include="TunnelBlock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GoalRoulette.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneSweeper.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneSweeper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -255,6 +264,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TunnelBlock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GoalRoulette.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
