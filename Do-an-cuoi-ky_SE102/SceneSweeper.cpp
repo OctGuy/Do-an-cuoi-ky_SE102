@@ -1,6 +1,5 @@
 #include "SceneSweeper.h"
 #include "Game.h"
-#include "PlayScene.h"
 
 // SceneSweeper.cpp - Update with the correct parameter type
 void CSceneSweeper::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -16,8 +15,13 @@ void CSceneSweeper::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	}
 
-	DebugOut(L"[INFO] SceneSweeper Position: %f\n", x);
+	//DebugOut(L"[INFO] SceneSweeper Position: %f\n", x);
 	x += SCENE_SWEEPER_SPEED * dt;
+
+	if(wall)
+		this->wall->SetPosition(x + game->GetBackBufferWidth() - 8.f, 0.f);
+	else
+		DebugOut(L"[ERROR] SceneSweeper wall is NULL\n");
 
 	playScene->SetCamLeftBound(x);
 	playScene->SetCamFollowOnX(false);
