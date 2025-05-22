@@ -31,14 +31,17 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 		if (state == KOOPA_STATE_SHELL_REVERSE_JUMP)
 			SetState(KOOPA_STATE_SHELL_REVERSE_IDLE);
 		ay = KOOPA_GRAVITY; 
-		//platform = e->obj;  // Set platform to what Koopa is standing on
 	}
 
-	if (e->nx != 0) { 
-		if (state == KOOPA_STATE_WALKING_LEFT)
-			SetState(KOOPA_STATE_WALKING_RIGHT);
-		else if (state == KOOPA_STATE_WALKING_RIGHT)
-			SetState(KOOPA_STATE_WALKING_LEFT);
+	if (state == KOOPA_STATE_WALKING_LEFT || state == KOOPA_STATE_WALKING_RIGHT) {
+		if (e->nx != 0 && e->obj->IsBlocking()) {
+			if (e->nx > 0) {
+				SetState(KOOPA_STATE_WALKING_RIGHT);
+			}
+			else {
+				SetState(KOOPA_STATE_WALKING_LEFT);
+			}
+		}
 	}
 
 	if (e->nx == 0 && e->ny == 0 && e->obj->IsBlocking())
@@ -117,7 +120,6 @@ void CKoopa::SetState(int state) {
 		vx = -KOOPA_WALKING_SPEED;
 		break;
 	case KOOPA_STATE_WALKING_RIGHT:
-		//vy = -0.4;
 		DebugOut(L"[INFO] Koopa is walking right\n");
 		vx = KOOPA_WALKING_SPEED;
 		break;
