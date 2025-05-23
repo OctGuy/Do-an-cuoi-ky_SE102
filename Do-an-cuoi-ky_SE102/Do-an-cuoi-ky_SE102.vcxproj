@@ -163,6 +163,8 @@
     <ClCompile Include="QuestionBrick.cpp" />
     <ClCompile Include="RaccoonTail.cpp" />
     <ClCompile Include="SampleKeyEventHandler.cpp" />
+    <ClCompile Include="SceneSweeper.cpp" />
+    <ClCompile Include="SceneSweeper.h" />
     <ClCompile Include="ShinyBrick.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />

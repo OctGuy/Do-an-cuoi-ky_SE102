@@ -36,6 +36,7 @@ protected:
 	float camLockPos = 231.f; //temporary until i figure something else out
 
 	BOOLEAN isCameraFollowMarioY = false; //Keep track of whether the camera should follow Mario's Y position
+	BOOLEAN isCameraFollowMarioX = true; //Same deal but on X
 
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
@@ -58,7 +59,6 @@ public:
 	void GetBoundary(float& left, float& right, float& bottom) { left = leftBoundary; right = rightBoundary; bottom = bottomBoundary; }
 	vector<LPGAMEOBJECT>& GetObjects() { return objects; }
 
-
 	void Add(LPGAMEOBJECT obj) { objects.push_back(obj); }
 
 	void Clear();
@@ -73,6 +73,7 @@ public:
 
 	void ActivateAllObjects();
 
+	void SetCamFollowOnX(bool isCamFollowOnX) { this->isCameraFollowMarioX = isCamFollowOnX; }
 	void SetCamLockPos(float camLockPos) { this->camLockPos = camLockPos; }
 	void SetCamLeftBound(float camLeftBoundary) { this->leftBoundary = camLeftBoundary; }
 	void SetCamBottomBound(float camBottomBoundary) { this->bottomBoundary = camBottomBoundary; }
