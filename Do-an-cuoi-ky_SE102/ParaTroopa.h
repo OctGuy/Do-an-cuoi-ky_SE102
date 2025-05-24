@@ -7,6 +7,7 @@
 #include "Brick.h"
 #include "Mario.h"
 #include "PlayScene.h"
+#include "ShinyBrick.h"
 #include "PiranhaPlant.h"
 
 #define PARATROOPA_ANI_WALKING_LEFT 8008
@@ -92,5 +93,6 @@ public:
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	CMario* GetPlayer();
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithShinyBrick(LPCOLLISIONEVENT e);
 };
 

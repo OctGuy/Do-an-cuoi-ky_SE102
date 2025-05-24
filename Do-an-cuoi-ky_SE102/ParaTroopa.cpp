@@ -106,7 +106,11 @@ void CParaTroopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 			}
 		}
 
-		if (dynamic_cast<CQuestionBrick*>(e->obj)) {
+		if (dynamic_cast<CShinyBrick*>(e->obj))
+		{
+			OnCollisionWithShinyBrick(e);
+		}
+		else if (dynamic_cast<CQuestionBrick*>(e->obj)) {
 			OnCollisionWithBrick(e);
 		}
 	}
@@ -117,6 +121,12 @@ void CParaTroopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 void CParaTroopa::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
 	CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
 	questionBrick->OnCollisionWith(e);
+}
+
+void CParaTroopa::OnCollisionWithShinyBrick(LPCOLLISIONEVENT e)
+{
+	CShinyBrick* shinyBrick = dynamic_cast<CShinyBrick*>(e->obj);
+	shinyBrick->Activate();
 }
 
 void CParaTroopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
