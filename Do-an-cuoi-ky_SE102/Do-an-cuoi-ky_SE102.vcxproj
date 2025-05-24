@@ -139,7 +139,6 @@
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="debug.cpp" />
-    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GoalRoulette.cpp" />
     <ClCompile Include="MovingPlatform.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

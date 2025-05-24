@@ -87,9 +87,6 @@
     <ClCompile Include="SceneryObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PiranhaPlant.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
