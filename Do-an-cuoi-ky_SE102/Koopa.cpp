@@ -295,8 +295,6 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		break;
 	}
 
-	//DebugOut(L"KOOPA SPEED: %f \n", vx);
-
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -311,7 +309,6 @@ void CKoopa::Reload()
 	stateShakingStart = -1;
 	die_start = -1;
 	isHeld = false;
-	//platform = nullptr;
 	isDeleted = false;
 	isActive = true;
 }

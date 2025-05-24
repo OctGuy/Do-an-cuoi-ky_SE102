@@ -1,5 +1,7 @@
 #include "Goomba.h"
 #include "WingedGoomba.h"
+#include "ParaTroopa.h"
+
 CGoomba::CGoomba(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -78,7 +80,7 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 		}
 		else if (e->nx != 0)
 		{
-			if (e->obj->IsBlocking()) {
+			if (e->obj->IsBlocking() || dynamic_cast<CParaTroopa*>(e->obj)) {
 				DebugOut(L"GOOMBA COLLISION WITH BLOCKING OBJECT\n");
 				if (e->nx > 0)
 					vx = GOOMBA_WALKING_SPEED;

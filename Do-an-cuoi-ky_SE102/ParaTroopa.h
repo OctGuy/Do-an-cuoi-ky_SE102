@@ -37,21 +37,22 @@
 #define PARATROOPA_SHELL_SHAKING_DURATION 2000
 #define PARATROOPA_DIE_DURATION 500
 
-#define PARATROOPA_STATE_WALKING_LEFT 0
-#define PARATROOPA_STATE_WALKING_RIGHT 1
-#define PARATROOPA_STATE_BOUNCE_LEFT 2
-#define PARATROOPA_STATE_BOUNCE_RIGHT 3
-#define PARATROOPA_STATE_SHELL_IDLE 4
-#define PARATROOPA_STATE_SHELL_MOVE 5
-#define PARATROOPA_STATE_SHELL_SHAKING 6
-#define PARATROOPA_STATE_SHELL_REVERSE_IDLE 7
-#define PARATROOPA_STATE_SHELL_REVERSE_MOVE 8
-#define PARATROOPA_STATE_SHELL_REVERSE_SHAKING 9
-#define PARATROOPA_STATE_DIE 10
+#define PARATROOPA_STATE_WALKING_LEFT 10
+#define PARATROOPA_STATE_WALKING_RIGHT 11
+#define PARATROOPA_STATE_BOUNCE_LEFT 12
+#define PARATROOPA_STATE_BOUNCE_RIGHT 13
+#define PARATROOPA_STATE_SHELL_IDLE 14
+#define PARATROOPA_STATE_SHELL_MOVE 15
+#define PARATROOPA_STATE_SHELL_SHAKING 16
+#define PARATROOPA_STATE_SHELL_REVERSE_IDLE 17
+#define PARATROOPA_STATE_SHELL_REVERSE_MOVE 18
+#define PARATROOPA_STATE_SHELL_REVERSE_SHAKING 19
+#define PARATROOPA_STATE_DIE 20
+#define PARATROOPA_STATE_SHELL_REVERSE_JUMP 21
 
 class CParaTroopa : public CEnemy
 {
-private:
+protected:
 	float ax;
 	float ay;
 
@@ -76,11 +77,11 @@ public:
 
 	void SetIsHeld(bool isHeld) { this->isHeld = isHeld; }
 	bool GetIsHeld() { return isHeld; }
-	//void Render();
-	//void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void Render();
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
-	//void SetState(int state);
-	//virtual void Reload();
+	void SetState(int state);
+	virtual void Reload();
 	int IsCollidable() { return (state != KOOPA_STATE_DIE); }
 
 	int IsBlocking() { return 0; }
@@ -88,8 +89,8 @@ public:
 	BOOLEAN IsInWall() { return isInWall; }
 
 	void OnNoCollision(DWORD dt);
-	//void OnCollisionWith(LPCOLLISIONEVENT e);
-	//CMario* GetPlayer();
-	//void OnCollisionWithBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWith(LPCOLLISIONEVENT e);
+	CMario* GetPlayer();
+	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
 };
 

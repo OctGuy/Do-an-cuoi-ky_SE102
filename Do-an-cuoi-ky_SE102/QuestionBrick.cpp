@@ -2,6 +2,7 @@
 #include "Coin.h"
 #include "PowerUp.h"
 #include "Koopa.h"
+#include "ParaTroopa.h"
 #include "RaccoonTail.h"
 #include "PSwitch.h"
 #include "Game.h"
@@ -36,7 +37,8 @@ void CQuestionBrick::Render()
 
 void CQuestionBrick::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-    if (e->nx != 0 && dynamic_cast<CKoopa*>(e->src_obj))
+    if (e->nx != 0 && (dynamic_cast<CKoopa*>(e->src_obj) 
+                        || dynamic_cast<CParaTroopa*>(e->src_obj)))
     {
 	    Activate();
     }

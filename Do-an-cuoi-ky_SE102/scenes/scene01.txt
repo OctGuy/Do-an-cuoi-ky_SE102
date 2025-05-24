@@ -19,7 +19,10 @@ assets\scenery_object.txt
 assets\fire_bullet.txt
 assets\HUD.txt
 assets\koopa.txt
+assets\paratroopa.txt
 assets\winged_goomba.txt
+
+
 
 
 #RENDERING ORDER IS IMPORTANT
@@ -298,6 +301,10 @@ assets\winged_goomba.txt
 11	558 	343
 11	234	266
 11	1990	332
+
+#PARATROOPA
+13	180	385
+
 # MARIO
 0	16	400
 #0	1913	389
@@ -352,4 +359,4 @@ assets\winged_goomba.txt
 4	2191	465
 4	2175	481
 # PORTAL 
-50	100	350	2
+#50	100	350	2

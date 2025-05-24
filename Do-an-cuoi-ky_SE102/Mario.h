@@ -276,6 +276,7 @@ class CMario : public CGameObject
 	void OnCollisionWithPowerUp(LPCOLLISIONEVENT e);
 	void OnCollisionWithBullet(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
+	void OnCollisionWithParaTroopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithPSwitch(LPCOLLISIONEVENT e);
 	void OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithMovingPlatform(LPCOLLISIONEVENT e);

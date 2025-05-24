@@ -2,6 +2,7 @@
 #include "Collision.h"
 #include "Goomba.h" 
 #include "Koopa.h"  
+#include "ParaTroopa.h"
 #include "debug.h" 
 #include "QuestionBrick.h"
 #include "ShinyBrick.h"
@@ -26,6 +27,10 @@ void CRaccoonTail::OnCollisionWith(LPCOLLISIONEVENT e)
     }
     else if (dynamic_cast<CKoopa*>(e->obj)) {
         OnCollisionWithKoopa(e);
+        currentScene->Add(particle);
+    }
+    else if (dynamic_cast<CParaTroopa*>(e->obj)) {
+        OnCollisionWithParaTroopa(e);
         currentScene->Add(particle);
     }
     else if (dynamic_cast<CPiranhaPlant*>(e->obj)) {
@@ -86,6 +91,15 @@ void CRaccoonTail::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
     koopa->SetSpeed(nx * KOOPA_SHELL_SPEED / 2, 0); // Set speed for Koopa
     koopa->SetState(KOOPA_STATE_SHELL_REVERSE_JUMP);
     SetActive(false);
+}
+
+void CRaccoonTail::OnCollisionWithParaTroopa(LPCOLLISIONEVENT e)
+{
+	//DebugOut(L"[INFO] RaccoonTail hit ParaTroopa\n");
+	CParaTroopa* paraTroopa = dynamic_cast<CParaTroopa*>(e->obj);
+	paraTroopa->SetSpeed(nx * PARATROOPA_SHELL_SPEED / 2, 0); // Set speed for ParaTroopa
+	paraTroopa->SetState(PARATROOPA_STATE_SHELL_REVERSE_JUMP);
+	SetActive(false);
 }
 
 void CRaccoonTail::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e)

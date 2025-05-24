@@ -77,7 +77,7 @@ void CWingedGoomba::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 	CKoopa* koopaHeldByMario = dynamic_cast<CKoopa*>(mario->GetKoopa());
 
 	if (koopa) {
-		if (koopaHeldByMario != nullptr && koopaHeldByMario == koopa && koopa->GetIsHeld()) {
+		if (koopa->GetIsHeld()) {
 			DebugOut(L"Koopa is collided with WingedGoomba when Mario hold\n");
 			SetState(GOOMBA_WING_STATE_DIE_REVERSE);
 			koopa->SetState(KOOPA_STATE_DIE);
@@ -210,7 +210,7 @@ void CWingedGoomba::SetState(int state) {
 		//DebugOut(L"GOOMBA WING DIE REVERSE\n");
 		die_start = GetTickCount64();
 		vx = 0;
-	vy = -GOOMBA_WING_DEFLECT_SPEED;
+		vy = -GOOMBA_WING_DEFLECT_SPEED;
 		ay = GOOMBA_WING_GRAVITY;
 		break;
 	}
