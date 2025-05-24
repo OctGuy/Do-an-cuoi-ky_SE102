@@ -37,7 +37,7 @@ void CParaTroopa::Render() {
 	if (aniId != -1)
 		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CParaTroopa::GetBoundingBox(float& l, float& t, float& r, float& b) {
