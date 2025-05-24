@@ -82,7 +82,7 @@ public:
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void SetState(int state);
 	virtual void Reload();
-	int IsCollidable() { return (state != KOOPA_STATE_DIE); }
+	int IsCollidable() { return (state != PARATROOPA_STATE_DIE); }
 
 	int IsBlocking() { return 0; }
 
