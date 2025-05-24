@@ -91,7 +91,6 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 void CGoomba::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 	CMario* mario = GetPlayer();
 	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
-	CKoopa* koopaHeldByMario = dynamic_cast<CKoopa*>(mario->GetKoopa());
 
 	if (koopa) {
 		if (koopa->GetIsHeld()) {
@@ -112,7 +111,6 @@ void CGoomba::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 void CGoomba::OnCollisionWithParaTroopa(LPCOLLISIONEVENT e) {
 	CMario* mario = GetPlayer();
 	CParaTroopa* paraTroopa = dynamic_cast<CParaTroopa*>(e->obj);
-	CParaTroopa* paraTroopaHeldByMario = dynamic_cast<CParaTroopa*>(mario->GetKoopa());
 
 	if (paraTroopa) {
 		if (paraTroopa->GetIsHeld()) {

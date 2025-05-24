@@ -199,10 +199,9 @@ void CPiranhaPlant::OnCollisionWith(LPCOLLISIONEVENT e) {
 void CPiranhaPlant::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 	CMario* mario = GetPlayer();
 	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
-	CKoopa* koopaHeldByMario = dynamic_cast<CKoopa*>(mario->GetKoopa());
 
 	if (koopa) {
-		if (koopaHeldByMario != nullptr && koopaHeldByMario == koopa && koopa->GetIsHeld()) {
+		if (koopa->GetIsHeld()) {
 			DebugOut(L"Koopa is collided with Piranha when Mario hold\n");
 			SetState(PIRANHA_STATE_DIE);
 			koopa->SetState(KOOPA_STATE_DIE);
@@ -220,10 +219,9 @@ void CPiranhaPlant::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 void CPiranhaPlant::OnCollisionWithParaTroopa(LPCOLLISIONEVENT e) {
 	CMario* mario = GetPlayer();
 	CParaTroopa* paraTroopa = dynamic_cast<CParaTroopa*>(e->obj);
-	CParaTroopa* paraTroopaHeldByMario = dynamic_cast<CParaTroopa*>(mario->GetKoopa());
 
 	if (paraTroopa) {
-		if (paraTroopaHeldByMario != nullptr && paraTroopaHeldByMario == paraTroopa && paraTroopa->GetIsHeld()) {
+		if (paraTroopa->GetIsHeld()) {
 			DebugOut(L"ParaTroopa is collided with Piranha when Mario hold\n");
 			SetState(PIRANHA_STATE_DIE);
 			paraTroopa->SetState(PARATROOPA_STATE_DIE);
