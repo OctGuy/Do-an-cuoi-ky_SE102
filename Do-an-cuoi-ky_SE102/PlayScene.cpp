@@ -23,6 +23,7 @@
 #include "MovingPlatform.h"
 #include "TunnelBlock.h"
 #include "GoalRoulette.h"
+#include "SceneSweeper.h"
 
 using namespace std;
 
@@ -349,6 +350,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			break;
 		}
 
+		case OBJECT_TYPE_SCENE_SWEEPER:
+		{
+			obj = new CSceneSweeper(x, y);
+			break;
+		}
+
 		default:
 			DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 			return;
@@ -544,21 +551,26 @@ void CPlayScene::Update(DWORD dt)
 	player->GetPosition(cx, cy);
 
 	CGame* game = CGame::GetInstance();
+	float camX, camY;
+	game->GetCamPos(camX, camY);
 
 	// Get Mario's vertical velocity to check if he's flying
 	float vy = ((CMario*)player)->GetVy();
 	CMario* mario = (CMario*)player;
 
 	// Follow on X axis
-	cx -= game->GetBackBufferWidth() / 2;
-
-	float marioX, marioY;
-	mario->GetPosition(marioX, marioY);
+	if (isCameraFollowMarioX)
+		cx -= game->GetBackBufferWidth() / 2;
+	else
+	{
+		isCameraFollowMarioX = true;
+		cx = camX;
+	}
 
 	// If mario is flying then switch camera to follow him on y axis else keep it fixed
-	if (mario->IsInAir() && vy < 0 || marioY < 200.f)
+	if (mario->IsInAir() && vy < 0)
 		isCameraFollowMarioY = true;
-	else if (mario->IsOnPlatform() && marioY >= 340.f)
+	else if (mario->IsOnPlatform() && cy >= 340.f)
 		isCameraFollowMarioY = false;
 
 	//Make camera follow Mario vertically when flying
@@ -578,7 +590,7 @@ void CPlayScene::Update(DWORD dt)
 	if (cy < 0) cy = 0;
 	else if (cy > bottomBoundary) cy = bottomBoundary;
 
-	CGame::GetInstance()->SetCamPos(cx, cy);
+	game->SetCamPos(cx, cy);
 
 	PurgeDeletedObjects();
 }
