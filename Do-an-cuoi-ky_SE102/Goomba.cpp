@@ -41,13 +41,6 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	// Handle rising logic
-	//if (state == GOOMBA_STATE_RISE && y <= originalY - GOOMBA_BBOX_HEIGHT)
-	//{
-	//	y = originalY - GOOMBA_BBOX_HEIGHT;
-	//	SetState(GOOMBA_STATE_WALKING); // Transition to walking state
-	//}
-
 	if (((state == GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT))
 		|| (state == GOOMBA_STATE_DIE_REVERSE) && (GetTickCount64() - die_start > GOOMBA_DIE_REVERSE_TIMEOUT))
 	{
@@ -67,20 +60,16 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	//if (dynamic_cast<CGoomba*>(e->obj) || dynamic_cast<CWingedGoomba*>(e->obj)) vx = -vx;
-
-	//if (!e->obj->IsBlocking()) return;
 	if (e->ny != 0 || e->nx != 0)
 	{
 		if (e->ny != 0 && e->obj->IsBlocking())
 		{
-			//DebugOut(L"GOOMBA COLLISION WITH BLOCKING OBJECT\n");
 			vy = 0;
 			ay = GOOMBA_GRAVITY; // Reset gravity to default
 		}
 		else if (e->nx != 0)
 		{
-			if (e->obj->IsBlocking() || dynamic_cast<CParaTroopa*>(e->obj)) {
+			if (e->obj->IsBlocking()) {
 				DebugOut(L"GOOMBA COLLISION WITH BLOCKING OBJECT\n");
 				if (e->nx > 0)
 					vx = GOOMBA_WALKING_SPEED;

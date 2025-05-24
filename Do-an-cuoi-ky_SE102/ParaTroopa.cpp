@@ -85,21 +85,30 @@ void CParaTroopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 		ay = PARATROOPA_GRAVITY;
 	}
 
-	bool isWalking = (state == PARATROOPA_STATE_WALKING_LEFT || state == PARATROOPA_STATE_WALKING_RIGHT);
-	bool isShellMoving = (state == PARATROOPA_STATE_SHELL_MOVE || state == PARATROOPA_STATE_SHELL_REVERSE_MOVE);
-
-	if (e->nx != 0) {
-		if (isWalking) {
-			SetState(e->nx > 0 ? PARATROOPA_STATE_WALKING_RIGHT : PARATROOPA_STATE_WALKING_LEFT);
-		}
-
-		if (isShellMoving && e->obj->IsBlocking()) {
-			vx = (e->nx > 0) ? PARATROOPA_SHELL_SPEED : -PARATROOPA_SHELL_SPEED;
+	if (state == PARATROOPA_STATE_WALKING_LEFT || state == PARATROOPA_STATE_WALKING_RIGHT) {
+		if (e->nx != 0) {
+			if (e->nx > 0) {
+				SetState(PARATROOPA_STATE_WALKING_RIGHT);
+			}
+			else {
+				SetState(PARATROOPA_STATE_WALKING_LEFT);
+			}
 		}
 	}
 
-	if (isShellMoving && dynamic_cast<CQuestionBrick*>(e->obj)) {
-		OnCollisionWithBrick(e);
+	if (state == PARATROOPA_STATE_SHELL_MOVE || state == PARATROOPA_STATE_SHELL_REVERSE_MOVE) {
+		if (e->nx != 0 && e->obj->IsBlocking()) {
+			if (e->nx > 0) {
+				vx = PARATROOPA_SHELL_SPEED;
+			}
+			else {
+				vx = -PARATROOPA_SHELL_SPEED;
+			}
+		}
+
+		if (dynamic_cast<CQuestionBrick*>(e->obj)) {
+			OnCollisionWithBrick(e);
+		}
 	}
 
 	if (e->nx == 0 && e->ny == 0 && e->obj->IsBlocking()) isInWall = true;
@@ -234,5 +243,6 @@ void CParaTroopa::Reload() {
 	die_start = -1;
 	isHeld = false;
 	isInWall = false;
+	isActive = true;
 }
 
