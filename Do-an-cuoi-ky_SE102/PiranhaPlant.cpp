@@ -1,5 +1,6 @@
 ﻿#include "PiranhaPlant.h"
 #include "PlayScene.h"
+#include "ParaTroopa.h"
 
 CPiranhaPlant::CPiranhaPlant(float x, float y) : CEnemy(x, y)
 {
@@ -191,6 +192,8 @@ bool CPiranhaPlant::IsTargetInRange() {
 void CPiranhaPlant::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (dynamic_cast<CKoopa*>(e->obj))
 		OnCollisionWithKoopa(e);
+	else if (dynamic_cast<CParaTroopa*>(e->obj)) 
+		OnCollisionWithParaTroopa(e);
 }
 
 void CPiranhaPlant::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
@@ -208,6 +211,27 @@ void CPiranhaPlant::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 		else if (koopa->GetState() == KOOPA_STATE_SHELL_MOVE
 			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
 			DebugOut(L"Koopa is collided with Piranha when Mario kick\n");
+			SetState(PIRANHA_STATE_DIE);
+			mario->AddPoint(100, e);
+		}
+	}
+}
+
+void CPiranhaPlant::OnCollisionWithParaTroopa(LPCOLLISIONEVENT e) {
+	CMario* mario = GetPlayer();
+	CParaTroopa* paraTroopa = dynamic_cast<CParaTroopa*>(e->obj);
+	CParaTroopa* paraTroopaHeldByMario = dynamic_cast<CParaTroopa*>(mario->GetKoopa());
+
+	if (paraTroopa) {
+		if (paraTroopaHeldByMario != nullptr && paraTroopaHeldByMario == paraTroopa && paraTroopa->GetIsHeld()) {
+			DebugOut(L"ParaTroopa is collided with Piranha when Mario hold\n");
+			SetState(PIRANHA_STATE_DIE);
+			paraTroopa->SetState(PARATROOPA_STATE_DIE);
+			mario->AddPoint(100, e);
+		}
+		else if (paraTroopa->GetState() == PARATROOPA_STATE_SHELL_MOVE
+			|| paraTroopa->GetState() == PARATROOPA_STATE_SHELL_REVERSE_MOVE) {
+			DebugOut(L"ParaTroopa is collided with Piranha when Mario kick\n");
 			SetState(PIRANHA_STATE_DIE);
 			mario->AddPoint(100, e);
 		}
