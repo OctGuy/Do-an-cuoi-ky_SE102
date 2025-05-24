@@ -139,12 +139,12 @@
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="debug.cpp" />
-    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GoalRoulette.cpp" />
     <ClCompile Include="MovingPlatform.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="MovingPlatform.h" />
+    <ClCompile Include="ParaTroopa.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="FireBullet.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -196,6 +196,7 @@
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Koopa.h" />
     <ClInclude Include="Mario.h" />
+    <ClInclude Include="ParaTroopa.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Pipe.h" />
     <ClInclude Include="PiranhaPlant.h" />

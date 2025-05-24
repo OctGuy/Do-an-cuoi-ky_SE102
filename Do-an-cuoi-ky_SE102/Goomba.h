@@ -4,6 +4,7 @@
 #include "Sprites.h"
 #include "RaccoonTail.h"
 #include "Koopa.h"
+#include "ParaTroopa.h"
 
 #define GOOMBA_GRAVITY 0.002f
 #define GOOMBA_WALKING_SPEED 0.05f
@@ -61,6 +62,7 @@ public:
 
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
+	void OnCollisionWithParaTroopa(LPCOLLISIONEVENT e);
 	void SetState(int state);
 	CMario* GetPlayer();
 };

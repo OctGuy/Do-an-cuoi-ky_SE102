@@ -37,6 +37,7 @@ public:
     void OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithShinyBrick(LPCOLLISIONEVENT e);
     void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
+	void OnCollisionWithParaTroopa(LPCOLLISIONEVENT e);
     void OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e);
 
     int IsCollidable() { return 1; }

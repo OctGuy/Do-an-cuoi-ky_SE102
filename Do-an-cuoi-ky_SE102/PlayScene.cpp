@@ -14,6 +14,7 @@
 #include "PiranhaPlant.h"
 #include "FireBullet.h"
 #include "Koopa.h"
+#include "ParaTroopa.h"
 #include "RaccoonTail.h"
 #include "Wall.h"
 #include "ShinyBrick.h"
@@ -312,12 +313,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			break;
 		}
 
+		case OBJECT_TYPE_PARATROOPA:
+		{
+			obj = new CParaTroopa(x, y);
+			DebugOut(L"Loaded Para Troopa\n");
+			break;
+		}
+
 		case OBJECT_TYPE_PORTAL:
 		{
 			int scene_id = atoi(tokens[3].c_str());
 			obj = new CPortal(x, y, scene_id);
+			break;
 		}
-		break;
 
 		case OBJECT_TYPE_TUNNEL_BLOCK:
 		{

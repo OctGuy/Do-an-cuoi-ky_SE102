@@ -1,5 +1,7 @@
 #include "Goomba.h"
 #include "WingedGoomba.h"
+#include "ParaTroopa.h"
+
 CGoomba::CGoomba(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -39,13 +41,6 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	// Handle rising logic
-	//if (state == GOOMBA_STATE_RISE && y <= originalY - GOOMBA_BBOX_HEIGHT)
-	//{
-	//	y = originalY - GOOMBA_BBOX_HEIGHT;
-	//	SetState(GOOMBA_STATE_WALKING); // Transition to walking state
-	//}
-
 	if (((state == GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT))
 		|| (state == GOOMBA_STATE_DIE_REVERSE) && (GetTickCount64() - die_start > GOOMBA_DIE_REVERSE_TIMEOUT))
 	{
@@ -65,14 +60,10 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	//if (dynamic_cast<CGoomba*>(e->obj) || dynamic_cast<CWingedGoomba*>(e->obj)) vx = -vx;
-
-	//if (!e->obj->IsBlocking()) return;
 	if (e->ny != 0 || e->nx != 0)
 	{
 		if (e->ny != 0 && e->obj->IsBlocking())
 		{
-			//DebugOut(L"GOOMBA COLLISION WITH BLOCKING OBJECT\n");
 			vy = 0;
 			ay = GOOMBA_GRAVITY; // Reset gravity to default
 		}
@@ -87,15 +78,19 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 			}
 		}
 	}
-	else
+	else {
 		if (dynamic_cast<CKoopa*>(e->obj))
 			OnCollisionWithKoopa(e);
+		else if (dynamic_cast<CParaTroopa*>(e->obj))
+			OnCollisionWithParaTroopa(e);
+		
+	}
+		
 }
 
 void CGoomba::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 	CMario* mario = GetPlayer();
 	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
-	CKoopa* koopaHeldByMario = dynamic_cast<CKoopa*>(mario->GetKoopa());
 
 	if (koopa) {
 		if (koopa->GetIsHeld()) {
@@ -107,6 +102,26 @@ void CGoomba::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 		else if (koopa->GetState() == KOOPA_STATE_SHELL_MOVE
 			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
 			DebugOut(L"Koopa is collided with Goomba when Mario kick\n");
+			SetState(GOOMBA_STATE_DIE_REVERSE);
+			mario->AddPoint(100, e);
+		}
+	}
+}
+
+void CGoomba::OnCollisionWithParaTroopa(LPCOLLISIONEVENT e) {
+	CMario* mario = GetPlayer();
+	CParaTroopa* paraTroopa = dynamic_cast<CParaTroopa*>(e->obj);
+
+	if (paraTroopa) {
+		if (paraTroopa->GetIsHeld()) {
+			DebugOut(L"Para Troopa is collided with Goomba when Mario hold\n");
+			SetState(GOOMBA_STATE_DIE_REVERSE);
+			paraTroopa->SetState(PARATROOPA_STATE_DIE);
+			mario->AddPoint(100, e);
+		}
+		else if (paraTroopa->GetState() == PARATROOPA_STATE_SHELL_MOVE
+			|| paraTroopa->GetState() == PARATROOPA_STATE_SHELL_REVERSE_MOVE) {
+			DebugOut(L"Para Troopa is collided with Goomba when Mario kick\n");
 			SetState(GOOMBA_STATE_DIE_REVERSE);
 			mario->AddPoint(100, e);
 		}
