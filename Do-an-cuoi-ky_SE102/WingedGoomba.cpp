@@ -37,28 +37,28 @@ void CWingedGoomba::OnNoCollision(DWORD dt) {
 
 void CWingedGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (e->obj->IsBlocking()) {
-		if (e->ny != 0) { 
-			vy = 0; 
+		if (e->ny != 0) {
+			vy = 0;
 			if (state == GOOMBA_WING_STATE_BOUNCE) {
-				if (e->ny < 0) { 
+				if (e->ny < 0) {
 					vy = -GOOMBA_WING_BOUNCE_SPEED; // Bounce up
 					bounceCount++;
 					isOnPlatform = true;
 				}
 			}
 			else if (state == GOOMBA_WING_STATE_FLY) {
-				if (e->ny < 0) { 
+				if (e->ny < 0) {
 					isOnPlatform = true;
 					SetState(GOOMBA_WING_STATE_TRACKING_MARIO); // Start tracking Mario
 				}
 			}
 			else if (state == GOOMBA_WING_STATE_WALKING) {
-				if (e->ny < 0) { 
+				if (e->ny < 0) {
 					isOnPlatform = true;
 				}
 			}
 		}
-		else if (e->nx != 0) { 
+		else if (e->nx != 0) {
 			if (state == GOOMBA_WING_STATE_WALKING || state == GOOMBA_WING_STATE_BOUNCE || state == GOOMBA_WING_STATE_TRACKING_MARIO) {
 				vx = -vx; // Reverse horizontal direction
 				nx = -nx; // Flip facing direction
@@ -68,7 +68,31 @@ void CWingedGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 	else
 		if (dynamic_cast<CGoomba*>(e->obj)) vx = -vx; // Reverse horizontal direction
 
-	if (dynamic_cast<CKoopa*>(e->obj)) OnCollisionWithKoopa(e);
+	if (dynamic_cast<CKoopa*>(e->obj)) 
+		OnCollisionWithKoopa(e);
+	else if (dynamic_cast<CParaTroopa*>(e->obj)) 
+		OnCollisionWithParaTroopa(e);
+}
+
+void CWingedGoomba::OnCollisionWithParaTroopa(LPCOLLISIONEVENT e) {
+	CMario* mario = GetPlayer();
+	CParaTroopa* paraTroopa = dynamic_cast<CParaTroopa*>(e->obj);
+	CParaTroopa* paraTroopaHeldByMario = dynamic_cast<CParaTroopa*>(mario->GetKoopa());
+
+	if (paraTroopa) {
+		if (paraTroopa->GetIsHeld()) {
+			DebugOut(L"Para Troopa is collided with Goomba when Mario hold\n");
+			SetState(GOOMBA_WING_STATE_DIE_REVERSE);
+			paraTroopa->SetState(PARATROOPA_STATE_DIE);
+			mario->AddPoint(100, e);
+		}
+		else if (paraTroopa->GetState() == PARATROOPA_STATE_SHELL_MOVE
+			|| paraTroopa->GetState() == PARATROOPA_STATE_SHELL_REVERSE_MOVE) {
+			DebugOut(L"Para Troopa is collided with Goomba when Mario kick\n");
+			SetState(GOOMBA_WING_STATE_DIE_REVERSE);
+			mario->AddPoint(100, e);
+		}
+	}
 }
 
 void CWingedGoomba::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
