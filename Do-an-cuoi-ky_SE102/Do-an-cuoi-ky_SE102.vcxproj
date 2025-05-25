@@ -140,10 +140,7 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="GoalRoulette.cpp" />
-    <ClCompile Include="MovingPlatform.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="MovingPlatform.h" />
+    <ClCompile Include="MovingPlatform.cpp" />
     <ClCompile Include="ParaTroopa.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="FireBullet.cpp" />
@@ -165,7 +162,6 @@
     <ClCompile Include="RaccoonTail.cpp" />
     <ClCompile Include="SampleKeyEventHandler.cpp" />
     <ClCompile Include="SceneSweeper.cpp" />
-    <ClCompile Include="SceneSweeper.h" />
     <ClCompile Include="ShinyBrick.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
@@ -176,6 +172,7 @@
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="WingedGoomba.cpp" />
   </ItemGroup>
+	
   <ItemGroup>
     <ClInclude Include="1UpMushroom.h" />
     <ClInclude Include="Animation.h" />
@@ -197,6 +194,7 @@
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Koopa.h" />
     <ClInclude Include="Mario.h" />
+    <ClInclude Include="MovingPlatform.h" />
     <ClInclude Include="ParaTroopa.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Pipe.h" />
@@ -205,18 +203,19 @@
     <ClInclude Include="Platform.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Portal.h" />
+    <ClInclude Include="PowerUp.h" />
     <ClInclude Include="PSwitch.h" />
     <ClInclude Include="QuestionBrick.h" />
     <ClInclude Include="RaccoonTail.h" />
     <ClInclude Include="SampleKeyEventHandler.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneryObject.h" />
+    <ClInclude Include="SceneSweeper.h" />
     <ClInclude Include="ShinyBrick.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprites.h" />
-    <ClInclude Include="PowerUp.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Textures.h" />
-    <ClInclude Include="SceneryObject.h" />
     <ClInclude Include="TunnelBlock.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Wall.h" />
