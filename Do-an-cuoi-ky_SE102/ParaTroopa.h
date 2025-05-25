@@ -51,11 +51,17 @@
 #define PARATROOPA_STATE_DIE 20
 #define PARATROOPA_STATE_SHELL_REVERSE_JUMP 21
 
+#define ORIGINAL_X_PARATROOPA_WALKING 1472.0f
+#define ORIGINAL_Y_PARATROOPA_WALKING 390.0f
+
 class CParaTroopa : public CEnemy
 {
 protected:
 	float ax;
 	float ay;
+
+	float x0;
+	float y0;
 
 	ULONGLONG stateShellStart;
 	ULONGLONG stateShakingStart;
@@ -66,9 +72,17 @@ protected:
 public:
 	CParaTroopa(float x, float y) : CEnemy(x, y)
 	{
+		x0 = x;
+		y0 = y;
 		this->ax = 0;
 		this->ay = PARATROOPA_GRAVITY;
-		SetState(PARATROOPA_STATE_BOUNCE_LEFT);
+
+		if (x0 == ORIGINAL_X_PARATROOPA_WALKING 
+			&& y0 == ORIGINAL_Y_PARATROOPA_WALKING)
+			SetState(PARATROOPA_STATE_WALKING_LEFT);
+		else
+			SetState(PARATROOPA_STATE_BOUNCE_LEFT);
+
 		stateShellStart = -1;
 		stateShakingStart = -1;
 		die_start = -1;
@@ -93,6 +107,8 @@ public:
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	CMario* GetPlayer();
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
+	void OnCollisionWithParaTroopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithShinyBrick(LPCOLLISIONEVENT e);
 };
 

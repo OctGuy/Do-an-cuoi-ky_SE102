@@ -89,6 +89,7 @@ public:
 	CMario* GetPlayer();
 	bool IsPlatformEdge(float checkDistance, vector<LPGAMEOBJECT>& possibleGrounds);
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithShinyBrick(LPCOLLISIONEVENT e);
 };
 

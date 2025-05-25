@@ -64,7 +64,10 @@ void CParaTroopa::OnNoCollision(DWORD dt) {
 }
 
 void CParaTroopa::OnCollisionWith(LPCOLLISIONEVENT e) {
-	if (!e->obj->IsBlocking()) return;
+	if (dynamic_cast<CParaTroopa*>(e->obj))
+		OnCollisionWithParaTroopa(e);
+	else if (dynamic_cast<CKoopa*>(e->obj))
+		OnCollisionWithKoopa(e);
 
 	if (e->ny < 0) { // Stand on platform
 		vy = 0;
@@ -107,12 +110,9 @@ void CParaTroopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 		}
 
 		if (dynamic_cast<CShinyBrick*>(e->obj))
-		{
 			OnCollisionWithShinyBrick(e);
-		}
-		else if (dynamic_cast<CQuestionBrick*>(e->obj)) {
+		else if (dynamic_cast<CQuestionBrick*>(e->obj))
 			OnCollisionWithBrick(e);
-		}
 	}
 
 	if (e->nx == 0 && e->ny == 0 && e->obj->IsBlocking()) isInWall = true;
@@ -123,8 +123,61 @@ void CParaTroopa::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
 	questionBrick->OnCollisionWith(e);
 }
 
-void CParaTroopa::OnCollisionWithShinyBrick(LPCOLLISIONEVENT e)
-{
+void CParaTroopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
+	CMario* mario = GetPlayer();
+	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+
+	if (koopa) {
+		if (koopa->GetIsHeld()) {
+			DebugOut(L"Koopa is collided with ParaTroopa when Mario hold\n");
+			SetState(PARATROOPA_STATE_DIE);
+			koopa->SetState(KOOPA_STATE_DIE);
+			mario->AddPoint(100, e);
+		}
+		else if (koopa->GetState() == KOOPA_STATE_SHELL_MOVE
+			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
+			DebugOut(L"Koopa is collided with ParaTroopa when Mario kick\n");
+			SetState(PARATROOPA_STATE_DIE);
+			mario->AddPoint(100, e);
+		}
+
+		if (this->GetIsHeld()) {
+			DebugOut(L"Koopa is collided with ParaTroopa when Mario hold\n");
+			SetState(PARATROOPA_STATE_DIE);
+			koopa->SetState(KOOPA_STATE_DIE);
+			mario->AddPoint(100, e);
+		}
+		else if (this->GetState() == PARATROOPA_STATE_SHELL_MOVE
+			|| this->GetState() == PARATROOPA_STATE_SHELL_REVERSE_MOVE) {
+			DebugOut(L"Koopa is collided with ParaTroopa when Mario kick\n");
+			koopa->SetState(KOOPA_STATE_DIE);
+			mario->AddPoint(100, e);
+		}
+	}
+}
+
+void CParaTroopa::OnCollisionWithParaTroopa(LPCOLLISIONEVENT e) {
+	CMario* mario = GetPlayer();
+	CParaTroopa* paraTroopa = dynamic_cast<CParaTroopa*>(e->obj);
+
+	if (paraTroopa) {
+		// ParaTroopa collides with another ParaTroopa
+		if (paraTroopa->GetIsHeld()) {
+			DebugOut(L"[INFO] ParaTroopa is held by Mario collide with another ParaTroopa\n");
+			paraTroopa->SetState(PARATROOPA_STATE_DIE);
+			this->SetState(PARATROOPA_STATE_DIE);
+			mario->AddPoint(100);
+		}
+		else if (paraTroopa->GetState() == PARATROOPA_STATE_SHELL_MOVE
+			|| paraTroopa->GetState() == PARATROOPA_STATE_SHELL_REVERSE_MOVE) {
+			DebugOut(L"[INFO] ParaTroopa moving shell collides with another ParaTroopa\n");
+			this->SetState(PARATROOPA_STATE_DIE);
+			mario->AddPoint(100);
+		}
+	}
+}
+
+void CParaTroopa::OnCollisionWithShinyBrick(LPCOLLISIONEVENT e) {
 	CShinyBrick* shinyBrick = dynamic_cast<CShinyBrick*>(e->obj);
 	shinyBrick->Activate();
 }
@@ -247,7 +300,13 @@ void CParaTroopa::Reload() {
 	CGameObject::Reload();
 	this->ax = 0;
 	this->ay = PARATROOPA_GRAVITY;
-	SetState(PARATROOPA_STATE_BOUNCE_LEFT);
+
+	if (x0 == ORIGINAL_X_PARATROOPA_WALKING
+		&& y0 == ORIGINAL_Y_PARATROOPA_WALKING)
+		SetState(PARATROOPA_STATE_WALKING_LEFT);
+	else
+		SetState(PARATROOPA_STATE_BOUNCE_LEFT);
+
 	stateShellStart = -1;
 	stateShakingStart = -1;
 	die_start = -1;
