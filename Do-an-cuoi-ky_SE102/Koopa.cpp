@@ -24,6 +24,9 @@ void CKoopa::OnNoCollision(DWORD dt) {
 }
 
 void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
+	if (dynamic_cast<CKoopa*>(e->obj))
+		OnCollisionWithKoopa(e);
+
 	if (e->ny < 0) { // Stand on platform
 		vy = 0;
 		if (state == KOOPA_STATE_SHELL_REVERSE_JUMP)
@@ -66,6 +69,27 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 void CKoopa::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
 	CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
 	questionBrick->OnCollisionWith(e);
+}
+
+void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
+	CMario* mario = GetPlayer();
+	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+
+	if (koopa) {
+		// ParaTroopa collides with another ParaTroopa
+		if (koopa->GetIsHeld()) {
+			DebugOut(L"[INFO] Koopa is held by Mario collide with another Koopa\n");
+			koopa->SetState(KOOPA_STATE_DIE);
+			this->SetState(KOOPA_STATE_DIE);
+			mario->AddPoint(100);
+		}
+		else if (koopa->GetState() == KOOPA_STATE_SHELL_MOVE
+			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
+			DebugOut(L"[INFO] Koopa moving shell collides with another Koopa\n");
+			this->SetState(KOOPA_STATE_DIE);
+			mario->AddPoint(100);
+		}
+	}
 }
 
 CMario* CKoopa::GetPlayer() {
