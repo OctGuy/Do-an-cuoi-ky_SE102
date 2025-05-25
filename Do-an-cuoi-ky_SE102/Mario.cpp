@@ -652,7 +652,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 			|| koopa->GetState() == KOOPA_STATE_SHELL_SHAKING
 			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE
 			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_SHAKING) {
-			if (isAbleToHold) 	// Mario picks Koopa
+			if (isAbleToHold && !Koopa) 	// Mario picks Koopa
 			{
 				this->Koopa = koopa;
 				koopa->SetIsHeld(true);
@@ -727,9 +727,8 @@ void CMario::OnCollisionWithParaTroopa(LPCOLLISIONEVENT e) {
 			|| koopa->GetState() == PARATROOPA_STATE_SHELL_SHAKING
 			|| koopa->GetState() == PARATROOPA_STATE_SHELL_REVERSE_IDLE
 			|| koopa->GetState() == PARATROOPA_STATE_SHELL_REVERSE_SHAKING) {
-			if (isAbleToHold) 	// Mario picks Koopa
+			if (isAbleToHold && !Koopa) 	// Mario picks Koopa
 			{
-
 				this->Koopa = koopa;
 				koopa->SetIsHeld(true);
 			}

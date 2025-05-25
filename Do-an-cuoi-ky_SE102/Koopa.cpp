@@ -1,5 +1,5 @@
 ﻿#include "Koopa.h"
-
+#include "ShinyBrick.h"
 void CKoopa::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	if (state == KOOPA_STATE_WALKING_LEFT || state == KOOPA_STATE_WALKING_RIGHT)
@@ -60,7 +60,11 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 			}
 		}
 
-		if (dynamic_cast<CQuestionBrick*>(e->obj)) {
+		if (dynamic_cast<CShinyBrick*>(e->obj))
+		{
+			OnCollisionWithShinyBrick(e);
+		}
+		else if (dynamic_cast<CQuestionBrick*>(e->obj)) {
 			OnCollisionWithBrick(e);
 		}	
 	}
@@ -90,6 +94,12 @@ void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 			mario->AddPoint(100);
 		}
 	}
+}
+
+void CKoopa::OnCollisionWithShinyBrick(LPCOLLISIONEVENT e)
+{
+	CShinyBrick* shinyBrick = dynamic_cast<CShinyBrick*>(e->obj);
+	shinyBrick->Activate();
 }
 
 CMario* CKoopa::GetPlayer() {
