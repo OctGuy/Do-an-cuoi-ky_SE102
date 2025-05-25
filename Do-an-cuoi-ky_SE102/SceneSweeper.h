@@ -33,9 +33,12 @@ public:
 			DebugOut(L"Wall Not Found");
 	}
 	~CSceneSweeper() {}
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
-	void Render() {};
-	void GetBoundingBox(float& l, float& t, float& r, float& b) override;
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void Render()
+	{
+
+	}
+	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void SetActive(bool isActive) override { this->isActive = true; }
 
 	//void SetActive(bool isActive) override;

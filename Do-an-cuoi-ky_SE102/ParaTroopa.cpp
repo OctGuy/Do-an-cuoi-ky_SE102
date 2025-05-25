@@ -292,7 +292,13 @@ void CParaTroopa::Reload() {
 	CGameObject::Reload();
 	this->ax = 0;
 	this->ay = PARATROOPA_GRAVITY;
-	SetState(PARATROOPA_STATE_WALKING_LEFT);
+
+	if (x0 == ORIGINAL_X_PARATROOPA_WALKING
+		&& y0 == ORIGINAL_Y_PARATROOPA_WALKING)
+		SetState(PARATROOPA_STATE_WALKING_LEFT);
+	else
+		SetState(PARATROOPA_STATE_BOUNCE_LEFT);
+
 	stateShellStart = -1;
 	stateShakingStart = -1;
 	die_start = -1;
