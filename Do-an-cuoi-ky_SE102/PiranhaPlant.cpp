@@ -296,9 +296,17 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	case PIRANHA_STATE_RISE:
 		y += vy * dt;
-		if (fabs(y - originalY) >= PIRANHA_BBOX_HEIGHT_RISE) {
-			y = originalY - PIRANHA_BBOX_HEIGHT_RISE;
-			SetState(PIRANHA_STATE_SNIP);
+		if (isRed) {
+			if (fabs(y - originalY) >= PIRANHA_BBOX_HEIGHT_RISE) {
+				y = originalY - PIRANHA_BBOX_HEIGHT_RISE;
+				SetState(PIRANHA_STATE_SNIP);
+			}
+		}
+		else {
+			if (fabs(y - originalY) >= GREEN_PIRANHA_BBOX_HEIGHT_RISE) {
+				y = originalY - GREEN_PIRANHA_BBOX_HEIGHT_RISE;
+				SetState(PIRANHA_STATE_SNIP);
+			}
 		}
 		break;
 
@@ -315,9 +323,17 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	case PIRANHA_STATE_DIVE:
 		y += vy * dt;
-		if (fabs(y - originalY) >= PIRANHA_BBOX_HEIGHT_RISE) {
-			y = originalY + PIRANHA_BBOX_HEIGHT_RISE;
-			SetState(PIRANHA_STATE_HIDE);
+		if (isRed) {
+			if (fabs(y - originalY) >= PIRANHA_BBOX_HEIGHT_RISE) {
+				y = originalY + PIRANHA_BBOX_HEIGHT_RISE;
+				SetState(PIRANHA_STATE_HIDE);
+			}
+		}
+		else {
+			if (fabs(y - originalY) >= GREEN_PIRANHA_BBOX_HEIGHT_RISE) {
+				y = originalY + GREEN_PIRANHA_BBOX_HEIGHT_RISE;
+				SetState(PIRANHA_STATE_HIDE);
+			}
 		}
 		break;
 
