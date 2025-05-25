@@ -12,6 +12,7 @@
 #include "SceneryObject.h"
 #include "SampleKeyEventHandler.h"
 #include "PiranhaPlant.h"
+#include "PlainPiranha.h"
 #include "FireBullet.h"
 #include "Koopa.h"
 #include "ParaTroopa.h"
@@ -297,6 +298,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		case OBJECT_TYPE_PIRANHA_PLANT:
 		{
 			obj = new CPiranhaPlant(x, y);
+			break;
+		}
+
+		case OBJECT_TYPE_PLAIN_PIRANHA:
+		{
+			obj = new CPlainPiranha(x, y);
+			DebugOut(L"Loaded Plain Piranha\n");
 			break;
 		}
 

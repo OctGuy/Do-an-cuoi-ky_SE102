@@ -39,6 +39,7 @@ public:
     void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithParaTroopa(LPCOLLISIONEVENT e);
     void OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e);
+	void OnCollisionWithPlainPiranha(LPCOLLISIONEVENT e);
 
     int IsCollidable() { return 1; }
     int IsBlocking() { return 0; }
