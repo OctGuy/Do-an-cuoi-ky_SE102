@@ -1,0 +1,11 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+########### OPEN MOUTH ###############
+90026	1	200	16	222	11
+
+########### CLOSE MOUTH #############
+90027	18	200	33	222	11
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+6013	90026	100	90027	100

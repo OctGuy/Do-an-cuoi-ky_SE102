@@ -287,7 +287,6 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			SetState(PIRANHA_STATE_RISE);
 		break;
 	}
-		
 
 	case PIRANHA_STATE_RISE:
 	{
@@ -333,7 +332,6 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		break;
 	}
 
-	DebugOut(L"Piranha state: %d\n", state);
 	
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);

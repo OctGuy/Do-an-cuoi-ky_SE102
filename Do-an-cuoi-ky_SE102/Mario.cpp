@@ -11,6 +11,7 @@
 #include "QuestionBrick.h"
 #include "ShinyBrick.h"
 #include "PiranhaPlant.h"
+#include "PlainPiranha.h"
 #include "Koopa.h"
 #include "ParaTroopa.h"
 #include "PSwitch.h"
@@ -334,6 +335,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		OnCollisionWithPiranhaPlant(e);
 	}
+	else if (dynamic_cast<CPlainPiranha*>(e->obj))
+	{
+		OnCollisionWithPlainPiranha(e);
+	}
 	else if (dynamic_cast<CPowerUp*>(e->obj))
 	{
 		OnCollisionWithPowerUp(e);
@@ -603,15 +608,23 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
 }
 
-void CMario::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e)
-{
+void CMario::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e) {
 	CPiranhaPlant* piranhaPlant = dynamic_cast<CPiranhaPlant*>(e->obj);
 	if (piranhaPlant) {
 		if (piranhaPlant->GetState() != PIRANHA_STATE_HIDE
 			&& piranhaPlant->GetState() != PIRANHA_STATE_DIE)
 		GetHurt();
 	}
-	
+}
+
+void CMario::OnCollisionWithPlainPiranha(LPCOLLISIONEVENT e) {
+	CPlainPiranha* plainPiranha = dynamic_cast<CPlainPiranha*>(e->obj);
+
+	if (plainPiranha) {
+		if (plainPiranha->GetState() != PLAIN_PIRANHA_STATE_HIDE
+			&& plainPiranha->GetState() != PLAIN_PIRANHA_STATE_DIE)
+			GetHurt();
+	}
 }
 
 void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e) {

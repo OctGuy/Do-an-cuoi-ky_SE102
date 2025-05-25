@@ -7,6 +7,7 @@
 #include "QuestionBrick.h"
 #include "ShinyBrick.h"
 #include "PiranhaPlant.h"
+#include "PlainPiranha.h"
 #include "WingedGoomba.h"
 
 void CRaccoonTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -35,6 +36,11 @@ void CRaccoonTail::OnCollisionWith(LPCOLLISIONEVENT e)
     }
     else if (dynamic_cast<CPiranhaPlant*>(e->obj)) {
         OnCollisionWithPiranhaPlant(e);
+        currentScene->Add(particle);
+        mario->AddPoint(100, e);
+    }
+    else if (dynamic_cast<CPlainPiranha*>(e->obj)) {
+        OnCollisionWithPlainPiranha(e);
         currentScene->Add(particle);
         mario->AddPoint(100, e);
     }
@@ -107,6 +113,13 @@ void CRaccoonTail::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e)
     //DebugOut(L"[INFO] RaccoonTail hit PiranhaPlant\n");
     CPiranhaPlant* piranha = dynamic_cast<CPiranhaPlant*>(e->obj);
     piranha->SetState(PIRANHA_STATE_DIE);
+}
+
+void CRaccoonTail::OnCollisionWithPlainPiranha(LPCOLLISIONEVENT e)
+{
+	//DebugOut(L"[INFO] RaccoonTail hit PlainPiranha\n");
+	CPlainPiranha* plainPiranha = dynamic_cast<CPlainPiranha*>(e->obj);
+	plainPiranha->SetState(PLAIN_PIRANHA_STATE_DIE);
 }
 
 void CRaccoonTail::Render()
