@@ -33,7 +33,7 @@
 #define PARATROOPA_SHELL_BBOX_WIDTH 16
 #define PARATROOPA_SHELL_BBOX_HEIGHT 16
 
-#define PARATROOPA_SHELL_DURATION 5000
+#define PARATROOPA_SHELL_DURATION 60000
 #define PARATROOPA_SHELL_SHAKING_DURATION 2000
 #define PARATROOPA_DIE_DURATION 500
 
@@ -67,7 +67,8 @@ public:
 	{
 		this->ax = 0;
 		this->ay = PARATROOPA_GRAVITY;
-		SetState(PARATROOPA_STATE_BOUNCE_LEFT);
+		//SetState(PARATROOPA_STATE_BOUNCE_LEFT);
+		SetState(PARATROOPA_STATE_WALKING_LEFT);
 		stateShellStart = -1;
 		stateShakingStart = -1;
 		die_start = -1;
@@ -92,5 +93,7 @@ public:
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	CMario* GetPlayer();
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
+	void OnCollisionWithParaTroopa(LPCOLLISIONEVENT e);
 };
 

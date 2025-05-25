@@ -24,8 +24,6 @@ void CKoopa::OnNoCollision(DWORD dt) {
 }
 
 void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
-	if (!e->obj->IsBlocking()) return;
-
 	if (e->ny < 0) { // Stand on platform
 		vy = 0;
 		if (state == KOOPA_STATE_SHELL_REVERSE_JUMP)
