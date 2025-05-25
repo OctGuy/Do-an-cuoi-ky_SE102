@@ -516,7 +516,7 @@ void CPlayScene::Update(DWORD dt)
 			if (objects[i]->IsActive())
 			{
 				objects[i]->Reload();
-				objects[i]->SetActive(false);\
+				objects[i]->SetActive(false);
 			}
 		}
 		else if (chunkStatus == 1) // Object is in the load chunk (but not fully on-screen yet)

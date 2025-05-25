@@ -21,6 +21,11 @@
 #define PIRANHA_BBOX_WIDTH 16
 #define PIRANHA_BBOX_HEIGHT 26
 #define PIRANHA_BBOX_HEIGHT_RISE 24
+
+#define GREEN_PIRANHA_BBOX_WIDTH 16
+#define GREEN_PIRANHA_BBOX_HEIGHT 23
+#define GREEN_PIRANHA_BBOX_HEIGHT_RISE 20
+
 #define PIRANHA_MOVE_SPEED 0.03f
 
 #define PIRANHA_HIDE_TIMEOUT 2500
@@ -44,6 +49,13 @@
 #define PIRANHA_ANI_UP_RIGHT 6004
 #define PIRANHA_ANI_DOWN_RIGHT 6005
 #define PIRANHA_ANI_DIE 6006
+
+#define GREEN_PIRANHA_ANI_LEFT_RISE_DIVE 6007
+#define GREEN_PIRANHA_ANI_RIGHT_RISE_DIVE 6008
+#define GREEN_PIRANHA_ANI_UP_LEFT 6009
+#define GREEN_PIRANHA_ANI_DOWN_LEFT 6010
+#define GREEN_PIRANHA_ANI_UP_RIGHT 6011
+#define GREEN_PIRANHA_ANI_DOWN_RIGHT 6012
 #pragma endregion
 
 #pragma region PIRANHA_RANGE
@@ -55,21 +67,25 @@ class CPiranhaPlant : public CEnemy
 {
 protected:
 	ULONGLONG stateStartTime;	// time when the current state was started
+	float originalX;			
 	float originalY;			// original y pos when starting descending, ascending
 	bool isShooting;			// check if the piranha plant is shooting
 	ULONGLONG die_start;
+	bool isRed;
 public:
 	CPiranhaPlant(float x, float y);
 
-	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-	virtual void Render();
-	virtual int IsCollidable() {
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void Render();
+
+	int IsCollidable() {
 		if (state == PIRANHA_STATE_DIE || state == PIRANHA_STATE_HIDE)
 			return 0;
 		return 1;
 	};
-	virtual int IsBlocking() { return 0; }
+
+	int IsBlocking() { return 0; }
 	int GetSnippingDirection(); // get the direction of the snipping action to mario
 	void SetState(int state);
 	void Shoot(int direction);

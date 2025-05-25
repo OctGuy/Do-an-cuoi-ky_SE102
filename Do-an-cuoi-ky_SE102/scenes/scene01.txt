@@ -124,6 +124,7 @@ assets\winged_goomba.txt
 
 #PIRANHA_PLANT
 9	359	367
+9	1863	367
 
 #INVISIBLE WALL
 #49	0	0	8	400	-1

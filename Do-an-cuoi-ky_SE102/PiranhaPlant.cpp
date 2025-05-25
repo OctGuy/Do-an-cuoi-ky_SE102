@@ -4,9 +4,10 @@
 
 CPiranhaPlant::CPiranhaPlant(float x, float y) : CEnemy(x, y)
 {
-	this->x = x;
-	this->y = y;
+	originalX = x;
 	originalY = y;
+	if (originalX == 1863.0 && originalY == 367.0) isRed = false;
+	else isRed = true;
 	SetState(PIRANHA_STATE_HIDE);
 	isShooting = false;				// Initialize shooting state
 	die_start = -1;
@@ -16,9 +17,13 @@ CPiranhaPlant::CPiranhaPlant(float x, float y) : CEnemy(x, y)
 void CPiranhaPlant::Reload()
 {
 	CGameObject::Reload();
+
+	if (originalX == 1863.0 && originalY == 367.0) isRed = false;
+	else isRed = true;
+
 	SetState(PIRANHA_STATE_HIDE);
 	isShooting = false;				// Initialize shooting state
-	//die_start = -1;
+	die_start = -1;
 }
 
 CMario* CPiranhaPlant::GetPlayer()
@@ -31,16 +36,23 @@ CMario* CPiranhaPlant::GetPlayer()
 
 void CPiranhaPlant::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x - PIRANHA_BBOX_WIDTH / 2;
-	top = y - PIRANHA_BBOX_HEIGHT / 2;
-	right = left + PIRANHA_BBOX_WIDTH;
-	bottom = top + PIRANHA_BBOX_HEIGHT;
+	if (isRed) {
+		left = x - PIRANHA_BBOX_WIDTH / 2;
+		top = y - PIRANHA_BBOX_HEIGHT / 2;
+		right = left + PIRANHA_BBOX_WIDTH;
+		bottom = top + PIRANHA_BBOX_HEIGHT;
+	}
+	else {
+		left = x - GREEN_PIRANHA_BBOX_WIDTH / 2;
+		top = y - GREEN_PIRANHA_BBOX_HEIGHT / 2;
+		right = left + GREEN_PIRANHA_BBOX_WIDTH;
+		bottom = top + GREEN_PIRANHA_BBOX_HEIGHT;
+	}
 }
 
 void CPiranhaPlant::SetState(int state)
 {
 	stateStartTime = GetTickCount64();
-	this->state = state;
 
 	switch (state) {
 	case PIRANHA_STATE_HIDE:
@@ -65,6 +77,8 @@ void CPiranhaPlant::SetState(int state)
 	default:
 		break;
 	}
+
+	CGameObject::SetState(state);
 
 	//DebugOut(L"[INFO] Piranha Plant state: %d\n", state);
 }
@@ -101,27 +115,39 @@ void CPiranhaPlant::Render()
 
 	if (state == PIRANHA_STATE_RISE || state == PIRANHA_STATE_DIVE) {
 		int direction = GetSnippingDirection();
-		if (direction == 0 || direction == 1)
-			aniId = PIRANHA_ANI_LEFT_RISE_DIVE;
-		else
-			aniId = PIRANHA_ANI_RIGHT_RISE_DIVE;
+		if (direction == 0 || direction == 1) 
+			aniId = isRed
+				? PIRANHA_ANI_LEFT_RISE_DIVE
+				: GREEN_PIRANHA_ANI_LEFT_RISE_DIVE;
+		else 
+			aniId = isRed
+				? PIRANHA_ANI_RIGHT_RISE_DIVE
+				: GREEN_PIRANHA_ANI_RIGHT_RISE_DIVE;
 	}
 	else if (state == PIRANHA_STATE_SNIP) {
 		int direction = GetSnippingDirection();
 		if (direction == 0)
-			aniId = PIRANHA_ANI_UP_LEFT;
-		else if (direction == 1)
-			aniId = PIRANHA_ANI_DOWN_LEFT;
-		else if (direction == 2)
-			aniId = PIRANHA_ANI_UP_RIGHT;
-		else
-			aniId = PIRANHA_ANI_DOWN_RIGHT;
+			aniId = isRed
+				? PIRANHA_ANI_UP_LEFT
+				: GREEN_PIRANHA_ANI_UP_LEFT;
+		else if (direction == 1) 
+			aniId = isRed
+				? PIRANHA_ANI_DOWN_LEFT
+				: GREEN_PIRANHA_ANI_DOWN_LEFT;
+		else if (direction == 2) 
+			aniId = isRed
+				? PIRANHA_ANI_UP_RIGHT
+				: GREEN_PIRANHA_ANI_UP_RIGHT;
+		else 
+			aniId = isRed
+				? PIRANHA_ANI_DOWN_RIGHT
+				: GREEN_PIRANHA_ANI_DOWN_RIGHT;
 	}
 	else if (state == PIRANHA_STATE_DIE)
 		aniId = PIRANHA_ANI_DIE;
 
-	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(aniId)->Render(x, y);
+	if (aniId != -1)
+		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 
 	//RenderBoundingBox();
 }
@@ -256,48 +282,58 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Mario is in the range of snipping
 	switch (state) {
 	case PIRANHA_STATE_HIDE:
-		if (now - stateStartTime > PIRANHA_HIDE_TIMEOUT) {
+	{
+		if (now - stateStartTime > PIRANHA_HIDE_TIMEOUT) 
 			SetState(PIRANHA_STATE_RISE);
-		}
 		break;
+	}
+		
 
 	case PIRANHA_STATE_RISE:
+	{
 		y += vy * dt;
-		if (fabs(y - originalY) >= PIRANHA_BBOX_HEIGHT_RISE) {
-			y = originalY - PIRANHA_BBOX_HEIGHT_RISE;
+		float heightRise = isRed ? PIRANHA_BBOX_HEIGHT_RISE : GREEN_PIRANHA_BBOX_HEIGHT_RISE;
+		if (fabs(y - originalY) >= heightRise) {
+			y = originalY - heightRise;
 			SetState(PIRANHA_STATE_SNIP);
 		}
 		break;
+	}
 
 	case PIRANHA_STATE_SNIP:
+	{
 		if (!isShooting && now - stateStartTime > PIRANHA_WAIT_FOR_SHOOT_TIMEOUT && IsTargetInRange()) {
 			int direction = GetSnippingDirection();
 			Shoot(direction);
 		}
 
-		if (now - stateStartTime > PIRANHA_SNIP_TIMEOUT) {		
+		if (now - stateStartTime > PIRANHA_SNIP_TIMEOUT) 
 			SetState(PIRANHA_STATE_DIVE);
-		}
 		break;
+	}
 
-	case PIRANHA_STATE_DIVE:
+	case PIRANHA_STATE_DIVE: 
+	{
 		y += vy * dt;
-		if (fabs(y - originalY) >= PIRANHA_BBOX_HEIGHT_RISE) {
-			y = originalY + PIRANHA_BBOX_HEIGHT_RISE;
+		float heightRise = isRed ? PIRANHA_BBOX_HEIGHT_RISE : GREEN_PIRANHA_BBOX_HEIGHT_RISE;
+		if (fabs(y - originalY) >= heightRise) {
+			y = originalY + heightRise;
 			SetState(PIRANHA_STATE_HIDE);
 		}
 		break;
+	}
 
-	case PIRANHA_STATE_DIE:
-		if (now - die_start > PIRANHA_DIE_TIMEOUT) {
-			isDeleted = true;
-		}
+	case PIRANHA_STATE_DIE: 
+	{
+		if (now - die_start > PIRANHA_DIE_TIMEOUT) this->Delete();
 		break;
+	}
+
 	default:
 		break;
 	}
 
-	//DebugOut(L"Piranha state: %d\n", state);
+	DebugOut(L"Piranha state: %d\n", state);
 	
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
