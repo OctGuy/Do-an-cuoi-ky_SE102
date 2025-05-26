@@ -20,7 +20,7 @@ assets\fire_bullet.txt
 assets\HUD.txt
 assets\koopa.txt
 assets\winged_goomba.txt
-
+assets\BoomerangBrother.txt
 
 #RENDERING ORDER IS IMPORTANT
 [OBJECTS]
