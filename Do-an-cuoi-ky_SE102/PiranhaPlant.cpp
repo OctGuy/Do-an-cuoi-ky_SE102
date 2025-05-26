@@ -6,8 +6,11 @@ CPiranhaPlant::CPiranhaPlant(float x, float y) : CEnemy(x, y)
 {
 	originalX = x;
 	originalY = y;
-	if (originalX == 1863.0 && originalY == 367.0) isRed = false;
+
+	if (originalX == GREEN_PIRANHA_ORIGINAL_X 
+		&& originalY == GREEN_PIRANHA_ORIGINAL_Y) isRed = false;
 	else isRed = true;
+
 	SetState(PIRANHA_STATE_HIDE);
 	isShooting = false;				// Initialize shooting state
 	die_start = -1;
@@ -18,7 +21,8 @@ void CPiranhaPlant::Reload()
 {
 	CGameObject::Reload();
 
-	if (originalX == 1863.0 && originalY == 367.0) isRed = false;
+	if (originalX == GREEN_PIRANHA_ORIGINAL_X
+		&& originalY == GREEN_PIRANHA_ORIGINAL_Y) isRed = false;
 	else isRed = true;
 
 	SetState(PIRANHA_STATE_HIDE);

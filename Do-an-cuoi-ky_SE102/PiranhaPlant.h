@@ -63,6 +63,9 @@
 #define IN_RANGE_OF_RIGHT 200
 #pragma endregion
 
+#define GREEN_PIRANHA_ORIGINAL_X 1863.0f
+#define GREEN_PIRANHA_ORIGINAL_Y 367.0f
+
 class CPiranhaPlant : public CEnemy
 {
 protected:

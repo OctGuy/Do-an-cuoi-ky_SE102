@@ -360,7 +360,8 @@ void CKoopa::Reload()
 	this->ax = 0;
 	this->ay = KOOPA_GRAVITY;
 
-	if (x == 1868.0)
+	if (x == FLYING_KOOPA_ORIGINAL_X
+		&& y == FLYING_KOOPA_ORIGINAL_Y)
 		SetState(KOOPA_STATE_FLY);
 	else SetState(KOOPA_STATE_WALKING_LEFT);
 

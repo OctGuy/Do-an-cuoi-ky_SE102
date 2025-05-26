@@ -49,6 +49,9 @@
 #define KOOPA_STATE_SHELL_REVERSE_JUMP	9
 #define KOOPA_STATE_FLY 10
 
+#define FLYING_KOOPA_ORIGINAL_X 1868.0f
+#define FLYING_KOOPA_ORIGINAL_Y 293.0f
+
 class CKoopa : public CEnemy
 {
 protected:
@@ -75,7 +78,8 @@ public:
 		flyUpperY = 0;
 		flyLowerY = 0;
 
-		if (x == 1868.0)
+		if (x == FLYING_KOOPA_ORIGINAL_X
+			&& y == FLYING_KOOPA_ORIGINAL_Y)
 			SetState(KOOPA_STATE_FLY);
 		else SetState(KOOPA_STATE_WALKING_LEFT);
 
