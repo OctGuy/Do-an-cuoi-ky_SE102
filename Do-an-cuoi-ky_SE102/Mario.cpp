@@ -1404,6 +1404,7 @@ void CMario::GetHurt()
 			DebugOut(L">>> Mario DIE >>> \n");
 			SetState(MARIO_STATE_DIE);
 			live--;
+			CGame::GetInstance()->Save();
 		}
 	}
 }
