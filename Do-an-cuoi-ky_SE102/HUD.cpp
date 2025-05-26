@@ -23,6 +23,7 @@ void CHUD::Update(DWORD dt)
         this->coin = player->GetCoin();
 		this->score = player->GetPoint();
         this->pMeter = player->GetPMeter()/100;
+		this->lives = player->GetLive();
 		this->cards = player->GetCards();
     }
 
