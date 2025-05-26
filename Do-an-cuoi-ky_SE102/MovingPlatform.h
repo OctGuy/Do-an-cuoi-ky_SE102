@@ -4,6 +4,8 @@
 #define MOVING_PLATFORM_HORIZONTAL_SPEED 0.05f
 #define MOVING_PLATFORM_VERTICAL_SPEED 0.05f
 
+#define MOVING_PLATFORM_GRAVITY 0.0001f
+
 using namespace std;
 
 class CMovingPlatform : public CPlatform

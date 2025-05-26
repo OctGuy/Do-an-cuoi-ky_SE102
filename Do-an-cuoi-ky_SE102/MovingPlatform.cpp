@@ -27,7 +27,7 @@ void CMovingPlatform::OnCollisionWithMario(LPCOLLISIONEVENT e)
 {
 	if (e->ny > 0) {
 		DebugOut(L"[INFO] Collided from top\n");
-		ay = 0.0001f; // Reset gravity to default
+		ay = MOVING_PLATFORM_GRAVITY; // Reset gravity to default
 		vx = 0;
 		vy = MOVING_PLATFORM_VERTICAL_SPEED;
 	}
