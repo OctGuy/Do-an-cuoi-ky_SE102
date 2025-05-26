@@ -270,6 +270,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//DebugOut(L"[INFO] Mario: %d %d\n", isAbleToTunnelDown, isAbleToTunnelUp);
 	//DebugOut(L"[INFO] Mario Update: %f %f\n", x, y);
 	//DebugOut(L"[INFO] Mario acceleration: %f %f\n", ax, ay);
+	//DebugOut(L"[INFO] Mario: %d\n", isSitting);
 }
 
 void CMario::AddPoint(int p, LPCOLLISIONEVENT e)
@@ -1327,6 +1328,7 @@ void CMario::SetState(int state)
 		isTunneling = true;
 		tunnel_start = GetTickCount64();
 		currentFloorY = y;
+		isSitting = false;
 		ay = 0;
 		ax = 0;
 		vx = 0;
@@ -1337,6 +1339,7 @@ void CMario::SetState(int state)
 		isTunneling = true;
 		tunnel_start = GetTickCount64();
 		currentFloorY = y;
+		isSitting = false;
 		ay = 0;
 		ax = 0;
 		vx = 0;
