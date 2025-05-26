@@ -15,6 +15,8 @@ void CShinyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CShinyBrick::Activate()
 {
+    isHit = true;
+
 	CGame* game = CGame::GetInstance();
 	CPlayScene* scene = (CPlayScene*)game->GetCurrentScene();
 	CParticle* brick_bit = new CParticle(x, y, PARTICLE_TYPE_BRICK);

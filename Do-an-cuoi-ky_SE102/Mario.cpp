@@ -652,6 +652,9 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 
 			koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
 		}
+		else if (koopa->GetState() == KOOPA_STATE_FLY) {
+			koopa->SetState(KOOPA_STATE_WALKING_LEFT);
+		}
 		AddPoint(100, e);
 	}
 	else if (e->nx != 0 || e->ny > 0) {
@@ -729,7 +732,7 @@ void CMario::OnCollisionWithParaTroopa(LPCOLLISIONEVENT e) {
 		}
 		AddPoint(100, e);
 	}
-	else if (e->nx != 0 || e->ny > 0) {
+	else if (e->nx != 0) {
 		if (koopa->GetState() == PARATROOPA_STATE_SHELL_IDLE
 			|| koopa->GetState() == PARATROOPA_STATE_SHELL_SHAKING
 			|| koopa->GetState() == PARATROOPA_STATE_SHELL_REVERSE_IDLE
@@ -755,12 +758,22 @@ void CMario::OnCollisionWithParaTroopa(LPCOLLISIONEVENT e) {
 			|| koopa->GetState() == PARATROOPA_STATE_BOUNCE_LEFT
 			|| koopa->GetState() == PARATROOPA_STATE_BOUNCE_RIGHT
 			|| koopa->GetState() == PARATROOPA_STATE_SHELL_MOVE
-			|| koopa->GetState() == PARATROOPA_STATE_SHELL_REVERSE_MOVE)
-		{
-			DebugOut(L"[INFO] Mario hit ParaTroopa\n");
-			Koopa = nullptr;
+			|| koopa->GetState() == PARATROOPA_STATE_SHELL_REVERSE_MOVE) {
 			GetHurt();
+			DebugOut(L"[INFO] ParaTroopa hit Mario from side\n");
+			Koopa = nullptr;
 		}
+	}
+	else if (e->ny > 0) {
+		if (koopa->GetState() == PARATROOPA_STATE_WALKING_LEFT
+			|| koopa->GetState() == PARATROOPA_STATE_WALKING_RIGHT
+			|| koopa->GetState() == PARATROOPA_STATE_BOUNCE_LEFT
+			|| koopa->GetState() == PARATROOPA_STATE_BOUNCE_RIGHT
+			|| koopa->GetState() == PARATROOPA_STATE_SHELL_MOVE
+			|| koopa->GetState() == PARATROOPA_STATE_SHELL_REVERSE_MOVE) {
+			DebugOut(L"[INFO] Mario hit ParaTroopa from above\n");
+			GetHurt();
+		}	
 	}
 }
 

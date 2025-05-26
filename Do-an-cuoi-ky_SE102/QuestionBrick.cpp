@@ -42,6 +42,14 @@ void CQuestionBrick::OnCollisionWith(LPCOLLISIONEVENT e)
     {
 	    Activate();
     }
+
+    if (e->ny > 0 && (dynamic_cast<CKoopa*>(e->obj)
+        || dynamic_cast<CParaTroopa*>(e->obj))) {
+        if (dynamic_cast<CKoopa*>(e->obj))
+			Koopa = dynamic_cast<CKoopa*>(e->obj);
+		else if (dynamic_cast<CParaTroopa*>(e->obj))
+			Koopa = dynamic_cast<CParaTroopa*>(e->obj);
+    }
 }
 
 void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -73,6 +81,13 @@ void CQuestionBrick::Activate()
 {
     if (!isHit)
     {
+        if (dynamic_cast<CKoopa*>(Koopa)) {
+			dynamic_cast<CKoopa*>(Koopa)->SetState(KOOPA_STATE_SHELL_REVERSE_JUMP);
+        }
+        else if (dynamic_cast<CParaTroopa*>(Koopa)) {
+            dynamic_cast<CParaTroopa*>(Koopa)->SetState(PARATROOPA_STATE_SHELL_REVERSE_JUMP);
+        }
+
         CMario* mario = GetPlayer();
         CPlayScene* playScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
         SetState(BRICK_STATE_BOUNCE);
