@@ -37,7 +37,7 @@ void CParaTroopa::Render() {
 	if (aniId != -1)
 		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CParaTroopa::GetBoundingBox(float& l, float& t, float& r, float& b) {
@@ -73,7 +73,8 @@ void CParaTroopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 		vy = 0;
 		if (state == PARATROOPA_STATE_SHELL_REVERSE_JUMP)
 			SetState(PARATROOPA_STATE_SHELL_REVERSE_IDLE); // Mario tail attack
-		if (state == PARATROOPA_STATE_BOUNCE_LEFT || state == PARATROOPA_STATE_BOUNCE_RIGHT) {
+		if ((state == PARATROOPA_STATE_BOUNCE_LEFT || state == PARATROOPA_STATE_BOUNCE_RIGHT)
+			&& e->obj->IsBlocking()) {
 			vy = -PARATROOPA_BOUNCE_SPEED; //  bounce up 
 
 			if (e->nx != 0 && e->obj->IsBlocking()) { // reverse bounce direction when collide with wall
@@ -89,7 +90,7 @@ void CParaTroopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 	}
 
 	if (state == PARATROOPA_STATE_WALKING_LEFT || state == PARATROOPA_STATE_WALKING_RIGHT) {
-		if (e->nx != 0) {
+		if (e->nx != 0 && e->obj->IsBlocking()) {
 			if (e->nx > 0) {
 				SetState(PARATROOPA_STATE_WALKING_RIGHT);
 			}

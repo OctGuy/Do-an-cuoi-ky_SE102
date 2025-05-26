@@ -365,4 +365,4 @@ assets\plain_piranha.txt
 4	2191	465
 4	2175	481
 # PORTAL 
-#50	100	350	2
+50	100	350	2
