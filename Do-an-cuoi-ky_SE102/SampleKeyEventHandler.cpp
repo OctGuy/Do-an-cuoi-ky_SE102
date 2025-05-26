@@ -144,9 +144,6 @@ void CSampleKeyHandler::KeyState(BYTE* states)
         || mario->IsInputBlocked())
         return;
 
-    if (game->IsKeyDown(DIK_S))
-		mario->SetState(MARIO_STATE_JUMP);
-
     if (game->IsKeyDown(DIK_LEFT))
     {
         if (game->IsKeyDown(DIK_A))
