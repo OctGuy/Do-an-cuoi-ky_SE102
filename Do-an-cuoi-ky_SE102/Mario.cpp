@@ -1309,6 +1309,8 @@ void CMario::SetState(int state)
 		vx = 0;
 		ax = 0;
 		isRunning = false;
+		live--;
+		CGame::GetInstance()->Save();
 		break;
 
 	case MARIO_STATE_HOLD:
@@ -1403,8 +1405,6 @@ void CMario::GetHurt()
 		{
 			DebugOut(L">>> Mario DIE >>> \n");
 			SetState(MARIO_STATE_DIE);
-			live--;
-			CGame::GetInstance()->Save();
 		}
 	}
 }
