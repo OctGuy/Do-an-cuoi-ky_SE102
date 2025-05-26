@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-#define TUNNEL_BLOCK_BBOX_WIDTH 16
+#define TUNNEL_BLOCK_BBOX_WIDTH 8
 #define TUNNEL_BLOCK_BBOX_HEIGHT 16
 
 #define TUNNEL_BLOCK_TYPE_ENTER 0

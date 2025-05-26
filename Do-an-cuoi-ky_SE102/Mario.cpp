@@ -158,6 +158,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	
 	if (x < leftBoundary + 8.f) { x = leftBoundary + 8.f; vx = 0; }
 	if (y < 8.f) { y = 8.f; vy = 0; }
+	if (y > bottomBoundary) SetState(MARIO_STATE_DIE); 
 
 	//Handle Koopa Picking and Kicking
 	if (Koopa)
@@ -261,14 +262,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	//Handle Raccoon Tail
-	if (Tail && tailAttack_start)
+	if (Tail)
 	{
-		Tail->SetPosition(x, y + 4.f);
+		Tail->SetPosition(x + 5.f*nx, y + 4.f);
 	}
 
 	//DebugOut(L"[INFO] Mario: %d %d\n", isAbleToTunnelDown, isAbleToTunnelUp);
 	//DebugOut(L"[INFO] Mario Update: %f %f\n", x, y);
 	//DebugOut(L"[INFO] Mario acceleration: %f %f\n", ax, ay);
+	//DebugOut(L"[INFO] Mario: %d\n", isSitting);
 }
 
 void CMario::AddPoint(int p, LPCOLLISIONEVENT e)
@@ -1322,6 +1324,8 @@ void CMario::SetState(int state)
 		vx = 0;
 		ax = 0;
 		isRunning = false;
+		live--;
+		CGame::GetInstance()->Save();
 		break;
 
 	case MARIO_STATE_HOLD:
@@ -1337,6 +1341,7 @@ void CMario::SetState(int state)
 		isTunneling = true;
 		tunnel_start = GetTickCount64();
 		currentFloorY = y;
+		isSitting = false;
 		ay = 0;
 		ax = 0;
 		vx = 0;
@@ -1347,6 +1352,7 @@ void CMario::SetState(int state)
 		isTunneling = true;
 		tunnel_start = GetTickCount64();
 		currentFloorY = y;
+		isSitting = false;
 		ay = 0;
 		ax = 0;
 		vx = 0;

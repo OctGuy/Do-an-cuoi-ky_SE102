@@ -596,7 +596,7 @@ void CPlayScene::Update(DWORD dt)
 		cx = rightBoundary - game->GetBackBufferWidth() - 9.f;
 
 	if (cy < 0) cy = 0;
-	else if (cy > bottomBoundary) cy = bottomBoundary;
+	else if (cy > bottomBoundary - game->GetBackBufferHeight()) cy = bottomBoundary - game->GetBackBufferHeight();
 
 	game->SetCamPos(cx, cy);
 
