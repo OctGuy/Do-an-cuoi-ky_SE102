@@ -158,6 +158,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	
 	if (x < leftBoundary + 8.f) { x = leftBoundary + 8.f; vx = 0; }
 	if (y < 8.f) { y = 8.f; vy = 0; }
+	if (y > bottomBoundary) SetState(MARIO_STATE_DIE); 
 
 	//Handle Koopa Picking and Kicking
 	if (Koopa)
