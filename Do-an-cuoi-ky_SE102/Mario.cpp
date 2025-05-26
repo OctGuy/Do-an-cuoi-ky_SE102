@@ -53,9 +53,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (isOnFallingPlatform)
 	{
 		isOnPlatform = true;
-		isOnFallingPlatform = false;
-		ay = MARIO_GRAVITY; 
+		currentFloorY += vy * dt; // Update current floor Y position so mario jump height stays the same
 	}
+
+	if (vy < 0) // Mario is jumping then mario cant be on platform right? could cause bug but not my problem now lol
+		isOnFallingPlatform = false;
 
 	//Update preLevel before current level
 	preLevel = level;
@@ -266,6 +268,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	//DebugOut(L"[INFO] Mario: %d %d\n", isAbleToTunnelDown, isAbleToTunnelUp);
 	//DebugOut(L"[INFO] Mario Update: %f %f\n", x, y);
+	//DebugOut(L"[INFO] Mario acceleration: %f %f\n", ax, ay);
 }
 
 void CMario::AddPoint(int p, LPCOLLISIONEVENT e)
@@ -483,22 +486,11 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e) {
 
 void CMario::OnCollisionWithMovingPlatform(LPCOLLISIONEVENT e) //Unstable need to be work on more
 {
+	CMovingPlatform* platform = dynamic_cast<CMovingPlatform*>(e->obj);
 	if (e->ny < 0) {
-		float vxx;
-		ay = 0;
-		e->obj->GetSpeed(vxx, vy);
 		isOnFallingPlatform = true;
-		y += 1.f; // Move mario downward to activate the bellow condition
-	}
-	else if (e->ny == 0 && e->nx == 0) {
-		DebugOut(L"[INFO] Mario is on moving platform\n");
-		float mVx, mVy;
-		e->obj->GetSpeed(mVx, mVy);
-		if (vy != mVy) vy = mVy; //Make mario fall at the same speed as platform
-		ay = 0;
-		isOnFallingPlatform = true;
-		float fill1, fill2, fill3; //I dont know how to get the bounding box of the object without these variable
-		e->obj->GetBoundingBox(fill1, currentFloorY, fill2, fill3);
+		vy = MOVING_PLATFORM_VERTICAL_SPEED;
+		ay = MOVING_PLATFORM_GRAVITY;
 	}
 	else if (e->nx != 0)
 	{

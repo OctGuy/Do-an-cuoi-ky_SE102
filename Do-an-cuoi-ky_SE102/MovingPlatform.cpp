@@ -4,6 +4,8 @@
 
 void CMovingPlatform::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	vy += ay * dt;
+
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -24,6 +26,8 @@ void CMovingPlatform::OnCollisionWith(LPCOLLISIONEVENT e)
 void CMovingPlatform::OnCollisionWithMario(LPCOLLISIONEVENT e)
 {
 	if (e->ny > 0) {
+		DebugOut(L"[INFO] Collided from top\n");
+		ay = MOVING_PLATFORM_GRAVITY; // Reset gravity to default
 		vx = 0;
 		vy = MOVING_PLATFORM_VERTICAL_SPEED;
 	}
