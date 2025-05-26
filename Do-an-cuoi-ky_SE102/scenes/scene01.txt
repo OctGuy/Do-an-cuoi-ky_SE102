@@ -304,7 +304,6 @@ assets\plain_piranha.txt
 #KOOPA
 11	576 	358
 11	2096	358
-#11	180	389
 
 #PARATROOPA
 13	1328	292

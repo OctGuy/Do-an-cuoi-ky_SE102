@@ -199,11 +199,11 @@ void CKoopa::SetState(int state) {
 		vx = 0;                         
 		// Initialize flying parameters if not set
 		if (flyUpperY == 0 && flyLowerY == 0) {
-			flyUpperY = y - KOOPA_FLY_HEIGHT;     // Fly up by KOOPA_FLY_RANGE
-			flyLowerY = y;  // Fly down by KOOPA_FLY_RANGE
+			flyUpperY = y;     // Fly up by KOOPA_FLY_RANGE
+			flyLowerY = y + KOOPA_FLY_HEIGHT;  // Fly down by KOOPA_FLY_RANGE
 		}
-		isFlyingUp = true;                // Start by flying up
-		vy = -KOOPA_FLY_SPEED;         // Initial upward velocity
+		isFlyingUp = false;                // Start by flying down
+		vy = KOOPA_FLY_SPEED;         // Initial downward velocity
 		break;
 	case KOOPA_STATE_DIE:
 		DebugOut(L"[INFO] Koopa is dead\n");
@@ -294,13 +294,14 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	// flying logic
 	if (state == KOOPA_STATE_FLY) {
-		if (isFlyingUp && y <= flyUpperY) { // reached top position
-			isFlyingUp = false;
-			vy = KOOPA_FLY_SPEED;  // flying down
-		}
-		else if (!isFlyingUp && y >= flyLowerY) { // reached bottom position
+		DebugOut(L"[INFO] Koopa position: %f, %f\n", x, y);
+		if (!isFlyingUp && y >= flyLowerY) { // reached bottom position
 			isFlyingUp = true;
 			vy = -KOOPA_FLY_SPEED;  // flying up
+		}
+		else if (isFlyingUp && y <= flyUpperY) { // reached top position
+			isFlyingUp = false;
+			vy = KOOPA_FLY_SPEED;  // flying down
 		}
 	}
 	else { // normal physics for non-flying states
@@ -359,12 +360,9 @@ void CKoopa::Reload()
 	this->ax = 0;
 	this->ay = KOOPA_GRAVITY;
 
-	if (x == 180.0)
+	if (x == 1868.0)
 		SetState(KOOPA_STATE_FLY);
 	else SetState(KOOPA_STATE_WALKING_LEFT);
-
-	flyLowerY = 0;
-	flyUpperY = 0;
 
 	stateShellStart = -1;
 	stateShakingStart = -1;

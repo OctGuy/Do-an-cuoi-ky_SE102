@@ -24,7 +24,7 @@
 #define KOOPA_WALKING_SPEED 0.03f
 #define KOOPA_SHELL_SPEED 0.15f
 #define KOOPA_DEFLECT_SPEED 0.3f
-#define KOOPA_FLY_HEIGHT 70.0f
+#define KOOPA_FLY_HEIGHT 112.0f
 #define KOOPA_FLY_SPEED 0.03f
 
 #define KOOPA_BBOX_WIDTH 16
@@ -75,7 +75,7 @@ public:
 		flyUpperY = 0;
 		flyLowerY = 0;
 
-		if (x == 145.0)
+		if (x == 1868.0)
 			SetState(KOOPA_STATE_FLY);
 		else SetState(KOOPA_STATE_WALKING_LEFT);
 
