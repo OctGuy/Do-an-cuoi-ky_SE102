@@ -9,6 +9,8 @@ using namespace std;
 class CMovingPlatform : public CPlatform
 {
 private:
+	float ay;
+
 	void OnCollisionWithMario(LPCOLLISIONEVENT e);
 public:
 	CMovingPlatform(float x, float y,
@@ -18,6 +20,8 @@ public:
 	{ 
 		this->vx = -MOVING_PLATFORM_HORIZONTAL_SPEED;
 		this->vy = 0;
+
+		this->ay = 0.0f; 
 	}
 
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
