@@ -8,8 +8,8 @@ CHUD::CHUD(CMario* player)
     this->player = player;
     this->score = 0;
     this->coin = 0;
-    this->lives = 4; // Default 4 lives
-    this->remainingTime = 300; // Default 300 seconds
+    this->lives = 4; 
+    this->remainingTime = 300; 
     this->timer_start = GetTickCount64();
 
 	this->base = sprites->Get(ID_TEX_HUD); 
@@ -18,20 +18,22 @@ CHUD::CHUD(CMario* player)
 
 void CHUD::Update(DWORD dt)
 {
-    // Update coin count from player
     if (player) {
         this->coin = player->GetCoin();
 		this->score = player->GetPoint();
         this->pMeter = player->GetPMeter()/100;
+		this->lives = player->GetLive();
 		this->cards = player->GetCards();
     }
 
-    // Update time
     ULONGLONG now = GetTickCount64();
-    if (now - timer_start > 1000) // Every second
+    if (now - timer_start > 1000) 
     {
         if (remainingTime > 0)
             remainingTime--;
+        else
+			player->SetState(MARIO_STATE_DIE); 
+
         timer_start = now;
     }
 }

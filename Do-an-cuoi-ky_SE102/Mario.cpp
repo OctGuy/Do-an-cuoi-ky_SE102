@@ -1309,6 +1309,8 @@ void CMario::SetState(int state)
 		vx = 0;
 		ax = 0;
 		isRunning = false;
+		live--;
+		CGame::GetInstance()->Save();
 		break;
 
 	case MARIO_STATE_HOLD:

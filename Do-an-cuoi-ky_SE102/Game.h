@@ -67,6 +67,7 @@ class CGame
 	//Manage mario saves through each scene
 	int point = 0;
 	int coin = 0;
+	int live = 4; 
 	vector<int> cards;
 
 	void _ParseSection_SETTINGS(string line);

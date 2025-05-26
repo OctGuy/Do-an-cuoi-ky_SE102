@@ -72,9 +72,12 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_3:
 		mario->SetLevel(MARIO_LEVEL_RACCOON);
 		break;
-    case DIK_R: //reload scene
-        game->ReloadCurrentScene();
-        break;
+    case DIK_R: 
+		if (mario->GetLive() > 0) // Only allow reload if player has lives left
+        {
+            game->ReloadCurrentScene();
+            break;
+        }
     }
 }
 
