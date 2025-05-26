@@ -16,6 +16,7 @@
 
 class CQuestionBrick : public CBrick
 {
+protected:
     LPGAMEOBJECT item; // Pointer to Item for easier manipulation
     BOOLEAN hasItem;
 
@@ -24,6 +25,8 @@ class CQuestionBrick : public CBrick
     float originalY;
     DWORD bounceStart;
     BOOLEAN isBouncingFinished;
+
+    LPGAMEOBJECT Koopa;
 
 public:
     CQuestionBrick(float x, float y, int type, int itemType) : CBrick(x, y, type)
@@ -36,6 +39,8 @@ public:
         originalY = y;
         bounceStart = 0;
         isBouncingFinished = false;
+
+        Koopa = nullptr;
     }
     void Render();
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
