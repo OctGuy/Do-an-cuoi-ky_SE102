@@ -251,6 +251,7 @@ assets\winged_goomba.txt
 #KOOPA
 11	1072	326
 11	1982	342
+11	180	389
 
 # MARIO
 0	48	336

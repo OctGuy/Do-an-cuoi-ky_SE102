@@ -129,12 +129,14 @@ void CKoopa::Render() {
 	else if (state == KOOPA_STATE_SHELL_SHAKING)
 		aniId = KOOPA_ANI_SHELL_SHAKING;
 	else if (state == KOOPA_STATE_SHELL_REVERSE_IDLE ||
-			 state == KOOPA_STATE_SHELL_REVERSE_JUMP)
+		state == KOOPA_STATE_SHELL_REVERSE_JUMP)
 		aniId = KOOPA_ANI_SHELL_REVERSE_IDLE;
 	else if (state == KOOPA_STATE_SHELL_REVERSE_MOVE)
 		aniId = KOOPA_ANI_SHELL_REVERSE_MOVE;
 	else if (state == KOOPA_STATE_SHELL_REVERSE_SHAKING)
 		aniId = KOOPA_ANI_SHELL_REVERSE_SHAKING;
+	else if (state == KOOPA_STATE_FLY)
+		aniId = KOOPA_ANI_FLY;
 	else if (state == KOOPA_STATE_DIE)
 		aniId = KOOPA_ANI_DIE;
 	
@@ -145,6 +147,8 @@ void CKoopa::Render() {
 }
 
 void CKoopa::SetState(int state) {
+	CGameObject::SetState(state);
+
 	switch (state)
 	{
 	case KOOPA_STATE_WALKING_LEFT:
@@ -162,8 +166,8 @@ void CKoopa::SetState(int state) {
 		break;
 	case KOOPA_STATE_SHELL_MOVE:
 		DebugOut(L"[INFO] Koopa is in shell move\n");
-		ay = KOOPA_GRAVITY;				// Natural fall down when Koopa is out of platform or box
-		vx = 0;							// Set vx when Collision
+		ay = KOOPA_GRAVITY;				// naturally fall down when Koopa is out of platform or box
+		vx = 0;						
 		break;
 	case KOOPA_STATE_SHELL_SHAKING:
 		DebugOut(L"[INFO] Koopa is shell shaking\n");
@@ -177,8 +181,7 @@ void CKoopa::SetState(int state) {
 		break;
 	case KOOPA_STATE_SHELL_REVERSE_MOVE:
 		DebugOut(L"[INFO] Koopa is shell reverse move\n");
-		ay = KOOPA_GRAVITY;				// Natural fall down when Koopa is out of platform or box
-		vx = 0;							// Set vx when Collision
+		ay = KOOPA_GRAVITY;				// naturally fall down when Koopa is out of platform or box
 		break;
 	case KOOPA_STATE_SHELL_REVERSE_SHAKING:
 		DebugOut(L"[INFO] Koopa is shell reverse shaking\n");
@@ -187,21 +190,29 @@ void CKoopa::SetState(int state) {
 		break;
 	case KOOPA_STATE_SHELL_REVERSE_JUMP:
 		DebugOut(L"[INFO] Koopa is shell reverse jump\n");
-		vy = -KOOPA_DEFLECT_SPEED;      // Jump up with reverse deflect speed
-		ay = KOOPA_GRAVITY;             // Apply gravity for natural arc
-		vx = -vx;                       // Reverse current x velocity
+		vy = -KOOPA_DEFLECT_SPEED;      
+		ay = KOOPA_GRAVITY;             
+		vx = -vx;                      
+		break;
+	case KOOPA_STATE_FLY:
+		ay = 0;                         
+		vx = 0;                         
+		// Initialize flying parameters if not set
+		if (flyUpperY == 0 && flyLowerY == 0) {
+			flyUpperY = y - KOOPA_FLY_HEIGHT;     // Fly up by KOOPA_FLY_RANGE
+			flyLowerY = y;  // Fly down by KOOPA_FLY_RANGE
+		}
+		isFlyingUp = true;                // Start by flying up
+		vy = -KOOPA_FLY_SPEED;         // Initial upward velocity
 		break;
 	case KOOPA_STATE_DIE:
 		DebugOut(L"[INFO] Koopa is dead\n");
 		die_start = GetTickCount64();
 		ay = KOOPA_GRAVITY;
-		vx = -0.1f;
-		//vy = -KOOPA_DEFLECT_SPEED;
+		break;
 	default:
 		break;
 	}
-
-	CGameObject::SetState(state);
 }
 
 bool CKoopa::IsPlatformEdge(float checkDistance, vector<LPGAMEOBJECT>& coObjects)
@@ -277,14 +288,25 @@ bool CKoopa::IsPlatformEdge(float checkDistance, vector<LPGAMEOBJECT>& coObjects
 void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CMario* player = GetPlayer();
 
-	//DebugOut(L"[INFO] Koopa velocity: %f %f\n", vx, vy);
-
 	if (state == KOOPA_STATE_DIE && player && player->GetKoopa() == this) {
 		player->SetKoopa(nullptr); 
 	}
 
-	vy += ay * dt;
-	vx += ax * dt;
+	// flying logic
+	if (state == KOOPA_STATE_FLY) {
+		if (isFlyingUp && y <= flyUpperY) { // reached top position
+			isFlyingUp = false;
+			vy = KOOPA_FLY_SPEED;  // flying down
+		}
+		else if (!isFlyingUp && y >= flyLowerY) { // reached bottom position
+			isFlyingUp = true;
+			vy = -KOOPA_FLY_SPEED;  // flying up
+		}
+	}
+	else { // normal physics for non-flying states
+		vy += ay * dt;
+		vx += ax * dt;
+	}
 
 	ULONGLONG now = GetTickCount64();
 
@@ -315,7 +337,6 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	case KOOPA_STATE_SHELL_SHAKING:
 	case KOOPA_STATE_SHELL_REVERSE_SHAKING:
 		if (now - stateShakingStart > KOOPA_SHELL_SHAKING_DURATION) {
-			//DebugOut(L"[INFO] Koopa is out of shell\n");
 			vy = -0.15;
 			SetState(KOOPA_STATE_WALKING_LEFT);
 		}
@@ -334,13 +355,23 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 void CKoopa::Reload()
 {
 	CGameObject::Reload();
+
 	this->ax = 0;
 	this->ay = KOOPA_GRAVITY;
-	SetState(KOOPA_STATE_WALKING_LEFT);
+
+	if (x == 180.0)
+		SetState(KOOPA_STATE_FLY);
+	else SetState(KOOPA_STATE_WALKING_LEFT);
+
+	flyLowerY = 0;
+	flyUpperY = 0;
+
 	stateShellStart = -1;
 	stateShakingStart = -1;
 	die_start = -1;
+
 	isHeld = false;
 	isDeleted = false;
 	isActive = true;
+	isFlyingUp = false;
 }

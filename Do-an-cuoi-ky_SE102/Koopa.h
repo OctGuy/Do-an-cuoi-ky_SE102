@@ -17,12 +17,15 @@
 #define KOOPA_ANI_SHELL_REVERSE_IDLE 8005
 #define KOOPA_ANI_SHELL_REVERSE_MOVE 8006
 #define KOOPA_ANI_SHELL_REVERSE_SHAKING 8007
-#define KOOPA_ANI_DIE 8007 // same as shell move
+#define KOOPA_ANI_DIE 8007 
+#define KOOPA_ANI_FLY 8018
 
 #define KOOPA_GRAVITY 0.001f
 #define KOOPA_WALKING_SPEED 0.03f
 #define KOOPA_SHELL_SPEED 0.15f
 #define KOOPA_DEFLECT_SPEED 0.3f
+#define KOOPA_FLY_HEIGHT 70.0f
+#define KOOPA_FLY_SPEED 0.03f
 
 #define KOOPA_BBOX_WIDTH 16
 #define KOOPA_BBOX_HEIGHT 26
@@ -44,13 +47,18 @@
 #define KOOPA_STATE_SHELL_REVERSE_SHAKING 7
 #define KOOPA_STATE_DIE 8
 #define KOOPA_STATE_SHELL_REVERSE_JUMP	9
-
+#define KOOPA_STATE_FLY 10
 
 class CKoopa : public CEnemy
 {
 protected:
 	float ax;
 	float ay;
+
+	float flyUpperY;
+	float flyLowerY;
+
+	bool isFlyingUp;
 
 	ULONGLONG stateShellStart;
 	ULONGLONG stateShakingStart;
@@ -63,12 +71,21 @@ public:
 	{
 		this->ax = 0;
 		this->ay = KOOPA_GRAVITY;
-		SetState(KOOPA_STATE_WALKING_LEFT);
+
+		flyUpperY = 0;
+		flyLowerY = 0;
+
+		if (x == 145.0)
+			SetState(KOOPA_STATE_FLY);
+		else SetState(KOOPA_STATE_WALKING_LEFT);
+
 		stateShellStart = -1;
 		stateShakingStart = -1;
 		die_start = -1;
+
 		isHeld = false;
 		isInWall = false;
+		isFlyingUp = false;
 	}
 
 	void SetIsHeld(bool isHeld) { this->isHeld = isHeld; }
