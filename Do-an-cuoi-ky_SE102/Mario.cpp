@@ -262,9 +262,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	//Handle Raccoon Tail
-	if (Tail && tailAttack_start)
+	if (Tail)
 	{
-		Tail->SetPosition(x, y + 4.f);
+		Tail->SetPosition(x + 5.f*nx, y + 4.f);
 	}
 
 	//DebugOut(L"[INFO] Mario: %d %d\n", isAbleToTunnelDown, isAbleToTunnelUp);
