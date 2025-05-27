@@ -23,8 +23,7 @@ assets\koopa.txt
 assets\paratroopa.txt
 assets\winged_goomba.txt
 assets\plain_piranha.txt
-
-
+assets\BoomerangBrother.txt
 
 #RENDERING ORDER IS IMPORTANT
 [OBJECTS]
@@ -294,10 +293,13 @@ assets\plain_piranha.txt
 #5	120	90	16	16	8	20001	20001	20001
 
 # GOOMBA
-2	224	400
+#2	224	400
 2 	528	400
 2	832	384
 2	880	384
+
+# BOOMERANG BROTHER
+15	200	380
 
 #WINGED GOOMBA
 12	944	381
