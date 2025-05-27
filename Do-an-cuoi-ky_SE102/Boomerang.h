@@ -37,6 +37,7 @@ public:
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	void Reload() override;
 
 	int IsBlocking() { return 0; }
 	int IsCollidable() { return 1; }

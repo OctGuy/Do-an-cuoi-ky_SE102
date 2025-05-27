@@ -292,6 +292,8 @@ void CBoomerangBrother::SetState(int state)
 		isAiming = false;
 		isThrowing = false;
 		die_start = GetTickCount64();
+		if(boomerang)
+			boomerang->Delete();
 		vx = 0;
 		vy = -0.1f;
 		ay = 0.001f;
@@ -300,6 +302,22 @@ void CBoomerangBrother::SetState(int state)
 	default:
 		break;
 	}
+}
+
+void CBoomerangBrother::Reload()
+{
+	originalX = x;
+
+	ay = BOOMERANG_BROTHER_GRAVITY;
+	vx = BOOMERANG_BROTHER_WALKING_SPEED;
+
+	isAiming = false;
+	isThrowing = false;
+	BoomerangCount = BOOMERANG_BROTHER_NUMBER_OF_BOOMERANG;
+	aimStartTime = 0;
+	throwStartTime = 0;
+
+	boomerang = nullptr;
 }
 
 

@@ -58,6 +58,11 @@ void CBoomerang::GetBoundingBox(float& left, float& top, float& right, float& bo
 	bottom = top + BOOMERANG_BBOX_HEIGHT;
 }
 
+void CBoomerang::Reload()
+{
+	this->Delete();
+}
+
 void CBoomerang::SetState(int state)
 {
 	CGameObject::SetState(state);
