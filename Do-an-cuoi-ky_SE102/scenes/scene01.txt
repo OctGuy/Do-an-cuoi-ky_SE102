@@ -23,8 +23,7 @@ assets\koopa.txt
 assets\paratroopa.txt
 assets\winged_goomba.txt
 assets\plain_piranha.txt
-
-
+assets\BoomerangBrother.txt
 
 #RENDERING ORDER IS IMPORTANT
 [OBJECTS]

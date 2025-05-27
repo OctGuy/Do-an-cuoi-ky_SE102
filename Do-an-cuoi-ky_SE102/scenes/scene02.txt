@@ -20,7 +20,7 @@ assets\fire_bullet.txt
 assets\HUD.txt
 assets\koopa.txt
 assets\winged_goomba.txt
-
+assets\BoomerangBrother.txt
 
 #RENDERING ORDER IS IMPORTANT
 [OBJECTS]
@@ -252,6 +252,9 @@ assets\winged_goomba.txt
 11	1982	342
 11	1868	293
 #11	185	300
+
+# BOOMERANG BROTHER
+15	2300	396
 
 # MARIO
 0	48	336

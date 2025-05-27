@@ -25,6 +25,7 @@
 #include "TunnelBlock.h"
 #include "GoalRoulette.h"
 #include "SceneSweeper.h"
+#include "BoomerangBrother.h"
 
 using namespace std;
 
@@ -325,6 +326,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{
 			obj = new CParaTroopa(x, y);
 			DebugOut(L"Loaded Para Troopa\n");
+			break;
+		}
+
+		case OBJECT_TYPE_BOOMERANG_BROTHER:
+		{
+			obj = new CBoomerangBrother(x, y);
+			DebugOut(L"Loaded Boomerang Brother\n");
 			break;
 		}
 

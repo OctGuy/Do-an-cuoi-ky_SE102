@@ -9,6 +9,7 @@
 #include "PiranhaPlant.h"
 #include "PlainPiranha.h"
 #include "WingedGoomba.h"
+#include "BoomerangBrother.h"
 
 void CRaccoonTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -58,6 +59,14 @@ void CRaccoonTail::OnCollisionWith(LPCOLLISIONEVENT e)
         //DebugOut(L"[INFO] RaccoonTail hit questionbrick\n");
         OnCollisionWithQuestionBrick(e);
     }
+	else if (dynamic_cast<CBoomerangBrother*>(e->obj))
+	{
+		//DebugOut(L"[INFO] RaccoonTail hit BoomerangBrother\n");
+		CBoomerangBrother* boomerangBrother = dynamic_cast<CBoomerangBrother*>(e->obj);
+		boomerangBrother->SetState(BOOMERANG_BROTHER_STATE_DIE);
+		currentScene->Add(particle);
+		mario->AddPoint(1000, e);
+	}
 }
 
 void CRaccoonTail::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
