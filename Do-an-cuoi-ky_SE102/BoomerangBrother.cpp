@@ -1,6 +1,7 @@
 #include "BoomerangBrother.h"
 #include "Mario.h"
 #include "PlayScene.h"
+#include "Boomerang.h"
 void CBoomerangBrother::Render()
 {
 	int aniId = -1;
@@ -50,9 +51,6 @@ void CBoomerangBrother::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (dxPlayer < 0)	nx = -1;
 	else	nx = 1;
 
-	if (fabs(dxPlayer) <= BOOMERANG_BROTHER_THROW_DISTANCE)
-		Throw();
-
 	ULONGLONG now = GetTickCount64();
 
 	//Logic for patrolling, if hit left edge, wait, move right, if hit right edge, wait, move left
@@ -80,21 +78,87 @@ void CBoomerangBrother::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+
+	//if (fabs(dxPlayer) <= BOOMERANG_BROTHER_THROW_DISTANCE)
+	//	Throw();
+
+	if (isAiming && isThrowing)
+	{
+		DebugOut(L"[ERROR] Boomerang Brother is both aiming and throwing boomerang at the same time\n");
+		return;
+	}
+
+	//CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+
+	//if boomerang brother have all his boomerangs and mario is within distance, he will throw
+	if (BoomerangCount == BOOMERANG_BROTHER_NUMBER_OF_BOOMERANG &&
+		fabs(dxPlayer) <= BOOMERANG_BROTHER_THROW_DISTANCE &&
+		!isAiming)
+	{
+		LPGAMEOBJECT boomerang = new CBoomerang(x, y);
+		boomerang->SetDirection(nx);
+		currentScene->Add(boomerang);
+		boomerang->SetState(BOOMERANG_STATE_HELD);
+		this->boomerang = boomerang;
+		SetState(BOOMERANG_BROTHER_STATE_AIMING);
+	}
+	else if (BoomerangCount == 0)
+	{
+		//not clear
+		isAiming = false;
+		isThrowing = false;
+	}
+
+	//ULONGLONG now = GetTickCount64();
+
+	if (isAiming)
+	{
+		if (now - aimStartTime >= BOOMERANG_BROTHER_AIM_TIME)
+		{
+			boomerang->SetState(BOOMERANG_STATE_THROWN);
+			this->boomerang = nullptr;
+			SetState(BOOMERANG_BROTHER_STATE_THROWING);
+		}
+	}
+	else if (isThrowing && now - throwStartTime >= BOOMERANG_BROTHER_THROW_TIME)
+	{
+		if (BoomerangCount > 0) //Still have boomerang then keep throwing
+		{
+			LPGAMEOBJECT boomerang = new CBoomerang(x, y);
+			boomerang->SetDirection(nx);
+			currentScene->Add(boomerang);
+			boomerang->SetState(BOOMERANG_STATE_HELD);
+			this->boomerang = boomerang;
+			SetState(BOOMERANG_BROTHER_STATE_AIMING);
+		}
+	}
+
+	if (boomerang)
+	{
+		if (isAiming && now - aimStartTime < BOOMERANG_BROTHER_AIM_TIME)
+				boomerang->SetPosition(x - nx * 10.f, y - 7.f); // Adjust boomerang position while aiming
+	}
 }
 
 void CBoomerangBrother::Throw()
 {
-	//Throwing and aiming logic
 	if (isAiming && isThrowing)
 	{
 		DebugOut(L"[ERROR] Boomerang Brother is both aiming and throwing boomerang at the same time\n");
-		return; // Prevents further processing if both states are active
+		return; 
 	}
+
+	CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
 
 	//if boomerang brother have all his boomerangs and mario is within distance, he will throw
 	if (BoomerangCount == BOOMERANG_BROTHER_NUMBER_OF_BOOMERANG &&
 		!isAiming)
 	{
+		LPGAMEOBJECT boomerang = new CBoomerang(x, y);
+		boomerang->SetDirection(nx);
+		currentScene->Add(boomerang);
+		boomerang->SetState(BOOMERANG_STATE_HELD);
+		this->boomerang = boomerang;
 		SetState(BOOMERANG_BROTHER_STATE_AIMING);
 	}
 	else if (BoomerangCount == 0)
@@ -106,14 +170,24 @@ void CBoomerangBrother::Throw()
 
 	ULONGLONG now = GetTickCount64();
 
-	if (isAiming && now - aimStartTime >= BOOMERANG_BROTHER_AIM_TIME)
+	if (isAiming)
 	{
-		SetState(BOOMERANG_BROTHER_STATE_THROWING);
+		if(now - aimStartTime >= BOOMERANG_BROTHER_AIM_TIME)
+		{
+			boomerang->SetState(BOOMERANG_STATE_THROWN);
+			this->boomerang = nullptr;
+			SetState(BOOMERANG_BROTHER_STATE_THROWING);
+		}
 	}
 	else if (isThrowing && now - throwStartTime >= BOOMERANG_BROTHER_THROW_TIME)
 	{
 		if (BoomerangCount > 0) //Still have boomerang then keep throwing
 		{
+			LPGAMEOBJECT boomerang = new CBoomerang(x, y);
+			boomerang->SetDirection(nx);
+			currentScene->Add(boomerang);
+			boomerang->SetState(BOOMERANG_STATE_HELD);
+			this->boomerang = boomerang;
 			SetState(BOOMERANG_BROTHER_STATE_AIMING);
 		}
 	}
@@ -147,6 +221,23 @@ void CBoomerangBrother::OnCollisionWith(LPCOLLISIONEVENT e)
 				vx = BOOMERANG_BROTHER_WALKING_SPEED;
 			}
 		}
+	}
+
+	if (dynamic_cast<CBoomerang*>(e->obj))
+	{
+		OnCollisionWithBoomerang(e);
+	}
+}
+
+void CBoomerangBrother::OnCollisionWithBoomerang(LPCOLLISIONEVENT e)
+{
+	CBoomerang* boomerang = dynamic_cast<CBoomerang*>(e->obj);
+
+	if(boomerang->IsReturning())
+	{
+		DebugOut(L"[INFO] Boomerang Brother collided with returning boomerang\n");
+		BoomerangCount++;
+		boomerang->Delete();
 	}
 }
 

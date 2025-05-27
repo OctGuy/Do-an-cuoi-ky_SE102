@@ -42,6 +42,10 @@ private:
 	ULONGLONG waitStartTime; 
 
 	int BoomerangCount;
+
+	LPGAMEOBJECT boomerang;
+
+	void OnCollisionWithBoomerang(LPCOLLISIONEVENT e);
 public:
 	CBoomerangBrother(float x, float y) : CEnemy(x, y)
 	{
@@ -52,9 +56,11 @@ public:
 
 		isAiming = false;
 		isThrowing = false;
-		BoomerangCount = 2;
+		BoomerangCount = BOOMERANG_BROTHER_NUMBER_OF_BOOMERANG;
 		aimStartTime = 0;
 		throwStartTime = 0;
+
+		boomerang = nullptr;
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

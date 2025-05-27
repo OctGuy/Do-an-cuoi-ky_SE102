@@ -43,6 +43,7 @@ public:
 	void GetLoadPosition(float& x, float& y) { x = this->loadX; y = this->loadY; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
 	void GetNx(int& nx) { nx = this->nx; }
+	void SetDirection(int direction) { nx = direction; }
 
 	virtual void SetActive(bool isActive) { this->isActive = isActive;} 
 	bool IsActive() { return isActive; }
