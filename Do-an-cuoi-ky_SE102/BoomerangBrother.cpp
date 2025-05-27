@@ -5,7 +5,11 @@
 void CBoomerangBrother::Render()
 {
 	int aniId = -1;
-	if (nx == 1)
+	if (state == BOOMERANG_BROTHER_STATE_DIE)
+	{
+		aniId = ID_ANI_BOOMERANG_BROTHER_DIE;
+	}
+	else if (nx == 1)
 	{
 		if (isAiming)
 			aniId = ID_ANI_BOOMERANG_BROTHER_AIM_RIGHT;
@@ -36,6 +40,18 @@ void CBoomerangBrother::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt; 
 
+	ULONGLONG now = GetTickCount64();
+
+	if (state == BOOMERANG_BROTHER_STATE_DIE)
+	{ 
+		y += vy * dt; 
+		if (now - die_start > BOOMERANG_BROTHER_DIE_TIMEOUT)
+		{
+			this->Delete();
+		}
+		return;
+	}
+
 	CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
 	CMario* player = dynamic_cast<CMario*>(currentScene->GetPlayer());
 
@@ -50,8 +66,6 @@ void CBoomerangBrother::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//Track mario postiion to turn left or right
 	if (dxPlayer < 0)	nx = -1;
 	else	nx = 1;
-
-	ULONGLONG now = GetTickCount64();
 
 	//Logic for patrolling, if hit left edge, wait, move right, if hit right edge, wait, move left
 	if(fabs(x - originalX) >= BOOMERANG_BROTHER_PATROL_DISTANCE)
@@ -251,6 +265,8 @@ void CBoomerangBrother::GetBoundingBox(float& left, float& top, float& right, fl
 
 void CBoomerangBrother::SetState(int state)
 {
+	CGameObject::SetState(state);
+
 	switch (state)
 	{
 	case BOOMERANG_BROTHER_STATE_AIMING:
@@ -267,11 +283,18 @@ void CBoomerangBrother::SetState(int state)
 		isThrowing = true;
 		BoomerangCount--;
 		throwStartTime = GetTickCount64();
-		//if (BoomerangCount >= BOOMERANG_BROTHER_NUMBER_OF_BOOMERANG)
-		//{
-		//	BoomerangCount = 0; // Reset count after throwing all boomerangs
-		//	isThrowing = false; // Stop throwing after all boomerangs are used
-		//}
+		break;
+	}
+
+	case BOOMERANG_BROTHER_STATE_DIE:
+	{
+		DebugOut(L"[INFO] Boomerang Brother is dead\n");
+		isAiming = false;
+		isThrowing = false;
+		die_start = GetTickCount64();
+		vx = 0;
+		vy = -0.1f;
+		ay = 0.001f;
 		break;
 	}
 	default:

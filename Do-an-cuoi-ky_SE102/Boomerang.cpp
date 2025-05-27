@@ -45,7 +45,7 @@ void CBoomerang::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	x += vx * dt;
 	y += vy * dt;
 
-	DebugOut(L"[INFO] Boomerang Update: %f %f\n", vx, vy);
+	//DebugOut(L"[INFO] Boomerang Update: %f %f\n", vx, vy);
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

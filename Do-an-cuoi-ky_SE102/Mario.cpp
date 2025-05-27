@@ -389,6 +389,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		OnCollisionWithGoalBoomerang(e);
 	}
+	else if (dynamic_cast<CBoomerangBrother*>(e->obj))
+	{
+		OnCollisionWithBoomerangBrother(e);
+	}
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -601,16 +605,18 @@ void CMario::OnCollisionWithGoalBoomerang(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithBoomerangBrother(LPCOLLISIONEVENT e)
 {
 	CBoomerangBrother* boomerangBrother = dynamic_cast<CBoomerangBrother*>(e->obj);
+	DebugOut(L"[INFO] Mario collided with Boomerang Brother\n");
 	if (e->ny < 0)
 	{
-		if (boomerangBrother->GetState() != GOOMBA_STATE_DIE_REVERSE)
+		//DebugOut(L"[INFO] Mario jump on Boomerang Brother\n");
+		if (boomerangBrother->GetState() != BOOMERANG_BROTHER_STATE_DIE)
 		{
-			boomerangBrother->SetState(GOOMBA_STATE_DIE);
+			boomerangBrother->SetState(BOOMERANG_BROTHER_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 			AddPoint(1000, e);
 		}
 	}
-	else if (boomerangBrother->GetState() != GOOMBA_STATE_DIE_REVERSE)
+	else if (boomerangBrother->GetState() != BOOMERANG_BROTHER_STATE_DIE)
 	{
 		GetHurt();
 	}

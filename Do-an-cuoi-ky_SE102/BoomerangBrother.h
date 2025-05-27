@@ -14,8 +14,11 @@
 #define ID_ANI_BOOMERANG_BROTHER_THROW_RIGHT 13003
 #define ID_ANI_BOOMERANG_BROTHER_THROW_LEFT 13004
 
+#define ID_ANI_BOOMERANG_BROTHER_DIE 13009
+
 #define BOOMERANG_BROTHER_STATE_AIMING 1
 #define BOOMERANG_BROTHER_STATE_THROWING 2
+#define BOOMERANG_BROTHER_STATE_DIE 4
 
 #define BOOMERANG_BROTHER_THROW_DISTANCE 100.0f
 #define BOOMERANG_BROTHER_AIM_TIME 500 
@@ -25,6 +28,7 @@
 #define BOOMERANG_BROTHER_GRAVITY 0.001f
 #define BOOMERANG_BROTHER_PATROL_DISTANCE 20.0f
 #define BOOMERANG_BROTHER_WAIT_TIME 300
+#define BOOMERANG_BROTHER_DIE_TIMEOUT 500
 
 class CBoomerangBrother : public CEnemy
 {
@@ -40,6 +44,7 @@ private:
 	ULONGLONG throwStartTime;
 
 	ULONGLONG waitStartTime; 
+	ULONGLONG die_start;
 
 	int BoomerangCount;
 
@@ -69,7 +74,13 @@ public:
 
 	void Throw();
 
-	int IsBlocking() { return 0; } // Boomerang Brother is blocking
+	int IsBlocking() { return 0; }
+	int IsCollidable() override
+	{ 
+		if (state == BOOMERANG_BROTHER_STATE_DIE)
+			return 0;
+		return 1;
+	} 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 };
