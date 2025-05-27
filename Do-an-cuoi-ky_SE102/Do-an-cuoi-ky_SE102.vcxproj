@@ -134,6 +134,7 @@
     <ClCompile Include="1UpMushroom.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Animations.cpp" />
+    <ClCompile Include="Boomerang.cpp" />
     <ClCompile Include="BoomerangBrother.cpp" />
     <ClCompile Include="BoxPlatform.cpp" />
     <ClCompile Include="Brick.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="AnimationFrame.h" />
     <ClInclude Include="Animations.h" />
     <ClInclude Include="AssetIDs.h" />
+    <ClInclude Include="Boomerang.h" />
     <ClInclude Include="BoomerangBrother.h" />
     <ClInclude Include="BoxPlatform.h" />
     <ClInclude Include="Brick.h" />
