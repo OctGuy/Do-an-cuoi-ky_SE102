@@ -18,6 +18,7 @@
 
 #define BOOMERANG_BROTHER_STATE_AIMING 1
 #define BOOMERANG_BROTHER_STATE_THROWING 2
+#define BOOMERANG_BROTHER_STATE_COOLDOWN 3
 #define BOOMERANG_BROTHER_STATE_DIE 4
 
 #define BOOMERANG_BROTHER_THROW_DISTANCE 100.0f
@@ -27,7 +28,8 @@
 #define BOOMERANG_BROTHER_WALKING_SPEED 0.03f
 #define BOOMERANG_BROTHER_GRAVITY 0.001f
 #define BOOMERANG_BROTHER_PATROL_DISTANCE 20.0f
-#define BOOMERANG_BROTHER_WAIT_TIME 300
+#define BOOMERANG_BROTHER_STOP_TIME 300
+#define BOOMERANG_BROTHER_COOLDOWN_TIME 3000
 #define BOOMERANG_BROTHER_DIE_TIMEOUT 500
 
 class CBoomerangBrother : public CEnemy
@@ -43,8 +45,10 @@ private:
 	ULONGLONG aimStartTime; 
 	ULONGLONG throwStartTime;
 
-	ULONGLONG waitStartTime; 
+	ULONGLONG stopStartTime; 
 	ULONGLONG die_start;
+
+	ULONGLONG cooldownStartTime;
 
 	int BoomerangCount;
 
@@ -64,6 +68,9 @@ public:
 		BoomerangCount = BOOMERANG_BROTHER_NUMBER_OF_BOOMERANG;
 		aimStartTime = 0;
 		throwStartTime = 0;
+		stopStartTime = 0;
+		die_start = 0;
+		cooldownStartTime = 0;
 
 		boomerang = nullptr;
 	}

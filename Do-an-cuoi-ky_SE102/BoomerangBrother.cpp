@@ -70,12 +70,12 @@ void CBoomerangBrother::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//Logic for patrolling, if hit left edge, wait, move right, if hit right edge, wait, move left
 	if(fabs(x - originalX) >= BOOMERANG_BROTHER_PATROL_DISTANCE)
 	{
-		if(!waitStartTime)
-			waitStartTime = now;
+		if(!stopStartTime)
+			stopStartTime = now;
 
-		if (now - waitStartTime >= BOOMERANG_BROTHER_WAIT_TIME)
+		if (now - stopStartTime >= BOOMERANG_BROTHER_STOP_TIME)
 		{
-			waitStartTime = 0; 
+			stopStartTime = 0; 
 			if (originalX + BOOMERANG_BROTHER_PATROL_DISTANCE <= x) 
 			{
 				vx = -BOOMERANG_BROTHER_WALKING_SPEED;
@@ -116,11 +116,16 @@ void CBoomerangBrother::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		this->boomerang = boomerang;
 		SetState(BOOMERANG_BROTHER_STATE_AIMING);
 	}
-	else if (BoomerangCount == 0)
+	else if (BoomerangCount == 0 && !cooldownStartTime)
 	{
-		//not clear
-		isAiming = false;
-		isThrowing = false;
+		SetState(BOOMERANG_BROTHER_STATE_COOLDOWN);
+	}
+
+	if (cooldownStartTime && now - cooldownStartTime >= BOOMERANG_BROTHER_COOLDOWN_TIME)
+	{
+		DebugOut(L"[INFO] Boomerang Brother finished resting\n");
+		cooldownStartTime = 0;
+		BoomerangCount = BOOMERANG_BROTHER_NUMBER_OF_BOOMERANG; // Reset boomerang count after resting
 	}
 
 	//ULONGLONG now = GetTickCount64();
@@ -144,7 +149,7 @@ void CBoomerangBrother::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			boomerang->SetState(BOOMERANG_STATE_HELD);
 			this->boomerang = boomerang;
 			SetState(BOOMERANG_BROTHER_STATE_AIMING);
-		}
+		}	
 	}
 
 	if (boomerang)
@@ -250,7 +255,6 @@ void CBoomerangBrother::OnCollisionWithBoomerang(LPCOLLISIONEVENT e)
 	if(boomerang->IsReturning())
 	{
 		DebugOut(L"[INFO] Boomerang Brother collided with returning boomerang\n");
-		BoomerangCount++;
 		boomerang->Delete();
 	}
 }
@@ -297,6 +301,15 @@ void CBoomerangBrother::SetState(int state)
 		vx = 0;
 		vy = -0.1f;
 		ay = 0.001f;
+		break;
+	}
+
+	case BOOMERANG_BROTHER_STATE_COOLDOWN:
+	{
+		DebugOut(L"[INFO] Boomerang Brother is resting\n");
+		isAiming = false;
+		isThrowing = false;
+		cooldownStartTime = GetTickCount64();
 		break;
 	}
 	default:
