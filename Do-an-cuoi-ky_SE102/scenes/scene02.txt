@@ -253,6 +253,9 @@ assets\BoomerangBrother.txt
 11	1868	293
 #11	185	300
 
+# BOOMERANG BROTHER
+15	2300	396
+
 # MARIO
 0	48	336
 #0	1946	304
