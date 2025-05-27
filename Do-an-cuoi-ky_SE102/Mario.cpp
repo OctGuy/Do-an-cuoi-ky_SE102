@@ -19,6 +19,8 @@
 #include "Collision.h"
 #include "TunnelBlock.h"
 #include "GoalRoulette.h"
+#include "Boomerang.h"
+#include "BoomerangBrother.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -383,6 +385,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		OnCollisionWithGoalRoulette(e);
 	}
+	else if (dynamic_cast<CBoomerang*>(e->obj))
+	{
+		OnCollisionWithGoalBoomerang(e);
+	}
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -585,6 +591,29 @@ void CMario::OnCollisionWithGoalRoulette(LPCOLLISIONEVENT e)
 	cards.push_back(card);
 
 	goalRoulette->Delete();
+}
+
+void CMario::OnCollisionWithGoalBoomerang(LPCOLLISIONEVENT e)
+{
+	GetHurt();
+}
+
+void CMario::OnCollisionWithBoomerangBrother(LPCOLLISIONEVENT e)
+{
+	CBoomerangBrother* boomerangBrother = dynamic_cast<CBoomerangBrother*>(e->obj);
+	if (e->ny < 0)
+	{
+		if (boomerangBrother->GetState() != GOOMBA_STATE_DIE_REVERSE)
+		{
+			boomerangBrother->SetState(GOOMBA_STATE_DIE);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			AddPoint(1000, e);
+		}
+	}
+	else if (boomerangBrother->GetState() != GOOMBA_STATE_DIE_REVERSE)
+	{
+		GetHurt();
+	}
 }
 
 
@@ -1256,7 +1285,7 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_FLYING:
-		DebugOut(L"[INFO] Mario flying\n");
+		//DebugOut(L"[INFO] Mario flying\n");
 		vy = MARIO_FLYING_SPEED; // Apply upward boost
 		slowfall_start = GetTickCount64();
 		maxVy = MARIO_FLYING_SPEED; // Use flying speed as max speed
@@ -1268,7 +1297,7 @@ void CMario::SetState(int state)
 		if (level == MARIO_LEVEL_RACCOON && !isTailAttacking &&
 			(GetTickCount64() - tailAttack_start > MARIO_TAIL_ATTACK_TIME + 100))
 		{
-			DebugOut(L"[INFO] Mario tail attack\n");
+			//DebugOut(L"[INFO] Mario tail attack\n");
 			if (Tail)
 			{
 				Tail->SetPosition(x, y + 6.f);
