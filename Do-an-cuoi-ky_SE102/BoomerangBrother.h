@@ -21,13 +21,17 @@
 #define BOOMERANG_BROTHER_AIM_TIME 500 
 #define BOOMERANG_BROTHER_THROW_TIME 1000
 #define BOOMERANG_BROTHER_NUMBER_OF_BOOMERANG 2
-#define BOOMERANG_BROTHER_WALKING_SPEED 0.05f
+#define BOOMERANG_BROTHER_WALKING_SPEED 0.03f
 #define BOOMERANG_BROTHER_GRAVITY 0.001f
+#define BOOMERANG_BROTHER_PATROL_DISTANCE 20.0f
+#define BOOMERANG_BROTHER_WAIT_TIME 300
 
 class CBoomerangBrother : public CEnemy
 {
 private:
 	float ay;
+
+	float originalX; 
 
 	BOOLEAN isAiming; 
 	BOOLEAN isThrowing;
@@ -35,10 +39,14 @@ private:
 	ULONGLONG aimStartTime; 
 	ULONGLONG throwStartTime;
 
+	ULONGLONG waitStartTime; 
+
 	int BoomerangCount;
 public:
 	CBoomerangBrother(float x, float y) : CEnemy(x, y)
 	{
+		originalX = x;
+
 		ay = BOOMERANG_BROTHER_GRAVITY;
 		vx = BOOMERANG_BROTHER_WALKING_SPEED;
 
@@ -53,7 +61,7 @@ public:
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	void SetState(int state);
 
-	//void Fire();
+	void Throw();
 
 	int IsBlocking() { return 0; } // Boomerang Brother is blocking
 	void OnNoCollision(DWORD dt);
