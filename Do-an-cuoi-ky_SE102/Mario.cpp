@@ -666,7 +666,9 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 
 	if (e->ny < 0) {
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
-		if (koopa->GetState() == KOOPA_STATE_WALKING_LEFT
+		if (koopa->GetState() == KOOPA_STATE_FLY) 
+			koopa->SetState(KOOPA_STATE_WALKING_LEFT);
+		else if (koopa->GetState() == KOOPA_STATE_WALKING_LEFT
 			|| koopa->GetState() == KOOPA_STATE_WALKING_RIGHT
 			|| koopa->GetState() == KOOPA_STATE_SHELL_MOVE
 			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
@@ -687,12 +689,9 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 
 			koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
 		}
-		else if (koopa->GetState() == KOOPA_STATE_FLY) {
-			koopa->SetState(KOOPA_STATE_WALKING_LEFT);
-		}
 		AddPoint(100, e);
 	}
-	else if (e->nx != 0 || e->ny > 0) {
+	else if (e->nx != 0) {
 		if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE
 			|| koopa->GetState() == KOOPA_STATE_SHELL_SHAKING
 			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE
@@ -716,17 +715,23 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 		else if (koopa->GetState() == KOOPA_STATE_WALKING_LEFT
 				|| koopa->GetState() == KOOPA_STATE_WALKING_RIGHT
 				|| koopa->GetState() == KOOPA_STATE_SHELL_MOVE
-				|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) 
+				|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE
+				|| koopa->GetState() == KOOPA_STATE_FLY) 
 		{
 			Koopa = nullptr;
 			GetHurt();
 		}
 	}
-	else 
-	{
+	else if (e->ny > 0) {
 		if (koopa->GetState() == KOOPA_STATE_WALKING_LEFT
-			|| koopa->GetState() == KOOPA_STATE_WALKING_RIGHT)
+			|| koopa->GetState() == KOOPA_STATE_WALKING_RIGHT
+			|| koopa->GetState() == KOOPA_STATE_SHELL_MOVE
+			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE
+			|| koopa->GetState() == KOOPA_STATE_FLY)
+		{
+			DebugOut(L"[INFO] Mario hit Koopa from above\n");
 			GetHurt();
+		}
 	}
 }
 

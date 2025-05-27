@@ -304,6 +304,7 @@ assets\BoomerangBrother.txt
 #KOOPA
 11	576 	358
 11	2096	358
+11	150	284
 
 #PARATROOPA
 13	1328	292
@@ -367,4 +368,4 @@ assets\BoomerangBrother.txt
 4	2191	465
 4	2175	481
 # PORTAL 
-50	100	350	2
+#50	100	350	2

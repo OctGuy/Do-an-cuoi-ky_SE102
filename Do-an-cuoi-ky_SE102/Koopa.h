@@ -78,8 +78,9 @@ public:
 		flyUpperY = 0;
 		flyLowerY = 0;
 
-		if (x == FLYING_KOOPA_ORIGINAL_X
-			&& y == FLYING_KOOPA_ORIGINAL_Y)
+		if ((x == FLYING_KOOPA_ORIGINAL_X
+			&& y == FLYING_KOOPA_ORIGINAL_Y) ||
+			(x == 150.0 && y == 284.0))
 			SetState(KOOPA_STATE_FLY);
 		else SetState(KOOPA_STATE_WALKING_LEFT);
 
