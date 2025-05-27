@@ -4,8 +4,8 @@
 #include "Textures.h"
 #include "Animations.h"
 
-#define BOOMERANG_BBOX_WIDTH 16
-#define BOOMERANG_BBOX_HEIGHT 16
+#define BOOMERANG_BBOX_WIDTH 14
+#define BOOMERANG_BBOX_HEIGHT 14
 
 #define BOOMERANG_STATE_THROWN 1
 #define BOOMERANG_STATE_HELD 2

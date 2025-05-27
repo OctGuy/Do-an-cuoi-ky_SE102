@@ -155,7 +155,10 @@ void CBoomerangBrother::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (boomerang)
 	{
 		if (isAiming && now - aimStartTime < BOOMERANG_BROTHER_AIM_TIME)
-				boomerang->SetPosition(x - nx * 10.f, y - 7.f); // Adjust boomerang position while aiming
+		{
+			boomerang->SetPosition(x - nx * 10.f, y - 7.f);
+			boomerang->SetDirection(nx);
+		}
 	}
 }
 
