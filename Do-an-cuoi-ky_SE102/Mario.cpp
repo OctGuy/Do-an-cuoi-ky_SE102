@@ -171,7 +171,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (level != MARIO_LEVEL_RACCOON)
 				Koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * 2.f, y - 3.f);
 			else
-				Koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * 7.f, y - 3.f);
+				Koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * 5.f, y - 3.f);
 			Koopa->SetSpeed(0, 0);
 
 			//If koopa is out of shell while mario is still holding it, mario is hurt
@@ -191,6 +191,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (!isAbleToHold) //Mario release koopa
 				{
+					DebugOut(L"[INFO] Mario kick Koopa by touch\n");
 					isKicking = true;
 					kick_start = now;
 
@@ -219,7 +220,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (level != MARIO_LEVEL_RACCOON)
 				Koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * 2.f, y - 3.f);
 			else
-				Koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * 7.f, y - 3.f);
+				Koopa->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * 5.f, y - 3.f);
 			Koopa->SetSpeed(0, 0);
 
 			//If koopa is out of shell while mario is still holding it, mario is hurt
@@ -622,7 +623,6 @@ void CMario::OnCollisionWithBoomerangBrother(LPCOLLISIONEVENT e)
 	}
 }
 
-
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	DebugOut(L">>> Mario touched coin >>> \n");
@@ -702,6 +702,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 				koopa->SetIsHeld(true);
 			}
 			else { // Kick
+				DebugOut(L"[INFO] Mario kick Koopa by touch\n");
 				isKicking = true;
 				kick_start = GetTickCount64();
 				if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE
