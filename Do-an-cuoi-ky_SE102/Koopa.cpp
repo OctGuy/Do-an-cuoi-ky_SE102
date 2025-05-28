@@ -66,13 +66,14 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 		}
 		else if (dynamic_cast<CQuestionBrick*>(e->obj)) {
 			OnCollisionWithBrick(e);
-		}	
+		}
 	}
 }
 
 void CKoopa::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
 	CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
-	questionBrick->OnCollisionWith(e);
+	if (e->nx != 0)
+		questionBrick->OnCollisionWith(e);
 }
 
 void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
@@ -99,7 +100,10 @@ void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 void CKoopa::OnCollisionWithShinyBrick(LPCOLLISIONEVENT e)
 {
 	CShinyBrick* shinyBrick = dynamic_cast<CShinyBrick*>(e->obj);
-	shinyBrick->Activate();
+	if (e->nx != 0)
+	{
+		shinyBrick->Activate();
+	}
 }
 
 CMario* CKoopa::GetPlayer() {
