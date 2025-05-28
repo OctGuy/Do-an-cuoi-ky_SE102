@@ -57,6 +57,8 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
         {
             mario->SetState(MARIO_STATE_JUMP);
         }
+
+        mario->SetHighBounce(true);
         break;
     case DIK_A:
         if (mario->GetLevel() == MARIO_LEVEL_RACCOON && !mario->IsTailAttacking() && !mario->IsSitting())
@@ -124,6 +126,8 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
         // Check if down key is presed when jump key is released
         if (game->IsKeyDown(DIK_DOWN))
             mario->SetState(MARIO_STATE_SIT);
+
+        mario->SetHighBounce(false);
         break;
     case DIK_DOWN:
         mario->SetState(MARIO_STATE_SIT_RELEASE);

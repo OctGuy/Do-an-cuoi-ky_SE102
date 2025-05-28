@@ -211,6 +211,8 @@
 
 #define MARIO_P_METER_MAX 600
 
+#define MAARIO_HIGH_BOUNCE_DISTANCE 50.f 
+
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
@@ -261,6 +263,8 @@ class CMario : public CGameObject
 	BOOLEAN isInputBlocked; 
 
 	float opacity;
+
+	BOOLEAN isAbleToHighBounce;
 
 	//Tracking point and coin
 	int coin;
@@ -324,6 +328,7 @@ public:
 		isAbleToTunnelDown = false;
 		isAbleToTunnelUp = false;
 		isInputBlocked = false;
+		isAbleToHighBounce = false;
 
 		Tail = nullptr;
 		currentFloorY = GROUND_Y; // Initialize to ground level
@@ -393,6 +398,9 @@ public:
 	//Set Tunneling
 	void SetAbleToTunnelDown(BOOLEAN able) { isAbleToTunnelDown = able; }
 	void SetAbleToTunnelUp(BOOLEAN able) { isAbleToTunnelUp = able; }
+
+	void SetHighBounce(BOOLEAN able) { isAbleToHighBounce = able; }
+	void Bounce();
 
 	void StartUntouchable() {
 		untouchable = 1;
