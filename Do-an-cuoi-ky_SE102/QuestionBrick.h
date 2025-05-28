@@ -22,25 +22,31 @@ protected:
 
     int itemType; // Type of item in the brick
     BOOLEAN isHit;
-    float originalY;
+
     DWORD bounceStart;
     BOOLEAN isBouncingFinished;
 
     LPGAMEOBJECT Koopa;
 
+    int activationCount;    
+    int maxActivations;
+
 public:
-    CQuestionBrick(float x, float y, int type, int itemType) : CBrick(x, y, type)
+    CQuestionBrick(float x, float y, int type, int itemType, int maxActivations = 1) : CBrick(x, y, type)
     {
         item = nullptr;
         hasItem = false;
         this->itemType = itemType;
 
         isHit = false;
-        originalY = y;
+
         bounceStart = 0;
         isBouncingFinished = false;
 
         Koopa = nullptr;
+
+		activationCount = 0;
+		this->maxActivations = maxActivations;
     }
     void Render();
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
