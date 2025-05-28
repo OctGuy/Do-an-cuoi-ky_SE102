@@ -187,31 +187,28 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				dynamic_cast<CKoopa*>(Koopa)->SetIsHeld(false);
 				Koopa = nullptr;
 			}
-			else
+			else if(!isAbleToHold) //Mario release koopa
 			{
-				if (!isAbleToHold) //Mario release koopa
+				DebugOut(L"[INFO] Mario kick Koopa by touch\n");
+				isKicking = true;
+				kick_start = now;
+
+				//If koopa is in a wall and mario is kicking it, mario kill it
+				if (dynamic_cast<CKoopa*>(Koopa)->IsInWall())
+					Koopa->SetState(KOOPA_STATE_DIE);
+				else
 				{
-					DebugOut(L"[INFO] Mario kick Koopa by touch\n");
-					isKicking = true;
-					kick_start = now;
-
-					//If koopa is in a wall and mario is kicking it, mario kill it
-					if (dynamic_cast<CKoopa*>(Koopa)->IsInWall())
-						Koopa->SetState(KOOPA_STATE_DIE);
+					if (Koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
+						Koopa->GetState() == KOOPA_STATE_SHELL_SHAKING)
+						Koopa->SetState(KOOPA_STATE_SHELL_MOVE);
 					else
-					{
-						if (Koopa->GetState() == KOOPA_STATE_SHELL_IDLE ||
-							Koopa->GetState() == KOOPA_STATE_SHELL_SHAKING)
-							Koopa->SetState(KOOPA_STATE_SHELL_MOVE);
-						else
-							Koopa->SetState(KOOPA_STATE_SHELL_REVERSE_MOVE);
-						//Koopa is kicked in the direction mario is looking
-						Koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
-					}
-
-					dynamic_cast<CKoopa*>(Koopa)->SetIsHeld(false);
-					Koopa = nullptr;
+						Koopa->SetState(KOOPA_STATE_SHELL_REVERSE_MOVE);
+					//Koopa is kicked in the direction mario is looking
+					Koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
 				}
+
+				dynamic_cast<CKoopa*>(Koopa)->SetIsHeld(false);
+				Koopa = nullptr;
 			}
 		}
 
@@ -696,12 +693,8 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 			|| koopa->GetState() == KOOPA_STATE_SHELL_SHAKING
 			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE
 			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_SHAKING) {
-			if (isAbleToHold && !Koopa) 	// Mario picks Koopa
+			if (!isAbleToHold || Koopa) 	// Mario kick Koopa
 			{
-				this->Koopa = koopa;
-				koopa->SetIsHeld(true);
-			}
-			else { // Kick
 				DebugOut(L"[INFO] Mario kick Koopa by touch\n");
 				isKicking = true;
 				kick_start = GetTickCount64();
@@ -732,6 +725,20 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 		{
 			DebugOut(L"[INFO] Mario hit Koopa from above\n");
 			GetHurt();
+		}
+	}
+	else if (e->nx == 0 && e->ny == 0)
+	{
+		if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE
+			|| koopa->GetState() == KOOPA_STATE_SHELL_SHAKING
+			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_IDLE
+			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_SHAKING)
+		{
+			if (isAbleToHold && !Koopa) 	// Mario picks Koopa
+			{
+				this->Koopa = koopa;
+				koopa->SetIsHeld(true);
+			}
 		}
 	}
 }
@@ -778,20 +785,17 @@ void CMario::OnCollisionWithParaTroopa(LPCOLLISIONEVENT e) {
 			|| koopa->GetState() == PARATROOPA_STATE_SHELL_SHAKING
 			|| koopa->GetState() == PARATROOPA_STATE_SHELL_REVERSE_IDLE
 			|| koopa->GetState() == PARATROOPA_STATE_SHELL_REVERSE_SHAKING) {
-			if (isAbleToHold && !Koopa) 	// Mario picks Koopa
+			if (!isAbleToHold || Koopa) 	// Mario kick Koopa
 			{
-				this->Koopa = koopa;
-				koopa->SetIsHeld(true);
-			}
-			else { // Kick
+				DebugOut(L"[INFO] Mario kick Koopa by touch\n");
 				isKicking = true;
 				kick_start = GetTickCount64();
-				if (koopa->GetState() == PARATROOPA_STATE_SHELL_IDLE
-					|| koopa->GetState() == PARATROOPA_STATE_SHELL_SHAKING)
-					koopa->SetState(PARATROOPA_STATE_SHELL_MOVE);
+				if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE
+					|| koopa->GetState() == KOOPA_STATE_SHELL_SHAKING)
+					koopa->SetState(KOOPA_STATE_SHELL_MOVE);
 				else
-					koopa->SetState(PARATROOPA_STATE_SHELL_REVERSE_MOVE);
-				koopa->SetSpeed(nx * PARATROOPA_SHELL_SPEED, 0);
+					koopa->SetState(KOOPA_STATE_SHELL_REVERSE_MOVE);
+				koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
 			}
 		}
 		else if (koopa->GetState() == PARATROOPA_STATE_WALKING_LEFT
@@ -815,6 +819,20 @@ void CMario::OnCollisionWithParaTroopa(LPCOLLISIONEVENT e) {
 			DebugOut(L"[INFO] Mario hit ParaTroopa from above\n");
 			GetHurt();
 		}	
+	}
+	else if (e->nx == 0 && e->ny == 0)
+	{
+		if (koopa->GetState() == PARATROOPA_STATE_SHELL_IDLE
+			|| koopa->GetState() == PARATROOPA_STATE_SHELL_SHAKING
+			|| koopa->GetState() == PARATROOPA_STATE_SHELL_REVERSE_IDLE
+			|| koopa->GetState() == PARATROOPA_STATE_SHELL_REVERSE_SHAKING)
+		{
+			if (isAbleToHold && !Koopa) 	// Mario picks Koopa
+			{
+				this->Koopa = koopa;
+				koopa->SetIsHeld(true);
+			}
+		}
 	}
 }
 
