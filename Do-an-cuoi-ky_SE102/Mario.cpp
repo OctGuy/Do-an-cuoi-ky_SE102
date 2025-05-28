@@ -71,8 +71,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		//DebugOut(L"Time Out\n");
 		slowfall_start = 0;
-		maxVy = MARIO_MAX_FALL_SPEED; // Reset max fall speed to default
-		isInAir = false; // Reset isInAir to false
+		maxVy = MARIO_MAX_FALL_SPEED; 
+		isInAir = false; 
 	}
 
 	//Check flying time
@@ -95,7 +95,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				opacity = 1.0f;
 			}
 		else if (((now - untouchable_start) / MARIO_LOW_OPACITY_TIME) % 2 == 1)
-			opacity = 0.6f;
+			opacity = 0.8f;
 		else if (((now - untouchable_start) / MARIO_LOW_OPACITY_TIME) % 2 == 0)
 			opacity = 0.0f;
 	}
@@ -113,7 +113,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		tailAttack_start = 0;
 		isTailAttacking = false;
-		Tail->SetActive(false); // Deactivate the tail after the attack animation
+		Tail->SetActive(false); 
 		CAnimations* animations = CAnimations::GetInstance();
 		animations->Get(ID_ANI_MARIO_RACCOON_TAIL_ATTACK_RIGHT)->Reset();
 		animations->Get(ID_ANI_MARIO_RACCOON_TAIL_ATTACK_LEFT)->Reset();
@@ -1382,6 +1382,8 @@ void CMario::SetState(int state)
 		tunnel_start = GetTickCount64();
 		currentFloorY = y;
 		isSitting = false;
+		isOnPlatform = true;
+		StartUntouchable();
 		ay = 0;
 		ax = 0;
 		vx = 0;
@@ -1393,6 +1395,8 @@ void CMario::SetState(int state)
 		tunnel_start = GetTickCount64();
 		currentFloorY = y;
 		isSitting = false;
+		isOnPlatform = true;
+		StartUntouchable();
 		ay = 0;
 		ax = 0;
 		vx = 0;
