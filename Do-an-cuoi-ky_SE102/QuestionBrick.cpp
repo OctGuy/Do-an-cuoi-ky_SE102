@@ -27,7 +27,7 @@ void CQuestionBrick::Render()
         id = ID_ANI_QUESTION_BRICK_BOUNCE;
         animations->Get(id)->Render(x, y);
     }
-    else if (isHit) {
+    else if (activationCount == maxActivations) {
         id = ID_ANI_QUESTION_BRICK_INACTIVE;
         animations->Get(id)->Render(x, y);
     }
@@ -54,23 +54,20 @@ void CQuestionBrick::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-    if (isHit)
+    if (bounceStart && GetTickCount64() - bounceStart >= BRICK_BOUNCE_TIME)
     {
-        if (GetTickCount64() - bounceStart >= BRICK_BOUNCE_TIME)
+        if (!isBouncingFinished) // After brick stop bouncing, activate non-coin item
         {
-            if (!isBouncingFinished) // After brick stop bouncing, activate non-coin item
+            isBouncingFinished = true;
+            if (itemType != ITEM_TYPE_COIN)
             {
-                isBouncingFinished = true;
-                if (itemType != ITEM_TYPE_COIN)
-                {
-                    ActivateItem();
-                }
-                //Reset aniamtion
-                CAnimations* animations = CAnimations::GetInstance();
-				animations->Get(ID_ANI_QUESTION_BRICK_BOUNCE)->Reset();
+                ActivateItem();
             }
-            bounceStart = 0;
+            //Reset aniamtion
+            CAnimations* animations = CAnimations::GetInstance();
+			animations->Get(ID_ANI_QUESTION_BRICK_BOUNCE)->Reset();
         }
+        bounceStart = 0;
     }
 
     CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -79,50 +76,49 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CQuestionBrick::Activate()
 {
-    if (!isHit)
-    {
-        if (dynamic_cast<CKoopa*>(Koopa)) {
-			dynamic_cast<CKoopa*>(Koopa)->SetState(KOOPA_STATE_SHELL_REVERSE_JUMP);
-        }
-        else if (dynamic_cast<CParaTroopa*>(Koopa)) {
-            dynamic_cast<CParaTroopa*>(Koopa)->SetState(PARATROOPA_STATE_SHELL_REVERSE_JUMP);
-        }
+    if (activationCount == maxActivations || bounceStart) return;
 
-        CMario* mario = GetPlayer();
-        CPlayScene* playScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
-        SetState(BRICK_STATE_BOUNCE);
-
-        if (itemType == ITEM_TYPE_COIN)
-        {
-            item = new CCoin(x, y - 16.f);
-            playScene->Add(item);
-			ActivateItem();
-		}
-        else if (itemType == ITEM_TYPE_PSWITCH)
-        {
-            item = new CPSwitch(x, y - 13.f);
-            playScene->Add(item);
-            CGame* game = CGame::GetInstance();
-            CPlayScene* scene = (CPlayScene*)game->GetCurrentScene();
-			CParticle* smoke = new CParticle(x, y - 13.f, PARTICLE_TYPE_SMOKE);
-			playScene->Add(smoke);
-        }
-        else if (itemType == ITEM_TYPE_1UP_MUSHROOM)
-        {
-            item = new C1UpMushroom(x, y - 8.f);
-            dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_1UP_MUSHROOM);
-			playScene->Add(item);
-        }
-        else
-        {
-			item = new CPowerUp(x, y - 8.f);
-            if (mario->GetLevel() == MARIO_LEVEL_SMALL)
-                dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_MUSHROOM);
-            else
-                dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_LEAF);
-            playScene->Add(item);
-        }
+    if (dynamic_cast<CKoopa*>(Koopa)) {
+		dynamic_cast<CKoopa*>(Koopa)->SetState(KOOPA_STATE_SHELL_REVERSE_JUMP);
     }
+    else if (dynamic_cast<CParaTroopa*>(Koopa)) {
+        dynamic_cast<CParaTroopa*>(Koopa)->SetState(PARATROOPA_STATE_SHELL_REVERSE_JUMP);
+    }
+
+    CMario* mario = GetPlayer();
+    CPlayScene* playScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+    SetState(BRICK_STATE_BOUNCE);
+
+    if (itemType == ITEM_TYPE_COIN)
+    {
+        item = new CCoin(x, y - 16.f);
+        playScene->Add(item);
+		ActivateItem();
+	}
+    else if (itemType == ITEM_TYPE_PSWITCH)
+    {
+        item = new CPSwitch(x, y - 13.f);
+        playScene->Add(item);
+		CParticle* smoke = new CParticle(x, y - 13.f, PARTICLE_TYPE_SMOKE);
+		playScene->Add(smoke);
+    }
+    else if (itemType == ITEM_TYPE_1UP_MUSHROOM)
+    {
+        item = new C1UpMushroom(x, y - 8.f);
+        dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_1UP_MUSHROOM);
+		playScene->Add(item);
+    }
+    else
+    {
+		item = new CPowerUp(x, y - 8.f);
+        if (mario->GetLevel() == MARIO_LEVEL_SMALL)
+            dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_MUSHROOM);
+        else
+            dynamic_cast<CPowerUp*>(item)->SetType(POWER_UP_TYPE_LEAF);
+        playScene->Add(item);
+    }
+
+	activationCount++;
 }
 
 void CQuestionBrick::SetState(int state)

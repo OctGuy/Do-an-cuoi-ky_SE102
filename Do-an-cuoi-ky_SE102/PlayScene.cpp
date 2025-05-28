@@ -170,7 +170,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{
 			type = atoi(tokens[3].c_str());
 			int itemType = atoi(tokens[4].c_str());
-			obj = new CQuestionBrick(x, y, type, itemType);
+			int maxActivations = atoi(tokens[5].c_str());
+			obj = new CQuestionBrick(x, y, type, itemType, maxActivations);
 			break;
 		}
 
