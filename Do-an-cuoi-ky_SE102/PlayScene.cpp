@@ -584,7 +584,7 @@ void CPlayScene::Update(DWORD dt)
 	}
 
 	// If mario is flying then switch camera to follow him on y axis else keep it fixed
-	if (mario->IsInAir() && vy < 0)
+	if (mario->IsInAir() && vy < 0 && mario->GetPMeter() == 600.f)
 		isCameraFollowMarioY = true;
 	else if (mario->IsOnPlatform() && cy >= 340.f)
 		isCameraFollowMarioY = false;
