@@ -1,6 +1,7 @@
 [SETTINGS]
 left	0
-right	2048
+#right	2048
+right	2576
 bottom	460
 
 [ASSETS]
@@ -238,7 +239,7 @@ assets\BoomerangBrother.txt
 
 #SCENE SWEEPER
 49	200	0	10	1000	-1
-48	10	300
+48	10	300	2048
 
 #KOOPA
 11	1072	326

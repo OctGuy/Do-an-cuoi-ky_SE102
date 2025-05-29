@@ -21,6 +21,7 @@
 #include "GoalRoulette.h"
 #include "Boomerang.h"
 #include "BoomerangBrother.h"
+#include "SceneSweeper.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -159,8 +160,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	playScene->GetBoundary(leftBoundary, rightBoundary, bottomBoundary);
 	
 	if (x < leftBoundary + 8.f) { x = leftBoundary + 8.f; vx = 0; }
+	else if (x > rightBoundary - 8.f) { x = rightBoundary - 8.f; vx = 0; }
 	if (y < 8.f) { y = 8.f; vy = 0; }
-	if (y > bottomBoundary) SetState(MARIO_STATE_DIE); 
+	else if (y > bottomBoundary) SetState(MARIO_STATE_DIE); 
 
 	//Handle Koopa Picking and Kicking
 	if (Koopa)
@@ -575,25 +577,51 @@ void CMario::OnCollisionWithGoalRoulette(LPCOLLISIONEVENT e)
 	CParticle* particle = nullptr;
 
 	if (card == CARD_TYPE_MUSHROOM)
-		particle = new CParticle(objX, objY, PARTICLE_TYPE_MUSHROOM, 0);
+		particle = new CParticle(objX, objY, PARTICLE_TYPE_MUSHROOM);
 	else if (card == CARD_TYPE_PLANT)
-		particle = new CParticle(objX, objY, PARTICLE_TYPE_PLANT, 0);
+		particle = new CParticle(objX, objY, PARTICLE_TYPE_PLANT);
 	else if (card == CARD_TYPE_STAR)
-		particle = new CParticle(objX, objY, PARTICLE_TYPE_STAR, 0);
+		particle = new CParticle(objX, objY, PARTICLE_TYPE_STAR);
 
 	if (particle)
 		playScene->Add(particle);
+
+	float camX, camY;
+	game->GetCamPos(camX, camY);
+
+	//Course end text
+	particle = new CParticle(camX + 124.f, camY + 32.f, PARTICLE_TYPE_TEXT_1);
+	if (particle)
+		playScene->Add(particle);
+
+	//You got a card text
+	particle = new CParticle(camX + 108.f, camY + 48.f, PARTICLE_TYPE_TEXT_2);
+	if (particle)
+		playScene->Add(particle);
+
+	//Card
+	if (card == CARD_TYPE_MUSHROOM)
+		particle = new CParticle(camX + 188.f, camY + 56.f, PARTICLE_TYPE_CARD_MUSHROOM);
+	else if (card == CARD_TYPE_PLANT)
+		particle = new CParticle(camX + 188.f, camY + 56.f, PARTICLE_TYPE_CARD_PLANT);
+	else if (card == CARD_TYPE_STAR)
+		particle = new CParticle(camX + 188.f, camY + 56.f, PARTICLE_TYPE_CARD_STAR);
+
+	playScene->Add(particle);
+
+	// Add the card to the cards vector 
+	cards.push_back(card);
 
 	// Force mrio to walk right
 	SetState(MARIO_STATE_WALKING_RIGHT);
 	isInputBlocked = true; //Restrict input
 
-	//Open portal to "next" scene
-	LPGAMEOBJECT portal = new CPortal(objX + 115.f, objY + 65.f, 2);	//Just put 2 for now because we dont have alot of level
-	playScene->Add(portal);
-
-	// Add the card to the cards vector 
-	cards.push_back(card);
+	//This entire part is just to let mario walk off the screen
+	float rightBoundary;
+	float dummy1, dummy2;
+	playScene->GetBoundary(dummy1, rightBoundary, dummy2);
+	playScene->SetCamRightBound(rightBoundary + 320.f);
+	playScene->SetCamFollowOnX(false);
 
 	goalRoulette->Delete();
 }

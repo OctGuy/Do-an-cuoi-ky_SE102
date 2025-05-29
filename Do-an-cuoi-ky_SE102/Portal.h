@@ -21,7 +21,7 @@ public:
 	void GetBoundingBox(float &l, float &t, float &r, float &b);
 	void Reload();
 
-	void SetActive(bool isActive);
+	void SetActive(bool isActive) override;
 
 	void RenderBoundingBox(void);
 	
