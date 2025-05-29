@@ -12,10 +12,15 @@ class CSceneSweeper : public CGameObject
 {
 private:
 	LPGAMEOBJECT wall;
+	float rightLimit;
 public:
-	CSceneSweeper(float x, float y) : CGameObject(x, y) 
+	CSceneSweeper(float x, float y, float rightLimit = 0) : CGameObject(x, y) 
 	{
 		this->wall = nullptr;
+		this->rightLimit = rightLimit;
+
+		vx = SCENE_SWEEPER_SPEED;
+
 		CGame* game = CGame::GetInstance();
 		CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
 		vector<LPGAMEOBJECT>& allObjects = playScene->GetObjects();
@@ -41,8 +46,11 @@ public:
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void SetActive(bool isActive) override { this->isActive = true; }
 
+	void Reload() override;
+
 	//void SetActive(bool isActive) override;
 
+	void SetWall(LPGAMEOBJECT wall) { this->wall = wall; }
 	int IsCollidable() { return 1; }
 	int IsBlocking() { return 0; }
 	int IsTangible() { return 0; }

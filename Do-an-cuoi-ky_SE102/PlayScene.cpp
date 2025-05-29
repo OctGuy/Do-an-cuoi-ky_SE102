@@ -369,7 +369,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		case OBJECT_TYPE_SCENE_SWEEPER:
 		{
-			obj = new CSceneSweeper(x, y);
+			float rightLimit = (float)atof(tokens[3].c_str());
+			obj = new CSceneSweeper(x, y, rightLimit);
 			break;
 		}
 
@@ -580,7 +581,7 @@ void CPlayScene::Update(DWORD dt)
 		cx -= game->GetBackBufferWidth() / 2;
 	else
 	{
-		isCameraFollowMarioX = true;
+		//isCameraFollowMarioX = true;
 		cx = camX;
 	}
 
@@ -609,6 +610,8 @@ void CPlayScene::Update(DWORD dt)
 
 	game->SetCamPos(cx, cy);
 
+	//DebugOut(L"[INFO] Camera position: (%f, %f)\n", cx, cy);
+	DebugOut(L"Cam Follow on X: %d\n", isCameraFollowMarioX);
 	PurgeDeletedObjects();
 }
 

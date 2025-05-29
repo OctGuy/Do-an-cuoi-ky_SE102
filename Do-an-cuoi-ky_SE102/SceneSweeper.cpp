@@ -9,19 +9,17 @@ void CSceneSweeper::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float leftBound, rightBound, bottomBound;
 	playScene->GetBoundary(leftBound, rightBound, bottomBound);
 
-	if (x + game->GetBackBufferWidth() > rightBound)
+	if (x + game->GetBackBufferWidth() > rightLimit)
 	{
-		this->Delete();
+		vx = 0;
 		return;
 	}
 
 	//DebugOut(L"[INFO] SceneSweeper Position: %f\n", x);
-	x += SCENE_SWEEPER_SPEED * dt;
+	x += vx * dt;
 
 	if(wall)
 		this->wall->SetPosition(x + game->GetBackBufferWidth() - 8.f, 0.f);
-	else
-		DebugOut(L"[ERROR] SceneSweeper wall is NULL\n");
 
 	playScene->SetCamLeftBound(x);
 	playScene->SetCamFollowOnX(false);
@@ -37,6 +35,13 @@ void CSceneSweeper::GetBoundingBox(float& l, float& t, float& r, float& b)
 	t = y;
 	r = x + 1;
 	b = y + 1; 
+}
+
+void CSceneSweeper::Reload()
+{
+	CPlayScene* playScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+	playScene->SetCamFollowOnX(true);
+	this->Delete();
 }
 
 //void CSceneSweeper::SetActive(bool isActive)
