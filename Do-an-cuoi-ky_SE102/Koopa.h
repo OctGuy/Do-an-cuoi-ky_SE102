@@ -52,6 +52,8 @@
 #define FLYING_KOOPA_ORIGINAL_X 1868.0f
 #define FLYING_KOOPA_ORIGINAL_Y 293.0f
 
+#define KOOPA_PLATFORM_EDGE_DISTANCE 0.1f
+
 class CKoopa : public CEnemy
 {
 protected:
