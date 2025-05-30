@@ -3,7 +3,6 @@
 void CBoxPlatform::Render()
 {
     if (this->length <= 0 || this->width <= 0) return;
-    //DebugOut(L"Rendering Box");
     float yy = y;
     RenderLayer(this->spriteIdTL, this->spriteIdMT, this->spriteIdTR, this->spriteIdSOTCorner, yy);
     yy += this->cellHeight;

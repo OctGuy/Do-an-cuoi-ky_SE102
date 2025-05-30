@@ -75,8 +75,6 @@ void CFireBullet::Reload()
 
 void CFireBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	// Same as piranha plant update
-
 	if (state == FIRE_BULLET_STATE_INACTIVE) return;
 
 	x += vx * dt;

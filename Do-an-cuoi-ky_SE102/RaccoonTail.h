@@ -14,8 +14,8 @@
 class CRaccoonTail : public CGameObject
 {
 protected:
-    float startX; // Initial x position for horizontal movement
-    bool isActive; // Flag to indicate if the tail is currently active
+    float startX; 
+    bool isActive; 
 
 public:
     CRaccoonTail(float x, float y) : CGameObject(x, y)

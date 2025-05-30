@@ -216,7 +216,6 @@ void CParaTroopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	case PARATROOPA_STATE_SHELL_SHAKING:
 	case PARATROOPA_STATE_SHELL_REVERSE_SHAKING:
 		if (now - stateShakingStart > PARATROOPA_SHELL_SHAKING_DURATION) {
-			//DebugOut(L"[INFO] Koopa is out of shell\n");
 			vy = -0.15;
 			SetState(PARATROOPA_STATE_WALKING_LEFT);
 		}

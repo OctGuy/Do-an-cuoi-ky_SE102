@@ -2,6 +2,7 @@
 #include "Mario.h"
 #include "PlayScene.h"
 #include "Boomerang.h"
+
 void CBoomerangBrother::Render()
 {
 	int aniId = -1;
@@ -93,16 +94,11 @@ void CBoomerangBrother::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 
-	//if (fabs(dxPlayer) <= BOOMERANG_BROTHER_THROW_DISTANCE)
-	//	Throw();
-
 	if (isAiming && isThrowing)
 	{
 		DebugOut(L"[ERROR] Boomerang Brother is both aiming and throwing boomerang at the same time\n");
 		return;
 	}
-
-	//CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
 
 	//if boomerang brother have all his boomerangs and mario is within distance, he will throw
 	if (BoomerangCount == BOOMERANG_BROTHER_NUMBER_OF_BOOMERANG &&
@@ -233,12 +229,10 @@ void CBoomerangBrother::OnCollisionWith(LPCOLLISIONEVENT e)
 		{
 			if (e->nx > 0)
 			{
-				//DebugOut(L"[INFO] Boomerang Brother collided from the right\n");
 				vx = -BOOMERANG_BROTHER_WALKING_SPEED;
 			}
 			else // Collision from the left
 			{
-				//DebugOut(L"[INFO] Boomerang Brother collided from the left\n");
 				vx = BOOMERANG_BROTHER_WALKING_SPEED;
 			}
 		}

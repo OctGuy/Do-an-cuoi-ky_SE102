@@ -35,7 +35,6 @@ void CMovingPlatform::OnCollisionWithMario(LPCOLLISIONEVENT e)
 
 void CMovingPlatform::Reload()
 {
-	//DebugOut(L"[INFO] Reload MovingPlatform\n");
 	CGameObject::Reload();
 	vx = -MOVING_PLATFORM_HORIZONTAL_SPEED;
 }

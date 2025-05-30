@@ -27,8 +27,8 @@
 class CPlainPiranha : public CEnemy
 {
 protected:
-	ULONGLONG stateStartTime;	// time when the current state was started
-	float originalY;			// original y pos when starting descending, ascending
+	ULONGLONG stateStartTime;	
+	float originalY;			
 	ULONGLONG die_start;
 public:
 	CPlainPiranha(float x, float y);

@@ -69,10 +69,10 @@
 class CPiranhaPlant : public CEnemy
 {
 protected:
-	ULONGLONG stateStartTime;	// time when the current state was started
+	ULONGLONG stateStartTime;	
 	float originalX;			
-	float originalY;			// original y pos when starting descending, ascending
-	bool isShooting;			// check if the piranha plant is shooting
+	float originalY;			
+	bool isShooting;			
 	ULONGLONG die_start;
 	bool isRed;
 public:
@@ -89,7 +89,7 @@ public:
 	};
 
 	int IsBlocking() { return 0; }
-	int GetSnippingDirection(); // get the direction of the snipping action to mario
+	int GetSnippingDirection(); 
 	void SetState(int state);
 	void Shoot(int direction);
 	bool IsTargetInRange();	

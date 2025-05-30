@@ -5,14 +5,12 @@ void CCoin::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(ID_ANI_COIN)->Render(x, y);
-
 	//RenderBoundingBox();
 }
 
 void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (state == COIN_STATE_BOUNCE) {
-		//DebugOut(L"Coin bounce");
 		if (GetTickCount64() - bounceStart < COIN_BOUNCE_TIME)
 		{
 			y += vy * dt;
@@ -47,7 +45,6 @@ void CCoin::SetState(int state)
 	switch (state)
 	{
 		case COIN_STATE_BOUNCE:
-			//DebugOut(L"Coin bounce");
 			originalY = y - COIN_BBOX_HEIGHT; //This happen after question brick update new y position for coin
 			bounceStart = GetTickCount64();
 			vy = -COIN_BOUNCE_SPEED;

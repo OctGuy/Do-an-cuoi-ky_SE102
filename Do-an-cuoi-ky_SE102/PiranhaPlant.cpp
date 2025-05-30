@@ -336,7 +336,5 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		break;
 	}
 
-	
-
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

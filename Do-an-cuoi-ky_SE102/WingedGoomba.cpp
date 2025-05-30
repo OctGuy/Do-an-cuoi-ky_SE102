@@ -165,9 +165,6 @@ void CWingedGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	wasOnPlatform = isOnPlatform;
 	isOnPlatform = false;
 
-	//DebugOut(L"[INFO] Winged Goomba state: %d\n", state);
-
-	//CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 

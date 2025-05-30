@@ -20,8 +20,6 @@
 #define LEAF_SWAYING_SPEED 0.04f
 #define LEAF_RISE_SPEED 0.08f
 
-
-///////////////
 #define MUSHROOM_BBOX_WIDTH 16
 #define MUSHROOM_BBOX_HEIGHT 14
 
@@ -42,7 +40,6 @@ protected:
     float ay;
     float originalY;
     float originalX;
-    //bool isOnPlatform;
 
     int type; // 1: mushroom, 2: leaf
 
