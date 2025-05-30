@@ -180,7 +180,6 @@ void CPlainPiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		break;
 	}
 
-	DebugOut(L"Plain Piranha state: %d\n", state);
-
 	CGameObject::Update(dt, coObjects);
+	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

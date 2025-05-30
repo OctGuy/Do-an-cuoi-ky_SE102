@@ -611,7 +611,7 @@ void CPlayScene::Update(DWORD dt)
 	game->SetCamPos(cx, cy);
 
 	//DebugOut(L"[INFO] Camera position: (%f, %f)\n", cx, cy);
-	DebugOut(L"Cam Follow on X: %d\n", isCameraFollowMarioX);
+	//DebugOut(L"Cam Follow on X: %d\n", isCameraFollowMarioX);
 	PurgeDeletedObjects();
 }
 
