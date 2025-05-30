@@ -34,44 +34,31 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 		ay = KOOPA_GRAVITY; 
 	}
 
-	if (state == KOOPA_STATE_WALKING_LEFT || state == KOOPA_STATE_WALKING_RIGHT) {
-		if (e->nx != 0 && e->obj->IsBlocking()) {
-			if (e->nx > 0) {
-				SetState(KOOPA_STATE_WALKING_RIGHT);
-			}
-			else {
-				SetState(KOOPA_STATE_WALKING_LEFT);
-			}
-		}
+	
+	if (e->nx != 0 && e->obj->IsBlocking()) {
+		if (state == KOOPA_STATE_WALKING_LEFT 
+			|| state == KOOPA_STATE_WALKING_RIGHT) 
+			SetState(e->nx > 0 
+				? KOOPA_STATE_WALKING_RIGHT 
+				: KOOPA_STATE_WALKING_LEFT);
+		else if (state == KOOPA_STATE_SHELL_MOVE 
+				|| state == KOOPA_STATE_SHELL_REVERSE_MOVE)
+			vx = e->nx > 0 
+			? KOOPA_SHELL_SPEED 
+			: -KOOPA_SHELL_SPEED;
 	}
 
-	if (e->nx == 0 && e->ny == 0 && e->obj->IsBlocking())
-	{
-		isInWall = true;
-	}
-
-	if (state == KOOPA_STATE_SHELL_MOVE || state == KOOPA_STATE_SHELL_REVERSE_MOVE) {
-		if (e->nx != 0 && e->obj->IsBlocking()) {
-			if (e->nx > 0) {
-				vx = KOOPA_SHELL_SPEED;
-			}
-			else {
-				vx = -KOOPA_SHELL_SPEED;
-			}
-		}
-	}
+	if (e->nx == 0 && e->ny == 0 && e->obj->IsBlocking())	isInWall = true;
 
 	if (dynamic_cast<CShinyBrick*>(e->obj))
-	{
 		OnCollisionWithShinyBrick(e);
-	}
-	else if (dynamic_cast<CQuestionBrick*>(e->obj)) {
+	else if (dynamic_cast<CQuestionBrick*>(e->obj))
 		OnCollisionWithBrick(e);
-	}
 }
 
 void CKoopa::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
 	CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
+
 	if (e->nx != 0 && state == KOOPA_STATE_SHELL_MOVE || state == KOOPA_STATE_SHELL_REVERSE_MOVE)
 		questionBrick->OnCollisionWith(e);
 	else if (e->ny < 0)
@@ -207,14 +194,15 @@ void CKoopa::SetState(int state) {
 		break;
 	case KOOPA_STATE_FLY:
 		ay = 0;                         
-		vx = 0;                         
-		// Initialize flying parameters if not set
+		vx = 0;          
+
 		if (flyUpperY == 0 && flyLowerY == 0) {
-			flyUpperY = y;     // Fly up by KOOPA_FLY_RANGE
-			flyLowerY = y + KOOPA_FLY_HEIGHT;  // Fly down by KOOPA_FLY_RANGE
+			flyUpperY = y;     
+			flyLowerY = y + KOOPA_FLY_HEIGHT;  
 		}
+
 		isFlyingUp = false;                // Start by flying down
-		vy = KOOPA_FLY_SPEED;         // Initial downward velocity
+		vy = KOOPA_FLY_SPEED;         
 		break;
 	case KOOPA_STATE_DIE:
 		DebugOut(L"[INFO] Koopa is dead\n");
@@ -303,17 +291,8 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		player->SetKoopa(nullptr); 
 	}
 
-	// flying logic
-	//if (state == KOOPA_STATE_FLY) {
-	//	
-	//}
-	//else { // normal physics for non-flying states
-	//	vy += ay * dt;
-	//	vx += ax * dt;
-	//}
-
-	vx += ax * dt; // Apply acceleration to velocity
-	vy += ay * dt; // Apply gravity to vertical velocity
+	vx += ax * dt; 
+	vy += ay * dt; 
 
 	ULONGLONG now = GetTickCount64();
 
@@ -333,7 +312,6 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	switch (state) 
 	{
 	case KOOPA_STATE_FLY:
-		//DebugOut(L"[INFO] Koopa position: %f, %f\n", x, y);
 		if (!isFlyingUp && y >= flyLowerY) { // reached bottom position
 			isFlyingUp = true;
 			vy = -KOOPA_FLY_SPEED;  // flying up

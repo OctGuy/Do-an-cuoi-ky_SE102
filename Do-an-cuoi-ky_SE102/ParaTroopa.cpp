@@ -69,47 +69,36 @@ void CParaTroopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 	else if (dynamic_cast<CKoopa*>(e->obj))
 		OnCollisionWithKoopa(e);
 
-	if (e->ny < 0) { // Stand on platform
+	if (e->ny < 0) { // standing on platform
 		vy = 0;
+
 		if (state == PARATROOPA_STATE_SHELL_REVERSE_JUMP)
 			SetState(PARATROOPA_STATE_SHELL_REVERSE_IDLE); // Mario tail attack
+
 		if ((state == PARATROOPA_STATE_BOUNCE_LEFT || state == PARATROOPA_STATE_BOUNCE_RIGHT)
 			&& e->obj->IsBlocking()) {
 			vy = -PARATROOPA_BOUNCE_SPEED; //  bounce up 
-
-			if (e->nx != 0 && e->obj->IsBlocking()) { // reverse bounce direction when collide with wall
-				if (e->nx > 0) {
-					SetState(PARATROOPA_STATE_BOUNCE_RIGHT);
-				}
-				else {
-					SetState(PARATROOPA_STATE_BOUNCE_LEFT);
-				}
-			}
 		}
+
 		ay = PARATROOPA_GRAVITY;
 	}
 
-	if ((state == PARATROOPA_STATE_WALKING_LEFT || state == PARATROOPA_STATE_WALKING_RIGHT ||
-		state == PARATROOPA_STATE_BOUNCE_LEFT || state == PARATROOPA_STATE_BOUNCE_RIGHT) &&
-		e->nx != 0 && e->obj->IsBlocking()) {
-		SetState(e->nx > 0
-			? (state == PARATROOPA_STATE_WALKING_LEFT || state == PARATROOPA_STATE_WALKING_RIGHT
-				? PARATROOPA_STATE_WALKING_RIGHT
-				: PARATROOPA_STATE_BOUNCE_RIGHT)
-			: (state == PARATROOPA_STATE_WALKING_LEFT || state == PARATROOPA_STATE_WALKING_RIGHT
-				? PARATROOPA_STATE_WALKING_LEFT
-				: PARATROOPA_STATE_BOUNCE_LEFT));
-	}
-
-	if (state == PARATROOPA_STATE_SHELL_MOVE || state == PARATROOPA_STATE_SHELL_REVERSE_MOVE) {
-		if (e->nx != 0 && e->obj->IsBlocking()) {
-			if (e->nx > 0) {
-				vx = PARATROOPA_SHELL_SPEED;
-			}
-			else {
-				vx = -PARATROOPA_SHELL_SPEED;
-			}
-		}
+	if (e->nx != 0 && e->obj->IsBlocking()) {
+		if (state == PARATROOPA_STATE_WALKING_LEFT 
+			|| state == PARATROOPA_STATE_WALKING_RIGHT) 
+			SetState(e->nx > 0 
+				? PARATROOPA_STATE_WALKING_RIGHT 
+				: PARATROOPA_STATE_WALKING_LEFT);
+		else if (state == PARATROOPA_STATE_BOUNCE_LEFT 
+				|| state == PARATROOPA_STATE_BOUNCE_RIGHT)
+			SetState(e->nx > 0 
+				? PARATROOPA_STATE_BOUNCE_RIGHT 
+				: PARATROOPA_STATE_BOUNCE_LEFT);
+		else if (state == PARATROOPA_STATE_SHELL_MOVE 
+				|| state == PARATROOPA_STATE_SHELL_REVERSE_MOVE) 
+			vx = e->nx > 0 
+			? PARATROOPA_SHELL_SPEED 
+			: -PARATROOPA_SHELL_SPEED;
 	}
 
 	if (e->nx == 0 && e->ny == 0 && e->obj->IsBlocking()) isInWall = true;
@@ -122,6 +111,7 @@ void CParaTroopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 
 void CParaTroopa::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
 	CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
+
 	if (e->nx != 0 && state == KOOPA_STATE_SHELL_MOVE || state == KOOPA_STATE_SHELL_REVERSE_MOVE)
 		questionBrick->OnCollisionWith(e);
 	else if (e->ny < 0)
