@@ -481,9 +481,9 @@ void CPlayScene::Load()
 		CGame* game = CGame::GetInstance();
 		float camX, camY;
 
-		// Center camera on Mario 
+		// Set camera position
 		camX = marioX - game->GetBackBufferWidth() / 2.0f;
-		camY = marioY - game->GetBackBufferHeight() / 2.0f;
+		camY = bottomBoundary - game->GetBackBufferHeight();
 
 		float gameWidth = game->GetBackBufferWidth();
 
@@ -514,6 +514,7 @@ void CPlayScene::Load()
 			}
 		}
 
+		DebugOut(L"[INFO] Camera position: (%f, %f)\n", camX, camY);
 		CGame::GetInstance()->SetCamPos(camX, camY);
 	}
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
@@ -610,7 +611,7 @@ void CPlayScene::Update(DWORD dt)
 
 	game->SetCamPos(cx, cy);
 
-	//DebugOut(L"[INFO] Camera position: (%f, %f)\n", cx, cy);
+	DebugOut(L"[INFO] Camera position: (%f, %f)\n", cx, cy);
 	//DebugOut(L"Cam Follow on X: %d\n", isCameraFollowMarioX);
 	PurgeDeletedObjects();
 }
