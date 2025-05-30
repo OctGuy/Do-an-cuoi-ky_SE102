@@ -44,7 +44,7 @@ void CGoalRoulette::Render()
 	{
 		DebugOut(L"[ERROR] CGoalRoulette::Render: Invalid animation ID\n");
 	}
-    RenderBoundingBox();
+    //RenderBoundingBox();
 }
 
 void CGoalRoulette::GetBoundingBox(float& left, float& top, float& right, float& bottom)
