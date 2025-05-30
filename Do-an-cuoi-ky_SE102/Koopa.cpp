@@ -2,7 +2,9 @@
 #include "ShinyBrick.h"
 void CKoopa::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	if (state == KOOPA_STATE_WALKING_LEFT || state == KOOPA_STATE_WALKING_RIGHT)
+	if (state == KOOPA_STATE_WALKING_LEFT 
+		|| state == KOOPA_STATE_WALKING_RIGHT
+		|| state == KOOPA_STATE_FLY)
 	{
 		l = x - KOOPA_BBOX_WIDTH / 2;
 		t = y - KOOPA_BBOX_HEIGHT / 2;
