@@ -514,7 +514,7 @@ void CPlayScene::Load()
 			}
 		}
 
-		DebugOut(L"[INFO] Camera position: (%f, %f)\n", camX, camY);
+		//DebugOut(L"[INFO] Camera position: (%f, %f)\n", camX, camY);
 		CGame::GetInstance()->SetCamPos(camX, camY);
 	}
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
@@ -611,7 +611,7 @@ void CPlayScene::Update(DWORD dt)
 
 	game->SetCamPos(cx, cy);
 
-	DebugOut(L"[INFO] Camera position: (%f, %f)\n", cx, cy);
+	//DebugOut(L"[INFO] Camera position: (%f, %f)\n", cx, cy);
 	//DebugOut(L"Cam Follow on X: %d\n", isCameraFollowMarioX);
 	PurgeDeletedObjects();
 }

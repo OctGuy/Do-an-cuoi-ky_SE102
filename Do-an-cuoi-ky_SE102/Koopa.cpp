@@ -59,21 +59,26 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 				vx = -KOOPA_SHELL_SPEED;
 			}
 		}
+	}
 
-		if (dynamic_cast<CShinyBrick*>(e->obj))
-		{
-			OnCollisionWithShinyBrick(e);
-		}
-		else if (dynamic_cast<CQuestionBrick*>(e->obj)) {
-			OnCollisionWithBrick(e);
-		}
+	if (dynamic_cast<CShinyBrick*>(e->obj))
+	{
+		OnCollisionWithShinyBrick(e);
+	}
+	else if (dynamic_cast<CQuestionBrick*>(e->obj)) {
+		OnCollisionWithBrick(e);
 	}
 }
 
 void CKoopa::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
 	CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
-	if (e->nx != 0)
+	if (e->nx != 0 && state == KOOPA_STATE_SHELL_MOVE || state == KOOPA_STATE_SHELL_REVERSE_MOVE)
 		questionBrick->OnCollisionWith(e);
+	else if (e->ny < 0)
+	{
+		DebugOut(L"[INFO] Koopa hit QuestionBrick from above\n");
+		questionBrick->SetKoopa(this);
+	}
 }
 
 void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
