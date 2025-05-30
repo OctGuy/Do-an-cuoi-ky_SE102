@@ -34,7 +34,7 @@ void CBoomerangBrother::Render()
 		DebugOut(L"[ERROR] Boomerang Brother animation ID is not set\n");
 	}
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CBoomerangBrother::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)

@@ -177,7 +177,7 @@ void CParaTroopa::OnCollisionWithParaTroopa(LPCOLLISIONEVENT e) {
 
 void CParaTroopa::OnCollisionWithShinyBrick(LPCOLLISIONEVENT e) {
 	CShinyBrick* shinyBrick = dynamic_cast<CShinyBrick*>(e->obj);
-	if (e->nx != 0)
+	if (e->nx != 0 && state == PARATROOPA_STATE_SHELL_MOVE || state == PARATROOPA_STATE_SHELL_REVERSE_MOVE)
 		shinyBrick->Activate();
 }
 

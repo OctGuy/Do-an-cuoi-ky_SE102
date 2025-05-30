@@ -93,7 +93,7 @@ void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 void CKoopa::OnCollisionWithShinyBrick(LPCOLLISIONEVENT e)
 {
 	CShinyBrick* shinyBrick = dynamic_cast<CShinyBrick*>(e->obj);
-	if (e->nx != 0) shinyBrick->Activate();
+	if (e->nx != 0 && state == KOOPA_STATE_SHELL_MOVE || state == KOOPA_STATE_SHELL_REVERSE_MOVE) shinyBrick->Activate();
 }
 
 CMario* CKoopa::GetPlayer() {
