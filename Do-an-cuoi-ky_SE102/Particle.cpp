@@ -63,6 +63,16 @@ void CParticle::Render()
 		aniID = ID_ANI_PARTICLE_PLANT;
 	else if (type == PARTICLE_TYPE_STAR)
 		aniID = ID_ANI_PARTICLE_STAR;
+	else if (type == PARTICLE_TYPE_TEXT_1)
+		aniID = ID_ANI_PARTICLE_TEXT_1;
+	else if (type == PARTICLE_TYPE_TEXT_2)
+		aniID = ID_ANI_PARTICLE_TEXT_2;
+	else if (type == PARTICLE_TYPE_CARD_PLANT)
+		aniID = ID_ANI_PARTICLE_CARD_PLANT;
+	else if (type == PARTICLE_TYPE_CARD_MUSHROOM)
+		aniID = ID_ANI_PARTICLE_CARD_MUSHROOM;
+	else if (type == PARTICLE_TYPE_CARD_STAR)
+		aniID = ID_ANI_PARTICLE_CARD_STAR;
 
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(aniID)->Render(x, y);
