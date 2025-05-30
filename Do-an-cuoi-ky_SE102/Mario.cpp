@@ -826,12 +826,12 @@ void CMario::OnCollisionWithParaTroopa(LPCOLLISIONEVENT e) {
 				DebugOut(L"[INFO] Mario kick Koopa by touch\n");
 				isKicking = true;
 				kick_start = GetTickCount64();
-				if (koopa->GetState() == KOOPA_STATE_SHELL_IDLE
-					|| koopa->GetState() == KOOPA_STATE_SHELL_SHAKING)
-					koopa->SetState(KOOPA_STATE_SHELL_MOVE);
+				if (koopa->GetState() == PARATROOPA_STATE_SHELL_IDLE
+					|| koopa->GetState() == PARATROOPA_STATE_SHELL_SHAKING)
+					koopa->SetState(PARATROOPA_STATE_SHELL_MOVE);
 				else
-					koopa->SetState(KOOPA_STATE_SHELL_REVERSE_MOVE);
-				koopa->SetSpeed(nx * KOOPA_SHELL_SPEED, 0);
+					koopa->SetState(PARATROOPA_STATE_SHELL_REVERSE_MOVE);
+				koopa->SetSpeed(nx * PARATROOPA_SHELL_SPEED, 0);
 			}
 		}
 		else if (koopa->GetState() == PARATROOPA_STATE_WALKING_LEFT

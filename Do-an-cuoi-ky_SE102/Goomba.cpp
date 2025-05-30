@@ -157,7 +157,21 @@ void CGoomba::Reload()
 {
 	// Reset the Goomba's state and position
 	CGameObject::Reload();
+
+	CMario* mario = GetPlayer();
+	float mX, mY;
+	mario->GetPosition(mX, mY);
+
 	SetState(GOOMBA_STATE_WALKING);
+
+	if (x < mX)
+	{
+		vx = GOOMBA_WALKING_SPEED;
+	}
+	else
+	{
+		vx = -GOOMBA_WALKING_SPEED;
+	}
 }
 
 void CGoomba::SetState(int state)
