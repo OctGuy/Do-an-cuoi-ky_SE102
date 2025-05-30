@@ -435,6 +435,7 @@ void CMario::OnCollisionWithPowerUp(LPCOLLISIONEVENT e)
 	else if (dynamic_cast<CPowerUp*>(e->obj)->GetType() == POWER_UP_TYPE_1UP_MUSHROOM)
 	{
 		AddPoint(0, e);
+		this->live++;
 	}
 	e->obj->Delete();
 	
