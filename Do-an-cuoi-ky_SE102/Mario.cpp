@@ -1232,9 +1232,6 @@ void CMario::Render()
 
 	animations->Get(aniId)->Render(x, y, opacity);
 
-	RenderBoundingBox();
-
-	DebugOutTitle(L"Coins: %d", coin);
 }
 
 void CMario::SetState(int state)

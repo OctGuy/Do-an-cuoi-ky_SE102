@@ -43,8 +43,6 @@ void CPlainPiranha::Render() {
 
 	if (aniId != -1)
 		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-
-	//RenderBoundingBox();
 }
 
 void CPlainPiranha::SetState(int state) {
@@ -87,14 +85,12 @@ void CPlainPiranha::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 
 	if (koopa) {
 		if (koopa->GetIsHeld()) {
-			DebugOut(L"Koopa is collided with Plain Piranha when Mario hold\n");
 			SetState(PLAIN_PIRANHA_STATE_DIE);
 			koopa->SetState(KOOPA_STATE_DIE);
 			mario->AddPoint(100, e);
 		}
 		else if (koopa->GetState() == KOOPA_STATE_SHELL_MOVE
 			|| koopa->GetState() == KOOPA_STATE_SHELL_REVERSE_MOVE) {
-			DebugOut(L"Koopa is collided with Plain Piranha when Mario kick\n");
 			SetState(PLAIN_PIRANHA_STATE_DIE);
 			mario->AddPoint(100, e);
 		}
@@ -107,14 +103,12 @@ void CPlainPiranha::OnCollisionWithParaTroopa(LPCOLLISIONEVENT e) {
 
 	if (paraTroopa) {
 		if (paraTroopa->GetIsHeld()) {
-			DebugOut(L"ParaTroopa is collided with Plain Piranha when Mario hold\n");
 			SetState(PLAIN_PIRANHA_STATE_DIE);
 			paraTroopa->SetState(PARATROOPA_STATE_DIE);
 			mario->AddPoint(100, e);
 		}
 		else if (paraTroopa->GetState() == PARATROOPA_STATE_SHELL_MOVE
 			|| paraTroopa->GetState() == PARATROOPA_STATE_SHELL_REVERSE_MOVE) {
-			DebugOut(L"ParaTroopa is collided with Plain Piranha when Mario kick\n");
 			SetState(PLAIN_PIRANHA_STATE_DIE);
 			mario->AddPoint(100, e);
 		}

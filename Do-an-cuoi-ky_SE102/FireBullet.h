@@ -3,14 +3,14 @@
 #include "Animation.h"
 #include "Animations.h"
 
-// Fire bullet shooted in 6 direction (left - right)
+// fire bullet shooted in 6 direction (left - right)
 // 45 degrees: high
 // 30 degrees: far
 // 60 degrees: low
 
 #define FIRE_BULLET_SPEED_Y 0.04f				
 
-// Basic arctan function to calc the angle based on the Position of bullet and the target
+// basic arctan function to calc the angle based on the Position of bullet and the target
 
 #define FIRE_BULLET_SPEED_X_FAR 0.1042f														
 #define FIRE_BULLET_SPEED_X_NEAR 0.042745f		

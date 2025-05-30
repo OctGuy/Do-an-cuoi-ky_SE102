@@ -37,15 +37,11 @@ void CBoomerang::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if(signbit(vx) == signbit(ax) && !isReturning && vx && ax)
 		isReturning = true;
 
-	//if (vy >= BOOMERANG_FLYING_SPEED_Y/2)
-	//	vy = 0;
 	if (vy >= 0.03f)
 		vy = 0;
 
 	x += vx * dt;
 	y += vy * dt;
-
-	//DebugOut(L"[INFO] Boomerang Update: %f %f\n", vx, vy);
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

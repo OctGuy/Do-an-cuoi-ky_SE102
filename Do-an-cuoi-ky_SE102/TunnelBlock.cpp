@@ -5,7 +5,7 @@
 
 void CTunnelBlock::Render()
 {
-    RenderBoundingBox();
+    //RenderBoundingBox();
 }
 
 void CTunnelBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)

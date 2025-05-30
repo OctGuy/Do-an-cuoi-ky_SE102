@@ -56,12 +56,10 @@ void CRaccoonTail::OnCollisionWith(LPCOLLISIONEVENT e)
     }
     else if (dynamic_cast<CQuestionBrick*>(e->obj))
     {
-        //DebugOut(L"[INFO] RaccoonTail hit questionbrick\n");
         OnCollisionWithQuestionBrick(e);
     }
 	else if (dynamic_cast<CBoomerangBrother*>(e->obj))
 	{
-		//DebugOut(L"[INFO] RaccoonTail hit BoomerangBrother\n");
 		CBoomerangBrother* boomerangBrother = dynamic_cast<CBoomerangBrother*>(e->obj);
 		boomerangBrother->SetState(BOOMERANG_BROTHER_STATE_DIE);
 		currentScene->Add(particle);
@@ -71,21 +69,18 @@ void CRaccoonTail::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CRaccoonTail::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
-    //DebugOut(L"[INFO] RaccoonTail hit Goomba\n");
     CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
     goomba->SetState(GOOMBA_STATE_DIE_REVERSE);
 }
 
 void CRaccoonTail::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
 {
-	//DebugOut(L"[INFO] RaccoonTail hit WingedGoomba\n");
     CWingedGoomba* wingedGoomba = dynamic_cast<CWingedGoomba*>(e->obj);
     wingedGoomba->SetState(GOOMBA_WING_STATE_DIE_REVERSE);
 }
 
 void CRaccoonTail::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 {
-    //DebugOut(L"[INFO] RaccoonTail hit questionbrick\n");
     CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
     if (!questionBrick->IsHit())
         questionBrick->Activate();
@@ -93,7 +88,6 @@ void CRaccoonTail::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 
 void CRaccoonTail::OnCollisionWithShinyBrick(LPCOLLISIONEVENT e)
 {
-	//DebugOut(L"[INFO] RaccoonTail hit shinybrick\n");
 	CShinyBrick* shinyBrick = dynamic_cast<CShinyBrick*>(e->obj);
 	shinyBrick->Activate();
     SetActive(false); //Deactivate so tail wont break multible brick
@@ -101,7 +95,6 @@ void CRaccoonTail::OnCollisionWithShinyBrick(LPCOLLISIONEVENT e)
 
 void CRaccoonTail::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 {
-    //DebugOut(L"[INFO] RaccoonTail hit Koopa\n");
     CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
     koopa->SetSpeed(nx * KOOPA_SHELL_SPEED / 2, 0); // Set speed for Koopa
     koopa->SetState(KOOPA_STATE_SHELL_REVERSE_JUMP);
@@ -110,7 +103,6 @@ void CRaccoonTail::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 
 void CRaccoonTail::OnCollisionWithParaTroopa(LPCOLLISIONEVENT e)
 {
-	//DebugOut(L"[INFO] RaccoonTail hit ParaTroopa\n");
 	CParaTroopa* paraTroopa = dynamic_cast<CParaTroopa*>(e->obj);
 	paraTroopa->SetSpeed(nx * PARATROOPA_SHELL_SPEED / 2, 0); // Set speed for ParaTroopa
 	paraTroopa->SetState(PARATROOPA_STATE_SHELL_REVERSE_JUMP);
@@ -119,14 +111,12 @@ void CRaccoonTail::OnCollisionWithParaTroopa(LPCOLLISIONEVENT e)
 
 void CRaccoonTail::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e)
 {
-    //DebugOut(L"[INFO] RaccoonTail hit PiranhaPlant\n");
     CPiranhaPlant* piranha = dynamic_cast<CPiranhaPlant*>(e->obj);
     piranha->SetState(PIRANHA_STATE_DIE);
 }
 
 void CRaccoonTail::OnCollisionWithPlainPiranha(LPCOLLISIONEVENT e)
 {
-	//DebugOut(L"[INFO] RaccoonTail hit PlainPiranha\n");
 	CPlainPiranha* plainPiranha = dynamic_cast<CPlainPiranha*>(e->obj);
 	plainPiranha->SetState(PLAIN_PIRANHA_STATE_DIE);
 }
@@ -134,7 +124,7 @@ void CRaccoonTail::OnCollisionWithPlainPiranha(LPCOLLISIONEVENT e)
 void CRaccoonTail::Render()
 {
     // Render bounding box for debugging purposes
-    RenderBoundingBox();
+    //RenderBoundingBox();
 }
 
 void CRaccoonTail::SetState(int state)

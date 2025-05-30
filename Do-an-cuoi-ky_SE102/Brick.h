@@ -35,7 +35,7 @@
 #define BRICK_TYPE_CONVEX 10
 #define BRICK_TYPE_SECRET 11
 
-#define BRICK_TYPE_DEATH 100 //Touch this brick and mario die
+#define BRICK_TYPE_DEATH 100 // touch this brick and mario die
 
 
 

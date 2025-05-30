@@ -128,7 +128,6 @@ void CBoomerangBrother::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		BoomerangCount = BOOMERANG_BROTHER_NUMBER_OF_BOOMERANG; // Reset boomerang count after resting
 	}
 
-	//ULONGLONG now = GetTickCount64();
 
 	if (isAiming)
 	{
