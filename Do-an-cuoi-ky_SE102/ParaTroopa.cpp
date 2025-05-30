@@ -89,15 +89,16 @@ void CParaTroopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 		ay = PARATROOPA_GRAVITY;
 	}
 
-	if (state == PARATROOPA_STATE_WALKING_LEFT || state == PARATROOPA_STATE_WALKING_RIGHT) {
-		if (e->nx != 0 && e->obj->IsBlocking()) {
-			if (e->nx > 0) {
-				SetState(PARATROOPA_STATE_WALKING_RIGHT);
-			}
-			else {
-				SetState(PARATROOPA_STATE_WALKING_LEFT);
-			}
-		}
+	if ((state == PARATROOPA_STATE_WALKING_LEFT || state == PARATROOPA_STATE_WALKING_RIGHT ||
+		state == PARATROOPA_STATE_BOUNCE_LEFT || state == PARATROOPA_STATE_BOUNCE_RIGHT) &&
+		e->nx != 0 && e->obj->IsBlocking()) {
+		SetState(e->nx > 0
+			? (state == PARATROOPA_STATE_WALKING_LEFT || state == PARATROOPA_STATE_WALKING_RIGHT
+				? PARATROOPA_STATE_WALKING_RIGHT
+				: PARATROOPA_STATE_BOUNCE_RIGHT)
+			: (state == PARATROOPA_STATE_WALKING_LEFT || state == PARATROOPA_STATE_WALKING_RIGHT
+				? PARATROOPA_STATE_WALKING_LEFT
+				: PARATROOPA_STATE_BOUNCE_LEFT));
 	}
 
 	if (state == PARATROOPA_STATE_SHELL_MOVE || state == PARATROOPA_STATE_SHELL_REVERSE_MOVE) {
@@ -306,11 +307,13 @@ void CParaTroopa::Reload() {
 	this->ax = 0;
 	this->ay = PARATROOPA_GRAVITY;
 
-	if (x0 == ORIGINAL_X_PARATROOPA_WALKING
-		&& y0 == ORIGINAL_Y_PARATROOPA_WALKING)
-		SetState(PARATROOPA_STATE_WALKING_LEFT);
-	else
-		SetState(PARATROOPA_STATE_BOUNCE_LEFT);
+	CMario* mario = GetPlayer();
+	float mX, mY;
+	mario->GetPosition(mX, mY);
+
+	SetState((x0 == ORIGINAL_X_PARATROOPA_WALKING && y0 == ORIGINAL_Y_PARATROOPA_WALKING)
+		? (x < mX ? PARATROOPA_STATE_WALKING_RIGHT : PARATROOPA_STATE_WALKING_LEFT)
+		: (x < mX ? PARATROOPA_STATE_BOUNCE_RIGHT : PARATROOPA_STATE_BOUNCE_LEFT));
 
 	stateShellStart = -1;
 	stateShakingStart = -1;
