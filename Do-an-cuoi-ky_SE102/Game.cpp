@@ -550,6 +550,7 @@ void CGame::Save()
 	this->coin = mario->GetCoin();
 	this->cards = mario->GetCards();
 	this->live = mario->GetLive();
+	this->level = mario->GetLevel();
 }
 
 void CGame::LoadSave()
@@ -560,6 +561,7 @@ void CGame::LoadSave()
 	mario->SetCoin(this->coin);
 	mario->SetCards(this->cards);
 	mario->SetLive(this->live);
+	mario->SetLevel(this->level);
 }
 
 void CGame::_ParseSection_TEXTURES(string line)

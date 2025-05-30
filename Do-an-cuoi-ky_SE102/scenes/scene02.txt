@@ -183,8 +183,7 @@ assets\BoomerangBrother.txt
 23	1792	368	30
 23	1808	368	30
 
-# COIN
-4	1073	320	
+# COIN	
 4	336	304
 4	352	304
 4	368	304

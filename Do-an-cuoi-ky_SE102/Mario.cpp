@@ -1420,6 +1420,7 @@ void CMario::SetState(int state)
 		ax = 0;
 		isRunning = false;
 		live--;
+		SetLevel(MARIO_LEVEL_SMALL); 
 		CGame::GetInstance()->Save();
 		break;
 
