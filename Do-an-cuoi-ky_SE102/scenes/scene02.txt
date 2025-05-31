@@ -238,7 +238,7 @@ assets\BoomerangBrother.txt
 
 #SCENE SWEEPER
 49	200	0	10	1000	-1
-48	10	300	2048
+48	10	300	2038
 
 #KOOPA
 11	1072	326
